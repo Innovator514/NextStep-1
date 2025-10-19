@@ -1,4 +1,4 @@
-# NextStep1
+# NextStep
 
 1. Home Page
 2. Map
