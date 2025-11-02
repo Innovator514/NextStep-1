@@ -1,0 +1,12 @@
+@import "tailwindcss";
+@layer base { :root { --brand: 222 89% 52%; } }
+@layer components {}
+@layer utilities {}
+@import "tailwindcss";
+@layer base {
+  :root {
+    --brand: 222 89% 52%;
+    --ink: 222 25% 12%;
+    --muted: 222 12% 45%;
+  }
+}
