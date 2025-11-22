@@ -1,9 +1,10 @@
  /* Basic Nav Styles */
 
 * {
-  text-decoration: none;.  margin: 0;
+  text-decoration: none;
+  margin: 0;
   font-family: 'Open Sans', sans-serif;
-
+  scroll-behavior: smooth;
 }
 
 body {
@@ -108,4 +109,8 @@ li a:hover{
   .point-content p {
     font-size: 16px;
   }
+}
+
+.active {
+    color:red;
 }
