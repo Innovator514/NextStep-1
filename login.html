@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full" dir="ltr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Login to NextStep" />  
+
+    <link rel="stylesheet" href="style.css" type="text/css"/>
+    <link rel="stylesheet" href="login.css" type="text/css"/>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+
+
+    <title>NextStep - Login</title>
+
+  </head>
+  <body>
+    <nav>
+      <div class="navbar">
+        <div class="navdiv">
+          <div class="logo"><a href="index.html">NEXTSTEP</a></div>
+          <ul>
+            <li class="navbar-item"><a href="index.html">Home</a></li>
+            <li class="navbar-item"><a href="map.html">Map</a></li>
+            <li class="navbar-item"><a href="events.html">Events</a></li>
+            <li class="navbar-item"><a href="badges.html">Badges</a></li>
+            <li class="navbar-item"><a href="chatbot.html">Compass</a></li>
+            <li class="navbar-item"><a href="contact.html">Contact Us</a></li>
+            <li class="navbar-item"><a href="login.html" class="login">Login</a></li>          
+        </ul>
+        </div>
+      </div>      
+    </nav>
+
+    <main class="login-main">
+      <div class="login-container">
+        <!-- Login Card -->
+        <div class="login-card" id="login-card">
+          <h1>Welcome Back</h1>
+          <p class="login-subtitle">Sign in to continue your civic journey</p>
+
+          <form id="login-form" class="auth-form">
+            <div cluass="form-group">
+              <label for="login-email">Email</label>
+              <input type="email" id="login-email" required placeholder="your.email@example.com">
+            </div>
+
+            <div class="form-group">
+              <label for="login-password">Password</label>
+              <input type="password" id="login-password" required placeholder="Enter your password">
+            </div>
+
+            <button type="submit" class="submit-button">
+              <span>Sign In</span>
+              <span class="button-icon">→</span>
+            </button>
+          </form>
+
+          <div class="divider">
+            <span>or</span>
+          </div>
+
+          <div class="social-login">
+            <button id="google-login" class="social-button google">
+              <span class="social-icon">G</span>
+              <span>Continue with Google</span>
+            </button>
+          </div>
+
+          <p class="switch-auth">
+            Don't have an account? <a href="#" id="show-signup">Sign up</a>
+          </p>
+        </div>
+
+        <!-- Sign Up Card -->
+        <div class="login-card signup-card" id="signup-card" style="display: none;">
+          <h1>Create Account</h1>
+          <p class="login-subtitle">Join NextStep and make a difference</p>
+
+          <form id="signup-form" class="auth-form">
+            <div class="form-group">
+              <label for="signup-name">Full Name</label>
+              <input type="text" id="signup-name" required placeholder="John Doe">
+            </div>
+
+            <div class="form-group">
+              <label for="signup-email">Email</label>
+              <input type="email" id="signup-email" required placeholder="your.email@example.com">
+            </div>
+
+            <div class="form-group">
+              <label for="signup-password">Password</label>
+              <input type="password" id="signup-password" required placeholder="Create a strong password">
+            </div>
+
+            <button type="submit" class="submit-button">
+              <span>Create Account</span>
+              <span class="button-icon">→</span>
+            </button>
+          </form>
+
+          <div class="divider">
+            <span>or</span>
+          </div>
+
+          <div class="social-login">
+            <button id="google-signup" class="social-button google">
+              <span class="social-icon">G</span>
+              <span>Sign up with Google</span>
+            </button>
+          </div>
+
+          <p class="switch-auth">
+            Already have an account? <a href="#" id="show-login">Sign in</a>
+          </p>
+        </div>
+      </div>
+    </main>
+  <footer>
+    <div class="footer-content">
+      <div class="footer-grid">
+        <!-- About Section -->
+        <div class="footer-section footer-about">
+          <h3>NEXTSTEP</h3>
+          <p>Empowering communities through civic engagement. Discover local events, connect with your neighbors, and
+            make a real difference in Boca Raton.</p>
+          <div class="social-links">
+            <a href="#" class="social-link" aria-label="Facebook">f</a>
+            <a href="#" class="social-link" aria-label="Twitter">𝕏</a>
+            <a href="#" class="social-link" aria-label="Instagram">📷</a>
+            <a href="#" class="social-link" aria-label="LinkedIn">in</a>
+          </div>
+        </div>
+
+        <!-- Quick Links -->
+        <div class="footer-section">
+          <h4>Quick Links</h4>
+          <ul class="footer-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="map.html">Map</a></li>
+            <li><a href="events.html">Events</a></li>
+            <li><a href="chatbot.html">Compass</a></li>
+            <li><a href="contact.html">Contact Us</a></li>
+          </ul>
+        </div>
+
+        <!-- Resources -->
+        <div class="footer-section">
+          <h4>Resources</h4>
+          <ul class="footer-links">
+            <li><a href="#">About Us</a></li>
+            <li><a href="#">Blog</a></li>
+            <li><a href="#">FAQs</a></li>
+            <li><a href="#">Volunteer</a></li>
+            <li><a href="#">Partners</a></li>
+          </ul>
+        </div>
+
+        <!-- Newsletter -->
+        <div class="footer-section">
+          <h4>Stay Updated</h4>
+          <p style="opacity: 0.9; font-size: 0.95rem; margin-bottom: 1rem;">Subscribe to our newsletter for the latest
+            civic events and opportunities.</p>
+          <form class="newsletter-form" onsubmit="handleNewsletter(event)">
+            <input type="email" class="newsletter-input" placeholder="Your email" required>
+            <button type="submit" class="newsletter-button">Join</button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Footer Bottom -->
+      <div class="footer-bottom">
+        <p>&copy; 2025 NextStep. All rights reserved.</p>
+        <div class="footer-bottom-links">
+          <a href="#">Privacy Policy</a>
+          <a href="#">Terms of Service</a>
+          <a href="#">Accessibility</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+    <!-- Firebase SDK -->
+    <script type="module" src="login.js"></script>
+    <script type="module" src="auth-check.js"></script>  </body>
+
+    </html>
