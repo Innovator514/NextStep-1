@@ -29,11 +29,158 @@
     font-weight: 500;
 }
 
-/* Contact Container */
+/* Two Column Layout */
 .contact-container {
-    max-width: 900px;
+    max-width: 1200px;
     margin: 0 auto;
-    padding: 0 2rem 2rem;
+    padding: 0 2rem 4rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    align-items: start;
+}
+
+/* Contact Info Sidebar */
+.contact-info-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.info-card {
+    background: white;
+    padding: 2rem;
+    border-radius: 15px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.info-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 30px rgba(37, 99, 235, 0.15);
+}
+
+.info-card-icon {
+    width: 50px;
+    height: 50px;
+    background: linear-gradient(135deg, #2563eb, #3b82f6);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.info-card h3 {
+    color: #1e40af;
+    font-size: 1.3rem;
+    margin-bottom: 0.75rem;
+    font-weight: 700;
+}
+
+.info-card p {
+    color: #64748b;
+    margin-bottom: 0.5rem;
+    line-height: 1.6;
+}
+
+.info-card a {
+    color: #2563eb;
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.3s;
+}
+
+.info-card a:hover {
+    color: #1e40af;
+    text-decoration: underline;
+}
+
+/* Availability Status */
+.availability-status {
+    margin-top: 1rem;
+    padding: 0.75rem;
+    background: #f1f5f9;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.95rem;
+    font-weight: 600;
+}
+
+.status-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #10b981;
+    animation: pulse 2s infinite;
+}
+
+.status-dot.offline {
+    background: #94a3b8;
+    animation: none;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+/* Impact Stats */
+.impact-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.stat {
+    text-align: center;
+    padding: 1rem 0.5rem;
+    background: linear-gradient(135deg, #f8fafc, #e0e7ff);
+    border-radius: 10px;
+}
+
+.stat-number {
+    display: block;
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: #2563eb;
+    margin-bottom: 0.25rem;
+}
+
+.stat-label {
+    display: block;
+    font-size: 0.8rem;
+    color: #64748b;
+    font-weight: 600;
+}
+
+.social-links-card {
+    display: flex;
+    gap: 0.75rem;
+    margin-top: 1rem;
+}
+
+.social-link-btn {
+    width: 45px;
+    height: 45px;
+    background: linear-gradient(135deg, #2563eb, #3b82f6);
+    color: white;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    font-size: 1.3rem;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.social-link-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(37, 99, 235, 0.4);
 }
 
 /* Contact Form */
@@ -49,7 +196,99 @@
     font-size: 2rem;
     margin-bottom: 2rem;
     font-weight: 700;
-    text-align: center;
+}
+
+/* Multi-Step Progress Bar */
+.form-progress {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 2.5rem;
+    position: relative;
+}
+
+.progress-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    position: relative;
+    z-index: 2;
+}
+
+.step-circle {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    background: #e2e8f0;
+    color: #94a3b8;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 1.1rem;
+    transition: all 0.3s ease;
+}
+
+.progress-step.active .step-circle {
+    background: linear-gradient(135deg, #2563eb, #3b82f6);
+    color: white;
+    box-shadow: 0 4px 15px rgba(37, 99, 235, 0.4);
+}
+
+.progress-step.completed .step-circle {
+    background: #10b981;
+    color: white;
+}
+
+.step-label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #94a3b8;
+    transition: color 0.3s;
+}
+
+.progress-step.active .step-label {
+    color: #2563eb;
+}
+
+.progress-step.completed .step-label {
+    color: #10b981;
+}
+
+.progress-line {
+    flex: 1;
+    height: 3px;
+    background: #e2e8f0;
+    margin: 0 0.5rem;
+    position: relative;
+    top: -1rem;
+    transition: background 0.3s;
+}
+
+.progress-line.completed {
+    background: #10b981;
+}
+
+/* Form Steps */
+.form-step {
+    display: none;
+    animation: fadeInStep 0.4s ease;
+}
+
+.form-step.active {
+    display: block;
+}
+
+@keyframes fadeInStep {
+    from {
+        opacity: 0;
+        transform: translateX(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
 }
 
 .form-row {
@@ -71,7 +310,8 @@
 }
 
 .form-group input,
-.form-group textarea {
+.form-group textarea,
+.form-group select {
     width: 100%;
     padding: 0.9rem;
     border: 2px solid #e2e8f0;
@@ -83,7 +323,8 @@
 }
 
 .form-group input:focus,
-.form-group textarea:focus {
+.form-group textarea:focus,
+.form-group select:focus {
     outline: none;
     border-color: #2563eb;
     box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
@@ -94,10 +335,49 @@
     min-height: 150px;
 }
 
-.submit-button {
-    width: 100%;
+/* Navigation Buttons */
+.button-row {
+    display: flex;
+    gap: 1rem;
+}
+
+.nav-button {
+    flex: 1;
     padding: 1rem 2rem;
+    background: white;
+    color: #2563eb;
+    border: 2px solid #2563eb;
+    border-radius: 10px;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.nav-button:hover {
+    background: #f1f5f9;
+    transform: translateY(-2px);
+}
+
+.nav-button.next-button {
     background: linear-gradient(135deg, #2563eb, #3b82f6);
+    color: white;
+    border: none;
+}
+
+.nav-button.next-button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(37, 99, 235, 0.4);
+}
+
+.submit-button {
+    flex: 1;
+    padding: 1rem 2rem;
+    background: linear-gradient(135deg, #10b981, #059669);
     color: white;
     border: none;
     border-radius: 10px;
@@ -109,115 +389,173 @@
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
-    margin-top: 1rem;
 }
 
-.submit-button:hover {
+.submit-button:hover:not(:disabled) {
     transform: translateY(-3px);
-    box-shadow: 0 10px 30px rgba(37, 99, 235, 0.4);
+    box-shadow: 0 10px 30px rgba(16, 185, 129, 0.4);
 }
 
-.submit-button:active {
-    transform: translateY(-1px);
+.submit-button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
 }
 
 .button-icon {
-    font-size: 1.3rem;
+    font-size: 1.2rem;
     transition: transform 0.3s ease;
 }
 
-.submit-button:hover .button-icon {
-    transform: translateX(5px);
+.next-button:hover .button-icon {
+    transform: translateX(3px);
 }
 
-/* Email Section */
-.email-section {
-    max-width: 900px;
-    margin: 2rem auto;
-    padding: 0 2rem;
+.prev-button:hover .button-icon {
+    transform: translateX(-3px);
+}
+
+/* Form Messages */
+.form-message {
+    padding: 12px 15px;
+    margin-bottom: 20px;
+    border-radius: 10px;
+    font-weight: bold;
+    animation: fadeIn 0.3s ease;
+}
+
+.form-message.success {
+    background: linear-gradient(135deg, #10b981, #059669);
+    color: white;
+}
+
+.form-message.error {
+    background: linear-gradient(135deg, #ef4444, #dc2626);
+    color: white;
+}
+
+@keyframes fadeIn {
+    from { 
+        opacity: 0; 
+        transform: translateY(-10px); 
+    }
+    to { 
+        opacity: 1; 
+        transform: translateY(0); 
+    }
+}
+
+/* FAQ Section */
+.faq-section {
+    max-width: 1200px;
+    margin: 3rem auto 0;
+    padding: 0 2rem 4rem;
+}
+
+.faq-header {
     text-align: center;
+    margin-bottom: 3rem;
 }
 
-.email-section p {
+.faq-header h2 {
+    font-size: 2.5rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, #2563eb, #3b82f6);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 0.5rem;
+}
+
+.faq-header p {
     font-size: 1.1rem;
     color: #64748b;
 }
 
-.email-section a {
-    color: #2563eb;
-    font-weight: 600;
-    text-decoration: none;
-    transition: all 0.3s ease;
+.faq-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
 }
 
-.email-section a:hover {
-    color: #1e40af;
-    text-decoration: underline;
-}
-
-/* Additional Info Section */
-.additional-info {
-    max-width: 1200px;
-    margin: 3rem auto 0;
-    padding: 0 2rem 4rem;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 2rem;
-}
-
-.info-box {
+.faq-item {
     background: white;
-    padding: 2rem;
-    border-radius: 15px;
-    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
-    text-align: center;
-    transition: all 0.3s ease;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+    transition: box-shadow 0.3s ease;
 }
 
-.info-box:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 30px rgba(37, 99, 235, 0.15);
+.faq-item:hover {
+    box-shadow: 0 5px 20px rgba(37, 99, 235, 0.15);
 }
 
-.info-box h3 {
-    color: #1e40af;
-    font-size: 1.3rem;
-    margin-bottom: 1rem;
+.faq-question {
+    width: 100%;
+    padding: 1.5rem;
+    background: none;
+    border: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    font-size: 1.1rem;
     font-weight: 700;
+    color: #1e293b;
+    text-align: left;
+    transition: color 0.3s;
 }
 
-.info-box p {
+.faq-question:hover {
+    color: #2563eb;
+}
+
+.faq-icon {
+    font-size: 1.5rem;
+    font-weight: 300;
+    color: #2563eb;
+    transition: transform 0.3s ease;
+}
+
+.faq-item.active .faq-icon {
+    transform: rotate(45deg);
+}
+
+.faq-answer {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease, padding 0.4s ease;
+}
+
+.faq-item.active .faq-answer {
+    max-height: 500px;
+    padding: 0 1.5rem 1.5rem;
+}
+
+.faq-answer p {
     color: #64748b;
-    line-height: 1.6;
-}
-
-/* Success Message */
-.success-message {
-    background: linear-gradient(135deg, #10b981, #059669);
-    color: white;
-    padding: 1rem 1.5rem;
-    border-radius: 10px;
-    margin-bottom: 1.5rem;
-    display: none;
-    animation: slideDown 0.4s ease;
-}
-
-.success-message.show {
-    display: block;
-}
-
-@keyframes slideDown {
-    from {
-        opacity: 0;
-        transform: translateY(-20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+    line-height: 1.7;
+    margin: 0;
 }
 
 /* Mobile Responsive */
+@media (max-width: 968px) {
+    .contact-container {
+        grid-template-columns: 1fr;
+    }
+
+    .contact-info-sidebar {
+        order: 2;
+    }
+
+    .form-card {
+        order: 1;
+    }
+
+    .impact-stats {
+        grid-template-columns: 1fr;
+    }
+}
+
 @media (max-width: 768px) {
     .contact-main {
         padding-top: 80px;
@@ -232,7 +570,7 @@
     }
 
     .contact-container {
-        padding: 0 1rem 2rem;
+        padding: 0 1rem 3rem;
     }
 
     .form-card {
@@ -241,39 +579,39 @@
 
     .form-row {
         grid-template-columns: 1fr;
-        gap: 0;
     }
 
-    .additional-info {
-        grid-template-columns: 1fr;
+    .info-card {
+        padding: 1.5rem;
+    }
+
+    .social-links-card {
+        flex-wrap: wrap;
+    }
+
+    .faq-section {
         padding: 0 1rem 3rem;
     }
 
-    .email-section {
-        padding: 0 1rem;
+    .faq-header h2 {
+        font-size: 2rem;
+    }
+
+    .form-progress {
+        padding: 0 0.5rem;
+    }
+
+    .step-label {
+        font-size: 0.75rem;
+    }
+
+    .step-circle {
+        width: 40px;
+        height: 40px;
+        font-size: 1rem;
+    }
+
+    .button-row {
+        flex-direction: column;
     }
 }
-
-.form-message {
-  padding: 12px 15px;
-  margin-bottom: 10px;
-  border-radius: 6px;
-  font-weight: bold;
-  animation: fadeIn 0.3s ease;
-}
-
-.form-message.success {
-  background: #d4f7d4;
-  color: #0b7a0b;
-}
-
-.form-message.error {
-  background: #ffd8d8;
-  color: #b30000;
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(-5px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-
