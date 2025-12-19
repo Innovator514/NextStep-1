@@ -2,7 +2,7 @@
 .hero-wrapper {
   position: relative;
   width: 100%;
-  overflow: hidden; /* Changed from overflow-x to overflow */
+  overflow: visible; /* CHANGED: was "hidden" - this was blocking scroll! */
   margin-bottom: 0;
 }
 
@@ -17,7 +17,8 @@
   z-index: 2;
   min-height: 40vh;
   margin-bottom: 0;
-  overflow: visible; /* Changed to visible so text can move */
+  overflow: visible;
+  /* REMOVED: will-change property that was forcing GPU layers */
 }
 
 /* Hero Title - Smooth transitions */
@@ -33,6 +34,7 @@
   position: relative;
   transition: color 0.3s ease, text-shadow 0.3s ease, opacity 0.4s ease;
   text-align: center;
+  /* REMOVED: will-change to reduce GPU overhead */
 }
 
 /* Tagline - Smooth transitions */
@@ -75,7 +77,9 @@
   height: 100%;
   margin: 0;
   padding: 0;
-  display: block;
+  display: flex; /* Changed to flex for centering */
+  align-items: center;
+  justify-content: center;
   overflow: hidden;
 }
 
@@ -86,10 +90,11 @@
   object-fit: cover;
   transform: scale(1);
   transform-origin: center center;
-  will-change: transform;
+  /* REMOVED: will-change - this can cause scroll jank */
   display: block;
   margin: 0;
   padding: 0;
+  transition: transform 0.1s ease-out; /* Smooth transform */
 }
 
 /* Content Sections */
@@ -98,11 +103,14 @@
   text-align: center;
   background: linear-gradient(135deg, #f8fafc 0%, #e0e7ff 100%);
   margin: 0;
+  position: relative;
+  overflow: visible; /* CRITICAL: Allow content to move */
 }
 
 .point-content {
   max-width: 800px;
   margin: 0 auto;
+  overflow: visible; /* CRITICAL: Allow content to move */
 }
 
 .point h2 {
@@ -110,6 +118,8 @@
   margin-bottom: 20px;
   color: rgb(1, 9, 67);
   font-weight: 700;
+  /* REMOVE ALL RESTRICTIONS FOR TESTING */
+  /* Let JavaScript fully control it */
 }
 
 .point p {
@@ -154,7 +164,6 @@
 .footer-cta {
   text-align: center;
   padding: 80px 40px;
-  
   margin: 0;
   background: white;
 }
@@ -194,9 +203,8 @@
 main {
   margin: 0;
   padding: 0;
-  overflow-x: hidden;
+  overflow: visible; /* CHANGED: was overflow-x: hidden */
 }
-
 
 /* Responsive for smaller screens */
 @media (max-width: 768px) {
@@ -252,4 +260,5 @@ main {
 /* Smooth scrolling */
 html {
   scroll-behavior: smooth;
+  /* REMOVED: Any scroll snap or scroll behavior that blocks natural scroll */
 }
