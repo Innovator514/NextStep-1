@@ -4,7 +4,7 @@ const badges = [
         id: 1,
         name: "First Step",
         description: "Attended your first civic event",
-        icon: "🎯",
+        icon: '<img src="https://cdn-icons-png.flaticon.com/128/599/599224.png" alt="First Step">',
         category: "milestone",
         earned: true,
         progress: 1,
@@ -14,7 +14,7 @@ const badges = [
         id: 2,
         name: "Active Citizen",
         description: "Attended 5 civic events",
-        icon: "⭐",
+        icon: '<img src="https://cdn-icons-png.flaticon.com/128/956/956100.png" alt="Active Citizen">',
         category: "participation",
         earned: true,
         progress: 5,
@@ -24,7 +24,7 @@ const badges = [
         id: 3,
         name: "Community Champion",
         description: "Attended 10 civic events",
-        icon: "🏆",
+        icon: '<img src="https://cdn-icons-png.flaticon.com/128/2827/2827957.png" alt="Community Champion">',
         category: "participation",
         earned: true,
         progress: 10,
@@ -34,7 +34,7 @@ const badges = [
         id: 4,
         name: "Civic Hero",
         description: "Attended 25 civic events",
-        icon: "🦸",
+        icon: '<img src="https://cdn-icons-png.flaticon.com/128/4766/4766834.png" alt="Civic Hero">',
         category: "participation",
         earned: false,
         progress: 12,
@@ -44,7 +44,7 @@ const badges = [
         id: 5,
         name: "Volunteer",
         description: "Volunteered at your first event",
-        icon: "🤝",
+        icon: '<img src="https://cdn-icons-png.flaticon.com/128/10729/10729191.png" alt="Volunteer">',
         category: "participation",
         earned: true,
         progress: 1,
@@ -54,7 +54,7 @@ const badges = [
         id: 6,
         name: "Helping Hand",
         description: "Volunteered 10 hours",
-        icon: "💪",
+        icon: '<img src="https://cdn-icons-png.flaticon.com/128/10845/10845170.png" alt="Helping Hand">',
         category: "impact",
         earned: true,
         progress: 10,
@@ -64,7 +64,7 @@ const badges = [
         id: 7,
         name: "Time Champion",
         description: "Volunteered 50 hours",
-        icon: "⏰",
+        icon: '<img src="https://cdn-icons-png.flaticon.com/128/14118/14118953.png" alt="Time Champion">',
         category: "impact",
         earned: false,
         progress: 24,
@@ -74,7 +74,7 @@ const badges = [
         id: 8,
         name: "Voice of Change",
         description: "Spoke at a town hall meeting",
-        icon: "🎤",
+        icon: '<img src="https://cdn-icons-png.flaticon.com/128/2168/2168463.png" alt="Voice of Change">',
         category: "leadership",
         earned: true,
         progress: 1,
@@ -84,7 +84,7 @@ const badges = [
         id: 9,
         name: "Earth Guardian",
         description: "Participated in 3 environmental events",
-        icon: "🌍",
+        icon: '<img src="https://cdn-icons-png.flaticon.com/128/8635/8635653.png" alt="Earth Guardian">',
         category: "impact",
         earned: true,
         progress: 3,
@@ -94,7 +94,7 @@ const badges = [
         id: 10,
         name: "Youth Leader",
         description: "Attended 5 youth-focused events",
-        icon: "🎓",
+        icon: '<img src="https://cdn-icons-png.flaticon.com/128/1344/1344761.png" alt="Youth Leader">',
         category: "leadership",
         earned: false,
         progress: 2,
@@ -104,7 +104,7 @@ const badges = [
         id: 11,
         name: "Tech Innovator",
         description: "Attended 3 innovation summits",
-        icon: "💡",
+        icon: '<img src="https://cdn-icons-png.flaticon.com/128/11995/11995575.png" alt="Tech Innovator">',
         category: "participation",
         earned: false,
         progress: 1,
@@ -114,7 +114,7 @@ const badges = [
         id: 12,
         name: "Early Bird",
         description: "Registered for an event 1 month in advance",
-        icon: "🐦",
+        icon: '<img src="https://cdn-icons-png.flaticon.com/128/1230/1230870.png" alt="Early Bird">',
         category: "milestone",
         earned: true,
         progress: 1,
@@ -124,7 +124,7 @@ const badges = [
         id: 13,
         name: "Streak Master",
         description: "Attended events for 3 consecutive months",
-        icon: "🔥",
+        icon: '<img src="https://cdn-icons-png.flaticon.com/128/14261/14261136.png" alt="Streak Master">',
         category: "milestone",
         earned: false,
         progress: 2,
@@ -134,7 +134,7 @@ const badges = [
         id: 14,
         name: "Social Butterfly",
         description: "Invited 5 friends to events",
-        icon: "🦋",
+        icon: '<img src="https://cdn-icons-png.flaticon.com/128/338/338337.png" alt="Social Butterfly">',
         category: "leadership",
         earned: false,
         progress: 3,
@@ -144,19 +144,74 @@ const badges = [
         id: 15,
         name: "Founding Member",
         description: "One of the first 100 users",
-        icon: "🌟",
+        icon: '<img src="https://cdn-icons-png.flaticon.com/128/616/616490.png" alt="Founding Member">',
         category: "milestone",
         earned: false,
         progress: 0,
         required: 1
+    },
+    {
+        id: 16,
+        name: "Community Builder",
+        description: "Created or organized a local event",
+        icon: '<img src="https://cdn-icons-png.flaticon.com/128/3079/3079652.png" alt="Community Builder">',
+        category: "leadership",
+        earned: false,
+        progress: 0,
+        required: 1
+    },
+    {
+        id: 17,
+        name: "Democracy Champion",
+        description: "Voted in 3 local elections",
+        icon: '<img src="https://cdn-icons-png.flaticon.com/128/3553/3553691.png" alt="Democracy Champion">',
+        category: "participation",
+        earned: true,
+        progress: 3,
+        required: 3
+    },
+    {
+        id: 18,
+        name: "Neighborhood Hero",
+        description: "Completed 5 community service projects",
+        icon: '<img src="https://cdn-icons-png.flaticon.com/128/2917/2917995.png" alt="Neighborhood Hero">',
+        category: "impact",
+        earned: false,
+        progress: 3,
+        required: 5
+    },
+    {
+        id: 19,
+        name: "Super Connector",
+        description: "Networked with 25 community members",
+        icon: '<img src="https://cdn-icons-png.flaticon.com/128/681/681494.png" alt="Super Connector">',
+        category: "leadership",
+        earned: false,
+        progress: 18,
+        required: 25
+    },
+    {
+        id: 20,
+        name: "Sustainability Star",
+        description: "Participated in 10 environmental initiatives",
+        icon: '<img src="https://cdn-icons-png.flaticon.com/128/2990/2990970.png" alt="Sustainability Star">',
+        category: "impact",
+        earned: false,
+        progress: 6,
+        required: 10
     }
 ];
 
 let currentFilter = 'all';
 
-// Render badges
+/**
+ * Render badges with optional filter
+ * @param {string} filter - Filter type: 'all', 'earned', 'locked', or category name
+ */
 function renderBadges(filter = 'all') {
     const grid = document.getElementById('badges-grid');
+    if (!grid) return;
+    
     grid.innerHTML = '';
 
     let filteredBadges = badges;
@@ -170,13 +225,17 @@ function renderBadges(filter = 'all') {
         filteredBadges = badges.filter(b => b.category === filter);
     }
 
-    filteredBadges.forEach(badge => {
+    // Create and append badge cards
+    filteredBadges.forEach((badge, index) => {
         const progressPercent = Math.min((badge.progress / badge.required) * 100, 100);
         
         const badgeCard = document.createElement('div');
         badgeCard.className = `badge-card ${badge.earned ? 'earned' : 'locked'}`;
         badgeCard.setAttribute('data-category', badge.category);
         badgeCard.setAttribute('data-status', badge.earned ? 'earned' : 'locked');
+        
+        // Add staggered animation delay
+        badgeCard.style.animationDelay = `${index * 0.05}s`;
         
         badgeCard.innerHTML = `
             ${badge.earned 
@@ -209,32 +268,105 @@ function renderBadges(filter = 'all') {
     updateStats();
 }
 
-// Update statistics
+/**
+ * Update statistics display
+ */
 function updateStats() {
     const earnedCount = badges.filter(b => b.earned).length;
     const totalCount = badges.length;
     const completionPercent = Math.round((earnedCount / totalCount) * 100);
 
-    document.getElementById('earned-count').textContent = earnedCount;
-    document.getElementById('total-count').textContent = totalCount;
-    document.getElementById('completion-percent').textContent = completionPercent + '%';
+    const earnedEl = document.getElementById('earned-count');
+    const totalEl = document.getElementById('total-count');
+    const percentEl = document.getElementById('completion-percent');
+
+    if (earnedEl) earnedEl.textContent = earnedCount;
+    if (totalEl) totalEl.textContent = totalCount;
+    if (percentEl) percentEl.textContent = completionPercent + '%';
 }
 
-// Filter badges
+/**
+ * Filter badges by category or status
+ * @param {string} filter - Filter type
+ */
 function filterBadges(filter) {
     currentFilter = filter;
     
     // Update active button
     const buttons = document.querySelectorAll('.filter-btn');
     buttons.forEach(btn => btn.classList.remove('active'));
-    event.target.classList.add('active');
+    
+    // Find the button that was clicked and set it as active
+    const clickedButton = Array.from(buttons).find(btn => {
+        const btnText = btn.textContent.toLowerCase().replace(/\s+/g, '');
+        const filterText = filter.toLowerCase().replace(/\s+/g, '');
+        return btnText === filterText || btn.getAttribute('onclick')?.includes(filter);
+    });
+    
+    if (clickedButton) {
+        clickedButton.classList.add('active');
+    } else if (window.event && window.event.target) {
+        window.event.target.classList.add('active');
+    }
     
     // Re-render badges with filter
     renderBadges(filter);
 }
 
-// Initialize
-document.addEventListener('DOMContentLoaded', function() {
+/**
+ * Handle newsletter form submission
+ * @param {Event} event - Form submit event
+ */
+function handleNewsletter(event) {
+    event.preventDefault();
+    const input = event.target.querySelector('.newsletter-input');
+    const email = input.value;
+    
+    // Show success message
+    alert(`Thank you for subscribing! We'll send updates to ${email}`);
+    input.value = '';
+}
+
+/**
+ * Initialize the badges page
+ */
+function init() {
     console.log('Badges page loaded');
+    console.log(`Total badges: ${badges.length}`);
+    console.log(`Earned badges: ${badges.filter(b => b.earned).length}`);
+    
+    // Render badges on page load
     renderBadges();
-});
+    
+    // Set up event listeners for filter buttons
+    const filterButtons = document.querySelectorAll('.filter-btn');
+    filterButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            // Extract filter value from onclick attribute or button text
+            const onclickAttr = this.getAttribute('onclick');
+            if (onclickAttr) {
+                const match = onclickAttr.match(/filterBadges\('([^']+)'\)/);
+                if (match) {
+                    filterBadges(match[1]);
+                }
+            }
+        });
+    });
+}
+
+// Initialize when DOM is ready
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+} else {
+    init();
+}
+
+// Export functions for external use if needed
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = {
+        badges,
+        renderBadges,
+        filterBadges,
+        updateStats
+    };
+}
