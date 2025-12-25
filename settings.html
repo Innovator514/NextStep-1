@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Settings – NextStep</title>
+    <link rel="stylesheet" href="settings.css" />
+</head>
+<body>
+
+<div class="settings-container">
+    <div class="settings-card">
+
+        <h1>Settings</h1>
+
+        <!-- Update Name -->
+        <div class="settings-section">
+            <h2>Update Display Name</h2>
+            <input id="new-name" type="text" placeholder="Enter new display name">
+            <button onclick="updateName()">Update Name</button>
+        </div>
+
+        <!-- Update Profile Photo -->
+        <div class="settings-section">
+            <h2>Update Profile Photo</h2>
+            <input id="new-photo" type="file" accept="image/*">
+            <button onclick="updatePhoto()">Upload Photo</button>
+        </div>
+
+        <!-- Change password -->
+        <div class="settings-section">
+            <h2>Change Password</h2>
+            <input id="new-password" type="password" placeholder="New password (6+ chars)">
+            <button onclick="changePassword()">Update Password</button>
+        </div>
+
+        <!-- Logout -->
+        <button class="logout-button" onclick="logout()">Logout</button>
+
+    </div>
+</div>
+
+<script type="module" src="settings.js"></script>
+<!-- Firebase Auth with Profile Dropdown -->
+<script type="module" src="auth-check.js"></script>
+</body>
+</html>

@@ -1,0 +1,162 @@
+#map {
+    position: fixed;
+    top: 70px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: calc(100vh - 70px);
+    z-index: 1;
+    margin: 0;
+    padding: 0;
+}
+
+/* Popup styling */
+.leaflet-popup-content {
+    margin: 12px;
+    line-height: 1.6;
+}
+
+.leaflet-popup-content-wrapper {
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(37, 99, 235, 0.15);
+}
+
+.leaflet-popup-tip {
+    box-shadow: 0 3px 14px rgba(37, 99, 235, 0.1);
+}
+
+.leaflet-popup-content b,
+.leaflet-popup-content strong {
+    font-weight: 700;
+    color: #2563eb;
+}
+
+/* Filter buttons container */
+.filter-buttons {
+    background: rgba(208, 208, 208, 0.356);
+    backdrop-filter: blur(10px);
+    padding: 16px;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    min-width: 180px;
+    font-family: 'Open Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    border: 1px solid rgba(37, 99, 235, 0.1);
+}
+
+/* Filter header */
+.filter-buttons::before {
+    content: "Filter Events";
+    font-weight: 700;
+    font-size: 15px;
+    color: #1e40af;
+    padding-bottom: 8px;
+    border-bottom: 2px solid #e0e7ff;
+    margin-bottom: 4px;
+}
+
+/* Label styling */
+.filter-buttons label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    color: #334155;
+    padding: 8px 10px;
+    border-radius: 8px;
+    border-left: 3px solid transparent;
+    transition: all 0.2s ease;
+    user-select: none;
+}
+
+/* Checkbox styling */
+.filter-buttons input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    accent-color: #2563eb;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+/* Hover effects */
+.filter-buttons label:hover {
+    background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+    transform: translateX(4px);
+    color: #1e40af;
+}
+
+.filter-buttons input[type="checkbox"]:hover {
+    transform: scale(1.1);
+}
+
+/* Active/checked state */
+.filter-buttons input[type="checkbox"]:checked {
+    font-weight: 600;
+}
+
+/* Category-specific colors */
+.filter-political:hover {
+    border-left-color: #3b82f6;
+}
+
+.filter-youth:hover {
+    border-left-color: #f59e0b;
+}
+
+.filter-innovation:hover {
+    border-left-color: #8b5cf6;
+}
+
+.filter-environmental:hover {
+    border-left-color: #10b981;
+}
+
+.filter-education:hover {
+    border-left-color: #2563eb;
+}
+
+/* Zoom control styling */
+.leaflet-control-zoom {
+    border: none !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15) !important;
+}
+
+.leaflet-control-zoom a {
+    background: rgba(255, 255, 255, 0.98) !important;
+    backdrop-filter: blur(10px);
+    color: #2563eb !important;
+    border: 1px solid rgba(37, 99, 235, 0.1) !important;
+    font-size: 20px !important;
+    font-weight: 700 !important;
+    transition: all 0.2s ease !important;
+}
+
+.leaflet-control-zoom a:hover {
+    background: linear-gradient(135deg, #2563eb, #3b82f6) !important;
+    color: white !important;
+    transform: scale(1.05);
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+    #map {
+        top: 60px;
+        height: calc(100vh - 60px);
+    }
+    
+    .filter-buttons {
+        min-width: 140px;
+        padding: 12px;
+        font-size: 13px;
+    }
+    
+    .filter-buttons label {
+        padding: 6px 8px;
+        font-size: 13px;
+    }
+}

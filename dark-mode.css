@@ -1,0 +1,784 @@
+/* ============================================
+   DARK MODE SYSTEM - Full Accessibility Support
+   ============================================ */
+
+/* CSS Variables for Light Mode (Default) */
+:root {
+  --bg-primary: linear-gradient(135deg, #f8fafc 0%, #e0e7ff 100%);
+  --bg-secondary: #ffffff;
+  --bg-tertiary: #f8fafc;
+  --text-primary: rgb(1, 9, 67);
+  --text-secondary: #64748b;
+  --text-muted: #94a3b8;
+  --accent-primary: #2563eb;
+  --accent-secondary: #3b82f6;
+  --border-color: #e2e8f0;
+  --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  --hover-bg: #f1f5f9;
+  --input-bg: #ffffff;
+  --footer-bg: rgb(1, 9, 67);
+  --nav-bg: rgba(255, 255, 255, 0.95);
+  --gradient-start: #f8fafc;
+  --gradient-end: #e0e7ff;
+}
+
+/* Dark Mode Variables */
+[data-theme="dark"] {
+  --bg-primary: linear-gradient(135deg, #0a1628 0%, #0f2744 100%);
+  --bg-secondary: #0f2744;
+  --bg-tertiary: #0a1628;
+  --text-primary: #f1f5f9;
+  --text-secondary: #e2e8f0;
+  --text-muted: #cbd5e1;
+  --accent-primary: #3b82f6;
+  --accent-secondary: #60a5fa;
+  --border-color: #1e3a5f;
+  --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+  --hover-bg: #1e3a5f;
+  --input-bg: #0a1628;
+  --footer-bg: #050d1a;
+  --nav-bg: rgba(10, 22, 40, 0.95);
+  --gradient-start: #0a1628;
+  --gradient-end: #0f2744;
+}
+
+/* Smooth transitions for theme changes - ONLY for specific elements */
+body,
+.navbar,
+.event-card,
+.badge-card,
+.info-card,
+.login-card,
+.form-card,
+.chat-container,
+.filter-btn,
+.tab,
+button,
+input,
+textarea,
+select {
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+/* Respect user's motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+    animation: none !important;
+  }
+}
+
+/* ============================================
+   DARK MODE TOGGLE BUTTON (ACCESSIBLE)
+   ============================================ */
+
+.theme-toggle-container {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  z-index: 9999;
+}
+
+.theme-toggle {
+  background: var(--bg-secondary);
+  border: 2px solid var(--border-color);
+  border-radius: 50px;
+  padding: 12px 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  box-shadow: var(--card-shadow);
+  transition: all 0.3s ease;
+  font-weight: 600;
+  color: var(--text-primary);
+  font-family: 'Open Sans', sans-serif;
+  font-size: 14px;
+}
+
+.theme-toggle:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+}
+
+.theme-toggle:focus {
+  outline: 3px solid var(--accent-primary);
+  outline-offset: 3px;
+}
+
+.theme-toggle:active {
+  transform: translateY(-1px);
+}
+
+/* Icon container */
+.theme-icon {
+  width: 24px;
+  height: 24px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.theme-icon svg {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  transition: all 0.3s ease;
+}
+
+.sun-icon {
+  opacity: 1;
+  transform: rotate(0deg) scale(1);
+}
+
+.moon-icon {
+  opacity: 0;
+  transform: rotate(180deg) scale(0);
+}
+
+[data-theme="dark"] .sun-icon {
+  opacity: 0;
+  transform: rotate(180deg) scale(0);
+}
+
+[data-theme="dark"] .moon-icon {
+  opacity: 1;
+  transform: rotate(0deg) scale(1);
+}
+
+/* ============================================
+   APPLY DARK MODE TO ALL ELEMENTS
+   ============================================ */
+
+/* Body and Main Containers */
+body {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+/* Navigation */
+.navbar {
+  background: var(--nav-bg);
+  border-bottom-color: var(--border-color);
+}
+
+.nav-links a {
+  color: var(--text-primary);
+}
+
+.nav-links a:hover {
+  background: var(--hover-bg);
+  color: var(--accent-primary);
+}
+
+.nav-links a.active {
+  background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+  color: white;
+}
+
+/* Login/Signup Buttons */
+[data-theme="dark"] .login {
+  background: var(--bg-secondary);
+  color: white !important;
+  border-color: var(--accent-primary);
+}
+
+.signup {
+  background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+}
+
+/* Hero Section */
+.hero {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+.hero h1,
+#heroTitle {
+  color: var(--text-primary);
+}
+
+[data-theme="dark"] .hero h1,
+[data-theme="dark"] #heroTitle {
+  text-shadow: 0 2px 20px rgba(0, 0, 0, 0.5);
+}
+
+.tagline {
+  color: var(--text-secondary);
+}
+
+/* Content Sections */
+.point,
+.point-alt {
+  background: var(--bg-primary);
+}
+
+.point h2,
+.point-alt h2 {
+  color: var(--text-primary);
+}
+
+.point p,
+.point-alt p {
+  color: var(--text-secondary);
+}
+
+/* Cards and Containers */
+.event-card,
+.badge-card,
+.info-card,
+.stat-card,
+.login-card,
+.form-card,
+.contact-card,
+.profile-card,
+.settings-card {
+  background: var(--bg-secondary);
+  box-shadow: var(--card-shadow);
+  border-color: var(--border-color);
+}
+
+[data-theme="dark"] .event-card,
+[data-theme="dark"] .badge-card,
+[data-theme="dark"] .info-card {
+  border: 1px solid var(--border-color);
+}
+
+
+
+
+/* Force light text in dark mode for specific elements */
+[data-theme="dark"] h1,
+[data-theme="dark"] h2,
+[data-theme="dark"] h3,
+[data-theme="dark"] h4,
+[data-theme="dark"] h5,
+[data-theme="dark"] h6 {
+  color: var(--text-primary) !important;
+}
+
+[data-theme="dark"] p,
+[data-theme="dark"] span,
+[data-theme="dark"] li,
+[data-theme="dark"] label,
+[data-theme="dark"] .text-primary {
+  color: var(--text-secondary) !important;
+}
+
+/* Contact Page - Specific Fixes */
+[data-theme="dark"] .info-card-label,
+[data-theme="dark"] .toggle-description,
+[data-theme="dark"] .stat-label {
+  color: var(--text-muted) !important;
+}
+
+[data-theme="dark"] .availability-status {
+  background: var(--bg-secondary);
+  color: var(--text-secondary) !important;
+}
+
+[data-theme="dark"] .status-dot.offline {
+  background: #64748b;
+}
+
+/* Impact Stats - Fix white text */
+[data-theme="dark"] .impact-stats {
+  background: var(--bg-secondary);
+}
+
+[data-theme="dark"] .stat {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+}
+
+/* "Back tomorrow" type messages */
+[data-theme="dark"] #availability-text {
+  color: var(--text-secondary) !important;
+}
+
+/* Form Inputs */
+input,
+textarea,
+select {
+  background: var(--input-bg);
+  color: var(--text-primary);
+  border-color: var(--border-color);
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: var(--text-muted);
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+[data-theme="dark"] input:focus,
+[data-theme="dark"] textarea:focus,
+[data-theme="dark"] select:focus {
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+}
+
+/* Buttons */
+.btn-primary,
+.submit-button,
+.send-button,
+.cta {
+  background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+}
+
+/* Filter Buttons */
+.filter-btn {
+  background: var(--hover-bg);
+  color: var(--text-primary);
+  border-color: var(--border-color);
+}
+/* Filter button hover - dark mode specific */
+[data-theme="dark"] .filter-btn:hover {
+  background: var(--hover-bg);
+  color: var(--accent-secondary);
+}
+[data-theme="dark"] .filter-btn.active:hover {
+  background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+  color: white;
+}
+
+.filter-btn.active {
+  background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+  color: white;
+}
+
+
+/* Profile Dropdown */
+.profile-button {
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  border-color: var(--border-color);
+}
+
+.profile-dropdown {
+  background: var(--bg-secondary);
+  border-color: var(--border-color);
+}
+
+.profile-menu {
+  background: var(--bg-secondary);
+  border-color: var(--border-color);
+}
+
+.profile-menu-header {
+  background: var(--bg-tertiary);
+}
+
+.profile-menu-item {
+  color: var(--text-primary);
+}
+
+.profile-menu-item:hover {
+  background: var(--hover-bg);
+}
+
+/* Footer */
+footer {
+  background: var(--footer-bg);
+  color: white;
+}
+
+/* Footer h3 and h4 gradient in dark mode */
+[data-theme="dark"] footer h3,
+[data-theme="dark"] footer h4 {
+  background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+[data-theme="dark"] footer {
+  border-top: 1px solid var(--border-color);
+}
+
+/* Chat/Chatbot */
+.chat-container {
+  background: var(--bg-secondary);
+  border-color: var(--border-color);
+}
+
+.chat-messages {
+  background: var(--bg-tertiary);
+}
+
+.bot-message .message-content {
+  background: var(--bg-secondary);
+  border-color: var(--border-color);
+}
+
+.user-message .message-content {
+  background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+}
+
+/* Badges Page */
+.badge-stats .stat-box {
+  background: var(--bg-secondary);
+}
+
+[data-theme="dark"] .badge-card.earned {
+  background: linear-gradient(135deg, var(--bg-secondary), var(--bg-tertiary));
+}
+
+/* Contact Page */
+.faq-item {
+  background: var(--bg-secondary);
+  border-color: var(--border-color);
+}
+
+.faq-question {
+  color: var(--text-primary);
+}
+
+.faq-answer p {
+  color: var(--text-secondary);
+}
+/* Fix all blue/gray text in dark mode */
+[data-theme="dark"] .contact-header p,
+[data-theme="dark"] .info-card p,
+[data-theme="dark"] .toggle-group .toggle-description,
+[data-theme="dark"] .footer-section p {
+  color: var(--text-secondary) !important;
+}
+
+[data-theme="dark"] .info-card a {
+  color: var(--accent-secondary) !important;
+}
+
+[data-theme="dark"] .info-card h3 {
+  color: var(--accent-secondary) !important;
+}
+
+
+[data-theme="dark"] [style*="color: rgb(1, 9, 67)"],
+[data-theme="dark"] [style*="color:#010943"] {
+  color: var(--text-primary) !important;
+}
+
+/* Profile Page */
+.page-header {
+  background: var(--bg-secondary);
+}
+
+.tab {
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+  border-color: var(--border-color);
+  transition: all 0.3s ease; /* Smooth transition */
+}
+
+.tab.current {
+  background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+  color: white;
+}
+
+.content {
+  background: var(--bg-secondary);
+  transition: background-color 0.3s ease; /* Smooth transition */
+}
+
+/* Map Page */
+.filter-buttons {
+  background: var(--nav-bg);
+  border-color: var(--border-color);
+}
+
+[data-theme="dark"] .filter-buttons {
+  backdrop-filter: blur(10px);
+}
+
+.filter-buttons label {
+  color: var(--text-primary);
+}
+
+.filter-buttons label:hover {
+  background: var(--hover-bg);
+}
+
+/* Events Page */
+.events-header h1 {
+  background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.event-description {
+  color: var(--text-secondary);
+}
+
+
+
+/* Social Links */
+[data-theme="dark"] .social-link {
+  background: var(--hover-bg);
+  color: var(--text-primary);
+}
+
+[data-theme="dark"] .social-link {
+  border: 1px solid var(--border-color);
+}
+
+/*Contact Us Social Links */
+[data-theme="dark"] .social-link-btn {
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+}
+
+[data-theme="dark"] .social-link-btn:hover {
+  text-decoration: none;
+  background: var(--hover-bg);
+  color: var(--accent-secondary);
+}
+/* Toggle Switch */
+.slider {
+  background-color: var(--border-color);
+}
+
+input:checked + .slider {
+  background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+}
+
+/* Dividers */
+.divider::before,
+.divider::after,
+.profile-menu-divider,
+.form-divider {
+  background: var(--border-color);
+}
+
+/* Scrollbar (Webkit browsers) */
+::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-tertiary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: 6px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-primary);
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .theme-toggle-container {
+    bottom: 20px;
+    right: 20px;
+  }
+
+  .theme-toggle {
+    padding: 10px 16px;
+    font-size: 13px;
+  }
+
+  .theme-toggle-text {
+    display: none;
+  }
+}
+
+/* High Contrast Mode Support */
+@media (prefers-contrast: high) {
+  :root {
+    --border-color: #000000;
+    --text-primary: #000000;
+  }
+
+  [data-theme="dark"] {
+    --border-color: #ffffff;
+    --text-primary: #ffffff;
+  }
+}
+
+/* Accessibility: Focus visible for keyboard navigation */
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 3px solid var(--accent-primary);
+  outline-offset: 2px;
+}
+
+/* Print styles - always light mode */
+@media print {
+  * {
+    background: white !important;
+    color: black !important;
+  }
+}
+
+/* ============================================
+   SPECIFIC PAGE FIXES FOR DARK MODE
+   ============================================ */
+
+/* Home Page - CTA Section */
+[data-theme="dark"] .footer-cta {
+  background: var(--bg-secondary);
+}
+
+[data-theme="dark"] .cta {
+  background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+  color: white;
+}
+
+/* Events Page */
+[data-theme="dark"] .filter-buttons-horizontal {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+}
+[data-theme="dark"] .filter-buttons-horizontal label:hover {
+  background: var(--hover-bg);
+  color: var(--accent-secondary);
+}
+[data-theme="dark"] .event-time strong, 
+[data-theme="dark"] .event-location strong {
+  color: var(--text-primary) !important;
+}
+/* Badges Page - Filter Buttons & Cards */
+[data-theme="dark"] .filter-buttons-horizontal {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+}
+
+[data-theme="dark"] .badge-card {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+}
+
+[data-theme="dark"] .badge-name {
+  color: var(--text-primary);
+}
+
+[data-theme="dark"] .badge-description {
+  color: var(--text-secondary);
+}
+
+[data-theme="dark"] .badge-card.locked {
+  opacity: 0.85;
+}
+
+[data-theme="dark"] .locked-badge {
+  background: #1e3a5f;
+  color: #93c5fd;
+  border: 1px solid #2563eb;
+}
+
+[data-theme="dark"] .badge-card.locked .badge-icon {
+  background: #1e3a5f;
+  border: 2px solid #334155;
+}
+
+/* Chatbot/Compass Page - Input Area */
+[data-theme="dark"] .chat-input-container {
+  background: var(--bg-secondary);
+  border-top-color: var(--border-color);
+}
+
+[data-theme="dark"] #user-input {
+  background: var(--input-bg);
+  color: var(--text-primary);
+  border-color: var(--border-color);
+}
+
+[data-theme="dark"] #user-input::placeholder {
+  color: var(--text-muted);
+}
+
+/* Map Page - Filter Buttons */
+[data-theme="dark"] .filter-buttons {
+  background: rgba(10, 22, 40, 0.95);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--border-color);
+}
+
+[data-theme="dark"] .filter-buttons::before {
+  color: var(--accent-secondary);
+  border-bottom-color: var(--border-color);
+}
+
+[data-theme="dark"] .filter-buttons label:hover {
+  background: var(--hover-bg);
+  color: var(--accent-secondary);
+}
+
+[data-theme="dark"] .leaflet-popup-content-wrapper {
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+}
+/* All Pages - Ensure backgrounds are dark blue */
+[data-theme="dark"] .events-main,
+[data-theme="dark"] .badges-main,
+[data-theme="dark"] .chatbot-main,
+[data-theme="dark"] .contact-main,
+[data-theme="dark"] .login-main,
+[data-theme="dark"] .profile-main {
+  background: var(--bg-primary);
+}
+
+/* Point sections */
+[data-theme="dark"] .point,
+[data-theme="dark"] .point-alt {
+  background: var(--bg-primary);
+}
+
+/* Image reveal section */
+[data-theme="dark"] .image-reveal {
+  background: var(--bg-tertiary);
+}
+
+/* Stat boxes in badges */
+[data-theme="dark"] .stat-box {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+}
+
+[data-theme="dark"] .stat-number {
+  background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Progress text in badges */
+[data-theme="dark"] .progress-text {
+  color: var(--text-secondary);
+}
+
+/* Category badges in badges page */
+[data-theme="dark"] .badge-category {
+  background: rgba(59, 130, 246, 0.2);
+  color: var(--accent-secondary);
+  border: 1px solid rgba(59, 130, 246, 0.3);
+}
+
+/* Info cards */
+[data-theme="dark"] .info-card {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+}
+
+[data-theme="dark"] .info-card-label {
+  color: var(--text-muted);
+}
+
+[data-theme="dark"] .info-card-value {
+  color: var(--text-primary);
+}
