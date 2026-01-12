@@ -52,8 +52,8 @@ Map.html
         <!-- Navigation links -->
         <nav class="nav-links">
           <ul>
-            <li class="navbar-item"><a href="index.html" class="active">Home</a></li>
-            <li class="navbar-item"><a href="map.html">Map</a></li>
+            <li class="navbar-item"><a href="index.html">Home</a></li>
+            <li class="navbar-item"><a href="map.html" class="active">Map</a></li>
             <li class="navbar-item"><a href="events.html">Events</a></li>
             <li class="navbar-item"><a href="chatbot.html">Compass</a></li>
             <li class="navbar-item"><a href="badges.html">Badges</a></li>
@@ -80,11 +80,21 @@ Map.html
   </div>
   <div id="map"></div>
 
+  <!-- Load centralized event data FIRST -->
+  <script src="events-data.js"></script>
+
+  <!-- Load popup component SECOND -->
+  <script src="events-popup.js"></script>
+
+  <!-- Load page-specific logic LAST -->
+  <script src="events.js"></script>
+  <script type="module" src="auth-check.js"></script>
+  <script src="badges.js"></script>
 
   <script src="map.js"></script>
   <!-- Firebase Auth with Profile Dropdown -->
-<script type="module" src="auth-check.js"></script>
-<script src="dark-mode.js"></script>
+  <script type="module" src="auth-check.js"></script>
+  <script src="dark-mode.js"></script>
 
 </body>
 </html>

@@ -142,7 +142,15 @@
     </div>
   </footer>
 
-<!-- Firebase Auth with Profile Dropdown -->
+  <!-- Load centralized event data FIRST -->
+  <script src="events-data.js"></script>
+
+  <!-- Load popup component SECOND -->
+  <script src="events-popup.js"></script>
+
+  <!-- Load page-specific logic LAST -->
+  <script src="events.js"></script>
+
   <script type="module" src="auth-check.js"></script>
   <script src="dark-mode.js"></script>
   <script src="events.js"></script>

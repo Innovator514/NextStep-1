@@ -191,3 +191,131 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 });
+
+// Carousel Functionality
+document.addEventListener("DOMContentLoaded", () => {
+  const track = document.querySelector(".carousel-track");
+  const prevBtn = document.querySelector(".carousel-btn.prev");
+  const nextBtn = document.querySelector(".carousel-btn.next");
+  const dotsNav = document.querySelector(".carousel-dots");
+
+  let slides = Array.from(track.children);
+  const slideCount = slides.length;
+  let index = 1; // start on first real slide
+  let autoplayInterval;
+  const AUTOPLAY_DELAY = 4000;
+
+  /* ---- Clone slides ---- */
+  const firstClone = slides[0].cloneNode(true);
+  const lastClone = slides[slides.length - 1].cloneNode(true);
+
+  track.appendChild(firstClone);
+  track.insertBefore(lastClone, slides[0]);
+
+  slides = Array.from(track.children);
+
+  /* ---- Create dots (real slides only) ---- */
+  for (let i = 0; i < slideCount; i++) {
+    const dot = document.createElement("button");
+    if (i === 0) dot.classList.add("active");
+    dotsNav.appendChild(dot);
+
+    dot.addEventListener("click", () => {
+      index = i + 1;
+      scrollToIndex();
+      resetAutoplay();
+    });
+  }
+
+  const dots = Array.from(dotsNav.children);
+
+  function slideWidth() {
+    return slides[0].getBoundingClientRect().width;
+  }
+
+  /* ---- Scroll helper ---- */
+  function scrollToIndex(jump = false) {
+    if (jump) track.classList.add("jump");
+
+    track.scrollTo({
+      left: slideWidth() * index,
+      behavior: jump ? "auto" : "smooth"
+    });
+
+    if (jump) {
+      requestAnimationFrame(() => track.classList.remove("jump"));
+    }
+  }
+
+  /* ---- Update dots ---- */
+  function updateDots() {
+    let realIndex = index - 1;
+    if (realIndex < 0) realIndex = slideCount - 1;
+    if (realIndex >= slideCount) realIndex = 0;
+
+    dots.forEach(d => d.classList.remove("active"));
+    dots[realIndex].classList.add("active");
+  }
+
+  /* ---- Autoplay ---- */
+  function startAutoplay() {
+    autoplayInterval = setInterval(() => {
+      index++;
+      scrollToIndex();
+    }, AUTOPLAY_DELAY);
+  }
+
+  function stopAutoplay() {
+    clearInterval(autoplayInterval);
+  }
+
+  function resetAutoplay() {
+    stopAutoplay();
+    startAutoplay();
+  }
+
+  /* ---- Buttons ---- */
+  prevBtn.addEventListener("click", () => {
+    index--;
+    scrollToIndex();
+    resetAutoplay();
+  });
+
+  nextBtn.addEventListener("click", () => {
+    index++;
+    scrollToIndex();
+    resetAutoplay();
+  });
+
+  /* ---- Scroll handling ---- */
+  track.addEventListener("scroll", () => {
+    window.requestAnimationFrame(() => {
+      const newIndex = Math.round(track.scrollLeft / slideWidth());
+
+      if (newIndex !== index) {
+        index = newIndex;
+        updateDots();
+      }
+
+      /* ---- Loop jump ---- */
+      if (index === 0) {
+        index = slideCount;
+        scrollToIndex(true);
+      }
+
+      if (index === slideCount + 1) {
+        index = 1;
+        scrollToIndex(true);
+      }
+    });
+  });
+
+  /* ---- Pause on hover ---- */
+  track.addEventListener("mouseenter", stopAutoplay);
+  track.addEventListener("mouseleave", startAutoplay);
+
+  /* ---- Init ---- */
+  scrollToIndex(true);
+  updateDots();
+  startAutoplay();
+});

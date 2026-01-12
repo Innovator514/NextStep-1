@@ -1,3 +1,6 @@
+// map.js - Updated to use centralized data and support detail popups
+// Load events-data.js and event-popup.js BEFORE this file
+
 // Exact centroid of Boca Raton
 const boca = [26.3684, -80.1289];
 var map = L.map('map', {
@@ -51,26 +54,15 @@ var environmental = L.layerGroup();
 var education = L.layerGroup();
 
 // Define custom icons with shadows for each category
-// Icon size: 69x92 pixels
-// Shadow size: 41x41 pixels
-// iconAnchor: position of the "tip" of the icon (bottom center for markers)
-// shadowAnchor: where shadow connects to icon tip
-
-const iconShadow = L.icon({
-    shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png',
-    shadowSize: [41, 41],
-    shadowAnchor: [12, 41]
-});
-
 const customIcons = {
     political: L.icon({
         iconUrl: 'images/political.png',
         shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png',
-        iconSize: [35, 46],      // Display size: scaled down from 69x92
+        iconSize: [35, 46],
         shadowSize: [41, 41],
-        iconAnchor: [17, 46],    // Bottom center (half of width, full height)
+        iconAnchor: [17, 46],
         shadowAnchor: [12, 41],
-        popupAnchor: [1, -40]    // Popup appears above marker
+        popupAnchor: [1, -40]
     }),
     youth: L.icon({
         iconUrl: 'images/youth.png',
@@ -110,71 +102,7 @@ const customIcons = {
     })
 };
 
-// ---------- EVENTS DATA ----------
-const eventsData = [
-    {
-        title: "Town Hall Meeting",
-        date: "November 21, 2025",
-        time: "7:00 PM",
-        location: "Mizner Park Amphitheater",
-        lat: 26.354,
-        lng: -80.084,
-        category: "political",
-        description: "Join us for a community discussion on local governance."
-    },
-    {
-        title: "Youth Leadership Workshop",
-        date: "December 5, 2025",
-        time: "3:00 PM",
-        location: "Boca Raton Community Center",
-        lat: 26.3682,
-        lng: -80.1036,
-        category: "youth",
-        description: "Empowering the next generation of civic leaders."
-    },
-    {
-        title: "Tech Innovation Summit",
-        date: "December 10, 2025",
-        time: "9:00 AM",
-        location: "FAU Tech Runway",
-        lat: 26.3748,
-        lng: -80.1027,
-        category: "innovation",
-        description: "Discover cutting-edge technology solutions for civic challenges."
-    },
-    {
-        title: "Beach Clean-Up Day",
-        date: "December 15, 2025",
-        time: "8:00 AM",
-        location: "South Beach Park",
-        lat: 26.3421,
-        lng: -80.0758,
-        category: "environmental",
-        description: "Help keep our beaches clean and beautiful."
-    },
-    {
-        title: "Education Forum",
-        date: "December 20, 2025",
-        time: "6:30 PM",
-        location: "Boca Raton Library",
-        lat: 26.3587,
-        lng: -80.0831,
-        category: "education",
-        description: "Discuss the future of education in our community."
-    },
-    {
-        title: "City Council Meeting",
-        date: "January 5, 2026",
-        time: "7:00 PM",
-        location: "City Hall",
-        lat: 26.3586,
-        lng: -80.0831,
-        category: "political",
-        description: "Monthly city council meeting open to the public."
-    }
-];
-
-// ---------- CREATE MARKERS FROM DATA ----------
+// Create category layer group mapping
 const categoryMap = {
     political: political,
     youth: youth,
@@ -183,25 +111,79 @@ const categoryMap = {
     education: education
 };
 
-eventsData.forEach(event => {
-    // Use custom icon with shadow based on category
+// Create markers from centralized event data
+window.eventsData.forEach(event => {
+    // Use custom icon based on category
     const marker = L.marker([event.lat, event.lng], {
         icon: customIcons[event.category]
     });
     
-    marker.bindPopup(`
-        <div style="min-width: 200px;">
-            <span style="font-weight: bold; font-size: 18px; color: #2563eb;">${event.title}</span><br>
-            <span style="color: #64748b; font-size: 14px;">📅 ${event.date}</span><br>
-            <span style="color: #64748b; font-size: 14px;">⏰ ${event.time}</span><br>
-            <span style="color: #64748b; font-size: 14px;">📍 ${event.location}</span><br>
-            <span style="color: #64748b; font-size: 13px; margin-top: 8px; display: block;">${event.description}</span>
+    // Create popup content with "View Details" button
+    const popupContent = `
+        <div style="min-width: 250px; font-family: 'Open Sans', sans-serif;">
+            <div style="background: linear-gradient(135deg, #2563eb, #3b82f6); color: white; padding: 12px; margin: -12px -12px 12px -12px; border-radius: 8px 8px 0 0;">
+                <span style="font-weight: bold; font-size: 18px; display: block; margin-bottom: 4px;">${event.title}</span>
+                <span style="font-size: 11px; text-transform: uppercase; background: rgba(255,255,255,0.2); padding: 3px 8px; border-radius: 10px; display: inline-block;">${event.category}</span>
+            </div>
+            <div style="padding: 0 4px;">
+                <div style="margin-bottom: 10px;">
+                    <div style="color: #64748b; font-size: 13px; margin-bottom: 4px;"><strong style="color: #2563eb;">📅</strong> ${event.date} at ${event.time}</div>
+                    <div style="color: #64748b; font-size: 13px; margin-bottom: 4px;"><strong style="color: #2563eb;">📍</strong> ${event.location}</div>
+                    <div style="color: #64748b; font-size: 13px;"><strong style="color: #2563eb;">👥</strong> ${event.registered}/${event.capacity} registered</div>
+                </div>
+                <p style="color: #475569; font-size: 14px; line-height: 1.5; margin: 12px 0;">${event.description}</p>
+                <button 
+                    onclick="openEventPopup('${event.id}')"
+                    style="
+                        width: 100%;
+                        padding: 10px 16px;
+                        background: linear-gradient(135deg, #2563eb, #3b82f6);
+                        color: white;
+                        border: none;
+                        border-radius: 8px;
+                        font-weight: 700;
+                        font-size: 14px;
+                        cursor: pointer;
+                        transition: all 0.3s ease;
+                        font-family: 'Open Sans', sans-serif;
+                    "
+                    onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 12px rgba(37,99,235,0.4)'"
+                    onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'"
+                >
+                    📋 View Full Details
+                </button>
+            </div>
         </div>
-    `);
+    `;
+    
+    marker.bindPopup(popupContent, {
+        maxWidth: 300,
+        className: 'custom-popup'
+    });
     
     // Add marker to appropriate category layer
     marker.addTo(categoryMap[event.category]);
 });
+
+// Add custom popup styles
+const popupStyle = document.createElement('style');
+popupStyle.textContent = `
+    .custom-popup .leaflet-popup-content-wrapper {
+        border-radius: 12px;
+        padding: 12px;
+        box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+    }
+    
+    .custom-popup .leaflet-popup-content {
+        margin: 0;
+        line-height: 1.4;
+    }
+    
+    .custom-popup .leaflet-popup-tip {
+        box-shadow: 0 3px 14px rgba(0,0,0,0.1);
+    }
+`;
+document.head.appendChild(popupStyle);
 
 // Add LayerGroups to map by default
 political.addTo(map);
@@ -210,7 +192,7 @@ innovation.addTo(map);
 environmental.addTo(map);
 education.addTo(map);
 
-// ---------- FILTER CONTROL ----------
+// Filter control
 var filterControl = L.control({ position: 'topleft' });
 
 filterControl.onAdd = function(map) {
@@ -231,7 +213,7 @@ filterControl.onAdd = function(map) {
 
 filterControl.addTo(map);
 
-// ---------- FILTER LOGIC ----------
+// Filter logic
 function updateLayers() {
     if (document.getElementById('politicalCheckbox').checked) {
         map.addLayer(political);
@@ -269,5 +251,5 @@ function updateLayers() {
     document.getElementById(id + 'Checkbox').addEventListener('change', updateLayers);
 });
 
-// ---------- ZOOM CONTROL ----------
+// Zoom control
 L.control.zoom({ position: 'bottomleft' }).addTo(map);

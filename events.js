@@ -1,113 +1,8 @@
-// Events Data (same as map.js)
-const eventsData = [
-    {
-        id: 'event-1',
-        title: "Town Hall Meeting",
-        date: "November 21, 2025",
-        time: "7:00 PM",
-        location: "Mizner Park Amphitheater",
-        lat: 26.354,
-        lng: -80.084,
-        category: "political",
-        description: "Join us for a community discussion on local governance and make your voice heard.",
-        badgeProgress: {
-            eventsAttended: 1,
-            townHallSpeeches: 0 // Can be 1 if user spoke
-        }
-    },
-    {
-        id: 'event-2',
-        title: "Youth Leadership Workshop",
-        date: "December 5, 2025",
-        time: "3:00 PM",
-        location: "Boca Raton Community Center",
-        lat: 26.3682,
-        lng: -80.1036,
-        category: "youth",
-        description: "Empowering the next generation of civic leaders through interactive workshops.",
-        badgeProgress: {
-            eventsAttended: 1,
-            youthEvents: 1
-        }
-    },
-    {
-        id: 'event-3',
-        title: "Tech Innovation Summit",
-        date: "December 10, 2025",
-        time: "9:00 AM",
-        location: "FAU Tech Runway",
-        lat: 26.3748,
-        lng: -80.1027,
-        category: "innovation",
-        description: "Discover cutting-edge technology solutions for civic challenges and community development.",
-        badgeProgress: {
-            eventsAttended: 1,
-            innovationSummits: 1
-        }
-    },
-    {
-        id: 'event-4',
-        title: "Beach Clean-Up Day",
-        date: "December 15, 2025",
-        time: "8:00 AM",
-        location: "South Beach Park",
-        lat: 26.3421,
-        lng: -80.0758,
-        category: "environmental",
-        description: "Help keep our beaches clean and beautiful. Supplies provided, just bring your enthusiasm!",
-        badgeProgress: {
-            eventsAttended: 1,
-            environmentalEvents: 1,
-            volunteeredHours: 2
-        }
-    },
-    {
-        id: 'event-5',
-        title: "Education Forum",
-        date: "December 20, 2025",
-        time: "6:30 PM",
-        location: "Boca Raton Library",
-        lat: 26.3587,
-        lng: -80.0831,
-        category: "education",
-        description: "Discuss the future of education in our community with school board members and educators.",
-        badgeProgress: {
-            eventsAttended: 1
-        }
-    },
-    {
-        id: 'event-6',
-        title: "City Council Meeting",
-        date: "January 5, 2026",
-        time: "7:00 PM",
-        location: "City Hall",
-        lat: 26.3586,
-        lng: -80.0831,
-        category: "political",
-        description: "Monthly city council meeting open to the public. Voice your concerns and stay informed.",
-        badgeProgress: {
-            eventsAttended: 1,
-            electionsVoted: 0 // Can be 1 if voting related
-        }
-    },
-    {
-        id: 'event-7',
-        title: "Community Garden Project",
-        date: "January 12, 2026",
-        time: "9:00 AM",
-        location: "Spanish River Park",
-        lat: 26.3586,
-        lng: -80.0831,
-        category: "environmental",
-        description: "Help build our community garden and learn sustainable farming practices.",
-        badgeProgress: {
-            eventsAttended: 1,
-            environmentalEvents: 1,
-            volunteeredHours: 3,
-            serviceProjects: 1
-        }
-    }
-];
+// events.js - Updated to use centralized data and support popups
+// Load events-data.js and event-popup.js BEFORE this file
+
+// Current filter
+let currentFilter = 'all';
 
 // Load completed events from localStorage
 function loadCompletedEvents() {
@@ -126,7 +21,7 @@ function isEventCompleted(eventId) {
     return completedEvents.includes(eventId);
 }
 
-// Load user progress from localStorage (direct implementation - no dependency on badges.js)
+// Load user progress from localStorage
 function loadUserProgress() {
     const saved = localStorage.getItem('userProgress');
     return saved ? JSON.parse(saved) : {
@@ -148,14 +43,14 @@ function loadUserProgress() {
     };
 }
 
-// Save user progress to localStorage (direct implementation - no dependency on badges.js)
+// Save user progress to localStorage
 function saveUserProgress(userProgress) {
     localStorage.setItem('userProgress', JSON.stringify(userProgress));
 }
 
 // Mark event as completed and update badge progress
 function markEventCompleted(eventId) {
-    const event = eventsData.find(e => e.id === eventId);
+    const event = window.eventsData.find(e => e.id === eventId);
     if (!event) {
         console.error('Event not found:', eventId);
         return;
@@ -205,7 +100,7 @@ function markEventCompleted(eventId) {
 
 // Mark event as uncompleted and subtract badge progress
 function markEventUncompleted(eventId) {
-    const event = eventsData.find(e => e.id === eventId);
+    const event = window.eventsData.find(e => e.id === eventId);
     if (!event) {
         console.error('Event not found:', eventId);
         return;
@@ -253,22 +148,19 @@ function markEventUncompleted(eventId) {
     renderEvents(currentFilter);
 }
 
-// Current filter
-let currentFilter = 'all';
-
 // Render Events
 function renderEvents(filter = 'all') {
     const eventsGrid = document.getElementById('events-grid');
     
     const filteredEvents = filter === 'all' 
-        ? eventsData 
-        : eventsData.filter(event => event.category === filter);
+        ? window.eventsData 
+        : window.eventsData.filter(event => event.category === filter);
     
     eventsGrid.innerHTML = filteredEvents.map(event => {
         const isCompleted = isEventCompleted(event.id);
         
         return `
-        <div class="event-card" data-category="${event.category}">
+        <div class="event-card" data-category="${event.category}" style="cursor: pointer;" onclick="openEventPopup('${event.id}')">
             <div class="event-header ${event.category}">
                 <div class="event-category">${event.category}</div>
                 <div class="event-title">${event.title}</div>
@@ -284,7 +176,7 @@ function renderEvents(filter = 'all') {
                 <div class="event-description">${event.description}</div>
                 <button 
                     class="complete-event-btn ${isCompleted ? 'completed' : ''}"
-                    onclick="${isCompleted ? `markEventUncompleted('${event.id}')` : `markEventCompleted('${event.id}')`}"
+                    onclick="event.stopPropagation(); ${isCompleted ? `markEventUncompleted('${event.id}')` : `markEventCompleted('${event.id}')`}"
                     style="
                         margin-top: 1rem;
                         padding: 0.75rem 1.5rem;
@@ -302,6 +194,27 @@ function renderEvents(filter = 'all') {
                     onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'"
                 >
                     ${isCompleted ? '✓ Completed (Click to Undo)' : 'Mark as Completed'}
+                </button>
+                <button 
+                    class="view-details-btn"
+                    onclick="event.stopPropagation(); openEventPopup('${event.id}')"
+                    style="
+                        margin-top: 0.5rem;
+                        padding: 0.75rem 1.5rem;
+                        background: linear-gradient(135deg, #2563eb, #3b82f6);
+                        color: white;
+                        border: none;
+                        border-radius: 10px;
+                        font-weight: 600;
+                        cursor: pointer;
+                        width: 100%;
+                        transition: all 0.3s ease;
+                        font-size: 0.95rem;
+                    "
+                    onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 20px rgba(37, 99, 235, 0.4)'"
+                    onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'"
+                >
+                    📋 View Full Details
                 </button>
             </div>
         </div>
@@ -339,3 +252,7 @@ function handleNewsletter(event) {
 
 // Initial render
 renderEvents('all');
+
+// Make functions globally available
+window.markEventCompleted = markEventCompleted;
+window.markEventUncompleted = markEventUncompleted;
