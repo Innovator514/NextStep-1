@@ -13,34 +13,40 @@
 
     <link rel="stylesheet" href="style.css" type="text/css"/>
     <link rel="stylesheet" href="profile.css" type="text/css"/>
+    <link rel="stylesheet" href="dark-mode.css" type="text/css"/>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
-<body>
+<body class="profile-page">
     <!-- Navigation - FIXED -->
     <nav>
         <div class="navbar">
             <div class="navdiv">
+                <!-- Logo -->
                 <div class="logo">
                     <a href="index.html">
                         <img src="logo.png" alt="NextStep Logo" class="logo-image">
                     </a>
                 </div>
-                <!-- FIXED NAVBAR STRUCTURE -->
-                <ul>
-                    <li class="navbar-item"><a href="index.html">Home</a></li>
-                    <li class="navbar-item"><a href="map.html">Map</a></li>
-                    <li class="navbar-item"><a href="events.html">Events</a></li>
-                    <li class="navbar-item"><a href="chatbot.html">Compass</a></li>
-                    <li class="navbar-item"><a href="badges.html">Badges</a></li>
-                    <li class="navbar-item"><a href="contact.html">Contact Us</a></li>
-                    <!-- Spacer to push login/signup to the right -->
-                    <li class="navbar-spacer"></li>
-                    <!-- Login/Signup at the end (will be replaced by profile dropdown when logged in) -->
-                    <li class="navbar-item"><a href="login.html" class="login">Login</a></li>
-                    <li class="navbar-item"><a href="signup.html" class="signup">Sign Up</a></li>
-                </ul>
+
+                <!-- Navigation links -->
+                <nav class="nav-links">
+                    <ul>
+                        <li class="navbar-item"><a href="index.html">Home</a></li>
+                        <li class="navbar-item"><a href="map.html">Map</a></li>
+                        <li class="navbar-item"><a href="events.html">Events</a></li>
+                        <li class="navbar-item"><a href="chatbot.html">Compass</a></li>
+                        <li class="navbar-item"><a href="badges.html">Badges</a></li>
+                        <li class="navbar-item"><a href="contact.html">Contact Us</a></li>
+                    </ul>
+                </nav>
+
+                <!-- Login/Sign Up - Will be replaced by profile dropdown when logged in -->
+                <div class="nav-right">
+                    <div class="navbar-item"><a href="login.html" class="login">Login</a></div>
+                    <div class="navbar-item"><a href="signup.html" class="signup">Sign Up</a></div>
+                </div>
             </div>
         </div>
     </nav>
@@ -248,5 +254,6 @@
     <script type="module" src="auth-check.js"></script>
     <!-- Then load profile-specific JavaScript -->
     <script type="module" src="profile.js"></script>
+    <script src="dark-mode.js"></script>
 </body>
 </html>

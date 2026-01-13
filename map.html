@@ -1,5 +1,3 @@
-Map.html
-
 <!DOCTYPE html>
 <html lang="en" class="h-full" dir="ltr">
   <head>
@@ -15,29 +13,23 @@ Map.html
 
     <link rel="stylesheet" href="style.css" type="text/css"/>
     <link rel="stylesheet" href="map.css" type="text/css"/>
-  <link rel="stylesheet" href="dark-mode.css" type="text/css"/>
-
+    <link rel="stylesheet" href="dark-mode.css" type="text/css"/>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
 
-
     <title>NextStep - Map</title>
 
-
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
       integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
       crossorigin=""/>
 
-
-   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
      integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
      crossorigin=""></script>
-
-
   </head>
-  <body>
+  <body class="map-page">
   <!--Navigation Menu-->
   <nav>
     <div class="navbar">
@@ -63,14 +55,13 @@ Map.html
 
         <div class="nav-right">
           <!-- Login/Signup at the end (will be replaced by profile dropdown when logged in) -->
-          <li class="navbar-item"><a href="login.html" class="login">Login</a></li>
-          <li class="navbar-item"><a href="signup.html" class="signup">Sign Up</a></li>
+          <div class="navbar-item"><a href="login.html" class="login">Login</a></div>
+          <div class="navbar-item"><a href="signup.html" class="signup">Sign Up</a></div>
         </div>
       </div>
     </div>
   </nav>
 
- 
   <div class="filter-buttons">
     <button onclick="showPolitical()"> Political</button>
     <button onclick="showYouth()"> Youth</button>
@@ -98,10 +89,3 @@ Map.html
 
 </body>
 </html>
-
-
-
-
-
-
-

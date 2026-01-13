@@ -782,3 +782,185 @@ textarea:focus-visible {
 [data-theme="dark"] .info-card-value {
   color: var(--text-primary);
 }
+
+/* ADD THESE STYLES TO dark-mode.css */
+
+/* ============================================
+   PROFILE, SETTINGS, AND ACTIVITY DARK MODE
+   ============================================ */
+
+/* Profile Main Container */
+[data-theme="dark"] .profile-main {
+    background: var(--bg-primary);
+}
+
+/* Page Header */
+[data-theme="dark"] .page-header {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+}
+
+[data-theme="dark"] .page-header h1 {
+    color: var(--text-primary) !important;
+}
+
+[data-theme="dark"] .back-btn {
+    background: var(--hover-bg);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+}
+
+[data-theme="dark"] .back-btn:hover {
+    background: var(--border-color);
+}
+
+/* Tabs */
+[data-theme="dark"] .tab {
+    background: var(--bg-secondary);
+    color: var(--text-secondary);
+    border-color: var(--border-color);
+}
+
+[data-theme="dark"] .tab:hover {
+    background: var(--hover-bg);
+    color: var(--accent-secondary);
+}
+
+[data-theme="dark"] .tab.current {
+    background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+    color: white;
+    border-color: var(--accent-primary);
+}
+
+/* Content Area */
+[data-theme="dark"] .content {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+}
+
+/* Profile Header */
+[data-theme="dark"] .profile-header {
+    border-bottom-color: var(--border-color);
+}
+
+[data-theme="dark"] .profile-name-display {
+    color: var(--text-primary) !important;
+}
+
+[data-theme="dark"] .profile-email-display {
+    color: var(--text-secondary) !important;
+}
+
+/* Profile Photo */
+[data-theme="dark"] .profile-photo {
+    border-color: var(--accent-primary);
+}
+
+[data-theme="dark"] .profile-initials-large {
+    background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+    border-color: var(--accent-primary);
+}
+
+/* Info Cards */
+[data-theme="dark"] .info-card {
+    background: var(--bg-tertiary);
+    border-color: var(--border-color);
+}
+
+[data-theme="dark"] .info-card-label {
+    color: var(--text-muted) !important;
+}
+
+[data-theme="dark"] .info-card-value {
+    color: var(--text-primary) !important;
+}
+
+/* Stats Cards */
+[data-theme="dark"] .stat-card {
+    background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+    color: white;
+}
+
+/* Settings Sections */
+[data-theme="dark"] .settings-section h2 {
+    color: var(--accent-secondary) !important;
+    border-bottom-color: var(--border-color);
+}
+
+[data-theme="dark"] .form-group label {
+    color: var(--text-secondary) !important;
+}
+
+[data-theme="dark"] .form-group input {
+    background: var(--input-bg);
+    color: var(--text-primary);
+    border-color: var(--border-color);
+}
+
+[data-theme="dark"] .form-group input:focus {
+    border-color: var(--accent-primary);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+}
+
+/* Toggle Groups */
+[data-theme="dark"] .toggle-group {
+    background: var(--bg-tertiary);
+    border-color: var(--border-color);
+}
+
+[data-theme="dark"] .toggle-label {
+    color: var(--text-primary) !important;
+}
+
+[data-theme="dark"] .toggle-description {
+    color: var(--text-muted) !important;
+}
+
+[data-theme="dark"] .slider {
+    background-color: var(--border-color);
+}
+
+[data-theme="dark"] input:checked + .slider {
+    background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+}
+
+/* Buttons */
+[data-theme="dark"] .btn-primary {
+    background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+    color: white;
+}
+
+[data-theme="dark"] .btn-danger {
+    background: #ef4444;
+    color: white;
+}
+
+[data-theme="dark"] .btn-danger:hover {
+    background: #dc2626;
+}
+
+/* Messages */
+[data-theme="dark"] .message.success {
+    background: rgba(16, 185, 129, 0.2);
+    color: #86efac;
+    border-color: rgba(16, 185, 129, 0.3);
+}
+
+[data-theme="dark"] .message.error {
+    background: rgba(239, 68, 68, 0.2);
+    color: #fca5a5;
+    border-color: rgba(239, 68, 68, 0.3);
+}
+
+/* Activity Tab - Recent Activity Cards */
+[data-theme="dark"] #activity-tab .info-card {
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-color);
+}
+
+/* Stats Grid in Activity Tab */
+[data-theme="dark"] #activity-tab .stats-grid .info-card {
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-color);
+    text-align: center;
+}
