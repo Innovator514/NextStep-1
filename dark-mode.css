@@ -333,22 +333,22 @@ select:focus {
 }
 
 /* Filter Buttons */
-.filter-btn {
-  background: var(--hover-bg);
+[data-theme="dark"] .filter-btn {
+  background: var(--bg-secondary);
   color: var(--text-primary);
   border-color: var(--border-color);
 }
 /* Filter button hover - dark mode specific */
 [data-theme="dark"] .filter-btn:hover {
-  background: var(--hover-bg);
+  background: var(--hover-bg) !important;
   color: var(--accent-secondary);
 }
 [data-theme="dark"] .filter-btn.active:hover {
-  background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+  background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary)) !important;
   color: white;
 }
 
-.filter-btn.active {
+[data-theme="dark"] .filter-btn.active {
   background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
   color: white;
 }
@@ -641,7 +641,7 @@ textarea:focus-visible {
 
 /* Events Page */
 [data-theme="dark"] .filter-buttons-horizontal {
-  background: var(--bg-secondary);
+  background: var(--bg-secondary)!important;
   border: 1px solid var(--border-color);
 }
 [data-theme="dark"] .filter-buttons-horizontal label:hover {
@@ -970,4 +970,170 @@ textarea:focus-visible {
 }
 [data-theme="dark"] .carousel-dots button.active {
   background: white;
+}
+
+/* Add these styles to the END of dark-mode.css */
+
+/* ============================================
+   EVENT POPUP DARK MODE FIXES
+   ============================================ */
+
+/* 1. Event Popup - Dark mode background and text */
+[data-theme="dark"] .event-popup-overlay {
+    background: rgba(0, 0, 0, 0.85);
+}
+
+[data-theme="dark"] .event-popup {
+    background: var(--bg-secondary);
+}
+
+[data-theme="dark"] .event-popup-title,
+[data-theme="dark"] .event-popup-value {
+    color: var(--text-primary) !important;
+}
+
+[data-theme="dark"] .event-popup-organizer,
+[data-theme="dark"] .event-popup-label,
+[data-theme="dark"] .capacity-text {
+    color: var(--text-secondary) !important;
+}
+
+[data-theme="dark"] .event-popup-info-card {
+    background: var(--bg-tertiary);
+    border-color: var(--border-color);
+}
+
+[data-theme="dark"] .event-popup-tag {
+    background: var(--hover-bg);
+    color: var(--accent-secondary);
+}
+
+/* 2. Map Popup - Fix gray text visibility */
+[data-theme="dark"] .leaflet-popup-content-wrapper {
+    background-color: var(--bg-secondary);
+    color: var(--text-primary);
+}
+
+[data-theme="dark"] .leaflet-popup-content {
+    color: var(--text-primary) !important;
+}
+
+/* Fix the date/location/registration text in map popup */
+[data-theme="dark"] .custom-popup .leaflet-popup-content div[style*="color: #64748b"] {
+    color: var(--text-secondary) !important;
+}
+
+/* Make all text in map popup visible */
+[data-theme="dark"] .leaflet-popup-content strong {
+    color: var(--accent-secondary) !important;
+}
+
+/* 4. Category-colored headers in popup (both light and dark mode) */
+/* Political - Blue */
+.event-popup-header.political,
+.custom-popup .category-political {
+    background: linear-gradient(135deg, #3b82f6, #2563eb) !important;
+}
+
+/* Youth - Orange */
+.event-popup-header.youth,
+.custom-popup .category-youth {
+    background: linear-gradient(135deg, #fb923c, #f59e0b) !important;
+}
+
+/* Innovation - Pink */
+.event-popup-header.innovation,
+.custom-popup .category-innovation {
+    background: linear-gradient(135deg, #ec4899, #db2777) !important;
+}
+
+/* Environmental - Green */
+.event-popup-header.environmental,
+.custom-popup .category-environmental {
+    background: linear-gradient(135deg, #34d399, #10b981) !important;
+}
+
+/* Education - Purple */
+.event-popup-header.education,
+.custom-popup .category-education {
+    background: linear-gradient(135deg, #ba3eeb, #b325eb) !important;
+}
+
+/* 5. Map zoom controls dark mode */
+[data-theme="dark"] .leaflet-control-zoom a {
+    background: var(--bg-secondary) !important;
+    color: var(--accent-secondary) !important;
+    border: 1px solid var(--border-color) !important;
+}
+
+[data-theme="dark"] .leaflet-control-zoom a:hover {
+    background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary)) !important;
+    color: white !important;
+}
+
+/* 6. Profile page stat cards - Fix visibility in BOTH modes */
+
+/* Light mode - gradient background with white text */
+.stat-card {
+    background: linear-gradient(135deg, #2563eb, #3b82f6);
+    color: white;
+}
+
+.stat-card .stat-number,
+.stat-card .stat-label {
+    color: white !important;
+}
+
+/* Dark mode - keep gradient but ensure text is visible */
+[data-theme="dark"] .stat-card {
+    background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+    color: white;
+}
+
+[data-theme="dark"] .stat-card .stat-number,
+[data-theme="dark"] .stat-card .stat-label {
+    color: white !important;
+}
+
+/* Additional fixes for map filter buttons in dark mode */
+[data-theme="dark"] .filter-buttons {
+    background: rgba(10, 22, 40, 0.95);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--border-color);
+}
+
+[data-theme="dark"] .filter-buttons label {
+    color: var(--text-primary);
+}
+
+[data-theme="dark"] .filter-buttons label:hover {
+    background: var(--hover-bg);
+    color: var(--accent-secondary);
+}
+
+
+
+/* Fix capacity progress bar in dark mode */
+[data-theme="dark"] .capacity-bar {
+    background: var(--border-color);
+}
+
+[data-theme="dark"] .capacity-fill {
+    background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+}
+
+/* Ensure popup action buttons are visible in dark mode */
+[data-theme="dark"] .event-popup-btn.btn-primary {
+    background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+    color: white;
+}
+
+[data-theme="dark"] .event-popup-btn.btn-secondary {
+    background: var(--bg-tertiary);
+    color: var(--accent-secondary);
+    border-color: var(--accent-secondary);
+}
+
+[data-theme="dark"] .event-popup-btn.btn-secondary:hover {
+    background: var(--hover-bg);
 }

@@ -648,11 +648,11 @@ body {
 .photo-overlay::before {
     /* Pseudo-element for camera emoji */
     
-    content: "📷";
+    content: "+";
     /* Camera emoji icon
        Universal symbol for photo
        No need for image file or icon font */
-    
+    color: white;
     font-size: 20px;
     /* Large emoji size
        Easily visible and recognizable */

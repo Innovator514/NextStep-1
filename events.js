@@ -214,7 +214,7 @@ function renderEvents(filter = 'all') {
                     onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 20px rgba(37, 99, 235, 0.4)'"
                     onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'"
                 >
-                    📋 View Full Details
+                    View More Details
                 </button>
             </div>
         </div>

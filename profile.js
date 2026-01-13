@@ -1,4 +1,4 @@
-// Profile page JavaScript - Firebase Auth version
+// Profile page JavaScript - Firebase Auth version with Photo Integration
 
 import { getAuth, updateProfile, updatePassword, EmailAuthProvider, reauthenticateWithCredential } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
 
@@ -33,6 +33,35 @@ function updateInitialsDisplay(name) {
     const navProfileName = document.querySelector('.profile-name');
     if (navProfileName && name) {
         navProfileName.textContent = name.split(' ')[0];
+    }
+}
+
+// Update profile photo in nav dropdown
+function updateNavPhoto(photoURL) {
+    const profileBtn = document.querySelector('.profile-btn');
+    if (!profileBtn) return;
+    
+    const existingPhoto = profileBtn.querySelector('.profile-photo-nav');
+    const existingInitials = profileBtn.querySelector('.profile-initials');
+    
+    if (photoURL) {
+        // Replace initials with photo
+        if (existingInitials) {
+            existingInitials.outerHTML = `<img src="${photoURL}" alt="Profile" class="profile-photo-nav">`;
+        } else if (!existingPhoto) {
+            // Insert photo at the beginning
+            profileBtn.insertAdjacentHTML('afterbegin', `<img src="${photoURL}" alt="Profile" class="profile-photo-nav">`);
+        } else {
+            // Update existing photo
+            existingPhoto.src = photoURL;
+        }
+    } else {
+        // Use initials
+        if (existingPhoto) {
+            const user = auth.currentUser;
+            const name = user?.displayName || user?.email?.split('@')[0] || 'User';
+            existingPhoto.outerHTML = `<span class="profile-initials">${getInitials(name)}</span>`;
+        }
     }
 }
 
@@ -85,25 +114,44 @@ function setupPhotoUpload() {
                 }
                 
                 const reader = new FileReader();
-                reader.onload = function(readerEvent) {
-                    // Replace initials with actual photo
-                    const container = document.querySelector('.profile-photo-container');
-                    if (container) {
-                        container.innerHTML = `
-                            <img class="profile-photo" src="${readerEvent.target.result}" alt="Profile Photo">
-                            <label for="photo-input" class="photo-overlay"></label>
-                            <input type="file" id="photo-input" accept="image/*">
-                        `;
-                        setupPhotoUpload(); // Re-attach listener
-                        
-                        // Save to localStorage (Firebase Storage would be better for production)
-                        try {
-                            localStorage.setItem('profilePhoto', readerEvent.target.result);
+                reader.onload = async function(readerEvent) {
+                    const photoURL = readerEvent.target.result;
+                    
+                    // Update Firebase profile
+                    try {
+                        const user = auth.currentUser;
+                        if (user) {
+                            await updateProfile(user, {
+                                photoURL: photoURL
+                            });
+                            
+                            // Update profile page photo
+                            const container = document.querySelector('.profile-photo-container');
+                            if (container) {
+                                container.innerHTML = `
+                                    <img class="profile-photo" src="${photoURL}" alt="Profile Photo">
+                                    <label for="photo-input" class="photo-overlay"></label>
+                                    <input type="file" id="photo-input" accept="image/*">
+                                `;
+                                setupPhotoUpload(); // Re-attach listener
+                            }
+                            
+                            // Update nav dropdown photo
+                            updateNavPhoto(photoURL);
+                            
+                            // Save to localStorage as backup
+                            try {
+                                localStorage.setItem('profilePhoto', photoURL);
+                                localStorage.setItem('userPhotoURL', photoURL);
+                            } catch (e) {
+                                console.error('Error saving to localStorage:', e);
+                            }
+                            
                             showMessage('Profile photo updated successfully!', 'success');
-                        } catch (e) {
-                            console.error('Error saving photo:', e);
-                            showMessage('Photo updated but could not be saved', 'error');
                         }
+                    } catch (error) {
+                        console.error('Error updating profile photo:', error);
+                        showMessage('Error updating photo: ' + error.message, 'error');
                     }
                 };
                 reader.readAsDataURL(file);
@@ -125,6 +173,7 @@ function loadSavedPhoto(user) {
                     <input type="file" id="photo-input" accept="image/*">
                 `;
                 setupPhotoUpload();
+                updateNavPhoto(user.photoURL);
                 return;
             }
         }
@@ -140,6 +189,7 @@ function loadSavedPhoto(user) {
                     <input type="file" id="photo-input" accept="image/*">
                 `;
                 setupPhotoUpload();
+                updateNavPhoto(savedPhoto);
             }
         }
     } catch (e) {
@@ -271,14 +321,12 @@ function formatDate(dateString) {
 // Load badge and event statistics
 function loadBadgeStatistics() {
     try {
-        // Load user progress from localStorage
         const saved = localStorage.getItem('userProgress');
         const userProgress = saved ? JSON.parse(saved) : {
             eventsAttended: 0,
             volunteeredHours: 0
         };
         
-        // Badge definitions (same as badges.js)
         const badges = [
             { progressKey: "eventsAttended", required: 1 },
             { progressKey: "eventsAttended", required: 5 },
@@ -302,7 +350,6 @@ function loadBadgeStatistics() {
             { progressKey: "sustainabilityInitiatives", required: 10 }
         ];
         
-        // Calculate earned badges
         let earnedCount = 0;
         badges.forEach(badge => {
             const progress = badge.progressKey === 'isFoundingMember' 
@@ -318,7 +365,6 @@ function loadBadgeStatistics() {
         const completionPercent = Math.round((earnedCount / totalBadges) * 100);
         const remainingBadges = totalBadges - earnedCount;
         
-        // Update Profile Tab stats
         const profileStatCards = document.querySelectorAll('.stats-grid .stat-card');
         if (profileStatCards.length >= 3) {
             profileStatCards[0].querySelector('.stat-number').textContent = userProgress.eventsAttended || 0;
@@ -327,7 +373,6 @@ function loadBadgeStatistics() {
             profileStatCards[2].querySelector('.stat-number').textContent = hours + 'h';
         }
         
-        // Update Activity Tab badge stats
         const activityInfoCards = document.querySelectorAll('#activity-tab .stats-grid .info-card');
         if (activityInfoCards.length >= 3) {
             activityInfoCards[0].querySelector('.info-card-value').textContent = earnedCount + ' Badges';
@@ -344,72 +389,17 @@ function loadBadgeStatistics() {
 // Load recent activity from completed events
 function loadRecentActivity() {
     try {
-        // Get completed events
         const completedEventsIds = JSON.parse(localStorage.getItem('completedEvents') || '[]');
         
-        // Events data (same as events.js)
-        const eventsData = [
-            {
-                id: 'event-1',
-                title: "Town Hall Meeting",
-                date: "November 21, 2025",
-                category: "political",
-                volunteeredHours: 0
-            },
-            {
-                id: 'event-2',
-                title: "Youth Leadership Workshop",
-                date: "December 5, 2025",
-                category: "youth",
-                volunteeredHours: 0
-            },
-            {
-                id: 'event-3',
-                title: "Tech Innovation Summit",
-                date: "December 10, 2025",
-                category: "innovation",
-                volunteeredHours: 0
-            },
-            {
-                id: 'event-4',
-                title: "Beach Clean-Up Day",
-                date: "December 15, 2025",
-                category: "environmental",
-                volunteeredHours: 2
-            },
-            {
-                id: 'event-5',
-                title: "Education Forum",
-                date: "December 20, 2025",
-                category: "education",
-                volunteeredHours: 0
-            },
-            {
-                id: 'event-6',
-                title: "City Council Meeting",
-                date: "January 5, 2026",
-                category: "political",
-                volunteeredHours: 0
-            },
-            {
-                id: 'event-7',
-                title: "Community Garden Project",
-                date: "January 12, 2026",
-                category: "environmental",
-                volunteeredHours: 3
-            }
-        ];
+        const eventsData = window.eventsData || [];
         
-        // Filter completed events and sort by date (most recent first)
         const completedEvents = eventsData
             .filter(event => completedEventsIds.includes(event.id))
             .sort((a, b) => new Date(b.date) - new Date(a.date));
         
-        // Get the activity section
         const activitySection = document.querySelector('#activity-tab .settings-section');
         if (!activitySection) return;
         
-        // Build the HTML for completed events
         let activityHTML = '<h2>Recent Activity</h2>';
         
         if (completedEvents.length === 0) {
@@ -448,12 +438,10 @@ function loadUserData() {
     const user = auth.currentUser;
     
     if (user) {
-        // Get data from Firebase user object
         const userName = user.displayName || user.email.split('@')[0];
         const userEmail = user.email;
         const memberSince = user.metadata.creationTime;
         
-        // Update profile display
         const nameDisplay = document.getElementById('profile-name-display');
         const emailDisplay = document.getElementById('profile-email-display');
         const infoName = document.getElementById('info-name');
@@ -466,19 +454,15 @@ function loadUserData() {
         if (infoEmail) infoEmail.textContent = userEmail;
         if (memberSinceEl) memberSinceEl.textContent = formatDate(memberSince);
         
-        // Update initials
         updateInitialsDisplay(userName);
         
-        // Set placeholder for name input
         const nameInput = document.getElementById('new-name');
         if (nameInput) {
             nameInput.placeholder = userName;
         }
         
-        // Load saved photo
         loadSavedPhoto(user);
     } else {
-        // Fallback to localStorage if no Firebase user yet
         try {
             const userName = localStorage.getItem('userName') || 'User';
             const userEmail = localStorage.getItem('userEmail') || 'user@example.com';
@@ -557,42 +541,25 @@ function checkURLHash() {
 document.addEventListener('DOMContentLoaded', function() {
     console.log('Profile page initializing...');
     
-    // Wait for Firebase auth to be ready
     auth.onAuthStateChanged((user) => {
         if (user) {
-            // Load user data
             loadUserData();
-            
-            // Load badge statistics
             loadBadgeStatistics();
-            
-            // Load recent activity
             loadRecentActivity();
-            
-            // Setup photo upload
             setupPhotoUpload();
-            
-            // Load notification preferences
             loadNotificationPreferences();
-            
-            // Setup notification toggles
             setupNotificationToggles();
-            
-            // Check URL hash for direct tab navigation
             checkURLHash();
             
             console.log('Profile page initialized successfully');
         } else {
-            // No user logged in, redirect to login
             window.location.href = 'login.html';
         }
     });
 });
 
-// Listen for hash changes
 window.addEventListener('hashchange', checkURLHash);
 
-// Make functions available globally
 window.switchTab = switchTab;
 window.updateAccountName = updateAccountName;
 window.updateUserPassword = updateUserPassword;

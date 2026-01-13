@@ -152,20 +152,16 @@
     transform: translateY(-3px);
     text-decoration: none;
 }
-/* Remove underline from Font Awesome icons inside */
+
 .social-link-btn i {
     text-decoration: none !important;
 }
 
-
-/* Make sure visited links don't show underline */
 .social-link-btn:visited,
 .social-link-btn:link,
 .social-link-btn:active {
     text-decoration: none !important;
 }
-
-
 
 /* Contact Form */
 .form-card {
@@ -533,10 +529,6 @@
 
     .form-card {
         order: 1;
-    }
-
-    .impact-stats {
-        grid-template-columns: 1fr;
     }
 }
 
