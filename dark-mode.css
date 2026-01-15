@@ -1092,7 +1092,10 @@ textarea:focus-visible {
 
 [data-theme="dark"] .stat-card .stat-number,
 [data-theme="dark"] .stat-card .stat-label {
-    color: white !important;
+    color: rgb(255, 254, 254) !important;
+}
+[data-theme="dark"] .stat-number {
+  color: white;
 }
 
 /* Additional fixes for map filter buttons in dark mode */

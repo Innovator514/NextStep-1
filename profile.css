@@ -880,6 +880,8 @@ body {
     margin-bottom: 5px;
     /* Small space below number (above label)
        5px keeps number and label grouped */
+   opacity: 0.3
+
 }
 
 /* Stat Label */

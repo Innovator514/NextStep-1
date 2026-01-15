@@ -1,4 +1,4 @@
-// Profile page JavaScript - Firebase Auth version with Photo Integration
+// Profile page JavaScript - Fixed Photo Upload with Full Persistence
 
 import { getAuth, updateProfile, updatePassword, EmailAuthProvider, reauthenticateWithCredential } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
 
@@ -45,24 +45,25 @@ function updateNavPhoto(photoURL) {
     const existingInitials = profileBtn.querySelector('.profile-initials');
     
     if (photoURL) {
-        // Replace initials with photo
+        // Replace initials with photo or update existing photo
         if (existingInitials) {
             existingInitials.outerHTML = `<img src="${photoURL}" alt="Profile" class="profile-photo-nav">`;
-        } else if (!existingPhoto) {
-            // Insert photo at the beginning
-            profileBtn.insertAdjacentHTML('afterbegin', `<img src="${photoURL}" alt="Profile" class="profile-photo-nav">`);
-        } else {
-            // Update existing photo
+        } else if (existingPhoto) {
             existingPhoto.src = photoURL;
         }
     } else {
-        // Use initials
+        // Replace photo with initials
         if (existingPhoto) {
             const user = auth.currentUser;
             const name = user?.displayName || user?.email?.split('@')[0] || 'User';
             existingPhoto.outerHTML = `<span class="profile-initials">${getInitials(name)}</span>`;
         }
     }
+    
+    // Dispatch custom event to notify auth-check.js
+    window.dispatchEvent(new CustomEvent('profilePhotoUpdated', {
+        detail: { photoURL: photoURL }
+    }));
 }
 
 // Tab Switching
@@ -94,106 +95,127 @@ function switchTab(tabName) {
     }
 }
 
-// Photo Upload Handler
+// Photo Upload Handler - FIXED VERSION
 function setupPhotoUpload() {
     const photoInput = document.getElementById('photo-input');
     if (photoInput) {
         photoInput.addEventListener('change', async function(e) {
             const file = e.target.files[0];
-            if (file) {
-                // Validate file type
-                if (!file.type.startsWith('image/')) {
-                    showMessage('Please select a valid image file', 'error');
-                    return;
-                }
-                
-                // Validate file size (max 5MB)
-                if (file.size > 5 * 1024 * 1024) {
-                    showMessage('Image must be smaller than 5MB', 'error');
-                    return;
-                }
-                
-                const reader = new FileReader();
-                reader.onload = async function(readerEvent) {
-                    const photoURL = readerEvent.target.result;
-                    
-                    // Update Firebase profile
-                    try {
-                        const user = auth.currentUser;
-                        if (user) {
-                            await updateProfile(user, {
-                                photoURL: photoURL
-                            });
-                            
-                            // Update profile page photo
-                            const container = document.querySelector('.profile-photo-container');
-                            if (container) {
-                                container.innerHTML = `
-                                    <img class="profile-photo" src="${photoURL}" alt="Profile Photo">
-                                    <label for="photo-input" class="photo-overlay"></label>
-                                    <input type="file" id="photo-input" accept="image/*">
-                                `;
-                                setupPhotoUpload(); // Re-attach listener
-                            }
-                            
-                            // Update nav dropdown photo
-                            updateNavPhoto(photoURL);
-                            
-                            // Save to localStorage as backup
-                            try {
-                                localStorage.setItem('profilePhoto', photoURL);
-                                localStorage.setItem('userPhotoURL', photoURL);
-                            } catch (e) {
-                                console.error('Error saving to localStorage:', e);
-                            }
-                            
-                            showMessage('Profile photo updated successfully!', 'success');
-                        }
-                    } catch (error) {
-                        console.error('Error updating profile photo:', error);
-                        showMessage('Error updating photo: ' + error.message, 'error');
-                    }
-                };
-                reader.readAsDataURL(file);
+            if (!file) return;
+            
+            console.log('Photo selected:', file.name, file.type, file.size);
+            
+            // Validate file type
+            if (!file.type.startsWith('image/')) {
+                showMessage('Please select a valid image file', 'error');
+                return;
             }
+            
+            // Validate file size (max 5MB)
+            if (file.size > 5 * 1024 * 1024) {
+                showMessage('Image must be smaller than 5MB', 'error');
+                return;
+            }
+            
+            const reader = new FileReader();
+            reader.onload = async function(readerEvent) {
+                const photoURL = readerEvent.target.result;
+                console.log('Photo converted to base64, length:', photoURL.length);
+                
+                try {
+                    const user = auth.currentUser;
+                    if (!user) {
+                        throw new Error('No user logged in');
+                    }
+                    
+                    console.log('Updating Firebase profile...');
+                    // Update Firebase profile
+                    await updateProfile(user, {
+                        photoURL: photoURL
+                    });
+                    console.log('Firebase profile updated successfully');
+                    
+                    // CRITICAL: Save to localStorage IMMEDIATELY
+                    try {
+                        localStorage.setItem('profilePhoto', photoURL);
+                        localStorage.setItem('userPhotoURL', photoURL);
+                        console.log('Photo saved to localStorage');
+                    } catch (storageError) {
+                        console.error('localStorage save failed:', storageError);
+                    }
+                    
+                    // Update profile page photo
+                    const container = document.querySelector('.profile-photo-container');
+                    if (container) {
+                        container.innerHTML = `
+                            <img class="profile-photo" src="${photoURL}" alt="Profile Photo">
+                            <label for="photo-input" class="photo-overlay"></label>
+                            <input type="file" id="photo-input" accept="image/*">
+                        `;
+                        setupPhotoUpload(); // Re-attach listener
+                        console.log('Profile page photo updated');
+                    }
+                    
+                    // Update nav dropdown photo
+                    updateNavPhoto(photoURL);
+                    console.log('Nav photo updated');
+                    
+                    showMessage('Profile photo updated successfully!', 'success');
+                } catch (error) {
+                    console.error('Error updating profile photo:', error);
+                    showMessage('Error updating photo: ' + error.message, 'error');
+                }
+            };
+            
+            reader.onerror = function(error) {
+                console.error('FileReader error:', error);
+                showMessage('Error reading file', 'error');
+            };
+            
+            reader.readAsDataURL(file);
         });
     }
 }
 
-// Load saved photo
+// Load saved photo - FIXED VERSION
 function loadSavedPhoto(user) {
     try {
-        // First try Firebase photoURL
+        console.log('Loading saved photo...');
+        let photoURL = null;
+        
+        // Priority 1: Firebase photoURL
         if (user && user.photoURL) {
-            const container = document.querySelector('.profile-photo-container');
-            if (container) {
-                container.innerHTML = `
-                    <img class="profile-photo" src="${user.photoURL}" alt="Profile Photo">
-                    <label for="photo-input" class="photo-overlay"></label>
-                    <input type="file" id="photo-input" accept="image/*">
-                `;
-                setupPhotoUpload();
-                updateNavPhoto(user.photoURL);
-                return;
+            console.log('Found Firebase photoURL');
+            photoURL = user.photoURL;
+        } 
+        // Priority 2: localStorage
+        else {
+            const savedPhoto = localStorage.getItem('profilePhoto') || localStorage.getItem('userPhotoURL');
+            if (savedPhoto) {
+                console.log('Found localStorage photo');
+                photoURL = savedPhoto;
             }
         }
         
-        // Then try localStorage
-        const savedPhoto = localStorage.getItem('profilePhoto');
-        if (savedPhoto) {
+        if (photoURL) {
+            console.log('Displaying photo, length:', photoURL.length);
             const container = document.querySelector('.profile-photo-container');
             if (container) {
                 container.innerHTML = `
-                    <img class="profile-photo" src="${savedPhoto}" alt="Profile Photo">
+                    <img class="profile-photo" src="${photoURL}" alt="Profile Photo">
                     <label for="photo-input" class="photo-overlay"></label>
                     <input type="file" id="photo-input" accept="image/*">
                 `;
                 setupPhotoUpload();
-                updateNavPhoto(savedPhoto);
+                updateNavPhoto(photoURL);
             }
+        } else {
+            console.log('No photo found, keeping initials');
+            setupPhotoUpload(); // Still need to attach the upload listener
         }
     } catch (e) {
         console.error('Error loading photo:', e);
+        setupPhotoUpload();
     }
 }
 
@@ -390,7 +412,6 @@ function loadBadgeStatistics() {
 function loadRecentActivity() {
     try {
         const completedEventsIds = JSON.parse(localStorage.getItem('completedEvents') || '[]');
-        
         const eventsData = window.eventsData || [];
         
         const completedEvents = eventsData
@@ -411,8 +432,8 @@ function loadRecentActivity() {
             `;
         } else {
             completedEvents.forEach(event => {
-                const activityType = event.volunteeredHours > 0 
-                    ? `Volunteered • ${event.volunteeredHours} hours` 
+                const activityType = event.badgeProgress?.volunteeredHours > 0 
+                    ? `Volunteered • ${event.badgeProgress.volunteeredHours} hours` 
                     : 'Attended';
                 
                 activityHTML += `
@@ -462,23 +483,6 @@ function loadUserData() {
         }
         
         loadSavedPhoto(user);
-    } else {
-        try {
-            const userName = localStorage.getItem('userName') || 'User';
-            const userEmail = localStorage.getItem('userEmail') || 'user@example.com';
-            const memberSince = localStorage.getItem('memberSince') || new Date().toISOString();
-            
-            document.getElementById('profile-name-display').textContent = userName;
-            document.getElementById('profile-email-display').textContent = userEmail;
-            document.getElementById('info-name').textContent = userName;
-            document.getElementById('info-email').textContent = userEmail;
-            document.getElementById('member-since').textContent = formatDate(memberSince);
-            
-            updateInitialsDisplay(userName);
-            loadSavedPhoto(null);
-        } catch (e) {
-            console.error('Error loading user data:', e);
-        }
     }
 }
 
@@ -546,7 +550,6 @@ document.addEventListener('DOMContentLoaded', function() {
             loadUserData();
             loadBadgeStatistics();
             loadRecentActivity();
-            setupPhotoUpload();
             loadNotificationPreferences();
             setupNotificationToggles();
             checkURLHash();
