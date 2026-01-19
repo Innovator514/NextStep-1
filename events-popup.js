@@ -53,110 +53,85 @@
             }
 
             /* Popup Header */
-            /* Popup Header (matches event card header exactly) */
             .event-popup-header {
+                position: relative;
                 padding: 30px;
-                color: white;
-                position: relative;
-                overflow: hidden;
+                border-bottom: 2px solid #e0e7ff;
             }
 
-            /* Gradient overlay (same as event cards) */
-            .event-popup-header::before {
-                content: '';
+            .event-popup-close {
                 position: absolute;
-                inset: 0;
-                background: inherit;
-                opacity: 0.9;
+                top: 20px;
+                right: 20px;
+                background: #f1f5f9;
+                border: none;
+                width: 40px;
+                height: 40px;
+                border-radius: 50%;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 24px;
+                color: #64748b;
+                transition: all 0.3s ease;
             }
 
-            /* Ensure content stays above overlay */
-            .event-popup-header > * {
-                position: relative;
-                z-index: 1;
+            .event-popup-close:hover {
+                background: #ef4444;
+                color: white;
+                transform: rotate(90deg);
             }
 
-            /* Category pill (same look as events.css) */
             .event-popup-category {
                 display: inline-block;
-                padding: 0.3rem 0.8rem;
-                background: rgba(255, 255, 255, 0.25);
-                backdrop-filter: blur(10px);
+                padding: 6px 16px;
                 border-radius: 20px;
-                font-size: 0.75rem;
+                font-size: 12px;
                 font-weight: 700;
                 text-transform: uppercase;
                 letter-spacing: 0.5px;
-                margin-bottom: 0.8rem;
+                margin-bottom: 15px;
             }
-            .event-popup-close {
-                position: absolute; 
-                top: 20px; 
-                right: 20px; 
-                background: #f1f5f9; 
-                border: none; 
-                width: 40px; 
-                height: 40px; 
-                border-radius: 50%; 
-                cursor: pointer;
-                display: flex; 
-                align-items: center; 
-                justify-content: center; 
-                font-size: 24px; 
-                color: #64748b; 
-                transition: all 0.3s ease; 
-            } 
-            
-            .event-popup-close:hover { background: #ef4444;
-             color: white; transform: rotate(90deg) }
 
+            /* Category Colors */
+            .category-political {
+                background: rgba(37, 99, 235, 0.1);
+                color: #2563eb;
+            }
 
-            /* Header title */
+            .category-youth {
+                background: rgba(245, 158, 11, 0.1);
+                color: #f59e0b;
+            }
+
+            .category-innovation {
+                background: rgba(202, 61, 42, 0.1);
+                color: #c95444;
+            }
+
+            .category-environmental {
+                background: rgba(16, 185, 129, 0.1);
+                color: #10b981;
+            }
+
+            .category-education {
+                background: rgba(179, 37, 235, 0.1);
+                color: #b325eb;
+            }
+
             .event-popup-title {
                 font-size: 28px;
                 font-weight: 800;
-                line-height: 1.3;
-                margin-bottom: 10px;
-            }
-
-            /* Organizer text */
-            .event-popup-organizer {
-                font-size: 14px;
-                font-weight: 600;
-                opacity: 0.95;
-            }
-
-            /* CATEGORY GRADIENTS (copied from events.css) */
-            .event-popup-header.political {
-                background: linear-gradient(135deg, #3b82f6, #2563eb);
-            }
-
-            .event-popup-header.youth {
-                background: linear-gradient(135deg, #fb923c, #f59e0b);
-            }
-
-            .event-popup-header.innovation {
-                background: linear-gradient(135deg, #c95444, #ca3d2a);
-            }
-
-            .event-popup-header.environmental {
-                background: linear-gradient(135deg, #34d399, #10b981);
-            }
-
-            .event-popup-header.education {
-                background: linear-gradient(135deg, #ba3eeb, #b325eb);
-            }
-            .event-popup-title {
-                font-size: 28px;
-                font-weight: 800;
+                color: rgb(1, 9, 67);
                 margin-bottom: 10px;
                 line-height: 1.3;
             }
 
             .event-popup-organizer {
+                color: #64748b;
                 font-size: 14px;
                 font-weight: 600;
-                opacity: 0.95;
             }
 
             /* Popup Body */
@@ -328,7 +303,7 @@
         return `
             <div class="event-popup-overlay" onclick="if(event.target === this) closeEventPopup()">
                 <div class="event-popup">
-                    <div class="event-popup-header ${event.category}">
+                    <div class="event-popup-header">
                         <button class="event-popup-close" onclick="closeEventPopup()" aria-label="Close">×</button>
                         <div class="event-popup-category category-${event.category}">${event.category}</div>
                         <h2 class="event-popup-title">${event.title}</h2>
@@ -337,74 +312,79 @@
 
                     <div class="event-popup-body">
                         <!-- Date/Time/Location Grid -->
-                    <div class="event-popup-info-grid">
-                        <div class="event-popup-info-card">
-                            <div class="event-popup-label">📅 Date & Time</div>
-                            <div class="event-popup-value">${event.date}<br>${event.time}</div>
+                        <div class="event-popup-info-grid">
+                            <div class="event-popup-info-card">
+                                <div class="event-popup-label">📅 Date & Time</div>
+                                <div class="event-popup-value">${event.date}<br>${event.time}</div>
+                            </div>
+                            <div class="event-popup-info-card">
+                                <div class="event-popup-label">📍 Location</div>
+                                <div class="event-popup-value">${event.location}<br><small style="color: #64748b;">${event.address}</small></div>
+                            </div>
                         </div>
-                        <div class="event-popup-info-card">
-                            <div class="event-popup-label">📍 Location</div>
-                            <div class="event-popup-value">${event.location}<br><small style="color: #64748b;">${event.address}</small></div>
+
+                        <!-- Full Description -->
+                        <div class="event-popup-section">
+                            <div class="event-popup-label">About This Event</div>
+                            <div class="event-popup-value">${event.fullDescription}</div>
                         </div>
-                    </div>
 
-                    <div class="event-popup-section">
-                        <div class="event-popup-label">About This Event</div>
-                        <div class="event-popup-value">${event.fullDescription}</div>
-                    </div>
-
-                    <div class="event-popup-section">
-                        <div class="event-popup-label">Topics</div>
-                        <div class="event-popup-tags">
-                            ${event.tags.map(tag => `<span class="event-popup-tag">${tag}</span>`).join('')}
+                        <!-- Tags -->
+                        <div class="event-popup-section">
+                            <div class="event-popup-label">Topics</div>
+                            <div class="event-popup-tags">
+                                ${event.tags.map(tag => `<span class="event-popup-tag">${tag}</span>`).join('')}
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="event-popup-section">
-                        <div class="event-popup-label">Requirements</div>
-                        <div class="event-popup-value">✓ ${event.requirements}</div>
-                    </div>
-
-                    <div class="event-popup-section">
-                        <div class="event-popup-label">Accessibility</div>
-                        <div class="event-popup-value">♿ ${event.accessibility}</div>
-                    </div>
-
-                    <div class="event-popup-section">
-                        <div class="event-popup-label">Parking</div>
-                        <div class="event-popup-value">🅿️ ${event.parking}</div>
-                    </div>
-
-                    <div class="event-popup-section event-popup-capacity">
-                        <div class="event-popup-label">Registration Status</div>
-                        <div class="capacity-bar">
-                            <div class="capacity-fill" style="width: ${capacityPercent}%"></div>
+                        <!-- Requirements & Accessibility -->
+                        <div class="event-popup-section">
+                            <div class="event-popup-label">Requirements</div>
+                            <div class="event-popup-value">✓ ${event.requirements}</div>
                         </div>
-                        <div class="capacity-text">${event.registered} of ${event.capacity} spots filled (${capacityPercent}%)</div>
-                    </div>
 
-                    <div class="event-popup-section">
-                        <div class="event-popup-label">Contact Information</div>
-                        <div class="event-popup-value">
-                            📧 <a href="mailto:${event.contact}" style="color: #2563eb; text-decoration: none;">${event.contact}</a><br>
-                            📞 ${event.phone}
+                        <div class="event-popup-section">
+                            <div class="event-popup-label">Accessibility</div>
+                            <div class="event-popup-value">♿ ${event.accessibility}</div>
                         </div>
-                    </div>
 
-                    <div class="event-popup-actions">
-                        <button class="event-popup-btn btn-primary" onclick="registerForEvent('${event.id}')">
-                            ✓ Register for Event
-                        </button>
-                        <button class="event-popup-btn btn-secondary" onclick="shareEvent('${event.id}')">
-                            🔗 Share
-                        </button>
+                        <div class="event-popup-section">
+                            <div class="event-popup-label">Parking</div>
+                            <div class="event-popup-value">🅿️ ${event.parking}</div>
+                        </div>
+
+                        <!-- Capacity -->
+                        <div class="event-popup-section event-popup-capacity">
+                            <div class="event-popup-label">Registration Status</div>
+                            <div class="capacity-bar">
+                                <div class="capacity-fill" style="width: ${capacityPercent}%"></div>
+                            </div>
+                            <div class="capacity-text">${event.registered} of ${event.capacity} spots filled (${capacityPercent}%)</div>
+                        </div>
+
+                        <!-- Contact Info -->
+                        <div class="event-popup-section">
+                            <div class="event-popup-label">Contact Information</div>
+                            <div class="event-popup-value">
+                                📧 <a href="mailto:${event.contact}" style="color: #2563eb; text-decoration: none;">${event.contact}</a><br>
+                                📞 ${event.phone}
+                            </div>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="event-popup-actions">
+                            <button class="event-popup-btn btn-primary" onclick="registerForEvent('${event.id}')">
+                                ✓ Register for Event
+                            </button>
+                            <button class="event-popup-btn btn-secondary" onclick="shareEvent('${event.id}')">
+                                🔗 Share
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    `;
-}
-
+        `;
+    }
 
     // Open popup
     window.openEventPopup = function(eventId) {
@@ -483,7 +463,7 @@
         if (!event) return;
 
         // In a real app, this would make an API call
-        alert(`You're registered for "${event.title}"!\n\nConfirmation email sent to your registered email address.\n\nEvent Details:\n📅 ${event.date} at ${event.time}\n📍 ${event.location}`);
+        alert(`🎉 You're registered for "${event.title}"!\n\nConfirmation email sent to your registered email address.\n\nEvent Details:\n📅 ${event.date} at ${event.time}\n📍 ${event.location}`);
         
         // Optionally close popup after registration
         window.closeEventPopup();

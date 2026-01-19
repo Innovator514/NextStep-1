@@ -16,9 +16,9 @@ import {
 
 const firebaseConfig = {
   apiKey: "AIzaSyBohx_5opFEgh2Xb-EO977v3KzQJ89CAf4",
-  authDomain: "nextstep-civic.firebaseapp.com",
-  projectId: "nextstep-civic",
-  storageBucket: "nextstep-civic.firebasestorage.app",
+  authDomain: "NextStep.firebaseapp.com",
+  projectId: "NextStep",
+  storageBucket: "NextStep.firebasestorage.app",
   messagingSenderId: "428056422654",
   appId: "1:428056422654:web:2d6ff0d08002134b3cddaf",
   measurementId: "G-E0YCVB3KK9"

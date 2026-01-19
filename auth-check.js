@@ -192,7 +192,7 @@ function createLoginOverlay() {
   `;
   
   document.body.appendChild(overlay);
-  document.body.style.overflow = 'hidden';
+  document.body.style.overflow = 'hidden'; // Prevent scrolling
 }
 
 // Check authentication and update navigation
@@ -204,7 +204,7 @@ function checkAuth() {
       // User is logged in - replace login with profile dropdown
       const displayName = user.displayName || user.email.split('@')[0];
       const initials = getInitials(displayName);
-      const photoURL = user.photoURL || localStorage.getItem('profilePhoto') || localStorage.getItem('userPhotoURL');
+      const photoURL = user.photoURL;
       const firstName = displayName.split(' ')[0];
       
       // Save user data to localStorage for profile page
@@ -263,18 +263,6 @@ function checkAuth() {
         if (signupItem) signupItem.remove();
       }
       
-      // Listen for storage changes to update photo in real-time
-      window.addEventListener('storage', function(e) {
-        if (e.key === 'profilePhoto' || e.key === 'userPhotoURL') {
-          updateNavPhoto(e.newValue);
-        }
-      });
-      
-      // Also listen for custom event from profile page
-      window.addEventListener('profilePhotoUpdated', function(e) {
-        updateNavPhoto(e.detail.photoURL);
-      });
-      
     } else if (!user) {
       // User not logged in - clear any saved data
       try {
@@ -295,31 +283,6 @@ function checkAuth() {
       }
     }
   });
-}
-
-// Function to update nav photo dynamically
-function updateNavPhoto(photoURL) {
-  const profileBtn = document.querySelector('.profile-btn');
-  if (!profileBtn) return;
-  
-  const existingPhoto = profileBtn.querySelector('.profile-photo-nav');
-  const existingInitials = profileBtn.querySelector('.profile-initials');
-  
-  if (photoURL) {
-    // Replace initials with photo or update existing photo
-    if (existingInitials) {
-      existingInitials.outerHTML = `<img src="${photoURL}" alt="Profile" class="profile-photo-nav">`;
-    } else if (existingPhoto) {
-      existingPhoto.src = photoURL;
-    }
-  } else {
-    // Replace photo with initials
-    if (existingPhoto) {
-      const user = auth.currentUser;
-      const name = user?.displayName || user?.email?.split('@')[0] || 'User';
-      existingPhoto.outerHTML = `<span class="profile-initials">${getInitials(name)}</span>`;
-    }
-  }
 }
 
 // Toggle profile dropdown menu
@@ -368,7 +331,6 @@ window.logout = async function(event) {
 
 // Make functions globally available
 window.getInitials = getInitials;
-window.updateNavPhoto = updateNavPhoto;
 
 // Initialize authentication check
 checkAuth();
