@@ -1,422 +1,145 @@
-/* Hero Wrapper */
-/* Comment block to organize CSS sections
-   Helps developers quickly find relevant styles */
+/* ===================================
+   HERO
+   =================================== */
 
+/* creates positioning context for child elements */
 .hero-wrapper {
-  /* Class selector targeting elements with class="hero-wrapper"
-     Wraps entire hero section (title + image) */
-     
   position: relative;
-  /* position: relative creates positioning context for child elements
-     Allows absolute positioning of children relative to this wrapper
-     Also enables z-index control */
-     
   width: 100%;
-  /* width: 100% makes wrapper span full width of browser window
-     Ensures hero takes up entire screen width */
-     
-  overflow: visible;
-  /* overflow: visible allows content to extend beyond wrapper boundaries
-     CRITICAL: Changed from "hidden" which was blocking scroll
-     "visible" lets title move beyond wrapper during parallax animation */
-     
+  overflow: visible; /* changed from hidden — was blocking parallax scroll */
   margin-bottom: 0;
-  /* margin-bottom: 0 removes space below wrapper
-     Connects hero section directly to content below
-     0 can be px, em, rem - just 0 doesn't need unit */
 }
 
-/* Hero Section */
 .hero {
-  /* Styles for main hero content area (title and tagline) */
-  
   font-family: 'Open Sans', sans-serif;
-  /* Sets font for all text in hero section
-     'Open Sans': Google Font loaded in HTML
-     sans-serif: fallback if Open Sans fails to load
-     Quotes needed for fonts with spaces in name */
-     
   text-align: center;
-  /* Centers all text horizontally in hero section
-     Applies to h1, p, and all text elements */
-     
   background: linear-gradient(135deg, #f8fafc 0%, #e0e7ff 100%);
-  /* Diagonal gradient background
-     135deg: angle (top-left to bottom-right)
-     #f8fafc: light gray-blue at start (0%)
-     #e0e7ff: light lavender at end (100%)
-     Creates soft, modern look */
-     
   color: rgb(1, 9, 67);
-  /* Text color - very dark blue
-     rgb(1, 9, 67): red=1, green=9, blue=67
-     Almost black but with blue tint */
-     
-  padding: 8rem 2rem 2rem;
-  /* Shorthand padding: top right/left bottom
-     8rem top: space for fixed navigation bar
-     2rem sides: horizontal padding
-     2rem bottom: space below text
-     rem units scale with root font size (accessible) */
-     
+  padding: 8rem 2rem 2rem; /* 8rem top clears the fixed nav */
   position: relative;
-  /* Creates positioning context
-     Allows z-index to work
-     Needed for overlapping with other elements */
-     
   z-index: 2;
-  /* Stacking order - higher numbers appear on top
-     2 puts hero above image (which has z-index: 1)
-     Ensures text stays on top during scroll animations */
-     
   min-height: 40vh;
-  /* Minimum height: 40% of viewport height
-     vh: viewport height unit (1vh = 1% of screen height)
-     Ensures hero has substantial presence
-     Adapts to different screen sizes */
-     
   margin-bottom: 0;
-  /* Removes space below hero
-     Connects directly to image reveal section */
-     
-  overflow: visible;
-  /* Allows content to move outside hero boundaries
-     Needed for parallax animation
-     Text moves down and beyond hero during scroll */
+  overflow: visible; /* needed for parallax — text moves beyond hero bounds */
 }
 
-/* Hero Title - Smooth transitions */
+/* gradient text clip trick */
 .hero h1,
 #heroTitle {
-  /* Multiple selector: targets both h1 inside .hero AND element with id="heroTitle"
-     Comma means "or" - both selectors get same styles
-     Ensures styling even if structure changes */
-     
   font-size: 90px;
-  /* Very large title text
-     px: pixel units (absolute size)
-     Creates impactful first impression
-     Will be scaled down on mobile */
-     
   font-weight: 700;
-  /* Bold text (700 on scale of 100-900)
-     400 is normal, 700 is bold
-     Loaded from Google Fonts (Open Sans:wght@700) */
-     
   margin: 0;
-  /* Removes default browser margins around h1
-     Browsers add default spacing to headings
-     Removing gives us precise control */
-     
   font-family: 'Open Sans', sans-serif;
-  /* Ensures Open Sans is used (inherits from .hero but explicit)
-     Redundant but ensures consistency */
-     
   letter-spacing: -1px;
-  /* Reduces space between letters by 1 pixel
-     Negative values tighten spacing
-     Makes large text look more elegant and compact */
-     
   color: rgb(1, 9, 67);
-  /* Dark blue text color
-     Same as hero section default
-     Explicit for clarity */
-     
   z-index: 10;
-  /* High stacking order
-     Ensures title appears above all other hero elements
-     Higher than hero (2) and image (1) */
-     
   position: relative;
-  /* Needed for z-index to work
-     Creates positioning context
-     Allows JavaScript to apply transforms */
-     
   transition: color 0.3s ease, text-shadow 0.3s ease, opacity 0.4s ease;
-  /* Smooth transitions for three properties:
-     color: changes smoothly when text moves over image
-     text-shadow: shadow fades in/out smoothly
-     opacity: fade in/out effect
-     0.3s/0.4s: transition duration
-     ease: starts slow, speeds up, ends slow (smooth curve) */
-     
   text-align: center;
-  /* Centers text horizontally
-     Redundant (inherits from .hero) but explicit */
 }
 
-/* Tagline - Smooth transitions */
 .tagline {
-  /* Styles for hero subtitle/tagline */
-  
   margin-top: 15px;
-  /* Space above tagline (below title)
-     Separates title and subtitle visually */
-     
   font-size: 20px;
-  /* Smaller than title but still prominent
-     Readable but doesn't compete with h1 */
-     
   color: rgb(1, 9, 67);
-  /* Same dark blue as title
-     Maintains visual consistency */
-     
   opacity: 0.9;
-  /* Slightly transparent (90% opaque)
-     Makes subtitle less prominent than title
-     Creates visual hierarchy */
-     
   z-index: 10;
-  /* High stacking order (same as title)
-     Ensures visibility above other elements */
-     
   position: relative;
-  /* Needed for z-index and transforms
-     Allows JavaScript to move element */
-     
   transition: color 0.3s ease, text-shadow 0.3s ease, opacity 0.4s ease;
-  /* Same smooth transitions as title
-     Creates cohesive animation experience */
-     
   max-width: 800px;
-  /* Limits line length for readability
-     Long lines are hard to read
-     800px is comfortable reading width */
-     
   margin-left: auto;
   margin-right: auto;
-  /* Centers element horizontally
-     auto margins push element to center
-     Works with max-width to create centered, constrained text */
-     
   line-height: 1.5;
-  /* Space between lines of text
-     1.5 = 150% of font size
-     Improves readability, looks spacious */
-     
   text-align: center;
-  /* Centers text within element */
-     
   padding: 0 20px;
-  /* Horizontal padding: 0 top/bottom, 20px left/right
-     Prevents text from touching screen edges on mobile */
 }
 
-/* Accent Color */
 .accent {
-  /* Styles for brand name emphasis (NextStep in title) */
-  
   color: #1e40ff;
-  /* Bright blue brand color
-     Hex color: #RRGGBB format
-     Makes "NextStep" stand out from surrounding text */
-     
   transition: color 0.3s ease;
-  /* Smooth color transition
-     Allows color to change smoothly when moved over image */
 }
 
-/* Image Reveal Section */
+/* ===================================
+   IMAGE REVEAL
+   =================================== */
+
 .image-reveal {
-  /* Container for hero image/video that expands on scroll */
-  
   height: 80vh;
-  /* 80% of viewport height
-     Tall section that requires scrolling
-     Creates space for parallax effect */
-     
   position: relative;
-  /* Creates positioning context
-     Allows absolute positioning of child elements */
-     
-  overflow: hidden;
-  /* Hides content that extends beyond boundaries
-     Prevents image from creating horizontal scroll
-     Clips image as it scales/moves */
-     
-  z-index: 1;
-  /* Lower stacking order than hero text (z-index: 2)
-     Image appears behind text */
-     
+  overflow: hidden; /* clips image as it scales/moves */
+  z-index: 1; /* sits behind hero text (z-index: 2) */
   margin: 0;
-  /* Removes margins */
-     
   padding: 0;
-  /* Removes padding
-     Ensures image fills entire section */
-     
   display: block;
-  /* Block-level element
-     Takes full width available
-     Default for sections but explicit for clarity */
-
-  background: linear-gradient(135deg, #f8fafc 0%, #e0e7ff 100%);
-  /* CRITICAL: Black background prevents YouTube's black bars from showing
-     Fills space while video loads */
+  background: linear-gradient(135deg, #f8fafc 0%, #e0e7ff 100%); /* fills space while video loads */
 }
 
-/* Hero Media Wrapper */
 .hero-media {
-  /* Wrapper for hero image/video */
   height: 100%;
   width: 155vh;
   max-width: 100%;
-  /* Fills entire parent (.image-reveal) */
   margin: 0 auto;
   padding: 0;
-  /* Removes spacing */
-     
-  position: relative;
-  /* CRITICAL: Creates positioning context for absolute iframe
-     Allows iframe to be centered within this container */
-     
+  position: relative; /* positioning context for absolute iframe */
   display: flex;
-  /* Flexbox layout - enables centering
-     Changed from default to use flex centering */
-     
   align-items: center;
-  /* Centers content vertically */
-     
   justify-content: center;
-  /* Centers content horizontally
-     Image will be perfectly centered */
-     
   overflow: hidden;
-  /* Hides overflow as image scales */
 }
 
-/* CRITICAL: Overlay to hide YouTube controls/title on load */
+/* overlay hides YouTube controls/title that flash on load */
 .hero-media::before {
-  /* Pseudo-element that covers the video
-     Hides YouTube's interface elements that briefly appear */
-     
   content: '';
-  /* Required for pseudo-element to display
-     Empty content creates invisible box */
-     
   position: absolute;
-  /* Positions relative to .hero-media parent
-     Covers entire area */
-     
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  /* Stretches to fill entire parent
-     Creates full coverage */
-     
   background: rgba(0, 0, 0, 0.2);
-  /* Slight dark overlay - 20% opacity black
-     Improves text readability over video
-     Hides YouTube controls/title that flash on load */
-     
-  z-index: 2;
-  /* CRITICAL: Must be above video (z-index: 0) but below text (z-index: 10)
-     Sits on top of video, blocks controls */
-     
-  pointer-events: none;
-  /* Allows clicks to pass through overlay
-     Users can still interact with page
-     Overlay is purely visual */
+  z-index: 2; /* above video (0) but below page text (10) */
+  pointer-events: none; /* clicks pass through to page */
 }
 
-/* Hero Video/Image - Works for both iframe and img */
 .hero-image {
-  /* Base styles that apply to both video iframe and fallback image */
-  
   display: block;
-  /* Block-level element
-     Prevents extra space below element */
-     
   margin: 0;
   padding: 0;
-  /* Removes spacing */
-     
-  border: none;
-  /* CRITICAL: Removes iframe's default border
-     Prevents white line around video */
-     
-  pointer-events: none;
-  /* Prevents clicking on video/image
-     Users can't accidentally click and pause video */
-     
-  transform: scale(1);
-  /* Initial scale (no zoom)
-     JavaScript will increase this value on scroll
-     Creates zoom effect */
-     
+  border: none; /* removes iframe's default border */
+  pointer-events: none; /* prevents accidental click-to-pause */
+  transform: scale(1); /* JS increases this on scroll for zoom effect */
   transform-origin: center center;
-  /* Point around which transforms occur
-     center center: scales from image center (not corner)
-     Keeps image centered while zooming */
-     
   transition: transform 0.1s ease-out, width 0.1s ease-out, border-radius 0.1s ease-out;
-  /* Smooth transitions for three properties:
-     transform: smooth zoom/scale
-     width: smooth expansion from 80% to 100%
-     border-radius: smooth corner rounding
-     0.1s: very fast (responsive to scroll)
-     ease-out: starts fast, slows at end */
 }
 
-/* Specific styles for iframe video */
+/* iframe needs absolute centering; regular img doesn't */
 iframe.hero-image {
-  /* Targets only iframe elements with hero-image class
-     Different positioning needed for video vs image */
-     
   position: absolute;
-  /* CRITICAL: Absolute positioning allows precise centering
-     Positions relative to .hero-media parent */
-     
   top: 50%;
   left: 50%;
-  /* Positions top-left corner at center of parent
-     Must combine with transform to truly center */
-     
   width: 100%;
   height: 100%;
-  /* Fills container completely */
-     
   min-width: 100%;
-  min-height: 100%;
-  /* CRITICAL: Ensures video always covers container
-     Prevents black bars on sides
-     Video may be cropped but never shows gaps */
-     
+  min-height: 100%; /* ensures video always covers container, no black bars */
   object-fit: contain;
-  /* How video fills its box
-     cover: scales to fill box, maintains aspect ratio, crops if needed
-     Ensures no empty space */
-     
-  z-index: 0;
-  /* CRITICAL: Behind overlay (z-index: 2)
-     Overlay hides YouTube controls */
-
+  z-index: 0; /* behind the ::before overlay */
 }
 
-/* Regular image fallback */
 img.hero-image {
-  /* Styles for regular image (not iframe)
-     Simpler positioning since images behave better */
-     
   width: 100%;
   height: 100%;
-  /* Fills container */
-     
   object-fit: cover;
-  /* Same cover behavior as video
-     Maintains consistency */
 }
 
-/* Community Gallery Carousel */
-/* Carousel wrapper */
+/* ===================================
+   CAROUSEL
+   =================================== */
+
 .carousel {
   position: relative;
   max-width: 100%;
   margin: 60px auto 0;
 }
 
-/* Track */
 .carousel-track {
   display: flex;
   overflow-x: auto;
@@ -428,10 +151,11 @@ img.hero-image {
   user-select: none;
 }
 
-.scrollbar-jump{ 
-   scroll-behavior: auto;
+.scrollbar-jump { 
+  scroll-behavior: auto;
 }
-/* Hide scrollbar */
+
+/* hide scrollbar */
 .carousel-track::-webkit-scrollbar {
   display: none;
 }
@@ -439,7 +163,6 @@ img.hero-image {
   scrollbar-width: none;
 }
 
-/* Image slides */
 .slide {
   flex: 0 0 100%;
   height: 300px;
@@ -452,15 +175,13 @@ img.hero-image {
   justify-content: center;
 }
 
-/* Images */
 .slide img {
   width: 100%;
   height: 100%;
-  object-fit: cover; /* fills slide without distortion */
+  object-fit: cover;
   display: block;
 }
 
-/* Buttons */
 .carousel-btn {
   position: absolute;
   top: 50%;
@@ -478,7 +199,6 @@ img.hero-image {
 .carousel-btn.prev { left: -20px; }
 .carousel-btn.next { right: -20px; }
 
-/* Dots */
 .carousel-dots {
   display: flex;
   justify-content: center;
@@ -499,734 +219,326 @@ img.hero-image {
   background: #000;
 }
 
-/* Content Sections */
+/* ===================================
+   CONTENT SECTIONS
+   =================================== */
+
 .point {
-  /* Styling for main content sections below hero */
-  
   padding: 120px 0px;
-  /* Large vertical padding: 120px top and bottom, 0 left/right
-     Creates white space around content
-     Makes sections breathe, improves readability */
-     
   text-align: center;
-  /* Centers all text in section */
-     
   background: linear-gradient(135deg, #f8fafc 0%, #e0e7ff 100%);
-  /* Same gradient as hero
-     Creates visual consistency
-     Soft, professional appearance */
-     
   margin: 0;
-  /* No margins between sections */
-     
   position: relative;
-  /* Creates positioning context
-     Allows JavaScript to control position */
-     
-  overflow: visible;
-  /* CRITICAL: Allows content to move during animations
-     Content can extend beyond section boundaries */
+  overflow: visible; /* allows content to move during JS animations */
 }
 
 .point-content {
-  /* Container for content inside .point sections */
-  
   max-width: 800px;
-  /* Limits content width for readability
-     Long lines are hard to read */
-     
   margin: 0 auto;
-  /* Centers container horizontally
-     auto margins push to center */
-     
   overflow: visible;
-  /* CRITICAL: Allows content to move
-     Necessary for JavaScript animations */
 }
 
-/* NEW: Split layout for first point section with typewriter animation */
+/* wider container for the split layout in the first point section */
 .point-content-split {
-  /* Container for the "Your Next Step" section with split layout */
-  
   max-width: 1200px;
-  /* Wider than standard point-content to accommodate two columns
-     Provides enough space for paragraph and list side-by-side */
-     
   margin: 0 auto;
-  /* Centers container horizontally */
-     
   padding: 0 40px;
-  /* Horizontal padding to prevent content from touching edges
-     40px gives breathing room on both sides */
 }
 
 .point-content-split h2 {
-  /* Heading for the split layout section */
-  
   font-size: 48px;
-  /* Large heading size matching other sections */
-     
   margin-bottom: 40px;
-  /* Space below heading before split content starts
-     40px creates visual separation */
-     
   color: rgb(1, 9, 67);
-  /* Dark blue matching site theme */
-     
   font-weight: 700;
-  /* Bold text for emphasis */
-     
   text-align: center;
-  /* Centered heading above the two columns */
 }
 
 .split-container {
-  /* Flexbox container that holds paragraph and engage list */
-  
   display: flex;
-  /* Flexbox layout for side-by-side columns */
-     
   gap: 60px;
-  /* Space between left (paragraph) and right (list) columns
-     60px creates clear visual separation */
-     
   align-items: flex-start;
-  /* Aligns items to top of container
-     Prevents stretching to match heights */
-     
   justify-content: center;
-  /* Centers the two columns within the container */
 }
 
-/* Right side: Paragraph that slides in from right */
+/* slides in from the right on scroll */
 .paragraph-side {
-  /* Container for the descriptive paragraph */
-  
   flex: 1;
-  /* Takes up equal space with engage-side (50/50 split)
-     flex: 1 means grow to fill available space */
-     
   max-width: 600px;
-  /* Limits paragraph width for optimal reading
-     Prevents lines from becoming too long
-     Wider than engage-side (600px vs 400px) for longer text */
-     
   opacity: 0;
-  /* Initially invisible
-     Will fade in during animation */
-     
   transform: translateX(50px);
-  /* Initially positioned 50px to the right
-     Will slide left to original position during animation */
-     
   transition: opacity 0.8s ease, transform 0.8s ease;
-  /* Smooth transitions for fade and slide
-     0.8s duration creates leisurely animation
-     ease: smooth acceleration/deceleration curve */
 }
 
 .paragraph-side.slide-in {
-  /* Class added by JavaScript to trigger animation */
-  
   opacity: 1;
-  /* Fully visible */
-     
   transform: translateX(0);
-  /* Returns to original position (no offset)
-     Creates slide-in effect from right */
 }
 
 .paragraph-side p {
-  /* Paragraph text styling */
-  
   font-size: 18px;
-  /* Standard readable size for body text */
-     
   line-height: 1.6;
-  /* Space between lines
-     1.6 = 160% of font size for comfortable reading */
-     
   color: rgb(1, 9, 67);
-  /* Dark blue matching site theme */
-     
   opacity: 0.8;
-  /* Slightly transparent (80% opaque)
-     Makes body text less prominent than headings */
-     
   text-align: left;
-  /* Left-aligned text (more natural for reading paragraphs) */
 }
 
-/* Left side: Engage in list with typewriter animation */
+/* slides in from the left on scroll */
 .engage-side {
-  /* Container for the "Engage in:" list */
-  
   flex: 1;
-  /* Takes up equal space with paragraph-side (50/50 split) */
-     
   max-width: 400px;
-  /* Limits list width
-     Slightly narrower than paragraph for visual balance */
-     
   text-align: left;
-  /* Left-aligns the list items */
-     
   opacity: 0;
-  /* Initially invisible
-     Will fade in during animation */
-     
   transform: translateX(-50px);
-  /* Initially positioned 50px to the left
-     Will slide right to original position during animation */
-     
   transition: opacity 0.8s ease, transform 0.8s ease;
-  /* Smooth transitions for fade and slide
-     0.8s duration creates leisurely animation
-     ease: smooth acceleration/deceleration curve */
 }
 
 .engage-side.slide-in {
-  /* Class added by JavaScript to trigger animation */
-  
   opacity: 1;
-  /* Fully visible */
-     
   transform: translateX(0);
-  /* Returns to original position (no offset)
-     Creates slide-in effect from left */
 }
 
 .engage-label {
-  /* "Engage in:" label above the list */
-  
   font-size: 24px;
-  /* Larger than body text, smaller than heading
-     Acts as sub-heading for the list */
-     
   font-weight: 700;
-  /* Bold for emphasis */
-     
   color: rgb(1, 9, 67);
-  /* Dark blue matching site theme */
-     
   margin-bottom: 20px;
-  /* Space below label, above list items */
-     
   opacity: 0;
-  /* Initially invisible
-     Will fade in before typewriter animation starts */
-     
   transition: opacity 0.5s ease;
-  /* Smooth fade-in transition
-     0.5s duration */
 }
 
 .engage-label.show {
-  /* Class added by JavaScript to reveal label */
-  
   opacity: 1;
-  /* Fully visible */
 }
 
 .engage-list {
-  /* Unordered list container */
-  
   list-style: none;
-  /* Removes default bullet points
-     We want clean text without bullets */
-     
   padding: 0;
-  /* Removes default list padding */
-     
   margin: 0;
-  /* Removes default list margin */
 }
 
 .engage-item {
-  /* Individual list items (Political, Environmental, etc.) */
-  
   font-size: 28px;
-  /* Large, prominent text
-     Makes each category stand out */
-     
   font-weight: 700;
-  /* Bold for emphasis and visual impact */
-     
   margin-bottom: 15px;
-  /* Space between each list item
-     Creates vertical rhythm */
-     
-  opacity: 0;
-  /* Initially invisible
-     Each item fades in as it's being typed */
-     
+  opacity: 0; /* each item fades in as it types */
   transition: opacity 0.3s ease;
-  /* Quick fade-in when typing starts
-     0.3s creates snappy appearance */
 }
 
 .engage-item.typing {
-  /* Class added when item is being typed */
-  
   opacity: 1;
-  /* Becomes visible as typewriter starts */
 }
 
-/* Category colors - each category gets unique vibrant color */
-.engage-item[data-category="political"] .typewriter-text {
-  /* Political category */
-  color: #2563eb; /* Blue - represents trust, stability, civic duty */
-}
+/* category colors */
+.engage-item[data-category="political"] .typewriter-text    { color: #2563eb; }
+.engage-item[data-category="environmental"] .typewriter-text { color: #10b981; }
+.engage-item[data-category="innovative"] .typewriter-text   { color: #ec4899; }
+.engage-item[data-category="youth"] .typewriter-text        { color: #f59e0b; }
+.engage-item[data-category="educational"] .typewriter-text  { color: #8b5cf6; }
 
-.engage-item[data-category="environmental"] .typewriter-text {
-  /* Environmental category */
-  color: #10b981; /* Green - represents nature, sustainability, growth */
-}
-
-.engage-item[data-category="innovative"] .typewriter-text {
-  /* Innovative category */
-  color: #ec4899; /* Pink - represents creativity, innovation, forward-thinking */
-}
-
-.engage-item[data-category="youth"] .typewriter-text {
-  /* Youth category */
-  color: #f59e0b; /* Yellow/Orange - represents energy, optimism, sunshine */
-}
-
-.engage-item[data-category="educational"] .typewriter-text {
-  /* Educational category */
-  color: #8b5cf6; /* Purple - represents wisdom, knowledge, learning */
-}
-
-/* Typewriter cursor effect */
+/* blinking cursor after typewriter text */
 .typewriter-text::after {
-  /* Pseudo-element creates blinking cursor */
-  
   content: '|';
-  /* Vertical bar character acts as cursor
-     Simple, recognizable cursor symbol */
-     
   animation: blink 0.7s infinite;
-  /* Blinks continuously
-     0.7s cycle creates natural typing rhythm
-     infinite: never stops blinking */
-     
   margin-left: 2px;
-  /* Small space between text and cursor
-     Prevents cursor from touching last letter */
 }
 
+/* remove cursor once typing is done */
 .typewriter-text.done::after {
-  /* Removes cursor after typing is complete */
-  
   content: '';
-  /* Empty content removes the cursor
-     Text appears "finished" */
-     
   animation: none;
-  /* Stops blinking animation */
 }
 
-/* Blinking animation for cursor */
 @keyframes blink {
-  /* Creates blinking effect by toggling opacity */
-  
-  0%, 50% { 
-    opacity: 1; 
-    /* Cursor visible for first half of cycle */
-  }
-  51%, 100% { 
-    opacity: 0; 
-    /* Cursor invisible for second half of cycle
-       Creates blinking effect */
-  }
+  0%, 50%  { opacity: 1; }
+  51%, 100% { opacity: 0; }
 }
 
 .point h2 {
-  /* Section headings */
-  
   font-size: 48px;
-  /* Large heading size
-     Smaller than hero h1 but still prominent */
-     
   margin-bottom: 20px;
-  /* Space below heading (above paragraph) */
-     
   color: rgb(1, 9, 67);
-  /* Dark blue matching hero */
-     
   font-weight: 700;
-  /* Bold text for emphasis */
 }
 
 .first-point h2 {
-  /* Specific style for first section heading */
-  
   opacity: 1;
-  /* Keep visible (removed fade-in from original)
-     First section heading is immediately visible */
 }
 
 .point p {
-  /* Paragraph text in sections */
-  
   max-width: 600px;
-  /* Narrower than container for optimal reading
-     40-75 characters per line is ideal */
-     
   margin: 0 auto;
-  /* Centers paragraph */
-     
   font-size: 18px;
-  /* Comfortable reading size */
-     
   line-height: 1.6;
-  /* Space between lines
-     1.6 = 160% of font size
-     Improves readability */
-     
   color: rgb(1, 9, 67);
-  /* Dark blue text */
-     
   opacity: 0.8;
-  /* Slightly transparent (80% opaque)
-     Makes body text less prominent than headings */
 }
 
-/* Alternate Point Section */
+/* alternate sections use a flat gray instead of the gradient */
 .point-alt {
-  /* Alternate styling for visual variety
-     Same structure as .point but different background */
-     
   background: #f6f6f6;
-  /* Light gray background
-     Contrasts with gradient sections
-     Creates alternating pattern */
-     
   padding: 120px 40px;
-  /* Large vertical padding, moderate horizontal
-     40px sides give more space than .point (0px) */
-     
   text-align: center;
-  /* Centers text */
-     
   margin: 0;
-  /* No margins */
 }
 
 .point-alt .point-content {
-  /* Content container in alternate sections
-     Inherits from .point-content but can override */
-     
   max-width: 800px;
   margin: 0 auto;
-  /* Same centered layout */
 }
 
 .point-alt h2 {
-  /* Headings in alternate sections */
-  
   font-size: 48px;
   margin-bottom: 20px;
   color: rgb(1, 9, 67);
   font-weight: 700;
-  /* Same as .point h2 - consistent typography */
 }
 
 .point-alt p {
-  /* Paragraphs in alternate sections */
-  
   max-width: 600px;
   margin: 0 auto;
   font-size: 18px;
   line-height: 1.6;
   color: rgb(1, 9, 67);
   opacity: 0.8;
-  /* Same as .point p - consistent reading experience */
 }
 
-/* Footer CTA */
+/* ===================================
+   FOOTER CTA
+   =================================== */
+
 .footer-cta {
-  /* Call-to-action section at bottom */
-  
   text-align: center;
-  /* Centers content */
-     
   padding: 80px 40px;
-  /* Generous padding all around
-     Creates spacious, breathable section */
-     
   margin: 0;
-  /* No margins */
-     
   background: white;
-  /* Clean white background
-     Contrasts with gradient sections above */
 }
 
 .cta-text {
-  /* Text above CTA button */
-  
   font-size: 24px;
-  /* Larger than body text, smaller than h2
-     Draws attention but isn't a heading */
-     
   margin-bottom: 30px;
-  /* Space below text, above button */
-     
   color: rgb(1, 9, 67);
-  /* Dark blue for consistency */
-     
   font-weight: 600;
-  /* Semi-bold (between normal 400 and bold 700)
-     Emphasizes without being too heavy */
 }
 
 .cta {
-  /* The call-to-action button */
-  
   background: rgb(1, 9, 67);
-  /* Dark blue matching text colors
-     Creates cohesive brand look */
-     
   color: white;
-  /* White text for contrast on dark background */
-     
   padding: 16px 40px;
-  /* Comfortable button size
-     16px vertical, 40px horizontal
-     Makes button easy to click */
-     
   border-radius: 8px;
-  /* Rounded corners
-     Modern, friendly appearance
-     8px is subtle rounding */
-     
   font-weight: 600;
-  /* Semi-bold text */
-     
   font-size: 20px;
-  /* Larger text for visibility */
-     
-  text-decoration: none;
-  /* Removes underline (it's a link styled as button)
-     Looks like button, not link */
-     
+  text-decoration: none; /* styled as button, not a link */
   transition: all 0.3s ease;
-  /* Smooth transition for ALL properties
-     Hover effects will be smooth */
-     
   display: inline-block;
-  /* Inline but respects padding/margins like block
-     Allows padding to work properly
-     Centers with text-align: center */
 }
 
 .cta:hover {
-  /* Button hover state - when mouse over button */
-  
   background: linear-gradient(135deg, #2563eb, #3b82f6);
-  /* Changes to blue gradient on hover
-     More vibrant than default dark blue
-     Provides visual feedback */
-     
   transform: translateY(-2px);
-  /* Moves button up 2 pixels
-     Creates "lift" effect
-     Makes button feel clickable */
-     
   box-shadow: 0 4px 15px rgba(30, 64, 255, 0.3);
-  /* Adds shadow under button
-     0: no horizontal offset
-     4px: shadow 4px below button
-     15px: blur radius (soft shadow)
-     rgba(30, 64, 255, 0.3): blue shadow at 30% opacity
-     Enhances lift effect */
 }
 
-/* Hero Inner Wrapper */
+/* ===================================
+   MISC
+   =================================== */
+
 .hero-inner {
-  /* Container for hero text content */
-  
   position: relative;
-  /* Creates positioning context */
-     
   z-index: 10;
-  /* High stacking order
-     Ensures content appears above everything else in hero */
 }
 
-/* Ensure main has no extra spacing */
+/* overflow: visible (not hidden) — parallax animations move content outside bounds */
 main {
-  /* The <main> element containing all page content */
-  
   margin: 0;
   padding: 0;
-  /* Removes default spacing */
-     
   overflow: visible;
-  /* CHANGED: was overflow-x: hidden
-     overflow-x would hide horizontal overflow only
-     overflow: visible allows content to move freely
-     Necessary for parallax animations */
 }
 
-/* Responsive for smaller screens */
+/* ===================================
+   RESPONSIVE
+   =================================== */
+
 @media (max-width: 768px) {
-  /* Media query: applies styles when screen is 768px wide or less
-     Tablets and mobile devices
-     768px is common breakpoint (iPad width)
-     All rules inside only apply on small screens */
-     
   .hero {
     padding: 6rem 1.5rem 1.5rem;
-    /* Reduced padding for smaller screens
-       6rem top (was 8rem) - less space for nav
-       1.5rem sides (was 2rem) - narrower padding
-       Adapts to limited screen space */
-       
     min-height: 25vh;
-    /* Reduced minimum height (was 40vh)
-       Smaller hero on mobile conserves vertical space */
   }
 
   .hero h1,
   #heroTitle {
     font-size: 50px;
-    /* Much smaller title (was 90px)
-       90px would be overwhelming on small screens
-       50px is readable and fits mobile displays */
   }
 
   .tagline {
     font-size: 18px;
-    /* Slightly smaller tagline (was 20px)
-       Maintains proportion with reduced title size */
   }
 
-  /* Stack split layout on mobile - makes two columns vertical */
+  /* stack two columns vertically on mobile */
   .split-container {
-    /* Changes from horizontal flex to vertical stack */
-    
     flex-direction: column;
-    /* Stacks items vertically instead of side-by-side
-       Better for narrow mobile screens */
-       
     gap: 40px;
-    /* Reduced gap (was 60px)
-       Conserves vertical space on mobile */
   }
 
   .paragraph-side,
   .engage-side {
-    /* Both columns now stack, so remove width limits */
-    
     max-width: 100%;
-    /* Full width on mobile (was 500px/400px)
-       Uses all available screen width */
   }
 
   .paragraph-side p {
-    /* Center paragraph text on mobile */
-    
     text-align: center;
-    /* Centered text (was left-aligned)
-       Looks better when stacked vertically */
   }
 
   .engage-side {
-    /* Center the engage list on mobile */
-    
     text-align: center;
-    /* Centers "Engage in:" and list items
-       Better visual balance on mobile */
   }
 
   .engage-label {
-    /* Smaller "Engage in:" label on mobile */
-    
     font-size: 20px;
-    /* Reduced from 24px
-       Proportional to smaller screen */
   }
 
   .engage-item {
-    /* Smaller category items on mobile */
-    
     font-size: 24px;
-    /* Reduced from 28px
-       Still prominent but fits mobile better */
   }
 
   .point,
   .point-alt {
     padding: 80px 20px;
-    /* Reduced padding (was 120px 0px/40px)
-       80px vertical: less space needed on mobile
-       20px horizontal: prevents text touching edges */
   }
 
   .point h2,
   .point-alt h2 {
     font-size: 36px;
-    /* Smaller headings (was 48px)
-       36px readable on mobile without overwhelming */
-       
     margin-bottom: 15px;
-    /* Less space below heading (was 20px) */
   }
 
   .point p,
   .point-alt p {
     font-size: 16px;
-    /* Smaller body text (was 18px)
-       16px is standard mobile body size
-       Conserves space, still readable */
   }
 
   .footer-cta {
     padding: 60px 20px;
-    /* Reduced CTA padding (was 80px 40px)
-       Adapts to smaller screen */
   }
 
   .cta-text {
     font-size: 20px;
-    /* Smaller CTA text (was 24px) */
-       
     margin-bottom: 20px;
-    /* Less space below text (was 30px) */
   }
 
   .cta {
     padding: 14px 30px;
-    /* Smaller button padding (was 16px 40px)
-       Still comfortable to tap on touchscreen */
-       
     font-size: 18px;
-    /* Smaller button text (was 20px) */
   }
 
   .image-reveal {
     height: 60vh;
-    /* Shorter image section on mobile (was 80vh)
-       60% of viewport - reduces scroll distance */
   }
 }
 
-/* Smooth scrolling */
 html {
-  /* Targets root HTML element */
-  
   scroll-behavior: smooth;
-  /* Enables smooth scrolling for anchor links
-     Click on #link scrolls smoothly instead of jumping
-     Native browser feature (no JavaScript needed)
-     Modern, polished user experience */
 }
-/* End of home.css */
-
 
 .nextstep-paragraph {
-   text-align: center !important;
+  text-align: center !important;
 }
