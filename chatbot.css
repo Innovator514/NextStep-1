@@ -1,5 +1,4 @@
 /* Compass Chatbot - Full Page Modern Design */
-
 .chatbot-main {
     padding-top: 70px;
     min-height: 100vh;
@@ -37,7 +36,7 @@
     width: 100%;
     max-width: 100%;
     margin: 0;
-    background: linear-gradient(135deg, #2564ebd8, #3b83f6d8);
+    background: linear-gradient(135deg, #2664e9d8, #3b83f6d8);
     border-radius: 0;
     box-shadow: none;
     display: flex;
@@ -54,8 +53,8 @@
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
     border-bottom: 1px solid rgba(148, 163, 184, 0.1);
-    color: white;
-    padding: 2.5rem 3rem;
+    color: #ffffff;
+    padding: 1.5rem;
     text-align: center;
     border-radius: 0;
     box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
@@ -66,7 +65,7 @@
     font-weight: 800;
     margin-bottom: 0.75rem;
     color: white;
-    background: linear-gradient(135deg, #ffffff 0%, #93c5fd 100%);
+    background: linear-gradient(135deg, #ffffff 0%, #ffffff 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -75,10 +74,10 @@
 
 .chat-header p {
     font-size: 1.1rem;
-    opacity: 0.9;
-    color: #cbd5e1;
-    font-weight: 400;
-}
+    opacity: 0.9; 
+    color: #cbd5e1; 
+    font-weight: 400; 
+} 
 
 /* Messages Area - Centered with Max Width */
 .chat-messages {
@@ -236,7 +235,7 @@
 /* Input Area - Full Width with Max Width Container */
 .chat-input-container {
     padding: 2rem 2rem 2.5rem;
-    background: rgba(236, 243, 255, 0.9);
+    background: #f4f4f4e6;
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
     border-top: 1px solid rgba(148, 163, 184, 0.1);

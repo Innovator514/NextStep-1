@@ -1,160 +1,131 @@
-// ===================================
-// EVENT POPUP COMPONENT
-// ===================================
-// Reusable modal popup that displays detailed event information
+// event-popup.js - Reusable event details popup component
 // Works on both events page and map page
-// Provides registration and sharing functionality
 
-// Immediately Invoked Function Expression (IIFE) to avoid polluting global scope
-// Only the functions we explicitly expose via window object will be globally available
 (function() {
-    'use strict'; // Enable strict mode for better error catching and performance
+    'use strict';
 
-    // ===================================
-    // STYLE INJECTION
-    // ===================================
-    
-    /**
-     * Inject popup CSS styles into the document head
-     * Only injects once (checks for existing styles to prevent duplicates)
-     * This approach allows the popup to be self-contained with its own styles
-     */
+    // Create popup CSS styles (only once)
     function injectPopupStyles() {
-        // Check if styles already exist to prevent duplicate injection
         if (document.getElementById('event-popup-styles')) return;
         
-        // Create a new style element
         const style = document.createElement('style');
-        style.id = 'event-popup-styles'; // ID for duplicate checking
-        
-        // All CSS styles for the popup component
+        style.id = 'event-popup-styles';
         style.textContent = `
-            /* ===== EVENT POPUP OVERLAY ===== */
-            /* Full-screen dark overlay that appears behind the popup */
+            /* Event Popup Overlay */
             .event-popup-overlay {
-                position: fixed; /* Stay fixed during scroll */
+                position: fixed;
                 top: 0;
                 left: 0;
                 right: 0;
                 bottom: 0;
-                background: rgba(0, 0, 0, 0.7); /* Semi-transparent black */
-                backdrop-filter: blur(5px); /* Blur the background content */
-                z-index: 10000; /* Ensure popup appears above everything */
+                background: rgba(0, 0, 0, 0.7);
+                backdrop-filter: blur(5px);
+                z-index: 10000;
                 display: flex;
-                align-items: center; /* Center popup vertically */
-                justify-content: center; /* Center popup horizontally */
-                padding: 20px; /* Spacing from edges */
-                opacity: 0; /* Start invisible for animation */
-                animation: fadeIn 0.3s ease forwards; /* Fade in animation */
+                align-items: center;
+                justify-content: center;
+                padding: 20px;
+                opacity: 0;
+                animation: fadeIn 0.3s ease forwards;
             }
 
-            /* Fade-in animation for overlay */
             @keyframes fadeIn {
-                to { opacity: 1; } /* End fully visible */
+                to { opacity: 1; }
             }
 
-            /* ===== POPUP CONTAINER ===== */
-            /* The main white card containing all popup content */
+            /* Popup Container */
             .event-popup {
                 background: white;
-                border-radius: 20px; /* Rounded corners */
-                max-width: 700px; /* Maximum width on large screens */
-                width: 100%; /* Full width up to max-width */
-                max-height: 90vh; /* Maximum 90% of viewport height */
-                overflow-y: auto; /* Scroll if content exceeds max height */
-                box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3); /* Dramatic shadow */
-                transform: scale(0.9); /* Start slightly smaller */
-                animation: popIn 0.3s ease forwards; /* Pop-in animation */
+                border-radius: 20px;
+                max-width: 700px;
+                width: 100%;
+                max-height: 90vh;
+                overflow-y: auto;
+                box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+                transform: scale(0.9);
+                animation: popIn 0.3s ease forwards;
             }
 
-            /* Pop-in animation for the popup card */
             @keyframes popIn {
                 to {
-                    transform: scale(1); /* End at normal size */
+                    transform: scale(1);
                 }
             }
 
-            /* ===== POPUP HEADER ===== */
-            /* Colored header section (matches event card styling) */
+            /* Popup Header */
+            /* Popup Header (matches event card header exactly) */
             .event-popup-header {
                 padding: 30px;
                 color: white;
                 position: relative;
-                overflow: hidden; /* Contain the gradient overlay */
+                overflow: hidden;
             }
 
-            /* Gradient overlay effect (same as event cards for consistency) */
+            /* Gradient overlay (same as event cards) */
             .event-popup-header::before {
-                content: ''; /* Required for pseudo-element */
+                content: '';
                 position: absolute;
-                inset: 0; /* Cover entire header */
-                background: inherit; /* Inherit category color */
-                opacity: 0.9; /* Slightly transparent */
+                inset: 0;
+                background: inherit;
+                opacity: 0.9;
             }
 
-            /* Ensure header content appears above the gradient overlay */
+            /* Ensure content stays above overlay */
             .event-popup-header > * {
                 position: relative;
-                z-index: 1; /* Stack above overlay */
+                z-index: 1;
             }
 
-            /* Category pill badge in header */
+            /* Category pill (same look as events.css) */
             .event-popup-category {
                 display: inline-block;
                 padding: 0.3rem 0.8rem;
-                background: rgba(255, 255, 255, 0.25); /* Semi-transparent white */
-                backdrop-filter: blur(10px); /* Frosted glass effect */
-                border-radius: 20px; /* Pill shape */
+                background: rgba(255, 255, 255, 0.25);
+                backdrop-filter: blur(10px);
+                border-radius: 20px;
                 font-size: 0.75rem;
                 font-weight: 700;
-                text-transform: uppercase; /* ALL CAPS */
-                letter-spacing: 0.5px; /* Slight spacing between letters */
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
                 margin-bottom: 0.8rem;
             }
-            
-            /* Close button (X) in top-right corner */
             .event-popup-close {
                 position: absolute; 
                 top: 20px; 
                 right: 20px; 
-                background: #f1f5f9; /* Light gray background */
+                background: #f1f5f9; 
                 border: none; 
                 width: 40px; 
                 height: 40px; 
-                border-radius: 50%; /* Perfect circle */
+                border-radius: 50%; 
                 cursor: pointer;
                 display: flex; 
                 align-items: center; 
                 justify-content: center; 
                 font-size: 24px; 
-                color: #64748b; /* Gray text */
+                color: #64748b; 
                 transition: all 0.3s ease; 
             } 
             
-            /* Close button hover effect */
-            /* Changes to red and rotates when hovering */
-            .event-popup-close:hover { 
-                background: #ef4444; /* Red background */
-                color: white; 
-                transform: rotate(90deg); /* Rotate X to create visual interest */
-            }
+            .event-popup-close:hover { background: #ef4444;
+             color: white; transform: rotate(90deg) }
 
-            /* Event title in header */
+
+            /* Header title */
             .event-popup-title {
                 font-size: 28px;
-                font-weight: 800; /* Extra bold */
-                line-height: 1.3; /* Comfortable line spacing */
+                font-weight: 800;
+                line-height: 1.3;
                 margin-bottom: 10px;
             }
 
-            /* Organizer name in header */
+            /* Organizer text */
             .event-popup-organizer {
                 font-size: 14px;
                 font-weight: 600;
-                opacity: 0.95; /* Slightly transparent */
+                opacity: 0.95;
             }
 
-            /* Duplicate title styling (can be removed - redundant) */
             .event-popup-title {
                 font-size: 28px;
                 font-weight: 800;
@@ -162,198 +133,169 @@
                 line-height: 1.3;
             }
 
-            /* Duplicate organizer styling (can be removed - redundant) */
             .event-popup-organizer {
                 font-size: 14px;
                 font-weight: 600;
                 opacity: 0.95;
             }
 
-            /* ===== POPUP BODY ===== */
-            /* Main content area containing event details */
+            /* Popup Body */
             .event-popup-body {
                 padding: 30px;
             }
 
-            /* Individual content section within body */
             .event-popup-section {
-                margin-bottom: 25px; /* Space between sections */
+                margin-bottom: 25px;
             }
 
-            /* Remove bottom margin from last section */
             .event-popup-section:last-child {
                 margin-bottom: 0;
             }
 
-            /* Section label (e.g., "About This Event", "Requirements") */
             .event-popup-label {
                 font-size: 12px;
                 font-weight: 700;
-                text-transform: uppercase; /* ALL CAPS */
-                letter-spacing: 0.5px; /* Slight letter spacing */
-                color: #64748b; /* Muted gray */
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+                color: #64748b;
                 margin-bottom: 8px;
             }
 
-            /* Section content value */
             .event-popup-value {
                 font-size: 16px;
-                color: rgb(1, 9, 67); /* Dark blue text */
-                line-height: 1.6; /* Comfortable reading height */
+                color: rgb(1, 9, 67);
+                line-height: 1.6;
             }
 
-            /* Icons within sections */
             .event-popup-icon {
                 margin-right: 8px;
-                color: #2563eb; /* Brand blue */
+                color: #2563eb;
             }
 
-            /* ===== INFO GRID ===== */
-            /* Grid layout for date/time/location cards */
+            /* Info Grid */
             .event-popup-info-grid {
                 display: grid;
-                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Responsive columns */
-                gap: 20px; /* Space between grid items */
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+                gap: 20px;
                 margin-bottom: 25px;
             }
 
-            /* Individual info card in the grid */
             .event-popup-info-card {
-                background: linear-gradient(135deg, #f8fafc 0%, #e0e7ff 100%); /* Subtle gradient */
+                background: linear-gradient(135deg, #f8fafc 0%, #e0e7ff 100%);
                 padding: 15px;
                 border-radius: 12px;
-                border: 2px solid #e0e7ff; /* Subtle border */
+                border: 2px solid #e0e7ff;
             }
 
-            /* ===== TAGS ===== */
-            /* Container for event topic tags */
+            /* Tags */
             .event-popup-tags {
                 display: flex;
-                flex-wrap: wrap; /* Wrap tags to multiple lines if needed */
-                gap: 8px; /* Space between tags */
+                flex-wrap: wrap;
+                gap: 8px;
             }
 
-            /* Individual tag pill */
             .event-popup-tag {
-                background: #eff6ff; /* Light blue background */
-                color: #2563eb; /* Blue text */
+                background: #eff6ff;
+                color: #2563eb;
                 padding: 6px 14px;
-                border-radius: 15px; /* Pill shape */
+                border-radius: 15px;
                 font-size: 13px;
                 font-weight: 600;
             }
 
-            /* ===== CAPACITY PROGRESS BAR ===== */
-            /* Section showing registration progress */
+            /* Progress Bar */
             .event-popup-capacity {
                 margin-top: 15px;
             }
 
-            /* Background bar for capacity indicator */
             .capacity-bar {
-                background: #e0e7ff; /* Light blue background */
+                background: #e0e7ff;
                 height: 8px;
                 border-radius: 4px;
-                overflow: hidden; /* Clip the fill bar */
+                overflow: hidden;
                 margin-top: 8px;
             }
 
-            /* Filled portion of capacity bar */
             .capacity-fill {
-                background: linear-gradient(135deg, #2563eb, #3b82f6); /* Blue gradient */
+                background: linear-gradient(135deg, #2563eb, #3b82f6);
                 height: 100%;
                 border-radius: 4px;
-                transition: width 0.5s ease; /* Smooth width animation */
+                transition: width 0.5s ease;
             }
 
-            /* Text showing capacity numbers */
             .capacity-text {
                 font-size: 14px;
-                color: #64748b; /* Muted gray */
+                color: #64748b;
                 margin-top: 5px;
             }
 
-            /* ===== ACTION BUTTONS ===== */
-            /* Container for Register and Share buttons */
+            /* Action Buttons */
             .event-popup-actions {
                 display: flex;
-                gap: 12px; /* Space between buttons */
+                gap: 12px;
                 margin-top: 30px;
                 padding-top: 25px;
-                border-top: 2px solid #e0e7ff; /* Divider line above buttons */
+                border-top: 2px solid #e0e7ff;
             }
 
-            /* Base button styling */
             .event-popup-btn {
-                flex: 1; /* Equal width buttons */
+                flex: 1;
                 padding: 14px 24px;
                 border-radius: 12px;
                 font-size: 16px;
                 font-weight: 700;
                 cursor: pointer;
-                transition: all 0.3s ease; /* Smooth hover effects */
+                transition: all 0.3s ease;
                 border: none;
                 display: flex;
-                align-items: center; /* Center content vertically */
-                justify-content: center; /* Center content horizontally */
-                gap: 8px; /* Space between icon and text */
+                align-items: center;
+                justify-content: center;
+                gap: 8px;
             }
 
-            /* Primary button (Register) - blue gradient */
             .btn-primary {
                 background: linear-gradient(135deg, #2563eb, #3b82f6);
                 color: white;
             }
 
-            /* Primary button hover effect */
             .btn-primary:hover {
-                transform: translateY(-2px); /* Lift up slightly */
-                box-shadow: 0 8px 20px rgba(37, 99, 235, 0.4); /* Blue glow */
+                transform: translateY(-2px);
+                box-shadow: 0 8px 20px rgba(37, 99, 235, 0.4);
             }
 
-            /* Secondary button (Share) - outlined style */
             .btn-secondary {
                 background: white;
-                color: #2563eb; /* Blue text */
-                border: 2px solid #2563eb; /* Blue border */
+                color: #2563eb;
+                border: 2px solid #2563eb;
             }
 
-            /* Secondary button hover effect */
             .btn-secondary:hover {
-                background: #eff6ff; /* Light blue background */
+                background: #eff6ff;
             }
 
-            /* ===== MOBILE RESPONSIVE ===== */
-            /* Optimizations for mobile devices */
+            /* Mobile Responsive */
             @media (max-width: 768px) {
-                /* Make popup taller on mobile */
                 .event-popup {
-                    max-height: 95vh; /* Use more screen height */
-                    margin: 10px; /* Smaller margin */
+                    max-height: 95vh;
+                    margin: 10px;
                 }
 
-                /* Reduce padding on mobile */
                 .event-popup-header,
                 .event-popup-body {
                     padding: 20px;
                 }
 
-                /* Smaller title text on mobile */
                 .event-popup-title {
                     font-size: 22px;
                 }
 
-                /* Stack info grid vertically on mobile */
                 .event-popup-info-grid {
-                    grid-template-columns: 1fr; /* Single column */
+                    grid-template-columns: 1fr;
                 }
 
-                /* Stack action buttons vertically on mobile */
                 .event-popup-actions {
                     flex-direction: column;
                 }
-                
-                /* Mobile button styling (appears to be redundant/duplicate) */
                 .event-popup-button {
                     width: 100%;
                     padding: 10px 16px;
@@ -368,76 +310,47 @@
                     font-family: 'Open Sans', sans-serif;
                 }
 
-                /* Mobile button hover effect */
                 .event-popup-button:hover {
                     transform: translateY(-2px);
                     box-shadow: 0 4px 12px rgba(37,99,235,0.4);
                 }
         }
         `;
-        
-        // Add the style element to the document head
         document.head.appendChild(style);
     }
 
-    // ===================================
-    // HTML GENERATION
-    // ===================================
-    
-    /**
-     * Generate the complete HTML structure for the event popup
-     * @param {Object} event - Event data object from eventsData array
-     * @returns {string} Complete HTML string for the popup
-     */
+    // Create popup HTML
     function createPopupHTML(event) {
-        // Calculate registration capacity percentage
         const capacityPercent = Math.round((event.registered / event.capacity) * 100);
         
-        // Return complete popup HTML structure
         return `
             <div class="event-popup-overlay" onclick="if(event.target === this) closeEventPopup()">
                 <div class="event-popup">
-                    <!-- HEADER SECTION -->
-                    <!-- Colored header with category, title, and organizer -->
                     <div class="event-popup-header ${event.category}">
-                        <!-- Close button (X) -->
                         <button class="event-popup-close" onclick="closeEventPopup()" aria-label="Close">×</button>
-                        
-                        <!-- Category badge -->
                         <div class="event-popup-category category-${event.category}">${event.category}</div>
-                        
-                        <!-- Event title -->
                         <h2 class="event-popup-title">${event.title}</h2>
-                        
-                        <!-- Organizer name -->
                         <div class="event-popup-organizer">Organized by ${event.organizer}</div>
                     </div>
 
-                    <!-- BODY SECTION -->
                     <div class="event-popup-body">
                         <!-- Date/Time/Location Grid -->
-                        <!-- Two-column grid showing essential event info -->
                     <div class="event-popup-info-grid">
-                        <!-- Date and Time card -->
                         <div class="event-popup-info-card">
                             <div class="event-popup-label"><i class="fa-regular fa-calendar"></i> Date & Time</div>
                             <div class="event-popup-value">${event.date}<br>${event.time}</div>
                         </div>
-                        
-                        <!-- Location card -->
                         <div class="event-popup-info-card">
                             <div class="event-popup-label"><i class="fa-solid fa-location-arrow"></i> Location</div>
                             <div class="event-popup-value">${event.location}<br><small style="color: #64748b;">${event.address}</small></div>
                         </div>
                     </div>
 
-                    <!-- Full event description -->
                     <div class="event-popup-section">
                         <div class="event-popup-label">About This Event</div>
                         <div class="event-popup-value">${event.fullDescription}</div>
                     </div>
 
-                    <!-- Event topic tags -->
                     <div class="event-popup-section">
                         <div class="event-popup-label">Topics</div>
                         <div class="event-popup-tags">
@@ -445,36 +358,29 @@
                         </div>
                     </div>
 
-                    <!-- Requirements section -->
                     <div class="event-popup-section">
                         <div class="event-popup-label">Requirements</div>
                         <div class="event-popup-value"><i class="fa-solid fa-clipboard-check"></i> ${event.requirements}</div>
                     </div>
 
-                    <!-- Accessibility information -->
                     <div class="event-popup-section">
                         <div class="event-popup-label">Accessibility</div>
                         <div class="event-popup-value"><i class="fa-brands fa-accessible-icon"></i> ${event.accessibility}</div>
                     </div>
 
-                    <!-- Parking information -->
                     <div class="event-popup-section">
                         <div class="event-popup-label">Parking</div>
                         <div class="event-popup-value"><i class="fa-solid fa-square-parking"></i> ${event.parking}</div>
                     </div>
 
-                    <!-- Registration capacity progress bar -->
                     <div class="event-popup-section event-popup-capacity">
                         <div class="event-popup-label">Registration Status</div>
-                        <!-- Visual progress bar -->
                         <div class="capacity-bar">
                             <div class="capacity-fill" style="width: ${capacityPercent}%"></div>
                         </div>
-                        <!-- Capacity text (e.g., "87 of 200 spots filled") -->
                         <div class="capacity-text">${event.registered} of ${event.capacity} spots filled (${capacityPercent}%)</div>
                     </div>
 
-                    <!-- Contact information -->
                     <div class="event-popup-section">
                         <div class="event-popup-label">Contact Information</div>
                         <div class="event-popup-value">
@@ -483,13 +389,10 @@
                         </div>
                     </div>
 
-                    <!-- Action buttons -->
                     <div class="event-popup-actions">
-                        <!-- Register button -->
                         <button class="event-popup-btn btn-primary" onclick="registerForEvent('${event.id}')">
                             ✓ Register for Event
                         </button>
-                        <!-- Share button -->
                         <button class="event-popup-btn btn-secondary" onclick="shareEvent('${event.id}')">
                             🔗 Share
                         </button>
@@ -500,32 +403,24 @@
     `;
 }
 
-    // ===================================
-    // POPUP CONTROL FUNCTIONS
-    // ===================================
 
-    /**
-     * Open the event popup with event details
-     * Made globally available via window object
-     * @param {string} eventId - The unique ID of the event to display
-     */
+    // Open popup
     window.openEventPopup = function(eventId) {
         console.log('Opening popup for event:', eventId);
         
         // CRITICAL FIX: Close any open Leaflet map popups BEFORE opening event popup
-        // This prevents conflicts between map markers and the detail popup
         if (typeof map !== 'undefined' && map.closePopup) {
             map.closePopup();
         }
         
-        // Verify that event data is loaded
+        // Check if eventsData exists
         if (!window.eventsData) {
             console.error('eventsData not loaded! Make sure events-data.js loads before event-popup.js');
             alert('Error: Event data not loaded. Please refresh the page.');
             return;
         }
         
-        // Find the event in the data array
+        // Find event data
         const event = window.eventsData.find(e => e.id === eventId);
         if (!event) {
             console.error('Event not found:', eventId);
@@ -535,139 +430,101 @@
 
         console.log('Found event:', event.title);
 
-        // Inject CSS styles if not already present
+        // Inject styles if not already done
         injectPopupStyles();
 
-        // Remove any existing popup to prevent duplicates
+        // Remove existing popup if any
         const existing = document.getElementById('event-popup-container');
         if (existing) existing.remove();
 
-        // Create a container element for the popup
+        // Create and append popup
         const container = document.createElement('div');
         container.id = 'event-popup-container';
-        
-        // Set the HTML content using the template function
         container.innerHTML = createPopupHTML(event);
-        
-        // Add popup to the page
         document.body.appendChild(container);
 
         console.log('Popup appended to body');
 
-        // Prevent scrolling of the page behind the popup
+        // Prevent body scroll
         document.body.style.overflow = 'hidden';
 
-        // Add keyboard listener for ESC key to close popup
+        // Add escape key listener
         const escapeHandler = function(e) {
             if (e.key === 'Escape') {
                 window.closeEventPopup();
             }
         };
         document.addEventListener('keydown', escapeHandler);
-        
-        // Mark that escape handler is attached (for cleanup tracking)
         container.dataset.escapeHandler = 'attached';
     };
 
-    /**
-     * Close the event popup
-     * Made globally available via window object
-     * Includes fade-out animation before removal
-     */
+    // Close popup
     window.closeEventPopup = function() {
         const container = document.getElementById('event-popup-container');
-        if (!container) return; // Exit if no popup exists
+        if (!container) return;
 
-        // Get the overlay element for animation
+        // Fade out animation
         const overlay = container.querySelector('.event-popup-overlay');
         if (overlay) {
-            // Apply fade-out animation
             overlay.style.animation = 'fadeOut 0.3s ease forwards';
-            
-            // Remove popup after animation completes
             setTimeout(() => {
                 container.remove();
-                document.body.style.overflow = ''; // Re-enable page scrolling
-            }, 300); // Match animation duration
+                document.body.style.overflow = '';
+            }, 300);
         } else {
-            // If no overlay found, remove immediately
             container.remove();
-            document.body.style.overflow = ''; // Re-enable page scrolling
+            document.body.style.overflow = '';
         }
 
-        // Remove escape key listener (cleanup)
+        // Remove escape key listener
         document.removeEventListener('keydown', window.closeEventPopup);
     };
 
-    // ===================================
-    // ACTION FUNCTIONS
-    // ===================================
-
-    /**
-     * Handle event registration
-     * Made globally available via window object
-     * @param {string} eventId - ID of the event to register for
-     */
+    // Register for event
     window.registerForEvent = function(eventId) {
-        // Find the event data
         const event = window.eventsData.find(e => e.id === eventId);
         if (!event) return;
 
-        // TODO: In a real application, this would make an API call to register the user
-        // For now, show a confirmation alert
+        // In a real app, this would make an API call
         alert(`You're registered for "${event.title}"!\n\nConfirmation email sent to your registered email address.\n\nEvent Details:\n ${event.date} at ${event.time}\n ${event.location}`);
         
-        // Close popup after registration (optional behavior)
+        // Optionally close popup after registration
         window.closeEventPopup();
     };
 
-    /**
-     * Share event using Web Share API or clipboard
-     * Made globally available via window object
-     * @param {string} eventId - ID of the event to share
-     */
+    // Share event
     window.shareEvent = function(eventId) {
-        // Find the event data
         const event = window.eventsData.find(e => e.id === eventId);
         if (!event) return;
 
-        // Try to use native Web Share API if available (mobile devices)
+        // Try to use Web Share API if available
         if (navigator.share) {
             navigator.share({
                 title: event.title,
                 text: `Join me at ${event.title} on ${event.date}!`,
-                url: window.location.href + '#event-' + eventId // Create shareable link
-            }).catch(err => console.log('Share cancelled')); // User cancelled share
+                url: window.location.href + '#event-' + eventId
+            }).catch(err => console.log('Share cancelled'));
         } else {
-            // Fallback for browsers without Web Share API: copy link to clipboard
+            // Fallback: copy link to clipboard
             const url = window.location.href.split('#')[0] + '#event-' + eventId;
             navigator.clipboard.writeText(url).then(() => {
                 alert('🔗 Event link copied to clipboard!\n\nShare it with friends and family.');
             }).catch(() => {
-                // Clipboard API failed, show URL in alert
                 alert('Event link:\n' + url);
             });
         }
     };
 
-    // ===================================
-    // ANIMATION STYLES
-    // ===================================
-    
-    // Add fade-out animation for closing popup
+    // Add fadeOut animation
     const fadeOutStyle = document.createElement('style');
     fadeOutStyle.textContent = `
         @keyframes fadeOut {
-            to { opacity: 0; } /* Fade to invisible */
+            to { opacity: 0; }
         }
     `;
     document.head.appendChild(fadeOutStyle);
 
-    // ===================================
-    // INITIALIZATION & TESTING
-    // ===================================
-    
-    // Log that the component has loaded successfully
+    // Log that popup component is ready
     console.log('✅ Event popup component loaded and ready');
     console.log('Functions available:', {
         openEventPopup: typeof window.openEventPopup,
@@ -676,20 +533,14 @@
         shareEvent: typeof window.shareEvent
     });
 
-    /**
-     * Test function for developers
-     * Call this in browser console: testEventPopup()
-     * Opens popup with first event in the data array
-     */
+    // Test function - call this in console to verify: testEventPopup()
     window.testEventPopup = function() {
-        // Check if event data exists
         if (!window.eventsData || window.eventsData.length === 0) {
             console.error('❌ No event data found!');
             return;
         }
-        // Open popup with first event
         console.log('✅ Testing with first event:', window.eventsData[0].id);
         window.openEventPopup(window.eventsData[0].id);
     };
 
-})(); // End of IIFE - execute immediately
+})();
