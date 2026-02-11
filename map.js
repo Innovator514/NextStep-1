@@ -1,3 +1,6 @@
+document.addEventListener('DOMContentLoaded', () => {
+    const API_KEY = '35da7f9e-28f9-4002-80cb-7bf719afd82e';
+
 // Exact location of Boca Raton
 const boca = [26.3684, -80.1289];
 var map = L.map('map', {
@@ -5,16 +8,23 @@ var map = L.map('map', {
 }).setView(boca, 13);
 
 // Light mode tile layer
-const lightTiles = L.tileLayer('https://tiles.stadiamaps.com/tiles/alidade_smooth/{z}/{x}/{y}{r}.png', {
-  maxZoom: 20,
-  attribution: '&copy; <a href="https://openstreetmap.org">OpenStreetMap</a> &copy; <a href="https://stadiamaps.com">Stadia Maps</a>'
-});
+const lightTiles = L.tileLayer(
+  `https://tiles.stadiamaps.com/tiles/alidade_smooth/{z}/{x}/{y}{r}.png?api_key=${API_KEY}`,
+  {
+    maxZoom: 20,
+    attribution: '&copy; <a href="https://openstreetmap.org">OpenStreetMap</a> &copy; <a href="https://stadiamaps.com">Stadia Maps</a>'
+  }
+);
 
 // Dark mode tile layer
-const darkTiles = L.tileLayer('https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png', {
-  maxZoom: 20,
-  attribution: '&copy; <a href="https://openstreetmap.org">OpenStreetMap</a> &copy; <a href="https://stadiamaps.com">Stadia Maps</a>'
-});
+const darkTiles = L.tileLayer(
+  `https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png?api_key=${API_KEY}`,
+  {
+    maxZoom: 20,
+    attribution: '&copy; <a href="https://openstreetmap.org">OpenStreetMap</a> &copy; <a href="https://stadiamaps.com">Stadia Maps</a>'
+  }
+);
+
 
 // Function to apply correct tile layer based on theme
 function applyMapTheme() {
@@ -271,4 +281,6 @@ function updateLayers() {
 });
 
 // Zoom control
+
 L.control.zoom({ position: 'bottomleft' }).addTo(map);
+    });
