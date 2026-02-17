@@ -66,33 +66,30 @@ function updateNavPhoto(photoURL) {
     }));
 }
 
-// Tab Switching
-function switchTab(tabName) {
-    // Remove current class from all tabs
-    const tabs = document.querySelectorAll('.tab');
-    tabs.forEach(tab => {
-        tab.classList.remove('current');
-    });
-    
-    // Remove current class from all tab contents
-    const contents = document.querySelectorAll('.tab-content');
-    contents.forEach(content => {
-        content.classList.remove('current');
-    });
-    
-    // Find and activate the correct tab button
-    tabs.forEach(tab => {
-        const tabText = tab.textContent.toLowerCase().trim();
-        if (tabText === tabName.toLowerCase()) {
-            tab.classList.add('current');
-        }
-    });
-    
-    // Show corresponding content
-    const tabContent = document.getElementById(tabName + '-tab');
-    if (tabContent) {
-        tabContent.classList.add('current');
+// Tab Switching — works for both old .tab system and new sidebar-nav + profile-pane
+function switchTab(tabName, clickedBtn) {
+    // New system: sidebar-nav-item + profile-pane
+    const panes = document.querySelectorAll('.profile-pane');
+    const sidebarBtns = document.querySelectorAll('.sidebar-nav-item');
+
+    if (panes.length > 0) {
+        panes.forEach(p => p.classList.remove('active'));
+        sidebarBtns.forEach(b => b.classList.remove('active'));
+
+        const target = document.getElementById('tab-' + tabName);
+        if (target) target.classList.add('active');
+        if (clickedBtn) clickedBtn.classList.add('active');
+        return;
     }
+
+    // Legacy fallback: .tab + .tab-content
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('current'));
+    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('current'));
+    document.querySelectorAll('.tab').forEach(t => {
+        if (t.textContent.toLowerCase().trim() === tabName.toLowerCase()) t.classList.add('current');
+    });
+    const tabContent = document.getElementById(tabName + '-tab');
+    if (tabContent) tabContent.classList.add('current');
 }
 
 // Photo Upload Handler - FIXED VERSION
@@ -307,14 +304,18 @@ async function updateUserPassword() {
     }
 }
 
-// Show Message
+// Show Message — works in both old #settings-message and new toast system
 function showMessage(text, type) {
+    // Try new toast first
+    if (typeof showProfileToast === 'function') {
+        showProfileToast(text, type);
+        return;
+    }
+    // Legacy fallback
     const messageDiv = document.getElementById('settings-message');
     if (messageDiv) {
         messageDiv.className = 'message ' + type;
         messageDiv.textContent = text;
-        
-        // Auto-hide after 4 seconds
         setTimeout(function() {
             messageDiv.className = '';
             messageDiv.textContent = '';
@@ -377,21 +378,34 @@ function loadBadgeStatistics() {
             const progress = badge.progressKey === 'isFoundingMember' 
                 ? (userProgress[badge.progressKey] ? 1 : 0)
                 : (userProgress[badge.progressKey] || 0);
-            
-            if (progress >= badge.required) {
-                earnedCount++;
-            }
+            if (progress >= badge.required) earnedCount++;
         });
         
         const totalBadges = badges.length;
         const completionPercent = Math.round((earnedCount / totalBadges) * 100);
         const remainingBadges = totalBadges - earnedCount;
-        
+        const eventsAttended = userProgress.eventsAttended || 0;
+        const hours = userProgress.volunteeredHours || 0;
+
+        // ── New sidebar stats ──
+        const statEvents = document.getElementById('stat-events');
+        const statBadges = document.getElementById('stat-badges');
+        const statHours  = document.getElementById('stat-hours');
+        if (statEvents) statEvents.textContent = eventsAttended;
+        if (statBadges) statBadges.textContent = earnedCount;
+        if (statHours)  statHours.textContent  = hours + 'h';
+
+        // ── New progress bar ──
+        const bar   = document.getElementById('badge-progress-bar');
+        const label = document.getElementById('badge-progress-label');
+        if (bar)   bar.style.width = completionPercent + '%';
+        if (label) label.textContent = `${earnedCount} of ${totalBadges} badges earned (${completionPercent}%)`;
+
+        // ── Legacy stat cards (old layout fallback) ──
         const profileStatCards = document.querySelectorAll('.stats-grid .stat-card');
         if (profileStatCards.length >= 3) {
-            profileStatCards[0].querySelector('.stat-number').textContent = userProgress.eventsAttended || 0;
+            profileStatCards[0].querySelector('.stat-number').textContent = eventsAttended;
             profileStatCards[1].querySelector('.stat-number').textContent = earnedCount;
-            const hours = userProgress.volunteeredHours || 0;
             profileStatCards[2].querySelector('.stat-number').textContent = hours + 'h';
         }
         
@@ -402,7 +416,6 @@ function loadBadgeStatistics() {
             activityInfoCards[2].querySelector('.info-card-value').textContent = remainingBadges + ' More';
         }
         
-        console.log('Badge statistics loaded:', { earnedCount, totalBadges, completionPercent });
     } catch (e) {
         console.error('Error loading badge statistics:', e);
     }
@@ -418,37 +431,57 @@ function loadRecentActivity() {
             .filter(event => completedEventsIds.includes(event.id))
             .sort((a, b) => new Date(b.date) - new Date(a.date));
         
+        // ── New activity-list div ──
+        const newList = document.getElementById('activity-list');
+        if (newList) {
+            if (completedEvents.length === 0) {
+                newList.innerHTML = `
+                    <div class="activity-empty">
+                        <i class="fas fa-seedling"></i>
+                        <p>No activity yet — start attending events!</p>
+                        <a href="events.html" class="settings-btn" style="text-decoration:none;display:inline-block;margin-top:1rem;">
+                            Browse Events →
+                        </a>
+                    </div>`;
+            } else {
+                newList.innerHTML = completedEvents.map(event => {
+                    const icon = event.badgeProgress?.volunteeredHours > 0 ? 'fa-hands-helping' : 'fa-calendar-check';
+                    const meta = event.badgeProgress?.volunteeredHours > 0
+                        ? `Volunteered • ${event.badgeProgress.volunteeredHours} hrs`
+                        : `Attended • ${event.date}`;
+                    return `
+                        <div class="activity-item">
+                            <div class="activity-icon"><i class="fas ${icon}"></i></div>
+                            <div class="activity-details">
+                                <div class="activity-title">${event.title}</div>
+                                <div class="activity-meta">${meta}</div>
+                            </div>
+                        </div>`;
+                }).join('');
+            }
+        }
+
+        // ── Legacy: old #activity-tab .settings-section ──
         const activitySection = document.querySelector('#activity-tab .settings-section');
-        if (!activitySection) return;
-        
-        let activityHTML = '<h2>Recent Activity</h2>';
-        
-        if (completedEvents.length === 0) {
-            activityHTML += `
-                <div class="info-card">
-                    <div class="info-card-value">No activities yet</div>
-                    <div class="toggle-description" style="margin-top: 8px;">Complete events to see your activity here!</div>
-                </div>
-            `;
-        } else {
-            completedEvents.forEach(event => {
-                const activityType = event.badgeProgress?.volunteeredHours > 0 
-                    ? `Volunteered • ${event.badgeProgress.volunteeredHours} hours` 
-                    : 'Attended';
-                
-                activityHTML += `
-                    <div class="info-card" style="margin-bottom: 15px;">
+        if (activitySection) {
+            let html = '<h2>Recent Activity</h2>';
+            if (completedEvents.length === 0) {
+                html += `<div class="info-card"><div class="info-card-value">No activities yet</div>
+                    <div class="toggle-description" style="margin-top:8px;">Complete events to see your activity here!</div></div>`;
+            } else {
+                completedEvents.forEach(event => {
+                    const activityType = event.badgeProgress?.volunteeredHours > 0
+                        ? `Volunteered • ${event.badgeProgress.volunteeredHours} hours` : 'Attended';
+                    html += `<div class="info-card" style="margin-bottom:15px;">
                         <div class="info-card-label">${event.date}</div>
                         <div class="info-card-value">${event.title}</div>
-                        <div class="toggle-description" style="margin-top: 8px;">${activityType}</div>
-                    </div>
-                `;
-            });
+                        <div class="toggle-description" style="margin-top:8px;">${activityType}</div>
+                    </div>`;
+                });
+            }
+            activitySection.innerHTML = html;
         }
         
-        activitySection.innerHTML = activityHTML;
-        
-        console.log('Recent activity loaded:', completedEvents.length + ' events');
     } catch (e) {
         console.error('Error loading recent activity:', e);
     }
@@ -486,18 +519,125 @@ function loadUserData() {
     }
 }
 
+// ===== TOAST NOTIFICATION =====
+function showProfileToast(message, type = 'success') {
+    const existing = document.getElementById('profile-toast');
+    if (existing) existing.remove();
+    const toast = document.createElement('div');
+    toast.id = 'profile-toast';
+    const bg = type === 'success'
+        ? 'linear-gradient(135deg,#10b981,#059669)'
+        : type === 'error'
+        ? 'linear-gradient(135deg,#ef4444,#dc2626)'
+        : 'linear-gradient(135deg,#2563eb,#3b82f6)';
+    toast.style.cssText = `
+        position:fixed;bottom:2rem;right:2rem;background:${bg};color:white;
+        padding:1rem 1.5rem;border-radius:12px;font-family:'Open Sans',sans-serif;
+        font-size:.95rem;font-weight:600;display:flex;align-items:center;gap:.75rem;
+        box-shadow:0 8px 32px rgba(0,0,0,.18);z-index:99999;max-width:340px;
+        animation:toastIn .3s cubic-bezier(.175,.885,.32,1.275) both;
+    `;
+    if (!document.getElementById('profile-toast-styles')) {
+        const s = document.createElement('style');
+        s.id = 'profile-toast-styles';
+        s.textContent = `
+            @keyframes toastIn{from{opacity:0;transform:translateY(20px) scale(.95)}to{opacity:1;transform:translateY(0) scale(1)}}
+            @keyframes toastOut{from{opacity:1;transform:translateY(0) scale(1)}to{opacity:0;transform:translateY(20px) scale(.95)}}
+            @media(max-width:480px){#profile-toast{right:1rem;left:1rem;max-width:calc(100% - 2rem);bottom:1rem}}
+        `;
+        document.head.appendChild(s);
+    }
+    const icon = type === 'success' ? '✓' : type === 'error' ? '✕' : 'ℹ';
+    toast.innerHTML = `<span style="font-size:1.2rem">${icon}</span><span>${message}</span>`;
+    document.body.appendChild(toast);
+    setTimeout(() => {
+        toast.style.animation = 'toastOut .3s ease forwards';
+        setTimeout(() => toast.remove(), 320);
+    }, 4000);
+}
+
 // Save notification preferences
 function saveNotificationPreferences() {
     try {
-        const emailNotif = document.getElementById('email-notif').checked;
-        const eventReminders = document.getElementById('event-reminders').checked;
-        const newsletter = document.getElementById('newsletter').checked;
-        
+        const emailNotif = document.getElementById('email-notif')?.checked ?? true;
+        const eventReminders = document.getElementById('event-reminders')?.checked ?? true;
+        const newsletter = document.getElementById('newsletter')?.checked ?? false;
         localStorage.setItem('notif_email', emailNotif);
         localStorage.setItem('notif_events', eventReminders);
         localStorage.setItem('notif_newsletter', newsletter);
     } catch (e) {
         console.error('Error saving preferences:', e);
+    }
+}
+
+// Save with user-visible toast feedback
+window.saveNotificationPreferencesWithFeedback = async function () {
+    saveNotificationPreferences();
+
+    // Handle browser push notification toggle
+    const pushToggle = document.getElementById('push-notif');
+    if (pushToggle && pushToggle.checked) {
+        await requestPushPermission();
+    } else if (pushToggle && !pushToggle.checked) {
+        localStorage.setItem('notif_push', 'false');
+    }
+
+    showProfileToast('Notification preferences saved!', 'success');
+};
+
+// Request browser push notification permission
+async function requestPushPermission() {
+    if (!('Notification' in window)) {
+        showProfileToast('Your browser doesn\'t support push notifications.', 'info');
+        const toggle = document.getElementById('push-notif');
+        if (toggle) toggle.checked = false;
+        return;
+    }
+
+    if (Notification.permission === 'granted') {
+        localStorage.setItem('notif_push', 'true');
+        updatePushUI('granted');
+        return;
+    }
+
+    if (Notification.permission === 'denied') {
+        showProfileToast('Push notifications are blocked. Please enable them in your browser settings.', 'error');
+        const toggle = document.getElementById('push-notif');
+        if (toggle) toggle.checked = false;
+        updatePushUI('denied');
+        return;
+    }
+
+    // Ask for permission
+    const permission = await Notification.requestPermission();
+    localStorage.setItem('notif_push', permission === 'granted' ? 'true' : 'false');
+    updatePushUI(permission);
+
+    if (permission === 'granted') {
+        // Send a test notification so user sees it working
+        new Notification('NextStep Notifications Enabled! 🎉', {
+            body: 'You\'ll now get alerts when new civic events are posted.',
+            icon: 'images/logo.png'
+        });
+    } else {
+        const toggle = document.getElementById('push-notif');
+        if (toggle) toggle.checked = false;
+        showProfileToast('Push notifications were not enabled.', 'info');
+    }
+}
+
+function updatePushUI(permissionState) {
+    const desc = document.getElementById('push-notif-desc');
+    if (!desc) return;
+    if (permissionState === 'granted') {
+        desc.textContent = '✓ Push notifications are active';
+        desc.style.color = '#10b981';
+    } else if (permissionState === 'denied') {
+        desc.textContent = '✕ Blocked — enable in browser settings';
+        desc.style.color = '#ef4444';
+    } else {
+        desc.textContent = 'Allow alerts when new events are posted';
+        desc.style.color = '';
     }
 }
 
@@ -507,37 +647,66 @@ function loadNotificationPreferences() {
         const emailNotif = localStorage.getItem('notif_email');
         const eventReminders = localStorage.getItem('notif_events');
         const newsletter = localStorage.getItem('notif_newsletter');
-        
+        const pushPref = localStorage.getItem('notif_push');
+
         if (emailNotif !== null) {
-            document.getElementById('email-notif').checked = emailNotif === 'true';
+            const el = document.getElementById('email-notif');
+            if (el) el.checked = emailNotif === 'true';
         }
         if (eventReminders !== null) {
-            document.getElementById('event-reminders').checked = eventReminders === 'true';
+            const el = document.getElementById('event-reminders');
+            if (el) el.checked = eventReminders === 'true';
         }
         if (newsletter !== null) {
-            document.getElementById('newsletter').checked = newsletter === 'true';
+            const el = document.getElementById('newsletter');
+            if (el) el.checked = newsletter === 'true';
+        }
+
+        // Push toggle
+        const pushToggle = document.getElementById('push-notif');
+        if (pushToggle) {
+            if (!('Notification' in window)) {
+                // Hide push row if not supported
+                const row = document.getElementById('push-notif-row');
+                if (row) row.style.display = 'none';
+            } else {
+                // Reflect current browser permission
+                if (Notification.permission === 'granted') {
+                    pushToggle.checked = true;
+                    localStorage.setItem('notif_push', 'true');
+                    updatePushUI('granted');
+                } else if (Notification.permission === 'denied') {
+                    pushToggle.checked = false;
+                    updatePushUI('denied');
+                } else {
+                    pushToggle.checked = pushPref === 'true';
+                }
+            }
         }
     } catch (e) {
         console.error('Error loading preferences:', e);
     }
 }
 
-// Setup notification toggles
+// Setup notification toggles (auto-save on change, except push which needs explicit save)
 function setupNotificationToggles() {
-    const toggles = ['email-notif', 'event-reminders', 'newsletter'];
-    toggles.forEach(id => {
+    ['email-notif', 'event-reminders', 'newsletter'].forEach(id => {
         const toggle = document.getElementById(id);
-        if (toggle) {
-            toggle.addEventListener('change', saveNotificationPreferences);
-        }
+        if (toggle) toggle.addEventListener('change', saveNotificationPreferences);
     });
 }
 
 // Check URL hash for direct tab access
 function checkURLHash() {
     const hash = window.location.hash.substring(1);
-    if (hash && (hash === 'profile' || hash === 'settings' || hash === 'activity')) {
-        switchTab(hash);
+    const validTabs = ['overview', 'settings', 'notifications', 'activity',
+                       'profile', 'activity']; // legacy names too
+    if (hash && validTabs.includes(hash)) {
+        // Map legacy names to new names
+        const nameMap = { profile: 'overview' };
+        const target = nameMap[hash] || hash;
+        const btn = document.querySelector(`.sidebar-nav-item[data-tab="${target}"]`);
+        switchTab(target, btn);
     }
 }
 

@@ -6,7 +6,7 @@
     align-items: center;
     justify-content: center;
     background: linear-gradient(135deg, #f8fafc 0%, #e0e7ff 100%);
-    padding: 120px 20px 40px;
+    padding: 120px 20px 40px; /* Top padding to clear navbar */
 }
 
 .login-container {
@@ -18,7 +18,7 @@
     background: white;
     border-radius: 20px;
     padding: 3rem;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 10px 40px rgba(0,0,0,0.1);
     animation: fadeIn 0.5s ease;
 }
 
@@ -40,7 +40,7 @@
 .login-card h1 {
     font-size: 2rem;
     font-weight: 800;
-    color: rgb(1, 9, 67);
+    color: #1e3a8a;
     margin-bottom: 0.5rem;
     text-align: center;
 }
@@ -154,7 +154,7 @@
 }
 
 .submit-button:hover .button-icon {
-    transform: translateX(5px);
+    transform: translateX(5px); /* Arrow moves forward on hover */
 }
 
 /* Divider */

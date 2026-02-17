@@ -3,8 +3,46 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content="Chat with NextStep AI Assistant" />  
-    
+    <meta name="description" content="Compass is NextStep's AI-powered civic guide. Ask questions about local government, how to get involved, upcoming events, and more in Boca Raton." />
+    <meta name="keywords" content="civic AI assistant, Boca Raton guide, NextStep Compass, civic engagement chatbot" />
+    <meta name="author" content="NextStep" />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://nextstep-civic.org/chatbot.html" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://nextstep-civic.org/chatbot.html" />
+    <meta property="og:site_name" content="NextStep" />
+    <meta property="og:title" content="Compass – Your AI Civic Guide | NextStep" />
+    <meta property="og:description" content="Ask Compass anything about civic engagement, local events, and how to get involved in Boca Raton." />
+    <meta property="og:image" content="https://nextstep-civic.org/images/logo.png" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Compass – Your AI Civic Guide | NextStep" />
+    <meta name="twitter:description" content="Ask Compass anything about civic engagement, local events, and how to get involved in Boca Raton." />
+    <meta name="twitter:image" content="https://nextstep-civic.org/images/logo.png" />
+
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebPage",
+      "@id": "https://nextstep-civic.org/chatbot.html",
+      "url": "https://nextstep-civic.org/chatbot.html",
+      "name": "Compass – Your AI Civic Guide | NextStep",
+      "description": "Ask Compass anything about civic engagement, local events, and how to get involved in Boca Raton.",
+      "isPartOf": { "@id": "https://nextstep-civic.org/#website" },
+      "breadcrumb": {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://nextstep-civic.org/" },
+          { "@type": "ListItem", "position": 2, "name": "Compass", "item": "https://nextstep-civic.org/chatbot.html" }
+        ]
+      }
+    }
+    </script>
+
     <!-- Favicon -->
     <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
@@ -15,7 +53,6 @@
     <link rel="stylesheet" href="chatbot.css" type="text/css"/>
     <link rel="stylesheet" href="dark-mode.css" type="text/css"/>
 
-  
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
@@ -23,8 +60,7 @@
     <!-- Font Awesome for Footer -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 
-
-    <title>NextStep - Compass</title>
+    <title>Compass – Your AI Civic Guide | NextStep</title>
 
   </head>
   <body>
@@ -163,6 +199,7 @@
     <script src="chatbot.js"></script>
     <script type="module" src="auth-check.js"></script>
     <script src="dark-mode.js"></script>
+    <script src="mobile-nav.js"></script>
 
   </body>
 </html>

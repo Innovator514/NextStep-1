@@ -3,38 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profile & Settings – NextStep</title>
-    
-    <!-- Favicon -->
+    <title>My Account – NextStep</title>
+
     <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
     <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
     <link rel="manifest" href="site.webmanifest">
 
-    <link rel="stylesheet" href="style.css" type="text/css"/>
-    <link rel="stylesheet" href="profile.css" type="text/css"/>
-    <link rel="stylesheet" href="dark-mode.css" type="text/css"/>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="profile.css">
+    <link rel="stylesheet" href="dark-mode.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
-    
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body class="profile-page">
-    <!-- Navigation - FIXED -->
+
+    <!-- Top navbar -->
     <nav>
         <div class="navbar">
             <div class="navdiv">
-                <!-- Logo -->
                 <div class="logo">
                     <a href="index.html">
                         <img src="images/logo.png" alt="NextStep Logo" class="logo-image">
                     </a>
                 </div>
-
-                <!-- Navigation links -->
                 <nav class="nav-links">
                     <ul>
                         <li class="navbar-item"><a href="index.html">Home</a></li>
@@ -45,8 +39,6 @@
                         <li class="navbar-item"><a href="contact.html">Contact Us</a></li>
                     </ul>
                 </nav>
-
-                <!-- Login/Sign Up - Will be replaced by profile dropdown when logged in -->
                 <div class="nav-right">
                     <div class="navbar-item"><a href="login.html" class="login">Login</a></div>
                     <div class="navbar-item"><a href="signup.html" class="signup">Sign Up</a></div>
@@ -55,209 +47,262 @@
         </div>
     </nav>
 
-    <!-- Main Container -->
-    <main class="profile-main">
-        <div class="container">
-            <!-- Page Header -->
-            <div class="page-header">
-                <button class="back-btn" onclick="window.location.href='index.html'">
-                    ← Back to Home
+    <!-- Full-screen profile layout -->
+    <div class="profile-shell">
+
+        <!-- LEFT SIDEBAR -->
+        <aside class="profile-sidebar">
+            <!-- Avatar + name -->
+            <div class="sidebar-avatar-area">
+                <div class="profile-photo-container">
+                    <div class="profile-initials-large" id="profile-initials-large">?</div>
+                    <label for="photo-input" class="photo-overlay" title="Change photo">
+                        <i class="fas fa-camera"></i>
+                    </label>
+                    <input type="file" id="photo-input" accept="image/*">
+                </div>
+                <div class="sidebar-name" id="profile-name-display">Loading…</div>
+                <div class="sidebar-email" id="profile-email-display">Loading…</div>
+                <div class="sidebar-badge">
+                    <i class="fas fa-map-marker-alt"></i> Boca Raton, FL
+                </div>
+            </div>
+
+            <!-- Quick stats -->
+            <div class="sidebar-stats">
+                <div class="sidebar-stat">
+                    <span class="sidebar-stat-n" id="stat-events">—</span>
+                    <span class="sidebar-stat-l">Events</span>
+                </div>
+                <div class="sidebar-stat">
+                    <span class="sidebar-stat-n" id="stat-badges">—</span>
+                    <span class="sidebar-stat-l">Badges</span>
+                </div>
+                <div class="sidebar-stat">
+                    <span class="sidebar-stat-n" id="stat-hours">—</span>
+                    <span class="sidebar-stat-l">Hours</span>
+                </div>
+            </div>
+
+            <!-- Nav items -->
+            <nav class="sidebar-nav">
+                <button class="sidebar-nav-item active" data-tab="overview" onclick="switchTab('overview',this)">
+                    <i class="fas fa-user"></i> Overview
                 </button>
-                <h1>My Account</h1>
-                <div style="width: 100px;"></div>
+                <button class="sidebar-nav-item" data-tab="settings" onclick="switchTab('settings',this)">
+                    <i class="fas fa-gear"></i> Settings
+                </button>
+                <button class="sidebar-nav-item" data-tab="notifications" onclick="switchTab('notifications',this)">
+                    <i class="fas fa-bell"></i> Notifications
+                </button>
+                <button class="sidebar-nav-item" data-tab="activity" onclick="switchTab('activity',this)">
+                    <i class="fas fa-chart-line"></i> Activity
+                </button>
+            </nav>
+
+            <!-- Bottom actions -->
+            <div class="sidebar-footer">
+                <a href="index.html" class="sidebar-back-btn">
+                    <i class="fas fa-arrow-left"></i> Back to Home
+                </a>
+                <button class="sidebar-logout-btn" onclick="logoutUser()">
+                    <i class="fas fa-arrow-right-from-bracket"></i> Logout
+                </button>
             </div>
+        </aside>
 
-            <!-- Tabs -->
-            <div class="tabs">
-                <button class="tab current" onclick="switchTab('profile')">Profile</button>
-                <button class="tab" onclick="switchTab('settings')">Settings</button>
-                <button class="tab" onclick="switchTab('activity')">Activity</button>
-            </div>
+        <!-- RIGHT CONTENT PANE -->
+        <main class="profile-content">
 
-            <!-- Content Area -->
-            <div class="content">
-                <!-- Profile Tab -->
-                <div id="profile-tab" class="tab-content current">
-                    <div class="profile-header">
-                        <div class="profile-photo-container">
-                            <div class="profile-initials-large" id="profile-initials-large">JD</div>
-                            <label for="photo-input" class="photo-overlay" title="Change photo"></label>
-                            <input type="file" id="photo-input" accept="image/*">
-                        </div>
-                        <div class="profile-name-display" id="profile-name-display">Loading...</div>
-                        <div class="profile-email-display" id="profile-email-display">Loading...</div>
+            <!-- ── OVERVIEW ── -->
+            <section id="tab-overview" class="profile-pane active">
+                <div class="pane-header">
+                    <h1>My Profile</h1>
+                    <p>Your civic engagement at a glance</p>
+                </div>
+
+                <div id="settings-message"></div>
+
+                <!-- Info cards -->
+                <div class="overview-grid">
+                    <div class="ov-card">
+                        <div class="ov-card-label"><i class="fas fa-id-card"></i> Full Name</div>
+                        <div class="ov-card-value" id="info-name">—</div>
                     </div>
-
-                    <div class="stats-grid">
-                        <div class="stat-card">
-                            <div class="stat-number">insert</div>
-                            <div class="stat-label">Events Attended</div>
-                        </div>
-                        <div class="stat-card">
-                            <div class="stat-number">insert</div>
-                            <div class="stat-label">Badges Earned</div>
-                        </div>
-                        <div class="stat-card">
-                            <div class="stat-number">insert</div>
-                            <div class="stat-label">Hours Volunteered</div>
-                        </div>
+                    <div class="ov-card">
+                        <div class="ov-card-label"><i class="fas fa-envelope"></i> Email</div>
+                        <div class="ov-card-value" id="info-email">—</div>
                     </div>
-
-                    <div class="profile-info-grid">
-                        <div class="info-card">
-                            <div class="info-card-label">Full Name</div>
-                            <div class="info-card-value" id="info-name">Loading...</div>
-                        </div>
-                        <div class="info-card">
-                            <div class="info-card-label">Email Address</div>
-                            <div class="info-card-value" id="info-email">Loading...</div>
-                        </div>
-                        <div class="info-card">
-                            <div class="info-card-label">Member Since</div>
-                            <div class="info-card-value" id="member-since">Loading...</div>
-                        </div>
-                        <div class="info-card">
-                            <div class="info-card-label">Location</div>
-                            <div class="info-card-value">Boca Raton, FL</div>
-                        </div>
+                    <div class="ov-card">
+                        <div class="ov-card-label"><i class="fas fa-calendar"></i> Member Since</div>
+                        <div class="ov-card-value" id="member-since">—</div>
+                    </div>
+                    <div class="ov-card">
+                        <div class="ov-card-label"><i class="fas fa-map-marker-alt"></i> Location</div>
+                        <div class="ov-card-value">Boca Raton, FL</div>
                     </div>
                 </div>
 
-                <!-- Settings Tab -->
-                <div id="settings-tab" class="tab-content">
-                    <div id="settings-message"></div>
-
-                    <!-- Account Settings -->
-                    <div class="settings-section">
-                        <h2>Account Information</h2>
-                        <div class="form-group">
-                            <label for="new-name">Display Name</label>
-                            <input type="text" id="new-name" placeholder="Enter your full name">
-                        </div>
-                        <button class="btn-primary" onclick="updateAccountName()">Update Name</button>
+                <!-- Progress toward next badge -->
+                <div class="progress-section">
+                    <div class="progress-section-header">
+                        <h3>Badge Progress</h3>
+                        <a href="badges.html" class="progress-link">View All →</a>
                     </div>
-
-                    <!-- Password Settings -->
-                    <div class="settings-section">
-                        <h2>Security</h2>
-                        <div class="form-group">
-                            <label for="new-password">New Password</label>
-                            <input type="password" id="new-password" placeholder="At least 6 characters">
-                        </div>
-                        <div class="form-group">
-                            <label for="confirm-password">Confirm Password</label>
-                            <input type="password" id="confirm-password" placeholder="Re-enter your password">
-                        </div>
-                        <button class="btn-primary" onclick="updateUserPassword()">Update Password</button>
+                    <div class="progress-bar-track">
+                        <div class="progress-bar-fill" id="badge-progress-bar" style="width:0%"></div>
                     </div>
+                    <p class="progress-label" id="badge-progress-label">Loading…</p>
+                </div>
+            </section>
 
-                    <!-- Notification Settings -->
-                    <div class="settings-section">
-                        <h2>Notifications</h2>
-                        <div class="toggle-group">
-                            <div>
-                                <div class="toggle-label">Email Notifications</div>
-                                <div class="toggle-description">Receive updates about events via email</div>
-                            </div>
-                            <label class="toggle-switch">
-                                <input type="checkbox" id="email-notif" checked>
-                                <span class="slider"></span>
-                            </label>
-                        </div>
-                        <div class="toggle-group">
-                            <div>
-                                <div class="toggle-label">Event Reminders</div>
-                                <div class="toggle-description">Get reminded before upcoming events</div>
-                            </div>
-                            <label class="toggle-switch">
-                                <input type="checkbox" id="event-reminders" checked>
-                                <span class="slider"></span>
-                            </label>
-                        </div>
-                        <div class="toggle-group">
-                            <div>
-                                <div class="toggle-label">Newsletter</div>
-                                <div class="toggle-description">Monthly civic engagement updates</div>
-                            </div>
-                            <label class="toggle-switch">
-                                <input type="checkbox" id="newsletter">
-                                <span class="slider"></span>
-                            </label>
-                        </div>
-                    </div>
+            <!-- ── SETTINGS ── -->
+            <section id="tab-settings" class="profile-pane">
+                <div class="pane-header">
+                    <h1>Settings</h1>
+                    <p>Manage your account information</p>
+                </div>
 
-                    <!-- Danger Zone -->
-                    <div class="settings-section">
-                        <h2>Account Actions</h2>
-                        <button class="btn-danger" onclick="logoutUser()">Logout</button>
+                <!-- Display Name -->
+                <div class="settings-block">
+                    <h2><i class="fas fa-signature"></i> Display Name</h2>
+                    <div class="settings-row">
+                        <input type="text" id="new-name" placeholder="Enter your full name" class="settings-input">
+                        <button class="settings-btn" onclick="updateAccountName()">Save</button>
                     </div>
                 </div>
 
-                <!-- Activity Tab -->
-                <div id="activity-tab" class="tab-content">
-                    <div class="settings-section">
-                        <h2>Recent Activity</h2>
-                        <div class="info-card" style="margin-bottom: 15px;">
-                            <div class="info-card-label">December 5, 2025</div>
-                            <div class="info-card-value">Youth Leadership Workshop</div>
-                            <div class="toggle-description" style="margin-top: 8px;">Registered for upcoming event</div>
-                        </div>
-                        <div class="info-card" style="margin-bottom: 15px;">
-                            <div class="info-card-label">November 21, 2025</div>
-                            <div class="info-card-value">Town Hall Meeting</div>
-                            <div class="toggle-description" style="margin-top: 8px;">Attended • 2 hours</div>
-                        </div>
-                        <div class="info-card" style="margin-bottom: 15px;">
-                            <div class="info-card-label">November 15, 2025</div>
-                            <div class="info-card-value">Beach Clean-Up Day</div>
-                            <div class="toggle-description" style="margin-top: 8px;">Volunteered • 4 hours</div>
-                        </div>
-                        <div class="info-card" style="margin-bottom: 15px;">
-                            <div class="info-card-label">November 8, 2025</div>
-                            <div class="info-card-value">Community Garden Project</div>
-                            <div class="toggle-description" style="margin-top: 8px;">Volunteered • 3 hours</div>
-                        </div>
-                        <div class="info-card">
-                            <div class="info-card-label">October 28, 2025</div>
-                            <div class="info-card-value">Civic Engagement Workshop</div>
-                            <div class="toggle-description" style="margin-top: 8px;">Completed • Earned badge</div>
-                        </div>
-                    </div>
-
-                    <div class="settings-section">
-                        <h2>Badges & Achievements</h2>
-                        <div class="stats-grid">
-                            <div class="info-card" style="text-align: center;">
-                                <div style="font-size: 40px; margin-bottom: 10px;"><i class="fa-solid fa-trophy"></i></div>
-                                <div class="info-card-value" style="margin-bottom: 5px;">_ Badges</div>
-                                <div class="info-card-label">Total Earned</div>
-                            </div>
-                            <div class="info-card" style="text-align: center;">
-                                <div style="font-size: 40px; margin-bottom: 10px;"><i class="fa-solid fa-chart-line"></i></div>
-                                <div class="info-card-value" style="margin-bottom: 5px;">_%</div>
-                                <div class="info-card-label">Progress</div>
-                            </div>
-                            <div class="info-card" style="text-align: center;">
-                                <div style="font-size: 40px; margin-bottom: 10px;"><i class="fa-solid fa-bullseye"></i></div>
-                                <div class="info-card-value" style="margin-bottom: 5px;">_ More</div>
-                                <div class="info-card-label">To Unlock</div>
-                            </div>
-                        </div>
-                        <div style="text-align: center; margin-top: 20px;">
-                            <a href="badges.html" class="btn-primary" style="text-decoration: none; display: inline-block;">
-                                View All Badges →
-                            </a>
-                        </div>
+                <!-- Password -->
+                <div class="settings-block">
+                    <h2><i class="fas fa-lock"></i> Change Password</h2>
+                    <div class="settings-row stacked">
+                        <input type="password" id="new-password" placeholder="New password (6+ characters)" class="settings-input">
+                        <input type="password" id="confirm-password" placeholder="Confirm new password" class="settings-input">
+                        <button class="settings-btn" onclick="updateUserPassword()">Update Password</button>
                     </div>
                 </div>
-            </div>
-        </div>
-    </main>
-    
-    <!-- Load Firebase Auth first -->
+
+                <!-- Profile Photo -->
+                <div class="settings-block">
+                    <h2><i class="fas fa-image"></i> Profile Photo</h2>
+                    <p class="settings-hint">Click the avatar on the left sidebar to upload a new photo.</p>
+                </div>
+
+                <!-- Danger Zone -->
+                <div class="settings-block danger-block">
+                    <h2><i class="fas fa-triangle-exclamation"></i> Account Actions</h2>
+                    <button class="settings-btn danger" onclick="logoutUser()">
+                        <i class="fas fa-arrow-right-from-bracket"></i> Logout
+                    </button>
+                </div>
+            </section>
+
+            <!-- ── NOTIFICATIONS ── -->
+            <section id="tab-notifications" class="profile-pane">
+                <div class="pane-header">
+                    <h1>Notifications</h1>
+                    <p>Control how NextStep keeps you informed</p>
+                </div>
+
+                <div class="notif-explainer">
+                    <i class="fas fa-circle-info"></i>
+                    <div>
+                        <strong>How notifications work:</strong> Email notifications are sent via our backend when new events are posted or when you register for an event. Browser push notifications alert you instantly even when the site is closed.
+                    </div>
+                </div>
+
+                <div class="settings-block">
+                    <h2><i class="fas fa-envelope"></i> Email Notifications</h2>
+
+                    <div class="toggle-row">
+                        <div class="toggle-info">
+                            <div class="toggle-title">New Event Alerts</div>
+                            <div class="toggle-desc">Email when new civic events are posted near you</div>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="email-notif" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+
+                    <div class="toggle-row">
+                        <div class="toggle-info">
+                            <div class="toggle-title">Event Registration Confirmation</div>
+                            <div class="toggle-desc">Confirmation email every time you register for an event</div>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="email-registration" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+
+                    <div class="toggle-row">
+                        <div class="toggle-info">
+                            <div class="toggle-title">Event Reminders</div>
+                            <div class="toggle-desc">Reminder 24 hours before events you've registered for</div>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="event-reminders" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+
+                    <div class="toggle-row">
+                        <div class="toggle-info">
+                            <div class="toggle-title">Monthly Newsletter</div>
+                            <div class="toggle-desc">A monthly digest of civic events and community highlights</div>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="newsletter">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="settings-block">
+                    <h2><i class="fas fa-bell"></i> Browser Push Notifications</h2>
+
+                    <div class="toggle-row" id="push-notif-row">
+                        <div class="toggle-info">
+                            <div class="toggle-title">Push Notifications</div>
+                            <div class="toggle-desc" id="push-notif-desc">Allow real-time alerts even when the site is closed</div>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="push-notif">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                </div>
+
+                <button class="settings-btn wide" onclick="saveNotificationPreferencesWithFeedback()">
+                    <i class="fas fa-check"></i> Save Preferences
+                </button>
+            </section>
+
+            <!-- ── ACTIVITY ── -->
+            <section id="tab-activity" class="profile-pane">
+                <div class="pane-header">
+                    <h1>Activity</h1>
+                    <p>Your civic engagement history</p>
+                </div>
+
+                <div id="activity-list" class="activity-list">
+                    <div class="activity-empty">
+                        <i class="fas fa-seedling"></i>
+                        <p>No activity yet — start attending events!</p>
+                        <a href="events.html" class="settings-btn" style="text-decoration:none;display:inline-block;margin-top:1rem;">
+                            Browse Events →
+                        </a>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div><!-- /profile-shell -->
+
     <script type="module" src="auth-check.js"></script>
-    <!-- Then load profile-specific JavaScript -->
     <script type="module" src="profile.js"></script>
     <script src="dark-mode.js"></script>
+    <script src="mobile-nav.js"></script>
 </body>
 </html>

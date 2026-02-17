@@ -1,278 +1,860 @@
 /* Events Page Specific Styles */
+/* This stylesheet contains all custom styles for the events listing page
+   Includes event cards, filters, grid layout, and category-specific designs */
 
-/* ===================================
-   PAGE WRAPPER
-   =================================== */
-
-/* padding-top accounts for fixed navbar */
+/* Events Main Container */
 .events-main {
+    /* Main wrapper for entire events page content */
+    
     padding-top: 100px;
+    /* Space at top to prevent content from hiding under fixed navigation
+       100px accommodates navbar height plus breathing room
+       Ensures first element is visible on page load */
+    
     min-height: 100vh;
+    /* Minimum height: 100% of viewport height
+       vh: viewport height unit (1vh = 1% of screen height)
+       Ensures page always fills entire screen even with few events
+       Prevents awkward short pages with floating footer */
+    
     background: linear-gradient(135deg, #f8fafc 0%, #e0e7ff 100%);
+    /* Diagonal gradient background matching site design
+       135deg: angle from top-left to bottom-right
+       #f8fafc: light gray-blue at start (0%)
+       #e0e7ff: light lavender at end (100%)
+       Creates cohesive visual experience with homepage */
 }
 
-/* ===================================
-   HEADER
-   =================================== */
-
+/* Events Header Section */
 .events-header {
+    /* Container for page title and description */
+    
     text-align: center;
+    /* Centers all text horizontally
+       Applies to h1, p, and any child elements */
+    
     padding: 2rem 1rem 3rem;
+    /* Shorthand padding: top right/left bottom
+       2rem top: space above title
+       1rem sides: horizontal padding for mobile
+       3rem bottom: extra space before filters
+       Creates visual hierarchy and breathing room */
+    
     max-width: 800px;
+    /* Limits width for readability
+       Long lines are hard to read
+       800px is comfortable width for centered content */
+    
     margin: 0 auto;
+    /* Centers container horizontally
+       0: no top/bottom margin
+       auto: browser calculates equal left/right margins
+       Works with max-width to center element */
 }
 
-/* gradient text clip trick */
+/* Events Page Title */
 .events-header h1 {
+    /* Main heading for events page */
+    
     font-size: 3rem;
+    /* Very large heading (48px at default 16px root)
+       rem: relative to root font size (accessible)
+       Creates strong visual impact
+       Will scale down on mobile */
+    
     font-weight: 800;
+    /* Extra bold text (800 on scale of 100-900)
+       Heavier than standard bold (700)
+       Creates maximum emphasis for page title */
+    
     background: linear-gradient(135deg, #2563eb, #3b82f6);
+    /* Gradient for text fill (not background)
+       135deg: diagonal angle
+       Blue gradient matches brand colors
+       Will be clipped to text shape below */
+    
     -webkit-background-clip: text;
+    /* CRITICAL: Clips background to text shape (WebKit browsers)
+       -webkit- prefix for Chrome, Safari, Edge
+       Makes gradient only visible within letters
+       Text becomes transparent to show gradient */
+    
     -webkit-text-fill-color: transparent;
+    /* CRITICAL: Makes text transparent (WebKit browsers)
+       Allows gradient background to show through
+       Without this, text would be solid color over gradient */
+    
     background-clip: text;
+    /* Standard version (non-prefixed)
+       Future-proofing for when browsers support unprefixed
+       Same functionality as -webkit-background-clip */
+    
     margin-bottom: 1rem;
+    /* Space below heading (above description)
+       1rem = 16px at default size
+       Separates title from tagline */
 }
 
+/* Events Page Description */
 .events-header p {
+    /* Descriptive text below page title */
+    
     font-size: 1.3rem;
+    /* Larger than body text (20.8px at default)
+       Prominent but smaller than heading
+       Draws attention without overwhelming */
+    
     color: #64748b;
+    /* Medium gray-blue color
+       Hex format: #RRGGBB
+       Less prominent than headings
+       Creates visual hierarchy */
+    
     font-weight: 500;
+    /* Medium weight (between normal 400 and semibold 600)
+       Slightly emphasized but not bold
+       Balances readability and importance */
 }
 
-/* ===================================
-   FILTERS
-   =================================== */
-
-/* aligns with the event card grid below */
+/* Filter Section Container */
 .filter-section {
+    /* Wrapper for category filter buttons */
+    
     max-width: 1200px;
+    /* Maximum width constraint
+       1200px matches main content grid
+       Keeps filters aligned with event cards */
+    
     margin: 0 auto 3rem;
+    /* Shorthand margin: top right/left bottom
+       0: no top margin (header provides spacing)
+       auto: centers container horizontally
+       3rem: large space below filters before event cards */
+    
     padding: 0 2rem;
+    /* Horizontal padding: 0 top/bottom, 2rem left/right
+       Prevents filters from touching screen edges
+       Matches grid padding for alignment */
 }
 
+/* Filter Buttons Container */
 .filter-buttons-horizontal {
+    /* Flexbox container for filter buttons */
+    
     display: flex;
+    /* Flexbox layout - enables flexible button arrangement
+       Buttons flow horizontally by default
+       Allows wrapping and centering */
+    
     flex-wrap: wrap;
+    /* Allows buttons to wrap to new lines
+       If container too narrow, buttons move to next row
+       Prevents horizontal scrolling on small screens */
+    
     gap: 1rem;
+    /* Space between buttons (all directions)
+       1rem = 16px spacing
+       Modern CSS property (simpler than margins)
+       Creates even spacing without complex calculations */
+    
     justify-content: center;
+    /* Centers buttons horizontally in container
+       Buttons group in center rather than left-align
+       Creates balanced, professional appearance */
+    
     padding: 1.5rem;
+    /* Even padding all around button group
+       1.5rem = 24px breathing room
+       Makes filter section feel spacious */
+    
     background: white;
+    /* Clean white background
+       Contrasts with page gradient
+       Makes button area stand out as interactive section */
+    
     border-radius: 15px;
+    /* Rounded corners (15px radius)
+       Modern, friendly appearance
+       Matches event card styling */
+    
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    /* Subtle shadow for depth
+       0: no horizontal offset (centered)
+       4px: shadow 4px below element (elevation)
+       20px: blur radius (soft, diffused shadow)
+       rgba(0, 0, 0, 0.08): black at 8% opacity (very subtle)
+       Creates subtle "floating" effect */
 }
 
-/* inactive state */
+/* Individual Filter Button */
 .filter-btn {
+    /* Styling for each category filter button */
+    
     padding: 0.75rem 1.5rem;
+    /* Button padding: vertical horizontal
+       0.75rem (12px) top/bottom: comfortable height
+       1.5rem (24px) left/right: wider for better clickability
+       Creates well-proportioned, easy-to-click buttons */
+    
     background: #f1f5f9;
-    border: 2px solid transparent; /* reserves space so layout doesn't shift when active border appears */
+    /* Light gray background (default/inactive state)
+       Hex color: slightly blue-tinted gray
+       Neutral appearance for unselected filters */
+    
+    border: 2px solid transparent;
+    /* Transparent border reserves space
+       2px: medium border width
+       transparent: invisible but takes up space
+       Prevents layout shift when active border appears */
+    
     border-radius: 25px;
+    /* Fully rounded ends (pill shape)
+       25px creates smooth, capsule appearance
+       Modern, friendly button style */
+    
     font-size: 0.95rem;
+    /* Slightly smaller than base text (15.2px)
+       Comfortable reading size for buttons
+       Not too small, not overwhelming */
+    
     font-weight: 600;
+    /* Semibold text (between normal and bold)
+       Makes button text stand out
+       Improves scannability of filter options */
+    
     color: #475569;
+    /* Dark gray text color
+       Good contrast on light background
+       Readable but not harsh black */
+    
     cursor: pointer;
+    /* Changes cursor to pointing hand on hover
+       Indicates element is clickable
+       Standard UI pattern for interactive elements */
+    
     transition: all 0.3s ease;
+    /* Smooth transitions for ALL properties
+       0.3s: third of a second (noticeable but not slow)
+       ease: acceleration curve (slow-fast-slow)
+       Applies to background, color, transform, etc. */
+    
     font-family: 'Open Sans', sans-serif;
+    /* Ensures consistent font with site
+       'Open Sans': Google Font (must have spaces in quotes)
+       sans-serif: fallback if Google Font fails */
 }
 
+/* Filter Button Hover State */
 .filter-btn:hover {
+    /* Styles when user hovers over button */
+    
     background: #e0e7ff;
+    /* Light blue background on hover
+       Provides visual feedback
+       Indicates interactivity before clicking */
+    
     color: #2563eb;
+    /* Changes text to blue
+       Matches brand colors
+       Reinforces hover state with color change */
+    
     transform: translateY(-2px);
+    /* Moves button up 2 pixels
+       Negative Y value = upward movement
+       Creates subtle "lift" effect
+       Makes button feel responsive and tactile */
 }
 
+/* Active/Selected Filter Button */
 .filter-btn.active {
+    /* Styles for currently selected category filter */
+    
     background: linear-gradient(135deg, #2563eb, #3b82f6);
+    /* Blue gradient background
+       135deg: diagonal angle
+       Matches site's primary brand colors
+       Makes active state unmistakable */
+    
     color: white;
+    /* White text for contrast on blue background
+       Ensures readability
+       Standard pattern for selected/primary buttons */
+    
     border-color: #2563eb;
+    /* Blue border (now visible)
+       Matches gradient start color
+       Adds definition to active button */
+    
     box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
+    /* Blue shadow for "glow" effect
+       0: centered horizontally
+       4px: shadow below button
+       15px: soft blur
+       rgba(37, 99, 235, 0.3): blue at 30% opacity
+       Creates impression of illuminated/selected state */
 }
 
-/* ===================================
-   EVENTS GRID
-   =================================== */
-
-/* auto-fill + minmax handles responsiveness without media queries */
+/* Events Grid Layout */
 .events-grid {
+    /* CSS Grid container for event cards */
+    
     display: grid;
+    /* CSS Grid layout (not flexbox)
+       Better for 2D layouts with rows and columns
+       Allows responsive card sizing */
+    
     grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    /* CRITICAL: Responsive grid formula
+       repeat(): repeats column definition
+       auto-fill: creates as many columns as fit
+       minmax(350px, 1fr): columns are minimum 350px, maximum 1 fraction
+       Result: cards automatically wrap to new rows
+       No media queries needed for basic responsiveness */
+    
     gap: 2rem;
+    /* Space between grid items (rows and columns)
+       2rem = 32px spacing
+       Creates visual separation between cards
+       Modern CSS property (replaces grid-gap) */
+    
     max-width: 1200px;
+    /* Maximum width constraint
+       Prevents grid from getting too wide on large screens
+       1200px is comfortable reading/viewing width */
+    
     margin: 0 auto;
+    /* Centers grid horizontally
+       0: no top/bottom margin
+       auto: equal left/right margins (centering) */
+    
     padding: 0 2rem 4rem;
+    /* Shorthand padding: top right/left bottom
+       0: no top padding (filters provide spacing)
+       2rem: horizontal padding prevents edge touching
+       4rem: large bottom padding before footer */
 }
 
-/* ===================================
-   EVENT CARD
-   =================================== */
-
+/* Event Card Container */
 .event-card {
+    /* Individual event card styling */
+    
     background: white;
+    /* Clean white background
+       Contrasts with page gradient
+       Makes content area clearly defined */
+    
     border-radius: 15px;
-    overflow: hidden; /* clips child elements to the rounded corners */
-    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
-    transition: all 0.3s ease;
-    display: flex;
-    flex-direction: column;
-    opacity: 1;
-    transform: scale(1);
-}
-
-.event-card.hidden {
-    display: none;
-}
-
-.event-card:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 15px 40px rgba(37, 99, 235, 0.2);
-}
-
-/* ===================================
-   CARD HEADER
-   =================================== */
-
-.event-header {
-    padding: 1.5rem;
-    color: white;
-    position: relative;
+    /* Rounded corners (15px radius)
+       Modern, friendly appearance
+       Matches filter button styling */
+    
     overflow: hidden;
+    /* CRITICAL: Hides content extending beyond border-radius
+       Without this, child elements (header) would show square corners
+       Clips header gradient to card's rounded shape */
+    
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+    /* Subtle shadow for depth
+       0: centered horizontally
+       5px: shadow below card (slight elevation)
+       20px: soft blur radius
+       rgba(0, 0, 0, 0.08): black at 8% opacity
+       Creates "floating card" effect */
+    
+    transition: all 0.3s ease;
+    /* Smooth transitions for hover effects
+       0.3s: third of a second
+       ease: acceleration curve
+       Animates transform and box-shadow on hover */
+    
+    display: flex;
+    /* Flexbox layout for card content
+       Allows flexible content arrangement
+       Enables header/body/footer structure */
+    
+    flex-direction: column;
+    /* Stacks flex items vertically
+       Default is row (horizontal)
+       Creates top-to-bottom card layout */
+    
+    opacity: 1;
+    /* Fully opaque (visible)
+       1 = 100% opacity
+       Can be animated when filtering */
+    
+    transform: scale(1);
+    /* Normal size (no scaling)
+       1 = 100% size
+       Starting point for hover animation */
 }
 
-/* semi-transparent overlay so gradient doesn't overpower text */
+/* Hidden Event Card (Filtered Out) */
+.event-card.hidden {
+    /* Applied to cards that don't match active filter */
+    
+    display: none;
+    /* Completely removes from layout
+       Element takes up no space
+       Not rendered by browser
+       Instant hide (no animation) for performance */
+}
+
+/* Event Card Hover State */
+.event-card:hover {
+    /* Styles when user hovers over card */
+    
+    transform: translateY(-10px);
+    /* Moves card up 10 pixels
+       Negative Y = upward movement
+       Creates "lift off" effect
+       More dramatic than button hover (2px) */
+    
+    box-shadow: 0 15px 40px rgba(37, 99, 235, 0.2);
+    /* Enhanced shadow on hover
+       0: centered horizontally
+       15px: shadow further below (greater elevation)
+       40px: larger blur (more diffused)
+       rgba(37, 99, 235, 0.2): blue shadow at 20% opacity
+       Creates impression of card rising toward user */
+}
+
+/* Event Card Header */
+.event-header {
+    /* Colored header section of event card */
+    
+    padding: 1.5rem;
+    /* Even padding all around header content
+       1.5rem = 24px breathing room
+       Comfortable spacing for title and metadata */
+    
+    color: white;
+    /* White text for contrast on colored backgrounds
+       Ensures readability regardless of header color
+       All text inside header inherits this */
+    
+    position: relative;
+    /* Creates positioning context
+       Needed for absolute positioning of ::before pseudo-element
+       Allows z-index stacking of child elements */
+    
+    overflow: hidden;
+    /* CRITICAL: Contains pseudo-element
+       Prevents ::before from extending beyond header
+       Clips gradient overlay to header bounds */
+}
+
+/* Event Header Background Overlay */
 .event-header::before {
+    /* Pseudo-element for gradient opacity effect */
+    
     content: '';
+    /* Required for pseudo-element to display
+       Empty string creates invisible element
+       Without this, ::before doesn't render */
+    
     position: absolute;
+    /* Positions relative to .event-header (position: relative)
+       Removes from document flow
+       Allows precise positioning with top/left/right/bottom */
+    
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
+    /* Stretches to fill entire parent
+       0 on all sides = covers completely
+       Creates full overlay effect */
+    
     background: inherit;
+    /* CRITICAL: Copies parent's background
+       inherit: uses .event-header's background gradient
+       Allows opacity without affecting text
+       Gradient is duplicated on pseudo-element */
+    
     opacity: 0.9;
+    /* 90% opacity (slightly transparent)
+       Makes gradient slightly less intense
+       Subtle effect that improves text readability
+       Only affects ::before, not text above it */
 }
 
-/* keeps text above the ::before overlay */
+/* Event Header Content Stacking */
 .event-header > * {
+    /* Targets all direct children of .event-header
+       > : direct child selector (not nested descendants)
+       * : universal selector (all elements) */
+    
     position: relative;
+    /* Creates new stacking context
+       Needed for z-index to work
+       Positions elements relative to their normal position */
+    
     z-index: 1;
+    /* Stacking order above pseudo-element
+       ::before has default z-index: 0
+       1 puts content above background overlay
+       Ensures text appears on top of gradient */
 }
 
+/* Event Category Badge */
 .event-category {
+    /* Small label showing event category/type */
+    
     display: inline-block;
+    /* Inline but respects padding/margins like block
+       Shrinks to fit content width
+       Allows padding to work properly
+       Centers with parent's text-align */
+    
     padding: 0.3rem 0.8rem;
+    /* Compact padding: vertical horizontal
+       0.3rem (4.8px): tight vertical padding
+       0.8rem (12.8px): more horizontal for readability
+       Creates small, pill-shaped badge */
+    
     background: rgba(255, 255, 255, 0.25);
-    backdrop-filter: blur(10px); /* frosted glass effect */
+    /* Semi-transparent white background
+       rgba: red, green, blue, alpha
+       255, 255, 255: pure white
+       0.25: 25% opacity (very subtle)
+       Creates frosted glass effect over gradient */
+    
+    backdrop-filter: blur(10px);
+    /* CRITICAL: Blurs content behind badge
+       10px: blur radius
+       Creates frosted/glassmorphism effect
+       Modern CSS feature (may not work in older browsers)
+       Enhances subtle transparency */
+    
     border-radius: 20px;
+    /* Fully rounded (pill shape)
+       20px creates smooth capsule
+       Matches overall rounded design language */
+    
     font-size: 0.75rem;
+    /* Small text (12px at default)
+       Smaller than body text
+       Appropriate for metadata/labels */
+    
     font-weight: 700;
+    /* Bold text
+       Makes small text more legible
+       Creates emphasis despite small size */
+    
     text-transform: uppercase;
+    /* Converts text to all capitals
+       "Political" becomes "POLITICAL"
+       Common pattern for labels/categories
+       Creates visual distinction */
+    
     letter-spacing: 0.5px;
+    /* Adds space between letters
+       0.5px: subtle spacing
+       Improves readability of uppercase text
+       Makes compact text easier to read */
+    
     margin-bottom: 0.8rem;
+    /* Space below badge (above title)
+       0.8rem = 12.8px
+       Separates category from event title */
 }
 
+/* Event Title */
 .event-title {
+    /* Main heading for individual event */
+    
     font-size: 1.5rem;
+    /* Large text (24px at default)
+       Prominent but not overwhelming
+       Hierarchy: page title (3rem) > event title (1.5rem) */
+    
     font-weight: 700;
+    /* Bold text
+       Creates emphasis and hierarchy
+       Makes title scannable in card layout */
+    
     margin-bottom: 0.5rem;
+    /* Space below title (above date)
+       0.5rem = 8px
+       Tight spacing keeps header content grouped */
+    
     line-height: 1.3;
+    /* Space between lines if title wraps
+       1.3 = 130% of font size
+       Tighter than body text (1.6)
+       Appropriate for large headings */
 }
 
+/* Event Date Display */
 .event-date {
+    /* Date information with icon */
+    
     font-size: 0.9rem;
+    /* Slightly smaller than body text
+       Appropriate for metadata
+       Still easily readable */
+    
     opacity: 0.95;
+    /* Slightly transparent (95% opaque)
+       Subtle de-emphasis compared to title
+       Creates visual hierarchy within header */
+    
     display: flex;
+    /* Flexbox layout for date and icon
+       Allows icon and text alignment
+       Creates horizontal arrangement */
+    
     align-items: center;
+    /* Centers items vertically
+       Aligns icon with text baseline
+       Creates polished appearance */
+    
     gap: 0.5rem;
+    /* Space between icon and text
+       0.5rem = 8px
+       Modern CSS property for flex spacing */
 }
 
-/* ===================================
-   CARD BODY
-   =================================== */
-
-/* flex-grow: 1 makes all cards the same height in the grid */
+/* Event Card Body */
 .event-body {
+    /* Main content area of event card */
+    
     padding: 1.5rem;
+    /* Even padding all around body content
+       1.5rem = 24px matches header padding
+       Creates consistent spacing throughout card */
+    
     flex-grow: 1;
+    /* CRITICAL: Fills remaining vertical space
+       flex-grow: 1 expands to available height
+       Pushes content to fill card evenly
+       Makes all cards same height in grid */
+    
     display: flex;
+    /* Flexbox layout for body content
+       Allows flexible content arrangement
+       Enables description to fill space */
+    
     flex-direction: column;
+    /* Stacks content vertically
+       Time, location, description stack top to bottom
+       Creates organized information hierarchy */
 }
 
+/* Event Time and Location Rows */
 .event-time,
 .event-location {
+    /* Shared styles for time and location metadata */
+    
     display: flex;
+    /* Flexbox layout for icon and text
+       Horizontal arrangement by default
+       Allows easy icon/text alignment */
+    
     align-items: center;
+    /* Centers items vertically
+       Aligns icons with text
+       Creates clean, aligned rows */
+    
     gap: 0.7rem;
+    /* Space between icon and text
+       0.7rem = 11.2px
+       Slightly more than date (0.5rem) for readability */
+    
     color: #64748b;
+    /* Medium gray color
+       Matches description text
+       De-emphasized compared to title */
+    
     margin-bottom: 0.8rem;
+    /* Space below each row
+       0.8rem = 12.8px
+       Separates metadata rows visually */
+    
     font-size: 0.95rem;
+    /* Slightly smaller than body text
+       Appropriate for metadata
+       Maintains hierarchy */
 }
 
+/* Event Time and Location Labels */
 .event-time strong,
 .event-location strong {
+    /* Bold labels within metadata rows */
+    
     color: #334155;
+    /* Darker gray than surrounding text
+       Provides contrast and emphasis
+       Makes labels stand out from values */
+    
     font-weight: 600;
+    /* Semibold (between normal and bold)
+       Creates emphasis without being too heavy
+       Balances with lighter surrounding text */
 }
 
-/* flex-grow pushes description to fill leftover card height */
+/* Event Description */
 .event-description {
+    /* Paragraph describing the event */
+    
     color: #64748b;
+    /* Medium gray color
+       Easy on eyes for longer text
+       Consistent with metadata color */
+    
     line-height: 1.6;
+    /* Space between lines
+       1.6 = 160% of font size
+       Improves readability of paragraph text
+       Comfortable for longer content */
+    
     margin-top: 0.5rem;
+    /* Space above description
+       0.5rem = 8px
+       Separates from metadata above */
+    
     flex-grow: 1;
+    /* CRITICAL: Fills remaining vertical space
+       Pushes description to fill card bottom
+       Makes all cards equal height in grid
+       Extra space goes to description area */
 }
 
-/* ===================================
-   CATEGORY COLORS
-   =================================== */
-
+/* Category Color - Political Events */
 .event-header.political {
+    /* Blue gradient for political/civic events */
+    
     background: linear-gradient(135deg, #3b82f6, #2563eb);
+    /* Diagonal blue gradient
+       135deg: top-left to bottom-right
+       Lighter blue to darker blue
+       Primary brand color - most important category */
 }
 
+/* Category Color - Youth Events */
 .event-header.youth {
+    /* Orange gradient for youth-focused events */
+    
     background: linear-gradient(135deg, #fb923c, #f59e0b);
+    /* Diagonal orange gradient
+       Warm, energetic color palette
+       Appeals to younger demographic
+       Stands out from political blue */
 }
 
+/* Category Color - Innovation Events */
 .event-header.innovation {
+    /* Red gradient for innovation/technology events */
+    
     background: linear-gradient(135deg, #ec4899, #db2777) !important;
+    /* Diagonal red gradient
+       Bold, attention-grabbing color
+       Conveys energy and forward-thinking
+       Distinct from other categories */
 }
 
+/* Category Color - Environmental Events */
 .event-header.environmental {
+    /* Green gradient for environmental events */
+    
     background: linear-gradient(135deg, #34d399, #10b981);
+    /* Diagonal green gradient
+       Natural, eco-friendly color palette
+       Instantly recognizable for environmental topics
+       Light to medium green for readability */
 }
 
+/* Category Color - Education Events */
 .event-header.education {
+    /* Purple gradient for education events */
+    
     background: linear-gradient(135deg, #ba3eeb, #b325eb);
+    /* Diagonal purple gradient
+       Academic, sophisticated color
+       Distinct from all other categories
+       Vibrant yet professional */
 }
 
-/* ===================================
-   RESPONSIVE
-   =================================== */
+/* Mobile Responsive Styles */
+/* Tablet (769px - 1024px) */
+@media (max-width: 1024px) and (min-width: 769px) {
+    .events-main {
+        padding-top: 90px;
+    }
+    .events-header h1 {
+        font-size: 2.4rem;
+    }
+    .events-grid {
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 1.5rem;
+        padding: 0 1.5rem 3rem;
+    }
+}
 
 @media (max-width: 768px) {
+       /* Tablets and mobile devices
+       768px is common breakpoint (iPad width)
+       All rules inside only apply on small screens */
+    
     .events-main {
         padding-top: 80px;
+        /* Reduced top padding on mobile (was 100px)
+           Mobile nav typically shorter
+           Conserves vertical space on small screens */
     }
 
     .events-header h1 {
         font-size: 2rem;
+        /* Smaller title on mobile (was 3rem)
+           2rem = 32px at default
+           3rem (48px) would be overwhelming on small screens
+           Maintains impact while fitting screen */
     }
 
     .events-header p {
         font-size: 1.1rem;
+        /* Smaller description on mobile (was 1.3rem)
+           1.1rem = 17.6px
+           Maintains proportion with reduced title
+           Still readable on small screens */
     }
 
-    /* single column on mobile */
     .events-grid {
         grid-template-columns: 1fr;
+        /* CRITICAL: Single column on mobile
+           Overrides auto-fill minmax formula
+           1fr: one column taking full width
+           Prevents squished cards on narrow screens */
+        
         padding: 0 1rem 3rem;
+        /* Reduced padding on mobile
+           0: no top padding
+           1rem: narrower side padding (was 2rem)
+           3rem: reduced bottom padding (was 4rem)
+           Maximizes usable screen space */
     }
 
     .filter-buttons-horizontal {
         gap: 0.5rem;
+        /* Reduced gap between filter buttons
+           0.5rem = 8px (was 1rem = 16px)
+           Allows more buttons per row on narrow screens
+           Prevents excessive wrapping */
     }
 
     .filter-btn {
         padding: 0.6rem 1rem;
+        /* Smaller button padding on mobile
+           0.6rem vertical (was 0.75rem)
+           1rem horizontal (was 1.5rem)
+           Maintains tap target size while saving space */
+        
         font-size: 0.85rem;
+        /* Smaller button text on mobile (was 0.95rem)
+           0.85rem = 13.6px
+           Still readable but more compact
+           Allows longer category names to fit */
     }
 }
+
+/* End of events.css */

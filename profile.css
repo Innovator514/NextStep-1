@@ -1,1608 +1,725 @@
-/* Profile Page Specific Styles */
-/* This stylesheet contains all styles for the user profile/dashboard page
-   Includes profile photo, tabs navigation, settings forms, statistics cards,
-   toggle switches, and comprehensive form controls */
+/* ============================================
+   PROFILE PAGE — Full-screen sidebar layout
+   ============================================ */
 
-/* Body Base Styles */
-body {
-    /* Styles for entire page body */
-    
-    background: linear-gradient(135deg, #f8fafc 0%, #e0e7ff 100%);
-    /* Diagonal gradient background
-       135deg: angle from top-left to bottom-right
-       #f8fafc: light gray-blue at start (0%)
-       #e0e7ff: light lavender at end (100%)
-       Matches site-wide design aesthetic
-       Creates soft, professional environment for profile page */
-    
+/* ── Shell: sidebar + content side-by-side ── */
+.profile-shell {
+    display: flex;
     min-height: 100vh;
-    /* Minimum height: 100% of viewport height
-       vh: viewport height unit (1vh = 1% of screen height)
-       Ensures page always fills entire screen
-       Gradient extends to bottom even with little content
-       Prevents awkward short pages */
-    
-    margin: 0;
-    /* Removes default browser margin
-       Browsers add 8px margin to body by default
-       Starting from zero gives precise control */
-    
-    padding: 0;
-    /* Removes default browser padding
-       Clean slate for custom spacing
-       Prevents unwanted gaps around page edges */
+    padding-top: 64px; /* navbar height */
+    background: var(--bg-primary, linear-gradient(135deg,#f8fafc 0%,#e0e7ff 100%));
 }
 
-/* Profile Main Container */
-.profile-main {
-    /* Outer wrapper for entire profile page content */
-    
-    padding-top: 100px;
-    /* Space at top to clear fixed navigation bar
-       100px accommodates navbar height plus breathing room
-       Ensures first element is visible on page load
-       Content doesn't hide under fixed header */
-    
-    min-height: 100vh;
-    /* Minimum height: 100% of viewport height
-       Ensures content area fills screen
-       Pushes footer to bottom even with little content
-       Creates consistent, full-height experience */
+/* Ensure body background is always correct in dark mode */
+.profile-page {
+    background: var(--bg-primary, linear-gradient(135deg,#f8fafc 0%,#e0e7ff 100%));
 }
 
-/* Content Container */
-.container {
-    /* Centers and constrains page content width */
-    
-    max-width: 1100px;
-    /* Maximum width constraint
-       1100px is comfortable reading/viewing width
-       Prevents content from getting too wide on large screens
-       Narrower than events page (1200px) - more focused layout */
-    
-    margin: 40px auto;
-    /* Shorthand margin: top/bottom right/left
-       40px: vertical spacing above and below container
-       auto: centers container horizontally
-       Equal left/right margins push container to center */
-    
-    padding: 0 20px;
-    /* Horizontal padding only: 0 top/bottom, 20px left/right
-       Prevents content from touching screen edges
-       Creates breathing room on all screen sizes
-       Essential for mobile responsiveness */
-}
-
-/* Page Header Section */
-.page-header {
-    /* Header bar with back button and page title */
-    
-    background: white;
-    /* Clean white background
-       Contrasts with gradient page background
-       Makes header stand out as important UI element */
-    
-    border-radius: 15px;
-    /* Rounded corners (15px radius)
-       Matches content card styling
-       Creates cohesive, modern design language */
-    
-    padding: 25px 30px;
-    /* Padding: vertical horizontal
-       25px top/bottom: comfortable header height
-       30px left/right: space around content
-       Creates spacious, premium feel */
-    
-    margin-bottom: 30px;
-    /* Space below header (above tabs)
-       30px separates header from page content
-       Creates clear visual grouping */
-    
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-    /* Soft shadow for depth
-       0: centered horizontally
-       4px: shadow below element (subtle elevation)
-       20px: soft blur radius
-       rgba(0, 0, 0, 0.08): black at 8% opacity (very subtle)
-       Creates floating card effect */
-    
+/* ════════════════════════════════
+   SIDEBAR
+   ════════════════════════════════ */
+.profile-sidebar {
+    width: 280px;
+    flex-shrink: 0;
+    background: var(--bg-secondary, #fff);
+    border-right: 1px solid var(--border-color, #e2e8f0);
     display: flex;
-    /* Flexbox layout for header content
-       Enables flexible positioning of button and title
-       Better than floats or inline-block */
-    
-    justify-content: space-between;
-    /* Pushes items to opposite ends
-       Back button on left, title on right
-       Creates balanced header layout */
-    
+    flex-direction: column;
+    position: sticky;
+    top: 64px;
+    height: calc(100vh - 64px);
+    overflow-y: auto;
+    padding: 2rem 1.25rem 1.5rem;
+    gap: 0;
+}
+
+/* ── Avatar area ── */
+.sidebar-avatar-area {
+    display: flex;
+    flex-direction: column;
     align-items: center;
-    /* Centers items vertically
-       Aligns button and title on same baseline
-       Creates polished, professional appearance */
-}
-
-/* Back Button */
-.back-btn {
-    /* Navigation button to return to previous page */
-    
-    background: #e2e8f0;
-    /* Light gray background
-       Neutral, secondary button appearance
-       Less prominent than primary blue buttons */
-    
-    color: #334155;
-    /* Dark gray text
-       Good contrast on light background
-       Readable and professional */
-    
-    border: none;
-    /* Removes default button border
-       Cleaner appearance without border
-       Background provides enough definition */
-    
-    padding: 10px 20px;
-    /* Padding: vertical horizontal
-       10px top/bottom: compact height
-       20px left/right: comfortable width
-       Creates well-proportioned button */
-    
-    border-radius: 8px;
-    /* Rounded corners (8px radius)
-       Smaller than cards (15px) creates hierarchy
-       Modern, friendly appearance */
-    
-    cursor: pointer;
-    /* Pointing hand cursor on hover
-       Indicates button is clickable
-       Standard UI pattern */
-    
-    font-size: 14px;
-    /* Slightly smaller than body text
-       Appropriate for secondary action
-       Still easily readable */
-    
-    font-weight: 600;
-    /* Semibold text
-       Makes button text stand out
-       Improves scannability */
-    
-    transition: all 0.3s;
-    /* Smooth transitions for all properties
-       0.3s: third of a second (responsive feel)
-       Animates background, transform on hover */
-    
-    display: flex;
-    /* Flexbox layout for icon and text
-       Enables easy alignment of elements
-       Creates horizontal arrangement */
-    
-    align-items: center;
-    /* Centers icon and text vertically
-       Creates aligned, polished appearance */
-    
-    gap: 8px;
-    /* Space between icon and text
-       8px provides comfortable separation
-       Modern CSS property (simpler than margins) */
-}
-
-/* Back Button Hover State */
-.back-btn:hover {
-    /* Effects when user hovers over back button */
-    
-    background: #cbd5e1;
-    /* Darker gray on hover
-       Provides visual feedback
-       Indicates interactivity */
-    
-    transform: translateX(-3px);
-    /* Moves button left 3 pixels
-       Negative X = leftward movement
-       Creates "pull back" effect pointing to previous page
-       Unique animation reinforces back navigation */
-}
-
-/* Page Header Title */
-.page-header h1 {
-    /* Main page title in header */
-    
-    color: rgb(1, 9, 67);
-    /* Very dark blue color
-       rgb(1, 9, 67): almost black with blue tint
-       Matches site branding
-       Strong contrast on white background */
-    
-    font-size: 28px;
-    /* Large title text
-       Prominent but not overwhelming
-       Fits comfortably in header space */
-    
-    font-weight: 700;
-    /* Bold text (700 on scale of 100-900)
-       Creates strong emphasis
-       Establishes clear page hierarchy */
-    
-    margin: 0;
-    /* Removes default h1 margins
-       Prevents unwanted spacing in flexbox layout
-       Allows precise control of positioning */
-}
-
-/* Tabs Navigation Container */
-.tabs {
-    /* Container for tab navigation buttons */
-    
-    display: flex;
-    /* Flexbox layout for tabs
-       Horizontal arrangement by default
-       Enables flexible tab sizing */
-    
-    gap: 10px;
-    /* Space between tab buttons
-       10px creates visual separation
-       Modern CSS property for spacing */
-    
-    margin-bottom: 30px;
-    /* Space below tabs (above content area)
-       30px separates navigation from content
-       Creates clear visual grouping */
-    
-    flex-wrap: wrap;
-    /* Allows tabs to wrap to new lines
-       If container too narrow, tabs move to next row
-       Prevents horizontal scrolling on mobile
-       Responsive behavior without media queries */
-}
-
-/* Individual Tab Button */
-.tab {
-    /* Styling for each navigation tab */
-    
-    background: white;
-    /* White background for inactive tabs
-       Clean, neutral appearance
-       Contrasts with active blue gradient */
-    
-    color: #64748b;
-    /* Medium gray text for inactive state
-       Less prominent than active tab
-       Still easily readable */
-    
-    border: 2px solid #e2e8f0;
-    /* Light gray border
-       2px: medium border width
-       Defines tab boundaries
-       Creates defined clickable area */
-    
-    padding: 14px 28px;
-    /* Padding: vertical horizontal
-       14px top/bottom: comfortable height
-       28px left/right: generous width
-       Creates substantial, easy-to-click tabs */
-    
-    border-radius: 10px;
-    /* Rounded corners
-       Modern, friendly appearance
-       Matches form input styling */
-    
-    cursor: pointer;
-    /* Pointing hand cursor
-       Indicates tab is clickable
-       Standard interactive element pattern */
-    
-    font-size: 16px;
-    /* Standard body text size
-       Easily readable tab labels
-       Comfortable for navigation */
-    
-    font-weight: 600;
-    /* Semibold text
-       Makes tab labels stand out
-       Improves scannability */
-    
-    transition: all 0.3s;
-    /* Smooth transitions for all properties
-       Animates color, border, background changes
-       0.3s: responsive but not jarring */
-    
-    flex: 1;
-    /* CRITICAL: Tabs grow equally to fill space
-       flex: 1 makes all tabs same width
-       Creates balanced, organized navigation
-       Each tab gets equal share of available space */
-    
-    min-width: 120px;
-    /* Minimum width constraint
-       Prevents tabs from becoming too narrow
-       Ensures tab labels have comfortable space
-       Particularly important when many tabs wrap */
-    
     text-align: center;
-    /* Centers tab label text
-       Creates balanced appearance
-       Standard for tab navigation */
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--border-color, #e2e8f0);
+    margin-bottom: 1.25rem;
 }
 
-/* Tab Hover State */
-.tab:hover {
-    /* Effects when hovering over inactive tab */
-    
-    border-color: #2563eb;
-    /* Changes border to blue
-       Provides immediate hover feedback
-       Indicates interactivity before clicking */
-    
-    color: #2563eb;
-    /* Changes text to blue
-       Matches brand color
-       Reinforces hover state */
-}
-
-/* Active/Current Tab */
-.tab.current {
-    /* Styling for currently selected tab */
-    
-    background: linear-gradient(135deg, #2563eb, #3b82f6);
-    /* Blue gradient background
-       135deg: diagonal angle matching site design
-       Makes active tab unmistakable
-       Matches primary button styling */
-    
-    color: white;
-    /* White text for contrast on blue
-       Ensures readability
-       Standard for primary/active elements */
-    
-    border-color: #2563eb;
-    /* Blue border matching gradient
-       Creates cohesive active appearance
-       Defines active tab boundaries */
-}
-
-/* Content Area Container */
-.content {
-    /* Main white card containing tab content */
-    
-    background: white;
-    /* Clean white background
-       Contrasts with gradient page background
-       Makes content area clearly defined */
-    
-    border-radius: 15px;
-    /* Rounded corners matching header
-       Creates cohesive design language
-       Modern, friendly appearance */
-    
-    padding: 40px;
-    /* Generous padding all around
-       40px = comfortable breathing room
-       Creates spacious, premium feel
-       Prevents content from touching card edges */
-    
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-    /* Soft shadow matching header
-       Creates consistent elevation
-       Subtle floating effect */
-}
-
-/* Tab Content Container */
-.tab-content {
-    /* Container for content of each tab panel */
-    
-    display: none;
-    /* Hidden by default
-       Only current tab's content is visible
-       JavaScript toggles this for active tab */
-    
-    animation: fadeIn 0.4s ease;
-    /* Entrance animation when tab becomes visible
-       fadeIn: defined in @keyframes below
-       0.4s: slightly slower than typical (polished feel)
-       ease: smooth acceleration curve
-       Creates smooth tab switching experience */
-}
-
-/* Active Tab Content */
-.tab-content.current {
-    /* Shows content of currently selected tab */
-    
-    display: block;
-    /* Makes content visible
-       Overrides display: none default
-       JavaScript adds .current class to active tab */
-}
-
-/* Fade In Animation */
-@keyframes fadeIn {
-    /* Animation for tab content appearance */
-    
-    from {
-        /* Starting state */
-        
-        opacity: 0;
-        /* Invisible at start
-           Fades in from transparent */
-        
-        transform: translateY(10px);
-        /* Positioned 10px below final location
-           Creates subtle upward slide
-           Less dramatic than typical animations (20px) */
-    }
-    
-    to {
-        /* Ending state */
-        
-        opacity: 1;
-        /* Fully visible
-           Smooth fade-in effect */
-        
-        transform: translateY(0);
-        /* At final position
-           Content settles into place
-           Subtle, polished transition */
-    }
-}
-
-/* Profile Header Section */
-.profile-header {
-    /* Top section of profile tab with photo and name */
-    
-    text-align: center;
-    /* Centers all content horizontally
-       Photo, name, email all centered
-       Standard pattern for profile displays */
-    
-    padding-bottom: 30px;
-    /* Space below profile header
-       30px creates separation before next section
-       Gives header breathing room */
-    
-    border-bottom: 2px solid #e2e8f0;
-    /* Bottom border separator
-       2px: medium border width
-       #e2e8f0: light gray
-       Visually separates header from profile details */
-    
-    margin-bottom: 30px;
-    /* Space below separator (above info cards)
-       30px matches padding-bottom
-       Creates balanced spacing around divider */
-}
-
-/* Profile Photo Container */
 .profile-photo-container {
-    /* Wrapper for profile photo and overlay button */
-    
     position: relative;
-    /* Creates positioning context
-       Needed for absolute positioning of overlay button
-       Allows overlay to be placed over photo */
-    
     display: inline-block;
-    /* Inline but respects width/height
-       Shrinks to fit photo size
-       Centers with parent's text-align: center */
-    
-    margin-bottom: 20px;
-    /* Space below photo (above name)
-       20px separates photo from text
-       Creates visual grouping */
+    margin-bottom: 1rem;
+    cursor: pointer;
 }
 
-/* Profile Photo Image */
-.profile-photo {
-    /* User's uploaded profile picture */
-    
-    width: 150px;
-    height: 150px;
-    /* Fixed square dimensions
-       150x150px = large profile photo
-       Square needed for perfect circle */
-    
-    border-radius: 50%;
-    /* CRITICAL: Creates perfect circle
-       50% radius on square makes circle
-       Classic profile photo shape */
-    
-    object-fit: cover;
-    /* CRITICAL: Maintains aspect ratio while filling circle
-       cover: scales image to fill box, crops overflow
-       Prevents distortion of photo
-       Ensures no empty space in circle */
-    
-    border: 4px solid #2563eb;
-    /* Blue border around photo
-       4px: substantial border
-       #2563eb: primary brand color
-       Creates branded frame effect */
-    
-    box-shadow: 0 4px 20px rgba(37, 99, 235, 0.3);
-    /* Blue glow shadow
-       0: centered horizontally
-       4px: shadow below photo
-       20px: soft blur
-       Blue shadow at 30% opacity
-       Creates premium, glowing effect */
-    
-    display: block;
-    /* Block-level element
-       Removes extra space below image
-       Prevents baseline alignment issues */
-}
-
-/* Profile Initials Circle (Fallback) */
 .profile-initials-large {
-    /* Display initials when no photo uploaded */
-    
-    width: 150px;
-    height: 150px;
-    /* Same size as profile photo
-       Maintains consistent layout
-       150x150px large display */
-    
+    width: 90px;
+    height: 90px;
     border-radius: 50%;
-    /* Perfect circle shape
-       Matches photo styling */
-    
     background: linear-gradient(135deg, #2563eb, #3b82f6);
-    /* Blue gradient background
-       Creates visually interesting alternative to photo
-       Matches brand colors */
-    
     display: flex;
-    /* Flexbox for centering initials
-       Better than line-height for vertical centering */
-    
     align-items: center;
-    /* Centers initials vertically */
-    
     justify-content: center;
-    /* Centers initials horizontally
-       Perfectly centered text */
-    
     color: white;
-    /* White text for contrast on blue
-       Ensures initials are readable */
-    
-    font-weight: 700;
-    /* Bold text
-       Makes initials prominent and clear */
-    
-    font-size: 48px;
-    /* Very large text
-       48px creates impactful initials
-       Fills circle nicely */
-    
-    border: 4px solid #2563eb;
-    /* Blue border matching photo
-       Creates consistent styling */
-    
-    box-shadow: 0 4px 20px rgba(37, 99, 235, 0.3);
-    /* Same shadow as photo
-       Maintains visual consistency */
+    font-weight: 800;
+    font-size: 2rem;
+    border: 3px solid rgba(37,99,235,0.3);
+    box-shadow: 0 4px 20px rgba(37,99,235,0.25);
+    transition: transform 0.2s;
 }
 
-/* Photo Upload Overlay Button */
+.profile-photo-container:hover .profile-initials-large,
+.profile-photo-container:hover .profile-photo {
+    transform: scale(1.04);
+}
+
+.profile-photo {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid rgba(37,99,235,0.3);
+    box-shadow: 0 4px 20px rgba(37,99,235,0.25);
+    display: block;
+    transition: transform 0.2s;
+}
+
 .photo-overlay {
-    /* Circular button overlaying profile photo for uploads */
-    
     position: absolute;
-    /* Positions relative to .profile-photo-container
-       Removes from document flow
-       Allows precise positioning over photo */
-    
-    bottom: 5px;
-    right: 5px;
-    /* Positions in bottom-right corner
-       5px inset from edges
-       Classic position for edit button */
-    
+    inset: 0;
+    border-radius: 50%;
+    background: rgba(0,0,0,0.35);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.2rem;
+    opacity: 0;
+    transition: opacity 0.2s;
+    cursor: pointer;
+}
+
+.profile-photo-container:hover .photo-overlay { opacity: 1; }
+#photo-input { display: none; }
+
+.sidebar-name {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--text-primary, rgb(1,9,67));
+    margin-bottom: 0.25rem;
+    word-break: break-word;
+}
+
+.sidebar-email {
+    font-size: 0.82rem;
+    color: var(--text-secondary, #64748b);
+    word-break: break-all;
+    margin-bottom: 0.6rem;
+}
+
+.sidebar-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: #2563eb;
+    background: rgba(37,99,235,0.08);
+    padding: 4px 10px;
+    border-radius: 20px;
+}
+
+/* ── Quick stats ── */
+.sidebar-stats {
+    display: flex;
+    justify-content: space-around;
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--border-color, #e2e8f0);
+    margin-bottom: 1.25rem;
+}
+
+.sidebar-stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.15rem;
+}
+
+.sidebar-stat-n {
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: #2563eb;
+    line-height: 1;
+}
+
+.sidebar-stat-l {
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: var(--text-secondary, #64748b);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+/* ── Sidebar nav ── */
+.sidebar-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    flex: 1;
+}
+
+.sidebar-nav-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.7rem 1rem;
+    border-radius: 10px;
+    border: none;
+    background: transparent;
+    color: var(--text-secondary, #64748b);
+    font-family: 'Open Sans', sans-serif;
+    font-size: 0.93rem;
+    font-weight: 600;
+    cursor: pointer;
+    text-align: left;
+    transition: background 0.18s, color 0.18s;
+    width: 100%;
+}
+
+.sidebar-nav-item i {
+    width: 18px;
+    text-align: center;
+    font-size: 0.9rem;
+    opacity: 0.8;
+}
+
+.sidebar-nav-item:hover {
+    background: rgba(37,99,235,0.07);
+    color: #2563eb;
+}
+
+.sidebar-nav-item.active {
+    background: linear-gradient(135deg, rgba(37,99,235,0.12), rgba(59,130,246,0.08));
+    color: #2563eb;
+    font-weight: 700;
+}
+
+.sidebar-nav-item.active i { opacity: 1; }
+
+/* ── Sidebar footer ── */
+.sidebar-footer {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--border-color, #e2e8f0);
+    margin-top: auto;
+}
+
+.sidebar-back-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.6rem 1rem;
+    border-radius: 8px;
+    color: var(--text-secondary, #64748b);
+    font-size: 0.88rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background 0.18s, color 0.18s;
+}
+
+.sidebar-back-btn:hover {
+    background: var(--hover-bg, #f1f5f9);
+    color: var(--text-primary, rgb(1,9,67));
+}
+
+.sidebar-logout-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.6rem 1rem;
+    border-radius: 8px;
+    border: none;
+    background: transparent;
+    color: #ef4444;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 0.88rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.18s;
+    text-align: left;
+}
+
+.sidebar-logout-btn:hover { background: #fee2e2; }
+
+/* ════════════════════════════════
+   CONTENT AREA
+   ════════════════════════════════ */
+.profile-content {
+    flex: 1;
+    padding: 2.5rem 3rem;
+    overflow-y: auto;
+    min-width: 0;
+}
+
+/* ── Pane visibility ── */
+.profile-pane {
+    display: none;
+    animation: paneIn 0.22s ease both;
+}
+
+.profile-pane.active { display: block; }
+
+@keyframes paneIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Pane header ── */
+.pane-header {
+    margin-bottom: 2rem;
+    padding-bottom: 1.25rem;
+    border-bottom: 1px solid var(--border-color, #e2e8f0);
+}
+
+.pane-header h1 {
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: var(--text-primary, rgb(1,9,67));
+    margin: 0 0 0.25rem;
+}
+
+.pane-header p {
+    color: var(--text-secondary, #64748b);
+    font-size: 0.95rem;
+    margin: 0;
+}
+
+/* ── Overview grid ── */
+.overview-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.ov-card {
+    background: var(--bg-tertiary, #f8fafc);
+    border: 1px solid var(--border-color, #e2e8f0);
+    border-radius: 14px;
+    padding: 1.25rem 1.5rem;
+    transition: box-shadow 0.2s, transform 0.2s;
+}
+
+.ov-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(37,99,235,0.1);
+}
+
+.ov-card-label {
+    font-size: 0.76rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-secondary, #64748b);
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.ov-card-label i { color: #2563eb; }
+
+.ov-card-value {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-primary, rgb(1,9,67));
+    word-break: break-word;
+}
+
+/* ── Progress bar ── */
+.progress-section {
+    background: var(--bg-tertiary, #f8fafc);
+    border: 1px solid var(--border-color, #e2e8f0);
+    border-radius: 14px;
+    padding: 1.5rem;
+}
+
+.progress-section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.875rem;
+}
+
+.progress-section-header h3 {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text-primary, rgb(1,9,67));
+    margin: 0;
+}
+
+.progress-link {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #2563eb;
+    text-decoration: none;
+}
+
+.progress-link:hover { text-decoration: underline; }
+
+.progress-bar-track {
+    background: var(--border-color, #e2e8f0);
+    border-radius: 999px;
+    height: 10px;
+    overflow: hidden;
+    margin-bottom: 0.6rem;
+}
+
+.progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #2563eb, #3b82f6);
+    border-radius: 999px;
+    transition: width 0.8s cubic-bezier(0.4,0,0.2,1);
+}
+
+.progress-label {
+    font-size: 0.85rem;
+    color: var(--text-secondary, #64748b);
+    margin: 0;
+}
+
+/* ── Settings blocks ── */
+.settings-block {
+    background: var(--bg-secondary, #fff);
+    border: 1px solid var(--border-color, #e2e8f0);
+    border-radius: 14px;
+    padding: 1.5rem;
+    margin-bottom: 1.25rem;
+}
+
+.settings-block h2 {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text-primary, rgb(1,9,67));
+    margin: 0 0 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.settings-block h2 i { color: #2563eb; width: 18px; text-align: center; }
+
+.settings-hint {
+    font-size: 0.88rem;
+    color: var(--text-secondary, #64748b);
+    margin: 0;
+}
+
+.settings-row {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.settings-row.stacked {
+    flex-direction: column;
+    align-items: stretch;
+}
+
+.settings-input {
+    flex: 1;
+    min-width: 200px;
+    padding: 0.65rem 1rem;
+    border: 2px solid var(--border-color, #e2e8f0);
+    border-radius: 10px;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 0.93rem;
+    color: var(--text-primary, rgb(1,9,67));
+    background: var(--input-bg, #fff);
+    transition: border-color 0.2s, box-shadow 0.2s;
+    outline: none;
+}
+
+.settings-input:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37,99,235,0.12);
+}
+
+.settings-btn {
+    padding: 0.65rem 1.4rem;
     background: linear-gradient(135deg, #2563eb, #3b82f6);
-    /* Blue gradient matching brand
-       Makes button stand out as interactive
-       Matches primary action styling */
-    
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 0.93rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform 0.18s, box-shadow 0.18s;
+    white-space: nowrap;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.settings-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(37,99,235,0.35);
+}
+
+.settings-btn.danger {
+    background: linear-gradient(135deg, #ef4444, #dc2626);
+    box-shadow: none;
+}
+
+.settings-btn.danger:hover { box-shadow: 0 6px 18px rgba(239,68,68,0.35); }
+
+.settings-btn.wide { width: 100%; justify-content: center; padding: 0.875rem; font-size: 1rem; }
+
+.danger-block { border-color: rgba(239,68,68,0.25); background: rgba(239,68,68,0.03); }
+.danger-block h2 { color: #dc2626; }
+.danger-block h2 i { color: #ef4444; }
+
+/* ── Notification explainer box ── */
+.notif-explainer {
+    display: flex;
+    gap: 0.875rem;
+    align-items: flex-start;
+    background: rgba(37,99,235,0.06);
+    border: 1px solid rgba(37,99,235,0.15);
+    border-radius: 12px;
+    padding: 1rem 1.25rem;
+    margin-bottom: 1.25rem;
+    font-size: 0.88rem;
+    color: var(--text-primary, rgb(1,9,67));
+    line-height: 1.6;
+}
+
+.notif-explainer i { color: #2563eb; font-size: 1.1rem; flex-shrink: 0; margin-top: 2px; }
+
+/* ── Toggle rows ── */
+.toggle-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.875rem 0;
+    border-bottom: 1px solid var(--border-color, #e2e8f0);
+}
+
+.toggle-row:last-child { border-bottom: none; padding-bottom: 0; }
+.toggle-row:first-child { padding-top: 0; }
+
+.toggle-info { flex: 1; margin-right: 1.5rem; }
+
+.toggle-title {
+    font-size: 0.93rem;
+    font-weight: 600;
+    color: var(--text-primary, rgb(1,9,67));
+    margin-bottom: 0.2rem;
+}
+
+.toggle-desc {
+    font-size: 0.8rem;
+    color: var(--text-secondary, #64748b);
+    line-height: 1.5;
+}
+
+/* ── Toggle switch ── */
+.toggle-switch {
+    position: relative;
+    width: 48px;
+    height: 26px;
+    flex-shrink: 0;
+}
+
+.toggle-switch input { opacity: 0; width: 0; height: 0; }
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    inset: 0;
+    background: #cbd5e1;
+    border-radius: 26px;
+    transition: background 0.3s;
+}
+
+.slider::before {
+    content: '';
+    position: absolute;
+    width: 18px;
+    height: 18px;
+    background: white;
+    border-radius: 50%;
+    bottom: 4px;
+    left: 4px;
+    transition: transform 0.3s;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+}
+
+input:checked + .slider { background: linear-gradient(135deg, #2563eb, #3b82f6); }
+input:checked + .slider::before { transform: translateX(22px); }
+
+/* ── Activity list ── */
+.activity-list { display: flex; flex-direction: column; gap: 0.75rem; }
+
+.activity-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    background: var(--bg-secondary, #fff);
+    border: 1px solid var(--border-color, #e2e8f0);
+    border-radius: 12px;
+    padding: 1rem 1.25rem;
+    transition: transform 0.18s, box-shadow 0.18s;
+}
+
+.activity-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(37,99,235,0.1);
+}
+
+.activity-icon {
     width: 40px;
     height: 40px;
-    /* Small circular button
-       40x40px = comfortable tap target
-       Meets minimum touch target size (44px recommended) */
-    
-    border-radius: 50%;
-    /* Perfect circle shape
-       Matches photo styling */
-    
+    border-radius: 10px;
+    background: linear-gradient(135deg, #2563eb, #3b82f6);
     display: flex;
-    /* Flexbox for centering emoji icon */
-    
     align-items: center;
     justify-content: center;
-    /* Centers camera emoji perfectly */
-    
-    cursor: pointer;
-    /* Pointing hand cursor
-       Indicates button is clickable */
-    
-    box-shadow: 0 2px 10px rgba(37, 99, 235, 0.5);
-    /* Blue glow around button
-       Creates floating, interactive appearance
-       Stronger shadow than photo (50% vs 30%) */
-    
-    transition: transform 0.3s;
-    /* Smooth scale animation on hover
-       0.3s: responsive feedback */
-}
-
-/* Photo Overlay Hover State */
-.photo-overlay:hover {
-    /* Effect when hovering over upload button */
-    
-    transform: scale(1.1);
-    /* Enlarges button to 110% size
-       Creates "pop" effect
-       Indicates interactivity */
-}
-
-/* Photo Overlay Icon */
-.photo-overlay::before {
-    /* Pseudo-element for camera emoji */
-    
-    content: "+";
-    /* Camera emoji icon
-       Universal symbol for photo
-       No need for image file or icon font */
     color: white;
-    font-size: 20px;
-    /* Large emoji size
-       Easily visible and recognizable */
-}
-
-/* Hidden File Input */
-#photo-input {
-    /* Hidden file input for photo uploads */
-    
-    display: none;
-    /* Completely hidden from view
-       Still functional for file selection
-       Triggered by clicking .photo-overlay
-       Standard pattern for styled file uploads */
-}
-
-/* Profile Name Display */
-.profile-name-display {
-    /* User's full name below photo */
-    
-    font-size: 24px;
-    /* Large text for prominence
-       Emphasizes user identity */
-    
-    font-weight: 700;
-    /* Bold text
-       Makes name stand out clearly */
-    
-    color: rgb(1, 9, 67);
-    /* Dark blue matching site branding
-       Strong contrast on white background */
-    
-    margin-bottom: 5px;
-    /* Small space below name (above email)
-       5px keeps name and email closely grouped */
-}
-
-/* Profile Email Display */
-.profile-email-display {
-    /* User's email address below name */
-    
-    font-size: 16px;
-    /* Standard body text size
-       Less prominent than name
-       Still easily readable */
-    
-    color: #64748b;
-    /* Medium gray color
-       De-emphasized compared to name
-       Creates visual hierarchy */
-}
-
-/* Profile Info Grid Layout */
-.profile-info-grid {
-    /* CSS Grid for profile information cards */
-    
-    display: grid;
-    /* CSS Grid layout
-       Better than flexbox for card grids
-       Automatic responsive behavior */
-    
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    /* CRITICAL: Responsive grid formula
-       repeat(): repeats column definition
-       auto-fit: creates as many columns as fit
-       minmax(250px, 1fr): columns minimum 250px, max 1 fraction
-       Cards automatically wrap to new rows
-       No media queries needed for basic responsiveness */
-    
-    gap: 20px;
-    /* Space between grid items (all directions)
-       20px creates visual separation */
-    
-    margin-top: 30px;
-    /* Space above grid (below profile header)
-       30px creates clear section separation */
-}
-
-/* Individual Info Card */
-.info-card {
-    /* Card displaying single piece of profile information */
-    
-    background: linear-gradient(135deg, #f8fafc 0%, #e0e7ff 100%);
-    /* Subtle gradient background
-       Matches page gradient but lighter
-       Creates visual interest without overwhelming */
-    
-    padding: 20px;
-    /* Even padding all around
-       20px creates comfortable card interior
-       Space for label and value */
-    
-    border-radius: 12px;
-    /* Rounded corners
-       Slightly smaller than main cards (15px)
-       Creates nested visual hierarchy */
-    
-    border: 2px solid #e0e7ff;
-    /* Light border matching gradient end color
-       Defines card boundaries
-       Subtle but adds definition */
-}
-
-/* Info Card Label */
-.info-card-label {
-    /* Label for information (e.g., "Email", "Phone") */
-    
-    font-size: 13px;
-    /* Small text for labels
-       Appropriate for metadata
-       Still readable */
-    
-    color: #64748b;
-    /* Medium gray color
-       De-emphasized compared to value
-       Creates hierarchy */
-    
-    font-weight: 600;
-    /* Semibold text
-       Makes label stand out despite small size */
-    
-    text-transform: uppercase;
-    /* All capital letters
-       "Email" becomes "EMAIL"
-       Common pattern for labels */
-    
-    letter-spacing: 0.5px;
-    /* Adds space between letters
-       Improves readability of uppercase
-       Creates polished appearance */
-    
-    margin-bottom: 8px;
-    /* Space below label (above value)
-       8px separates label from value */
-}
-
-/* Info Card Value */
-.info-card-value {
-    /* The actual information value */
-    
-    font-size: 18px;
-    /* Larger than label (13px)
-       Makes value prominent
-       Emphasizes actual data */
-    
-    color: rgb(1, 9, 67);
-    /* Dark blue for emphasis
-       Strong contrast
-       Draws attention to information */
-    
-    font-weight: 600;
-    /* Semibold text
-       Makes value stand out clearly */
-    
-    word-break: break-word;
-    /* CRITICAL: Breaks long words if needed
-       Prevents overflow on long emails/URLs
-       Keeps card layout intact
-       Essential for responsive design */
-}
-
-/* Statistics Grid Layout */
-.stats-grid {
-    /* CSS Grid for statistics cards */
-    
-    display: grid;
-    /* CSS Grid layout */
-    
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    /* Responsive grid formula
-       Similar to info grid but narrower minimum (200px vs 250px)
-       Allows more stats per row
-       Stats cards can be narrower than info cards */
-    
-    gap: 20px;
-    /* Space between stat cards */
-    
-    margin-bottom: 30px;
-    /* Space below stats section
-       30px separates from content below */
-}
-
-/* Individual Stat Card */
-.stat-card {
-    /* Card displaying single statistic */
-    
-    background: linear-gradient(135deg, #2563eb, #3b82f6);
-    /* Blue gradient background
-       Matches primary brand colors
-       Makes stats stand out prominently
-       More attention-grabbing than info cards */
-    
-    padding: 25px;
-    /* Generous padding
-       25px creates spacious card interior
-       More padding than info cards (20px) for emphasis */
-    
-    border-radius: 12px;
-    /* Rounded corners matching info cards
-       Consistent design language */
-    
-    color: white;
-    /* White text for contrast on blue
-       Ensures readability */
-    text-align: center;
-    /* Centers number and label
-       Standard pattern for stat displays
-       Creates clean, organized appearance */
-}
-
-/* Stat Number Display */
-.stat-number {
-    /* Large number showing statistic value */
-    
-    font-size: 36px;
-    /* Very large text
-       36px creates strong visual impact
-       Emphasizes the number */
-    
-    font-weight: 700;
-    /* Bold text
-       Maximum emphasis for statistic */
-    
-    margin-bottom: 5px;
-    /* Small space below number (above label)
-       5px keeps number and label grouped */
-
-}
-
-/* Stat Label */
-.stat-label {
-    /* Descriptive label for statistic */
-    
-    font-size: 14px;
-    /* Smaller text than number
-       Appropriate for labels
-       Still easily readable on colored background */
-    
-    opacity: 0.9;
-    /* Slightly transparent (90% opaque)
-       Makes label less prominent than number
-       Creates hierarchy within card */
-}
-
-/* Settings Section Container */
-.settings-section {
-    /* Container for each settings category */
-    
-    margin-bottom: 40px;
-    /* Large space between settings sections
-       40px creates clear visual separation
-       Helps organize different setting categories */
-}
-
-/* Last Settings Section (No Bottom Margin) */
-.settings-section:last-child {
-    /* Removes margin from final section */
-    
-    margin-bottom: 0;
-    /* No space after last section
-       Prevents excessive whitespace at bottom
-       Content flows naturally to card edge */
-}
-
-/* Settings Section Heading */
-.settings-section h2 {
-    /* Heading for each settings category */
-    
-    color: rgb(1, 9, 67);
-    /* Dark blue matching site branding */
-    
-    font-size: 20px;
-    /* Prominent heading size
-       Larger than form labels (14px)
-       Creates clear section hierarchy */
-    
-    font-weight: 700;
-    /* Bold text for emphasis */
-    
-    margin-bottom: 20px;
-    /* Space below heading (above form fields)
-       20px separates heading from content */
-    
-    padding-bottom: 10px;
-    /* Extra space inside heading area
-       10px above border creates breathing room */
-    
-    border-bottom: 2px solid #e0e7ff;
-    /* Bottom border separator
-       2px: medium border
-       Light blue color
-       Visually defines section boundaries */
-}
-
-/* Form Group Container */
-.form-group {
-    /* Container for label + input pair */
-    
-    margin-bottom: 20px;
-    /* Space between form fields
-       20px creates organized, scannable form
-       Prevents fields from feeling cramped */
-}
-
-/* Form Label */
-.form-group label {
-    /* Label for input fields */
-    
-    display: block;
-    /* Block-level element
-       Takes full width
-       Label appears above input (not beside) */
-    
-    margin-bottom: 8px;
-    /* Space below label (above input)
-       8px connects label to input visually */
-    
-    color: #334155;
-    /* Dark gray color
-       Strong contrast for readability */
-    
-    font-weight: 600;
-    /* Semibold text
-       Makes labels prominent and scannable */
-    
-    font-size: 14px;
-    /* Slightly smaller than input text (15px)
-       Appropriate for labels
-       Creates subtle hierarchy */
-}
-
-/* Form Input Fields */
-.form-group input {
-    /* Text input fields in settings forms */
-    
-    width: 100%;
-    /* Full width of form group
-       Creates consistent, aligned form layout */
-    
-    padding: 12px 15px;
-    /* Padding: vertical horizontal
-       12px top/bottom: comfortable height
-       15px left/right: space for text entry */
-    
-    border: 2px solid #e2e8f0;
-    /* Light gray border
-       2px: medium width
-       Defines input boundaries clearly */
-    
-    border-radius: 10px;
-    /* Rounded corners
-       Matches tab and button styling
-       Modern, friendly appearance */
-    
-    font-size: 15px;
-    /* Comfortable reading/typing size
-       Slightly smaller than minimum for iOS zoom (16px)
-       Balance between size and preventing zoom */
-    
-    font-family: 'Open Sans', sans-serif;
-    /* CRITICAL: Explicit font declaration
-       Input fields don't inherit font by default
-       Ensures consistent typography */
-    
-    transition: all 0.3s;
-    /* Smooth transitions for focus effects
-       Animates border color and shadow */
-    
-    box-sizing: border-box;
-    /* CRITICAL: Includes padding/border in width
-       Prevents inputs from overflowing container
-       width: 100% includes padding/border
-       Makes layout calculations predictable */
-}
-
-/* Form Input Focus State */
-.form-group input:focus {
-    /* Styles when input receives focus (clicked/tabbed) */
-    
-    outline: none;
-    /* Removes default browser outline
-       Default blue outline can clash with design
-       Will add custom focus indicator below */
-    
-    border-color: #2563eb;
-    /* Changes border to blue
-       #2563eb: primary brand color
-       Clear visual feedback for active field */
-    
-    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
-    /* Blue glow around focused input
-       0 0 0: no offset (centered)
-       3px: glow width
-       rgba blue at 10% opacity
-       Creates accessible focus indicator
-       Meets WCAG focus requirements */
-}
-
-/* Primary Action Button */
-.btn-primary {
-    /* Main action buttons (Save, Update, etc.) */
-    
-    background: linear-gradient(135deg, #2563eb, #3b82f6);
-    /* Blue gradient matching brand
-       Creates premium, modern appearance */
-    
-    color: white;
-    /* White text for contrast */
-    
-    border: none;
-    /* Removes default button border */
-    
-    padding: 12px 28px;
-    /* Padding: vertical horizontal
-       12px: comfortable height
-       28px: generous width for button text */
-    
-    border-radius: 10px;
-    /* Rounded corners matching inputs */
-    
-    font-size: 16px;
-    /* Readable button text */
-    
-    font-weight: 700;
-    /* Bold text for emphasis */
-    
-    cursor: pointer;
-    /* Pointing hand cursor */
-    
-    transition: all 0.3s;
-    /* Smooth transitions for hover effects */
-}
-
-/* Primary Button Hover State */
-.btn-primary:hover {
-    /* Effects when hovering over primary button */
-    
-    transform: translateY(-2px);
-    /* Lifts button up 2 pixels
-       Creates "lift off" effect
-       Makes button feel responsive */
-    
-    box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4);
-    /* Enhanced blue shadow
-       Creates stronger floating effect
-       Reinforces hover state */
-}
-
-/* Danger/Delete Button */
-.btn-danger {
-    /* Destructive action buttons (Delete, Remove, etc.) */
-    
-    background: #ef4444;
-    /* Red background (no gradient)
-       #ef4444: bright red color
-       CRITICAL: Red indicates dangerous/destructive action
-       Universal color for delete/remove operations
-       Solid color (not gradient) feels more serious */
-    
-    color: white;
-    /* White text for contrast on red */
-    
-    border: none;
-    /* Removes default button border */
-    
-    padding: 12px 28px;
-    /* Same padding as primary button
-       Creates consistent button sizing */
-    
-    border-radius: 10px;
-    /* Rounded corners matching other buttons */
-    
-    font-size: 16px;
-    /* Same size as primary button */
-    
-    font-weight: 700;
-    /* Bold text for emphasis */
-    
-    cursor: pointer;
-    /* Pointing hand cursor */
-    
-    transition: all 0.3s;
-    /* Smooth transitions for hover effects */
-}
-
-/* Danger Button Hover State */
-.btn-danger:hover {
-    /* Effects when hovering over danger button */
-    
-    background: #dc2626;
-    /* Darker red on hover
-       #dc2626: deeper, more serious red
-       Reinforces dangerous action
-       Provides clear hover feedback */
-    
-    transform: translateY(-2px);
-    /* Lifts button up 2 pixels
-       Same lift effect as primary button
-       Consistent interaction pattern */
-    
-    box-shadow: 0 6px 20px rgba(239, 68, 68, 0.4);
-    /* Red shadow instead of blue
-       Matches button color
-       Creates cohesive danger button effect
-       rgba(239, 68, 68, 0.4): red at 40% opacity */
-}
-
-/* Toggle Switch Container */
-.toggle-group {
-    /* Container for toggle switch and labels */
-    
-    display: flex;
-    /* Flexbox layout for horizontal arrangement
-       Enables space-between positioning */
-    
-    justify-content: space-between;
-    /* Pushes label and switch to opposite ends
-       Label on left, switch on right
-       Creates organized, scannable layout */
-    
-    align-items: center;
-    /* Centers items vertically
-       Aligns switch with label text
-       Creates polished appearance */
-    
-    padding: 15px 20px;
-    /* Padding: vertical horizontal
-       15px top/bottom: comfortable height
-       20px left/right: breathing room */
-    
-    background: #f8fafc;
-    /* Light gray background
-       Distinguishes toggle area from white card
-       Subtle visual grouping */
-    
-    border-radius: 10px;
-    /* Rounded corners
-       Matches form styling */
-    
-    margin-bottom: 15px;
-    /* Space between toggle groups
-       15px separates different settings */
-    
-    border: 2px solid #e2e8f0;
-    /* Light gray border
-       Defines toggle group boundaries
-       Matches input border styling */
-}
-
-/* Toggle Label Text */
-.toggle-label {
-    /* Main label text for toggle setting */
-    
-    color: #334155;
-    /* Dark gray color
-       Strong contrast for readability */
-    
-    font-weight: 600;
-    /* Semibold text
-       Makes label prominent and scannable */
-}
-
-/* Toggle Description Text */
-.toggle-description {
-    /* Explanatory text below toggle label */
-    
-    font-size: 13px;
-    /* Small text for descriptions
-       Less prominent than label
-       Still readable */
-    
-    color: #64748b;
-    /* Medium gray color
-       De-emphasized compared to label
-       Creates hierarchy */
-    
-    margin-top: 3px;
-    /* Small space above description
-       3px keeps it close to label
-       Shows relationship between label and description */
-}
-
-/* Toggle Switch Container */
-.toggle-switch {
-    /* Wrapper for toggle switch element */
-    
-    position: relative;
-    /* Creates positioning context
-       Needed for absolute positioning of slider
-       Allows slider to move within this container */
-    
-    width: 52px;
-    height: 28px;
-    /* Fixed dimensions for toggle
-       52px wide: enough for slider movement
-       28px tall: comfortable tap target
-       Creates pill-shaped switch */
-    
+    font-size: 1rem;
     flex-shrink: 0;
-    /* CRITICAL: Prevents switch from shrinking
-       flex-shrink: 0 maintains 52px width
-       Ensures switch doesn't compress on narrow screens
-       Toggle stays consistent size */
 }
 
-/* Hidden Checkbox Input */
-.toggle-switch input {
-    /* Actual checkbox input (hidden) */
-    
-    opacity: 0;
-    /* Invisible but still functional
-       Maintains accessibility (keyboard/screen readers)
-       Allows click events to work */
-    
-    width: 0;
-    height: 0;
-    /* No dimensions
-       Takes up no space
-       Checkbox is purely functional, not visual */
+.activity-details { flex: 1; min-width: 0; }
+
+.activity-title {
+    font-size: 0.93rem;
+    font-weight: 700;
+    color: var(--text-primary, rgb(1,9,67));
+    margin-bottom: 0.2rem;
 }
 
-/* Toggle Slider (Visual Element) */
-.slider {
-    /* The visual toggle switch element */
-    
-    position: absolute;
-    /* Positions relative to .toggle-switch parent
-       Fills entire parent container
-       Allows precise positioning */
-    
-    cursor: pointer;
-    /* Pointing hand cursor
-       Indicates entire switch is clickable
-       Not just the circle */
-    
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    /* Stretches to fill parent completely
-       Creates full toggle background */
-    
-    background-color: #cbd5e0;
-    /* Gray background for "off" state
-       Neutral, inactive appearance
-       Will change to blue when toggled on */
-    
-    transition: 0.4s;
-    /* Smooth transition for background color
-       0.4s: slightly slower for deliberate feel
-       Animates color change when toggled */
-    
-    border-radius: 28px;
-    /* Fully rounded (pill shape)
-       28px matches height of .toggle-switch
-       Creates smooth, rounded toggle */
+.activity-meta {
+    font-size: 0.8rem;
+    color: var(--text-secondary, #64748b);
 }
 
-/* Toggle Slider Circle */
-.slider:before {
-    /* Pseudo-element: the circular knob that slides */
-    
-    position: absolute;
-    /* Positions within .slider parent */
-    
-    content: "";
-    /* Required for pseudo-element
-       Empty content creates invisible box */
-    
-    height: 20px;
-    width: 20px;
-    /* Small circle
-       20x20px fits inside 28px tall slider
-       Leaves 4px space on top/bottom */
-    
-    left: 4px;
-    bottom: 4px;
-    /* Positions circle in "off" position
-       4px from left: starting position
-       4px from bottom: vertically centers
-       Creates equal spacing around circle */
-    
-    background-color: white;
-    /* White circle contrasts with gray background */
-    
-    transition: 0.4s;
-    /* Smooth sliding animation
-       0.4s matches slider background transition
-       Creates cohesive animation */
-    
-    border-radius: 50%;
-    /* CRITICAL: Creates perfect circle
-       50% radius on square makes circle */
+.activity-empty {
+    text-align: center;
+    padding: 3rem;
+    color: var(--text-secondary, #64748b);
 }
 
-/* Checked (On) State Background */
-input:checked + .slider {
-    /* When checkbox is checked, changes slider background
-       + : adjacent sibling selector
-       Targets .slider immediately after checked input */
-    
-    background: linear-gradient(135deg, #2563eb, #3b82f6);
-    /* Blue gradient for "on" state
-       Matches brand colors
-       Clear visual indication toggle is active */
-}
+.activity-empty i { font-size: 2.5rem; margin-bottom: 1rem; color: #cbd5e1; display: block; }
 
-/* Checked (On) State Circle Position */
-input:checked + .slider:before {
-    /* When checked, moves circle to right */
-    
-    transform: translateX(24px);
-    /* Moves circle 24 pixels to the right
-       24px: calculated to position at right end
-       52px total width - 20px circle - 4px left - 4px right = 24px movement
-       Creates sliding "on" animation */
-}
-
-/* Success/Error Message Container */
-.message {
-    /* Container for feedback messages */
-    
-    padding: 15px 20px;
-    /* Padding: vertical horizontal
-       15px top/bottom: comfortable message height
-       20px left/right: breathing room for text */
-    
+/* Message feedback */
+.profile-message {
+    padding: 0.875rem 1.25rem;
     border-radius: 10px;
-    /* Rounded corners
-       Matches form styling
-       Modern, friendly appearance */
-    
-    margin-bottom: 20px;
-    /* Space below message
-       20px separates from content below
-       Prevents messages from feeling cramped */
-    
     font-weight: 600;
-    /* Semibold text
-       Makes message prominent
-       Ensures user notices feedback */
-    
-    animation: slideDown 0.4s ease;
-    /* Entrance animation when message appears
-       slideDown: defined in @keyframes below
-       0.4s: slightly slower for noticeable effect
-       ease: smooth acceleration
-       Creates polished feedback experience */
+    font-size: 0.9rem;
+    margin-bottom: 1.25rem;
+    animation: paneIn 0.25s ease both;
 }
 
-/* Success Message Styling */
-.message.success {
-    /* Green styling for success messages */
-    
-    background: #d1fae5;
-    /* Light green background
-       Positive, success color
-       Soft enough to not overwhelm */
-    
+.profile-message.success {
+    background: linear-gradient(135deg, #d1fae5, #a7f3d0);
     color: #065f46;
-    /* Dark green text
-       Strong contrast on light background
-       Reinforces success state */
-    
-    border: 2px solid #6ee7b7;
-    /* Medium green border
-       Adds definition to message
-       Creates cohesive green theme */
+    border: 1px solid #6ee7b7;
 }
 
-/* Error Message Styling */
-.message.error {
-    /* Red styling for error messages */
-    
-    background: #fee2e2;
-    /* Light red background
-       Error/warning color
-       Soft enough to not be alarming */
-    
+.profile-message.error {
+    background: linear-gradient(135deg, #fee2e2, #fecaca);
     color: #991b1b;
-    /* Dark red text
-       Strong contrast for readability
-       Reinforces error state */
-    
-    border: 2px solid #fca5a5;
-    /* Medium red border
-       Adds definition to message
-       Creates cohesive red theme */
+    border: 1px solid #fca5a5;
 }
 
-/* Slide Down Animation */
-@keyframes slideDown {
-    /* Animation for message appearance */
-    
-    from {
-        /* Starting state */
-        
-        opacity: 0;
-        /* Invisible at start */
-        
-        transform: translateY(-20px);
-        /* Positioned 20px above final location
-           Negative Y = upward
-           Creates downward slide effect */
-    }
-    
-    to {
-        /* Ending state */
-        
-        opacity: 1;
-        /* Fully visible */
-        
-        transform: translateY(0);
-        /* At final position
-           Message slides down into place
-           Draws attention to feedback */
-    }
+/* ════════════════════════════════
+   DARK MODE OVERRIDES
+   ════════════════════════════════ */
+[data-theme="dark"] .profile-sidebar {
+    background: var(--bg-secondary);
+    border-right-color: var(--border-color);
 }
 
-/* Mobile Responsive Styles */
-@media (max-width: 768px) {
-    /* Media query: applies when screen is 768px wide or less
-       Tablets and mobile devices in portrait mode
-       768px is common breakpoint (iPad width)
-       Optimizes profile page for small screens */
-    
-    .profile-main {
-        padding-top: 80px;
-        /* Reduced top padding on mobile (was 100px)
-           Mobile nav typically shorter
-           Conserves vertical space on small screens */
-    }
+[data-theme="dark"] .sidebar-nav-item.active {
+    background: rgba(96,165,250,0.15);
+    color: #60a5fa;
+}
 
-    .container {
-        padding: 0 15px;
-        /* Reduced horizontal padding (was 20px)
-           15px maximizes usable width on narrow screens
-           Still prevents content touching edges */
-        
-        margin: 20px auto;
-        /* Reduced vertical margin (was 40px)
-           20px conserves vertical space
-           Allows more content visible without scrolling */
-    }
+[data-theme="dark"] .sidebar-nav-item:hover {
+    background: rgba(96,165,250,0.1);
+    color: #60a5fa;
+}
 
-    .content {
-        padding: 25px 20px;
-        /* Reduced padding on mobile (was 40px)
-           25px vertical (was 40px)
-           20px horizontal (was 40px)
-           Maximizes usable space in content card
-           Still comfortable, just more compact */
-    }
+[data-theme="dark"] .ov-card { background: var(--bg-tertiary); border-color: var(--border-color); }
+[data-theme="dark"] .settings-block { background: var(--bg-tertiary); border-color: var(--border-color); }
+[data-theme="dark"] .settings-input { background: var(--input-bg); color: var(--text-primary); border-color: var(--border-color); }
+[data-theme="dark"] .progress-section { background: var(--bg-tertiary); border-color: var(--border-color); }
+[data-theme="dark"] .activity-item { background: var(--bg-tertiary); border-color: var(--border-color); }
+[data-theme="dark"] .slider { background: #334155; }
+[data-theme="dark"] .sidebar-badge { background: rgba(96,165,250,0.12); color: #60a5fa; }
+[data-theme="dark"] .sidebar-stat-n { color: #60a5fa; }
+[data-theme="dark"] .settings-block h2 i { color: #60a5fa; }
+[data-theme="dark"] .ov-card-label i { color: #60a5fa; }
+[data-theme="dark"] .progress-bar-fill { background: linear-gradient(90deg,#2563eb,#60a5fa); }
+[data-theme="dark"] .toggle-row { border-bottom-color: var(--border-color); }
+[data-theme="dark"] .danger-block { border-color: rgba(239,68,68,0.3); background: rgba(239,68,68,0.05); }
+[data-theme="dark"] .notif-explainer { background: rgba(96,165,250,0.08); border-color: rgba(96,165,250,0.2); color: var(--text-primary); }
+[data-theme="dark"] .pane-header { border-bottom-color: var(--border-color); }
+[data-theme="dark"] .profile-pane { background: transparent; }
+[data-theme="dark"] .profile-content { background: transparent; }
 
-    .tabs {
-        flex-direction: column;
-        /* CRITICAL: Stacks tabs vertically on mobile
-           Overrides default row direction
-           Prevents tabs from being too narrow
-           Each tab gets full width */
-    }
+/* ════════════════════════════════
+   RESPONSIVE
+   ════════════════════════════════ */
+@media (max-width: 900px) {
+    .profile-sidebar { width: 240px; padding: 1.5rem 1rem; }
+    .profile-content { padding: 2rem 1.75rem; }
+}
 
-    .tab {
+@media (max-width: 700px) {
+    .profile-shell { flex-direction: column; }
+
+    .profile-sidebar {
         width: 100%;
-        /* Full width tabs on mobile
-           Overrides flex: 1 behavior
-           Creates easy-to-tap buttons */
-        
-        text-align: center;
-        /* Centers tab text
-           Ensures centered appearance at full width */
-    }
-
-    .page-header {
+        height: auto;
+        position: static;
+        border-right: none;
+        border-bottom: 1px solid var(--border-color, #e2e8f0);
+        padding: 1.25rem;
         flex-direction: column;
-        /* Stacks header elements vertically
-           Back button above title
-           Better use of narrow screen space */
-        
-        gap: 15px;
-        /* Space between stacked elements
-           15px separates button and title */
-        
-        text-align: center;
-        /* Centers all header content
-           Creates balanced mobile layout */
-        
-        padding: 20px;
-        /* Reduced padding (was 25px 30px)
-           20px all around
-           More compact on mobile */
     }
 
-    .page-header h1 {
-        font-size: 24px;
-        /* Smaller title on mobile (was 28px)
-           24px fits comfortably on narrow screens
-           Still prominent but not overwhelming */
+    .sidebar-avatar-area { flex-direction: row; text-align: left; gap: 1rem; padding-bottom: 1rem; }
+    .sidebar-avatar-area > div:first-child { margin-bottom: 0; }
+
+    .sidebar-stats { justify-content: flex-start; gap: 2rem; }
+
+    .sidebar-nav {
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 0.4rem;
     }
 
-    .profile-info-grid {
-        grid-template-columns: 1fr;
-        /* CRITICAL: Single column on mobile
-           Overrides auto-fit minmax formula
-           1fr: one column taking full width
-           Prevents narrow, squished cards */
-    }
+    .sidebar-nav-item { flex: 1; min-width: 100px; justify-content: center; padding: 0.5rem 0.6rem; font-size: 0.82rem; }
 
-    .stats-grid {
-        grid-template-columns: 1fr;
-        /* Single column for stats on mobile
-           Same reasoning as info grid
-           Ensures readable, comfortable stat cards */
-    }
+    .sidebar-footer { flex-direction: row; border-top: none; padding-top: 0; margin-top: 0; }
 
-    .toggle-group {
-        flex-direction: column;
-        /* Stacks label and switch vertically
-           Better layout on narrow screens
-           Prevents cramped appearance */
-        
-        gap: 15px;
-        /* Space between label and switch
-           15px creates clear separation when stacked */
-        
-        text-align: center;
-        /* Centers label text
-           Creates balanced mobile layout */
-    }
-    
-    .profile-photo,
-    .profile-initials-large {
-        /* Targets both photo and initials fallback */
-        
-        width: 120px;
-        height: 120px;
-        /* Smaller profile display on mobile (was 150px)
-           120x120px conserves vertical space
-           Still large enough to be prominent
-           Reduces file size for mobile uploads */
-    }
-    
-    .profile-initials-large {
-        /* Additional styling for initials on mobile */
-        
-        font-size: 40px;
-        /* Smaller initials (was 48px)
-           Maintains proportion with smaller circle
-           40px fits comfortably in 120px circle */
-    }
+    .profile-content { padding: 1.5rem 1rem; }
+
+    .pane-header h1 { font-size: 1.4rem; }
+
+    .overview-grid { grid-template-columns: 1fr 1fr; }
+
+    .settings-row { flex-direction: column; }
+    .settings-input { min-width: auto; width: 100%; }
 }
 
-/* End of profile.css */
+@media (max-width: 440px) {
+    .overview-grid { grid-template-columns: 1fr; }
+    .sidebar-avatar-area { flex-direction: column; text-align: center; }
+}

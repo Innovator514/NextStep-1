@@ -151,46 +151,7 @@ if (document.readyState === 'loading') {
   smoothParallax();
 }
 
-// Mobile menu toggle functionality
-document.addEventListener('DOMContentLoaded', function() {
-    const nav = document.querySelector('nav ul');
-    const hamburger = document.createElement('button');
-    hamburger.className = 'mobile-menu-toggle';
-    hamburger.innerHTML = '<span></span><span></span><span></span>';
-    hamburger.setAttribute('aria-label', 'Toggle menu');
-    
-    const navdiv = document.querySelector('.navdiv');
-    
-    if (navdiv && nav) {
-        navdiv.insertBefore(hamburger, nav);
-        
-        hamburger.addEventListener('click', function(e) {
-            e.stopPropagation();
-            nav.classList.toggle('mobile-open');
-            this.classList.toggle('active');
-            document.body.classList.toggle('menu-open');
-        });
-        
-        document.addEventListener('click', function(e) {
-            if (nav.classList.contains('mobile-open') && 
-                !nav.contains(e.target) && 
-                !hamburger.contains(e.target)) {
-                nav.classList.remove('mobile-open');
-                hamburger.classList.remove('active');
-                document.body.classList.remove('menu-open');
-            }
-        });
-        
-        const navLinks = nav.querySelectorAll('a');
-        navLinks.forEach(link => {
-            link.addEventListener('click', function() {
-                nav.classList.remove('mobile-open');
-                hamburger.classList.remove('active');
-                document.body.classList.remove('menu-open');
-            });
-        });
-    }
-});
+// Mobile menu is handled by mobile-nav.js (shared across all pages)
 
 // Carousel Functionality
 document.addEventListener("DOMContentLoaded", () => {
@@ -326,115 +287,85 @@ const categoryText = {
 };
 
 let isAnimating = false;
-let animationStopped = false; // Flag to stop animation when scrolled away
+let animationStopped = false;
+let animationLoopId = 0; // unique id to cancel stale loops
 
-// Typewriter function - types text character by character
-function typeWriter(element, text, speed = 50) {
+// Typewriter function
+function typeWriter(element, text, loopId, speed = 50) {
   return new Promise((resolve) => {
     let i = 0;
-    const cursor = element;
-    
     function type() {
-      if (animationStopped) {
-        resolve();
-        return;
-      }
-      
+      if (animationStopped || animationLoopId !== loopId) { resolve(); return; }
       if (i < text.length) {
-        cursor.textContent += text.charAt(i);
+        element.textContent += text.charAt(i);
         i++;
         setTimeout(type, speed);
       } else {
-        // Remove blinking cursor after typing is done
-        cursor.classList.add('done');
+        element.classList.add('done');
         resolve();
       }
     }
-    
     type();
   });
 }
 
-// Backspace function - deletes text character by character
-function backspaceWriter(element, speed = 30) {
+// Backspace function
+function backspaceWriter(element, loopId, speed = 30) {
   return new Promise((resolve) => {
-    const text = element.textContent;
-    let i = text.length;
-    
     function backspace() {
-      if (animationStopped) {
-        resolve();
-        return;
-      }
-      
-      if (i > 0) {
-        element.textContent = text.substring(0, i - 1);
-        i--;
+      if (animationStopped || animationLoopId !== loopId) { resolve(); return; }
+      if (element.textContent.length > 0) {
+        element.textContent = element.textContent.slice(0, -1);
         setTimeout(backspace, speed);
       } else {
-        // Re-add blinking cursor for next typing
         element.classList.remove('done');
         resolve();
       }
     }
-    
     backspace();
   });
 }
 
-// Main infinite animation loop - SINGLE LINE ONLY
-async function infiniteTypewriterLoop() {
-  if (animationStopped) return;
-  
+// Main infinite animation loop
+async function infiniteTypewriterLoop(loopId) {
+  if (animationStopped || animationLoopId !== loopId) return;
+
   const engageItems = document.querySelectorAll('.engage-item');
-  
-  // Only use the FIRST item - hide all others permanently
+
   engageItems.forEach((item, index) => {
     if (index !== 0) {
       item.style.display = 'none';
     } else {
-      // Style the single visible item - bigger and centered
       item.style.fontSize = '65px';
       item.style.textAlign = 'center';
       item.style.fontWeight = '700';
     }
   });
-  
+
   const singleItem = engageItems[0];
+  if (!singleItem) return;
   const typewriterSpan = singleItem.querySelector('.typewriter-text');
-  
-  // Array of all categories to cycle through
+  if (!typewriterSpan) return;
+
   const allCategories = Object.entries(categoryText);
   let currentIndex = 0;
-  
-  while (!animationStopped) {
-    const [categoryName, categoryData] = allCategories[currentIndex];
-    const currentText = categoryData.text;
-    const currentColor = categoryData.color;
-    
-    // Change color for this category
-    typewriterSpan.style.color = currentColor;
-    
-    // Make item visible
+
+  while (!animationStopped && animationLoopId === loopId) {
+    const [, categoryData] = allCategories[currentIndex];
+    typewriterSpan.style.color = categoryData.color;
     singleItem.classList.add('typing');
-    
-    // Type the text
-    await typeWriter(typewriterSpan, currentText, 50);
-    
-    // Pause with text visible and blinking cursor
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    
-    if (animationStopped) break;
-    
-    // Backspace the text
-    await backspaceWriter(typewriterSpan, 30);
-    
-    // Small pause before next category
-    await new Promise(resolve => setTimeout(resolve, 200));
-    
-    if (animationStopped) break;
-    
-    // Move to next category (loop back to start)
+
+    // Show typing indicator dots while about to type
+    typewriterSpan.setAttribute('data-typing', 'true');
+    await new Promise(r => setTimeout(r, 300));
+    typewriterSpan.removeAttribute('data-typing');
+
+    await typeWriter(typewriterSpan, categoryData.text, loopId, 55);
+    await new Promise(r => setTimeout(r, 1100));
+    if (animationStopped || animationLoopId !== loopId) break;
+    await backspaceWriter(typewriterSpan, loopId, 32);
+    await new Promise(r => setTimeout(r, 220));
+    if (animationStopped || animationLoopId !== loopId) break;
     currentIndex = (currentIndex + 1) % allCategories.length;
   }
 }
@@ -465,63 +396,59 @@ function animateParagraph() {
   }, 800);
 }
 
-// Reset animation
+// Reset animation — increments loopId so any running loop sees it's stale
 function resetAnimation() {
+  animationStopped = true;
+  animationLoopId++;          // invalidate any running loop instantly
+
   const paragraphSide = document.querySelector('.paragraph-side');
   const engageSide = document.querySelector('.engage-side');
   const engageLabel = document.querySelector('.engage-label');
   const engageItems = document.querySelectorAll('.engage-item');
-  
-  // Stop any running animation
-  animationStopped = true;
-  
-  // Remove slide-in classes
-  paragraphSide.classList.remove('slide-in');
-  engageSide.classList.remove('slide-in');
-  engageLabel.classList.remove('show');
-  
-  // Reset all engage items
+
+  if (paragraphSide) paragraphSide.classList.remove('slide-in');
+  if (engageSide)    engageSide.classList.remove('slide-in');
+  if (engageLabel)   engageLabel.classList.remove('show');
+
   engageItems.forEach(item => {
     item.classList.remove('typing');
-    const typewriterSpan = item.querySelector('.typewriter-text');
-    typewriterSpan.textContent = '';
-    typewriterSpan.classList.remove('done');
+    const span = item.querySelector('.typewriter-text');
+    if (span) { span.textContent = ''; span.classList.remove('done'); }
   });
 }
 
-// Start animation when section comes into view
+// Start animation — grabs a fresh loopId so only this run is canonical
 function startAnimation() {
   animationStopped = false;
+  animationLoopId++;
+  const myLoopId = animationLoopId;
   animateParagraph();
-  
-  // Start infinite typewriter loop after paragraph slides in
   setTimeout(() => {
-    infiniteTypewriterLoop();
+    if (animationLoopId === myLoopId) infiniteTypewriterLoop(myLoopId);
   }, 1000);
 }
 
-// Intersection Observer to trigger animation
+// Intersection Observer — debounced so rapid scroll doesn't double-fire
 function setupTypewriterObserver() {
   const firstPointSection = document.querySelector('.first-point');
-  
   if (!firstPointSection) return;
-  
+
+  let debounceTimer = null;
+
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
-      if (entry.isIntersecting && animationStopped) {
-        // Section came into view - start animation
-        startAnimation();
-      } else if (!entry.isIntersecting && !animationStopped) {
-        // Section left view - reset animation
-        resetAnimation();
-      }
+      clearTimeout(debounceTimer);
+      debounceTimer = setTimeout(() => {
+        if (entry.isIntersecting && animationStopped) {
+          startAnimation();
+        } else if (!entry.isIntersecting && !animationStopped) {
+          resetAnimation();
+        }
+      }, 80); // 80ms debounce prevents flicker on fast scroll
     });
-  }, {
-    threshold: 0.3 // Trigger when 30% of section is visible
-  });
-  
+  }, { threshold: 0.25 });
+
   observer.observe(firstPointSection);
 }
 
-// Initialize on page load
 document.addEventListener('DOMContentLoaded', setupTypewriterObserver);

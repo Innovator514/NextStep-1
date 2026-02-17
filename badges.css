@@ -1,159 +1,51 @@
 /* Badges Page Specific Styles */
-/* This stylesheet contains all styles for the badges/achievements page
-   Includes badge cards, progress tracking, animations, and gamification elements */
 
 /* Universal Reset */
 * {
-    /* Universal selector - applies to ALL elements
-       Asterisk (*) targets every HTML element on page */
-    
     margin: 0;
-    /* Removes default browser margins
-       Browsers add margins to many elements (h1, p, body, etc.)
-       Starting from zero gives precise control */
-    
     padding: 0;
-    /* Removes default browser padding
-       Browsers add padding to elements like ul, ol, form inputs
-       Clean slate for custom spacing */
-    
-    box-sizing: border-box;
-    /* CRITICAL: Changes box model calculation
-       border-box: width/height includes padding and border
-       Default (content-box) adds padding/border to width
-       Makes layout calculations predictable and easier */
+    box-sizing: border-box; /* Include padding/border in element width calculations */
 }
 
 /* Body Base Styles */
 body {
-    /* Styles for entire page body */
-    
     font-family: 'Open Sans', -apple-system, sans-serif;
-    /* Font stack: tries fonts left to right
-       'Open Sans': Google Font (primary choice)
-       -apple-system: Apple's system font (fallback for iOS/Mac)
-       sans-serif: generic fallback if others fail
-       Ensures text displays on all devices */
-    
     background: linear-gradient(135deg, #f8fafc 0%, #e0e7ff 100%);
-    /* Diagonal gradient background
-       135deg: angle from top-left to bottom-right
-       #f8fafc: light gray-blue at start
-       #e0e7ff: light lavender at end
-       Matches site-wide design aesthetic */
 }
 
 /* Main Container */
 .badges-container {
-    /* Wrapper for all badges page content */
-    
     max-width: 1200px;
-    /* Maximum width constraint
-       1200px prevents content from getting too wide on large screens
-       Maintains comfortable reading/viewing width */
-    
-    margin: 0 auto;
-    /* Centers container horizontally
-       0: no top/bottom margin
-       auto: browser calculates equal left/right margins
-       Creates centered layout */
-    
+    margin: 0 auto; /* Center horizontally */
     padding: 0 2rem;
-    /* Horizontal padding only
-       0: no top/bottom padding
-       2rem: left/right padding prevents content touching edges
-       Creates breathing room on all screen sizes */
 }
 
 /* Page Title */
 h1 {
-    /* Main heading for badges page */
-    
-    margin-top: 10rem;
-    /* Large top spacing to clear fixed navigation
-       10rem = 160px at default font size
-       Ensures title isn't hidden under navbar
-       Creates dramatic entrance space */
-    
+    margin-top: 10rem; /* Clear fixed navigation */
     font-size: 3rem;
-    /* Very large heading text (48px at default)
-       rem: relative to root font size (accessible)
-       Creates strong visual impact
-       Establishes clear page hierarchy */
-    
     font-weight: 800;
-    /* Extra bold (800 on scale of 100-900)
-       Heavier than standard bold (700)
-       Maximum emphasis for page title */
-    
     text-align: center;
-    /* Centers text horizontally
-       Common pattern for hero/page titles
-       Creates balanced, professional appearance */
     
+    /* Gradient text effect */
     background: linear-gradient(135deg, #2563eb, #3b82f6);
-    /* Blue gradient for text fill
-       135deg: diagonal angle matching body gradient
-       Will be clipped to text shape with properties below */
-    
     -webkit-background-clip: text;
-    /* CRITICAL: Clips background to text shape (WebKit)
-       -webkit- prefix for Chrome, Safari, Edge
-       Makes gradient only visible within letters */
-    
     -webkit-text-fill-color: transparent;
-    /* CRITICAL: Makes text transparent (WebKit)
-       Allows gradient background to show through
-       Without this, text would be solid over gradient */
-    
     background-clip: text;
-    /* Standard (non-prefixed) version
-       Future-proofing for broader browser support
-       Same functionality as -webkit-background-clip */
     
     margin-bottom: 1rem;
-    /* Space below title (16px at default)
-       Separates title from subtitle
-       Creates visual grouping */
-    
     animation: fadeInDown 0.6s ease;
-    /* Entrance animation on page load
-       fadeInDown: defined in @keyframes below
-       0.6s: animation duration
-       ease: smooth acceleration curve
-       Creates polished, dynamic page load */
 }
 
 /* Page Subtitle */
 .subtitle {
-    /* Descriptive text below page title */
-    
     text-align: center;
-    /* Centers text horizontally
-       Matches h1 alignment
-       Creates cohesive header section */
-    
     color: #64748b;
-    /* Medium gray-blue color
-       Less prominent than title
-       Creates visual hierarchy */
-    
     font-size: 1.1rem;
-    /* Slightly larger than body text
-       1.1rem = 17.6px at default
-       Prominent but doesn't compete with title */
-    
     margin-bottom: 3rem;
-    /* Large space below subtitle
-       3rem = 48px
-       Separates header from content sections */
-    
     animation: fadeInUp 0.6s ease;
-    /* Entrance animation (opposite direction from title)
-       fadeInUp: slides up while fading in
-       0.6s: matches h1 timing
-       Creates coordinated animation effect */
 }
+
 /* Badge Progress Bar Styles */
 .badge-progress {
     margin-top: 1rem;
@@ -177,6 +69,7 @@ h1 {
     position: relative;
 }
 
+/* Animated shimmer effect on progress bar */
 .progress-bar::after {
     content: '';
     position: absolute;
@@ -214,927 +107,292 @@ h1 {
     line-height: 1.5;
 }
 
-/* The rest of the badges.css remains the same */
-/* I'm only showing the new progress bar styles above */
-/* Copy all the existing badges.css content after these additions */
-/* Animation: Fade In From Top */
+/* Entrance Animations */
 @keyframes fadeInDown {
-    /* Animation for elements entering from above */
-    
     from {
-        /* Starting state (before animation begins) */
-        
         opacity: 0;
-        /* Invisible at start
-           0 = completely transparent */
-        
         transform: translateY(-20px);
-        /* Positioned 20px above final location
-           Negative Y = upward
-           Creates slide-down effect */
     }
-    
     to {
-        /* Ending state (after animation completes) */
-        
         opacity: 1;
-        /* Fully visible at end
-           1 = completely opaque */
-        
         transform: translateY(0);
-        /* At final position (no offset)
-           Element settles into place
-           Smooth transition from above */
     }
 }
 
-/* Animation: Fade In From Bottom */
 @keyframes fadeInUp {
-    /* Animation for elements entering from below */
-    
     from {
-        /* Starting state */
-        
         opacity: 0;
-        /* Invisible at start */
-        
         transform: translateY(20px);
-        /* Positioned 20px below final location
-           Positive Y = downward
-           Creates slide-up effect */
     }
-    
     to {
-        /* Ending state */
-        
         opacity: 1;
-        /* Fully visible */
-        
         transform: translateY(0);
-        /* At final position
-           Element rises into place
-           Opposite direction from fadeInDown */
     }
 }
 
-/* Animation: Simple Fade In */
 @keyframes fadeIn {
-    /* Basic fade animation without movement */
-    
-    from { 
-        opacity: 0; 
-        /* Invisible at start
-           Simple, subtle entrance */
-    }
-    
-    to { 
-        opacity: 1; 
-        /* Fully visible at end
-           No position change, just opacity
-           Used for elements that shouldn't move */
-    }
+    from { opacity: 0; }
+    to { opacity: 1; }
 }
 
 /* Badge Statistics Section */
 .badge-stats {
-    /* Container for statistics boxes (earned badges, total points, etc.) */
-    
     display: flex;
-    /* Flexbox layout for stat boxes
-       Horizontal arrangement by default
-       Enables flexible positioning */
-    
     justify-content: center;
-    /* Centers items horizontally
-       Groups stats in center of page
-       Creates balanced layout */
-    
     gap: 2rem;
-    /* Space between stat boxes
-       2rem = 32px
-       Modern CSS property replaces margin calculations */
-    
     margin-bottom: 3rem;
-    /* Space below stats section
-       3rem = 48px
-       Separates stats from filters/badges */
-    
-    flex-wrap: wrap;
-    /* Allows boxes to wrap to new lines
-       If too narrow, boxes move to next row
-       Prevents horizontal scrolling on mobile */
-    
+    flex-wrap: wrap; /* Wrap on smaller screens */
     animation: fadeIn 0.8s ease;
-    /* Fade-in animation on load
-       0.8s: slightly slower than title (0.6s)
-       Creates staggered loading effect */
 }
 
 /* Individual Statistic Box */
 .stat-box {
-    /* Container for single statistic (number + label) */
-    
     background: white;
-    /* Clean white background
-       Contrasts with page gradient
-       Makes stats stand out as important info */
-    
     padding: 2rem 3rem;
-    /* Padding: vertical horizontal
-       2rem (32px): top/bottom space
-       3rem (48px): left/right space
-       Creates spacious, comfortable stat display */
-    
     border-radius: 20px;
-    /* Rounded corners (20px radius)
-       Larger radius than badges (15px)
-       Creates prominent, friendly appearance */
-    
     text-align: center;
-    /* Centers number and label
-       Standard pattern for stat displays
-       Creates clean, organized look */
-    
     box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
-    /* Soft shadow for depth
-       0: centered horizontally
-       8px: shadow below box
-       30px: large blur (very soft)
-       rgba(0, 0, 0, 0.08): black at 8% opacity
-       Creates subtle floating effect */
-    
     transition: transform 0.3s ease, box-shadow 0.3s ease;
-    /* Smooth transitions for hover effects
-       transform: animates lift effect
-       box-shadow: animates shadow enhancement
-       0.3s: third of a second (responsive)
-       ease: smooth acceleration */
-    
     position: relative;
-    /* Creates positioning context
-       Needed for absolute positioning of ::before
-       Enables z-index control */
-    
-    overflow: hidden;
-    /* CRITICAL: Contains animated ::before element
-       Prevents shimmer effect from extending outside
-       Clips animation to box bounds */
+    overflow: hidden; /* Contains animated ::before element */
 }
 
-/* Stat Box Shimmer Effect */
+/* Shimmer effect on hover */
 .stat-box::before {
-    /* Pseudo-element for animated light sweep */
-    
     content: '';
-    /* Required for pseudo-element to display
-       Empty content creates invisible element */
-    
     position: absolute;
-    /* Positions relative to .stat-box parent
-       Removes from document flow
-       Allows precise positioning */
-    
     top: 0;
-    left: -100%;
-    /* Starts completely off-screen to the left
-       -100%: one full width left of container
-       Will animate across on hover */
-    
+    left: -100%; /* Start off-screen left */
     width: 100%;
     height: 100%;
-    /* Fills entire parent dimensions
-       Creates full-height sweep effect */
-    
     background: linear-gradient(90deg, transparent, rgba(37, 99, 235, 0.1), transparent);
-    /* Horizontal light sweep gradient
-       90deg: left to right
-       transparent → light blue → transparent
-       rgba(37, 99, 235, 0.1): blue at 10% opacity
-       Creates subtle highlight bar */
-    
     transition: left 0.5s;
-    /* Animates horizontal position
-       left: moves element across box
-       0.5s: half second sweep
-       Creates smooth gliding effect */
 }
 
-/* Stat Box Shimmer On Hover */
 .stat-box:hover::before {
-    /* Triggers shimmer animation */
-    
-    left: 100%;
-    /* Moves completely off-screen to the right
-       Sweep goes from -100% to +100%
-       Travels across entire box
-       Creates light sweep effect */
+    left: 100%; /* Sweep across to off-screen right */
 }
 
-/* Stat Box Hover State */
 .stat-box:hover {
-    /* Effects when user hovers over stat box */
-    
     transform: translateY(-5px);
-    /* Lifts box up 5 pixels
-       Negative Y = upward movement
-       Creates subtle hover response */
-    
     box-shadow: 0 12px 40px rgba(37, 99, 235, 0.15);
-    /* Enhanced shadow on hover
-       0: centered
-       12px: deeper shadow (was 8px)
-       40px: larger blur (was 30px)
-       rgba blue at 15% (was black at 8%)
-       Creates impression of floating toward user */
 }
 
 /* Statistic Number Display */
 .stat-number {
-    /* Large number showing stat value */
-    
     font-size: 3rem;
-    /* Very large text (48px at default)
-       Same size as page h1
-       Creates visual impact and emphasis */
-    
     font-weight: 700;
-    /* Bold text
-       Makes numbers stand out
-       Creates hierarchy above label */
     
+    /* Gradient text */
     background: linear-gradient(135deg, #2563eb, #3b82f6);
-    /* Blue gradient for number
-       Matches page title gradient
-       Creates visual cohesion */
-    
     -webkit-background-clip: text;
-    /* Clips gradient to text shape (WebKit) */
-    
     -webkit-text-fill-color: transparent;
-    /* Makes text transparent to show gradient */
-    
     background-clip: text;
-    /* Standard version for future support */
     
     margin-bottom: 0.5rem;
-    /* Small space below number
-       0.5rem = 8px
-       Separates number from label */
 }
 
-/* Statistic Label */
 .stat-label {
-    /* Descriptive text below stat number */
-    
     font-size: 0.95rem;
-    /* Slightly smaller than body text
-       Appropriate for labels/metadata
-       Still easily readable */
-    
     color: #64748b;
-    /* Medium gray color
-       Less prominent than number
-       Creates clear hierarchy */
-    
     font-weight: 600;
-    /* Semibold text
-       Slightly emphasized but not bold
-       Balances with large number above */
 }
 
 /* Filter Section Container */
 .filter-section {
-    /* Wrapper for category filter buttons */
-    
     margin-bottom: 3rem;
-    /* Space below filter section
-       3rem = 48px
-       Separates filters from badge grid */
 }
 
 /* Filter Buttons Container */
 .filter-buttons-horizontal {
-    /* Flexbox container for filter buttons */
-    
     display: flex;
-    /* Flexbox layout
-       Horizontal button arrangement
-       Enables flexible positioning */
-    
     flex-wrap: wrap;
-    /* Allows buttons to wrap to new lines
-       Responsive behavior without media queries
-       Prevents overflow on narrow screens */
-    
     gap: 0.75rem;
-    /* Space between buttons
-       0.75rem = 12px
-       Slightly tighter than events page (1rem) */
-    
     justify-content: center;
-    /* Centers buttons horizontally
-       Creates balanced appearance
-       Professional layout pattern */
-    
     padding: 1.5rem;
-    /* Even padding all around
-       1.5rem = 24px breathing room
-       Makes filter area feel spacious */
-    
     background: white;
-    /* White background
-       Contrasts with page gradient
-       Defines interactive area clearly */
-    
     border-radius: 20px;
-    /* Large rounded corners
-       Matches stat boxes
-       Creates cohesive design language */
-    
     box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
-    /* Soft shadow matching stat boxes
-       Creates consistent elevation
-       Subtle floating effect */
 }
 
 /* Individual Filter Button */
 .filter-btn {
-    /* Category filter button styling */
-    
     padding: 0.75rem 1.5rem;
-    /* Padding: vertical horizontal
-       0.75rem: comfortable tap height
-       1.5rem: wider for better clickability */
-    
     background: #f1f5f9;
-    /* Light gray background (inactive)
-       Neutral appearance for unselected state
-       Contrasts with white container */
-    
-    border: 2px solid transparent;
-    /* Transparent border reserves space
-       Prevents layout shift when active border appears
-       2px: medium border width */
-    
-    border-radius: 25px;
-    /* Fully rounded (pill shape)
-       Creates modern, friendly button style
-       Matches site design language */
-    
+    border: 2px solid transparent; /* Reserve space to prevent layout shift */
+    border-radius: 25px; /* Pill shape */
     font-size: 0.95rem;
-    /* Slightly smaller than body text
-       Comfortable reading size
-       Appropriate for buttons */
-    
     font-weight: 600;
-    /* Semibold text
-       Makes button text stand out
-       Improves scannability */
-    
     color: #475569;
-    /* Dark gray text
-       Good contrast on light background
-       Readable in inactive state */
-    
     cursor: pointer;
-    /* Pointing hand cursor on hover
-       Indicates clickability
-       Standard UI pattern */
-    
     transition: all 0.3s ease;
-    /* Smooth transitions for all properties
-       Animates background, color, transform
-       0.3s: responsive but not jarring
-       ease: smooth acceleration */
-    
     font-family: 'Open Sans', sans-serif;
-    /* Ensures consistent font
-       Matches body font
-       Some buttons need explicit font declaration */
 }
 
-/* Filter Button Hover State */
 .filter-btn:hover {
-    /* Effects when hovering over button */
-    
     background: #e0e7ff;
-    /* Light blue background
-       Provides immediate visual feedback
-       Indicates interactivity */
-    
     color: #2563eb;
-    /* Blue text
-       Matches brand color
-       Reinforces hover state */
-    
     transform: translateY(-2px);
-    /* Lifts button up 2 pixels
-       Subtle hover response
-       Creates tactile feel */
 }
 
 /* Active/Selected Filter Button */
 .filter-btn.active {
-    /* Currently selected filter button */
-    
     background: linear-gradient(135deg, #2563eb, #3b82f6);
-    /* Blue gradient background
-       Matches site primary colors
-       Makes selection unmistakable */
-    
     color: white;
-    /* White text for contrast
-       Standard for primary buttons
-       Ensures readability */
-    
     box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
-    /* Blue glow shadow
-       Creates "selected" appearance
-       Reinforces active state visually */
 }
 
-/* Badges Grid Layout */
+/* Badges Grid Layout - responsive without media queries */
 .badges-grid {
-    /* CSS Grid container for badge cards */
-    
     display: grid;
-    /* CSS Grid layout
-       Better than flexbox for card grids
-       Automatic responsive behavior */
-    
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    /* CRITICAL: Responsive grid formula
-       repeat(): repeats column definition
-       auto-fill: creates as many columns as fit
-       minmax(280px, 1fr): columns minimum 280px, max 1 fraction
-       Cards automatically wrap to new rows
-       No media queries needed for basic responsiveness */
-    
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); /* Auto-responsive grid */
     gap: 2rem;
-    /* Space between grid items (all directions)
-       2rem = 32px
-       Creates visual separation between badges */
-    
     margin-bottom: 4rem;
-    /* Large space below grid
-       4rem = 64px
-       Separates from footer or next section */
-    
     animation: fadeIn 1s ease;
-    /* Fade-in animation on load
-       1s: slower than stats (0.8s)
-       Creates progressive reveal effect */
 }
 
 /* Badge Card Container */
 .badge-card {
-    /* Individual badge card styling */
-    
     background: white;
-    /* Clean white background
-       Standard card appearance
-       Contrasts with page gradient */
-    
     border-radius: 20px;
-    /* Large rounded corners
-       Matches stat boxes and filters
-       Creates cohesive design */
-    
     padding: 2rem;
-    /* Even padding all around
-       2rem = 32px breathing room
-       Creates spacious card interior */
-    
     text-align: center;
-    /* Centers all content
-       Standard for badge displays
-       Creates organized appearance */
-    
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-    /* Soft shadow for depth
-       Slightly less than stat boxes (8px)
-       Subtle elevation effect */
-    
-    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    /* Advanced easing curve transition
-       0.4s: slightly longer than usual
-       cubic-bezier: custom acceleration (bouncy feel)
-       Creates playful, game-like animation
-       Bounce-back effect on hover */
-    
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Bouncy animation */
     position: relative;
-    /* Creates positioning context
-       Needed for absolute pseudo-elements
-       Enables z-index stacking */
-    
     overflow: hidden;
-    /* CRITICAL: Contains pseudo-element overlay
-       Prevents effects from extending outside
-       Clips animations to card bounds */
-    
     cursor: pointer;
-    /* Pointing hand cursor
-       Indicates cards are clickable/interactive
-       Suggests more info available */
 }
 
-/* Badge Card Background Overlay */
+/* Gradient overlay for hover effect */
 .badge-card::before {
-    /* Pseudo-element for hover gradient effect */
-    
     content: '';
-    /* Required for pseudo-element */
-    
     position: absolute;
-    /* Covers entire card */
-    
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    /* Fills card completely */
-    
     background: linear-gradient(135deg, rgba(37, 99, 235, 0.05), rgba(59, 130, 246, 0.05));
-    /* Very subtle blue gradient overlay
-       rgba at 5% opacity (barely visible)
-       Only appears on hover */
-    
     opacity: 0;
-    /* Invisible by default
-       Fades in on hover */
-    
     transition: opacity 0.3s ease;
-    /* Smooth fade transition
-       Creates gentle appearance effect */
 }
 
-/* Badge Card Overlay On Hover */
 .badge-card:hover::before {
-    /* Shows gradient overlay on hover */
-    
     opacity: 1;
-    /* Fully visible (at its 5% background opacity)
-       Adds subtle tint to card
-       Enhances hover feedback */
 }
 
-/* Badge Card Hover State */
 .badge-card:hover {
-    /* Effects when hovering over badge card */
-    
     transform: translateY(-10px) scale(1.02);
-    /* Combined transforms:
-       translateY(-10px): lifts card up 10px
-       scale(1.02): enlarges to 102% size
-       Creates dynamic, engaging hover
-       More dramatic than stat boxes (5px) */
-    
     box-shadow: 0 15px 40px rgba(37, 99, 235, 0.2);
-    /* Enhanced blue shadow
-       0: centered
-       15px: much deeper (was 4px)
-       40px: larger blur
-       Blue tint at 20% opacity
-       Creates strong floating effect */
 }
 
-/* Earned Badge Card Style */
+/* Earned Badge Special Styling */
 .badge-card.earned {
-    /* Special styling for earned/unlocked badges */
-    
     background: linear-gradient(135deg, #fff 0%, #e0e7ff 100%);
-    /* Subtle gradient background
-       White to light blue
-       Distinguishes from locked badges (solid white)
-       Creates sense of achievement */
 }
 
-/* Locked Badge Card Style */
+/* Locked Badge Styling */
 .badge-card.locked {
-    /* Styling for badges not yet earned */
-    
     opacity: 0.7;
-    /* Reduced opacity (70%)
-       Makes card appear faded/inactive
-       Visual cue that badge is locked */
 }
 
-/* Locked Badge Icon Effect */
 .badge-card.locked .badge-icon {
-    /* Additional styling for locked badge icons */
-    
-    filter: grayscale(1);
-    /* CRITICAL: Removes all color from icon
-       grayscale(1) = 100% grayscale
-       Creates desaturated, inactive appearance
-       Strong visual indicator of locked state */
+    filter: grayscale(1); /* Remove color from locked badges */
 }
 
-/* Earned Badge Status Label */
+/* Status Labels */
 .earned-badge, .locked-badge {
-    /* Small status labels on badge cards */
-    
     position: absolute;
-    /* Positions relative to .badge-card parent
-       Removes from document flow
-       Allows precise placement */
-    
     top: 1rem;
     right: 1rem;
-    /* Positions in top-right corner
-       1rem: inset from edges
-       Classic position for status badges */
-    
     padding: 0.4rem 0.9rem;
-    /* Compact padding for small badge
-       0.4rem: tight vertical
-       0.9rem: wider horizontal for text */
-    
     border-radius: 20px;
-    /* Fully rounded (pill shape)
-       Matches button styling
-       Creates cohesive design */
-    
     font-size: 0.75rem;
-    /* Small text (12px at default)
-       Appropriate for status labels
-       Doesn't overwhelm card */
-    
     font-weight: 700;
-    /* Bold text
-       Ensures legibility at small size
-       Creates emphasis */
-    
     text-transform: uppercase;
-    /* All capitals
-       "Earned" becomes "EARNED"
-       Common pattern for status labels */
-    
     letter-spacing: 0.5px;
-    /* Adds space between letters
-       Improves readability of uppercase
-       Creates polished appearance */
-    
     z-index: 10;
-    /* High stacking order
-       Ensures badge appears above other elements
-       Always visible on top */
 }
 
-/* Earned Badge Label Specific Style */
 .earned-badge {
-    /* Green badge for earned achievements */
-    
     background: linear-gradient(135deg, #10b981, #059669);
-    /* Green gradient
-       Bright to dark green
-       Universal "success" color
-       Creates positive feeling */
-    
     color: white;
-    /* White text for contrast
-       Ensures readability on green
-       Standard for colored badges */
-    
     animation: pulse 2s ease-in-out infinite;
-    /* Pulsing animation
-       pulse: defined below
-       2s: slow, gentle rhythm
-       infinite: loops forever
-       Draws attention to achievement */
 }
 
-/* Pulse Animation for Earned Badges */
+/* Pulsing animation for earned badges */
 @keyframes pulse {
-    /* Subtle scale animation for earned badges */
-    
-    0%, 100% { 
-        transform: scale(1); 
-        /* Normal size at start and end
-           Creates loop point */
-    }
-    
-    50% { 
-        transform: scale(1.05); 
-        /* 5% larger at midpoint
-           Subtle "breathing" effect
-           Draws eye without being distracting */
-    }
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
 }
 
-/* Locked Badge Label Style */
 .locked-badge {
-    /* Gray badge for locked achievements */
-    
     background: #94a3b8;
-    /* Medium gray background
-       Neutral, inactive appearance
-       Contrasts with green earned badge */
-    
     color: white;
-    /* White text for readability
-       Standard on dark backgrounds */
 }
 
 /* Badge Category Label */
 .badge-category {
-    /* Category label above badge icon */
-    
     display: inline-block;
-    /* Inline but respects padding/margins
-       Shrinks to fit content
-       Allows centering with text-align */
-    
     margin-bottom: 1rem;
-    /* Space below category label
-       1rem = 16px
-       Separates from badge icon */
-    
     font-size: 0.75rem;
-    /* Small text (12px)
-       Appropriate for metadata
-       Doesn't compete with badge name */
-    
     font-weight: 700;
-    /* Bold text
-       Ensures legibility at small size
-       Creates emphasis */
-    
     text-transform: uppercase;
-    /* All capitals
-       Common pattern for category labels
-       Creates visual distinction */
-    
     letter-spacing: 1px;
-    /* Wider letter spacing
-       More pronounced than status badges (0.5px)
-       Improves readability of uppercase */
-    
     padding: 0.4rem 1rem;
-    /* Padding: vertical horizontal
-       0.4rem: compact height
-       1rem: generous horizontal for readability */
-    
     border-radius: 15px;
-    /* Rounded corners
-       Smaller radius than cards (20px)
-       Creates nested visual hierarchy */
-    
     z-index: 10;
-    /* High stacking order
-       Appears above gradient overlays */
-    
     position: relative;
-    /* Creates positioning context
-       Needed for z-index to work */
 }
 
-/* Category Colors - Participation */
+/* Category Colors */
 .category-participation {
-    /* Blue styling for participation badges */
-    
     color: #2563eb;
-    /* Primary blue text
-       Matches site brand color
-       Most common category */
-    
     background: rgba(37, 99, 235, 0.1);
-    /* Light blue background
-       Same blue at 10% opacity
-       Creates subtle tinted effect */
 }
 
-/* Category Colors - Leadership */
 .category-leadership {
-    /* Purple styling for leadership badges */
-    
     color: #8b5cf6;
-    /* Purple text
-       Distinguished from participation blue
-       Conveys authority/achievement */
-    
     background: rgba(139, 92, 246, 0.1);
-    /* Light purple background
-       10% opacity for subtle effect */
 }
 
-/* Category Colors - Impact */
 .category-impact {
-    /* Green styling for impact badges */
-    
     color: #10b981;
-    /* Green text
-       Positive, growth-oriented color
-       Suggests meaningful contribution */
-    
     background: rgba(16, 185, 129, 0.1);
-    /* Light green background
-       10% opacity subtle tint */
 }
 
-/* Category Colors - Milestone */
 .category-milestone {
-    /* Orange styling for milestone badges */
-    
     color: #f59e0b;
-    /* Orange/amber text
-       Warm, celebratory color
-       Stands out as special achievement */
-    
     background: rgba(245, 158, 11, 0.1);
-    /* Light orange background
-       10% opacity subtle tint */
 }
 
 /* Badge Icon Container */
 .badge-icon {
-    /* Circular container for badge icon/image */
-    
     width: 100px;
     height: 100px;
-    /* Fixed square dimensions
-       100x100px = medium-large icon size
-       Consistent sizing across all badges */
-    
     margin: 0 auto 1rem;
-    /* Shorthand margin: top right/left bottom
-       0: no top margin (category provides space)
-       auto: centers horizontally
-       1rem: space below icon */
-    
-    border-radius: 50%;
-    /* CRITICAL: Creates perfect circle
-       50% radius = circle when width = height
-       Works because width and height are equal */
-    
+    border-radius: 50%; /* Perfect circle */
     display: flex;
-    /* Flexbox for icon centering
-       Enables perfect centering of content */
-    
     align-items: center;
-    /* Centers vertically */
-    
     justify-content: center;
-    /* Centers horizontally
-       Icon content perfectly centered in circle */
-    
     font-size: 3rem;
-    /* Large size for emoji/text icons
-       3rem = 48px at default
-       Fallback for non-image icons */
-    
     position: relative;
-    /* Creates positioning context
-       Needed for z-index */
-    
     z-index: 5;
-    /* Medium stacking order
-       Above background, below status badges */
-    
     transition: transform 0.3s ease;
-    /* Smooth transform animation
-       Animates rotation and scale on hover */
-    
     padding: 15px;
-    /* Inner padding
-       Creates space between icon and circle edge
-       Prevents icon from touching borders */
 }
 
 /* Badge Icon Image Styling */
 .badge-icon img {
-    /* Styles for image-based icons (from Flaticon, etc.) */
-    
     width: 60%;
     height: 60%;
-    /* 60% of container (60px out of 100px)
-       Creates padding effect
-       Prevents icon from filling entire circle */
-    
-    object-fit: contain;
-    /* CRITICAL: Maintains image aspect ratio
-       contain: fits entire image within box
-       No cropping, no distortion
-       May leave empty space */
-    
+    object-fit: contain; /* Maintain aspect ratio */
     transition: transform 0.3s ease;
-    /* Smooth scale animation
-       Separate from container transform
-       Allows independent icon animation */
 }
 
 /* Badge Icon SVG Styling */
 .badge-icon svg {
-    /* Styles for SVG-based icons */
-    
     width: 100%;
     height: 100%;
-    /* Fills container completely */
-      /* SVGs scale perfectly without quality loss */
-    
     filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.1));
-    /* Adds shadow to SVG
-       0: centered horizontally
-       2px: shadow below
-       8px: soft blur */
 }

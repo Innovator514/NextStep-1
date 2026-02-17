@@ -1,6 +1,8 @@
+/* Map Page Styles */
+
 #map {
     position: fixed;
-    top: 70px;
+    top: 70px; /* Below navbar */
     left: 0;
     right: 0;
     bottom: 0;
@@ -69,7 +71,7 @@
     color: #334155;
     padding: 8px 10px;
     border-radius: 8px;
-    border-left: 3px solid transparent;
+    border-left: 3px solid transparent; /* Reserve space for hover effect */
     transition: all 0.2s ease;
     user-select: none;
 }
@@ -99,7 +101,7 @@
     font-weight: 600;
 }
 
-/* Category-specific colors */
+/* Category-specific border colors on hover */
 .filter-political:hover {
     border-left-color: #3b82f6;
 }

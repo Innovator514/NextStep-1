@@ -1,140 +1,496 @@
 /* Settings Page Specific Styles */
+/* This stylesheet contains all styles for the user settings/profile page
+   Includes account settings card, form inputs, buttons, and logout functionality */
 
+/* Body Base Styles */
 body {
+    /* Styles for entire page body */
+    
     margin: 0;
+    /* Removes default browser margin
+       Browsers add 8px margin to body by default
+       Starting from zero gives precise control over spacing
+       Prevents unwanted white space around page edges */
+    
     font-family: 'Open Sans', sans-serif;
+    /* Font stack for all text on page
+       'Open Sans': Google Font (primary choice)
+       Quotes needed for fonts with spaces in name
+       sans-serif: generic fallback if Open Sans fails to load
+       Ensures consistent typography across entire settings page */
+    
     background: linear-gradient(135deg, #e0e7ff, #f0f4ff);
+    /* Diagonal gradient background
+       135deg: angle from top-left to bottom-right
+       #e0e7ff: light lavender at start
+       #f0f4ff: lighter blue-white at end
+       Creates soft, calming environment for settings page
+       Matches site-wide design aesthetic */
 }
 
+/* Settings Main Container */
 .settings-container {
+    /* Outer wrapper for entire settings page content */
+    
     display: flex;
+    /* Flexbox layout for centering
+       Enables powerful alignment capabilities
+       Better than margin: auto for vertical + horizontal centering */
+    
     justify-content: center;
-    padding: 120px 20px; /* 120px top clears the fixed nav */
+    /* Centers content horizontally
+       Pushes settings card to horizontal center
+       Works because flex-direction is row (default) */
+    
+    padding: 120px 20px;
+    /* Padding: vertical horizontal
+       120px top/bottom: large space clears fixed navigation
+       Provides breathing room above and below card
+       20px left/right: prevents card touching screen edges on mobile
+       Ensures content never touches viewport boundaries */
 }
 
+/* Settings Card Container */
 .settings-card {
+    /* Main card containing all settings form elements */
+    
     background: white;
+    /* Clean white background
+       Contrasts strongly with gradient page background
+       Makes form area clearly defined and professional
+       Standard for content cards */
+    
     width: 100%;
+    /* Takes full width of parent container
+       Allows card to be responsive to screen size
+       Will be constrained by max-width below */
+    
     max-width: 500px;
+    /* Maximum width constraint
+       500px is comfortable width for form inputs
+       Prevents card from getting too wide on large screens
+       Long input fields become hard to scan/fill
+       Works with width: 100% for responsive behavior */
+    
     padding: 3rem;
+    /* Even padding all around card interior
+       3rem = 48px at default font size
+       Generous spacing creates premium, spacious feel
+       Prevents form elements from touching card edges
+       Makes form comfortable to interact with */
+    
     border-radius: 20px;
+    /* Large rounded corners (20px radius)
+       Matches site design language (badges, events use same)
+       Creates modern, friendly appearance
+       Softens otherwise sharp rectangular form */
+    
     box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+    /* Soft shadow for depth and elevation
+       0: centered horizontally (no offset)
+       10px: shadow 10px below card (floating effect)
+       40px: large blur radius (very soft, diffused)
+       rgba(0,0,0,0.1): black at 10% opacity (subtle)
+       Creates card "floating" above gradient background
+       Depth helps focus attention on form */
 }
 
+/* Settings Card Main Title */
 .settings-card h1 {
+    /* Page title at top of settings card */
+    
     text-align: center;
+    /* Centers title text horizontally
+       Standard pattern for form headers
+       Creates balanced, professional appearance
+       Draws eye to center of card */
+    
     color: #1e3a8a;
+    /* Dark blue color
+       Hex format: #RRGGBB
+       Darker than standard blue (#2563eb)
+       Creates strong contrast on white background
+       Establishes visual hierarchy as main heading */
+    
     margin-bottom: 2rem;
+    /* Large space below title
+       2rem = 32px at default size
+       Separates title from form sections below
+       Creates clear visual grouping
+       Breathing room improves readability */
 }
 
+/* Settings Section Container */
 .settings-section {
+    /* Container for each settings category (profile, password, etc.) */
+    
     margin-bottom: 2rem;
+    /* Space between setting sections
+       2rem = 32px
+       Creates visual separation between different form groups
+       Prevents sections from feeling cramped
+       Improves form scannability and organization
+       Users can easily distinguish different setting categories */
 }
 
+/* Settings Section Subheading */
 .settings-section h2 {
+    /* Subheading for each settings section */
+    
     color: #1e40af;
+    /* Medium-dark blue color
+       Slightly lighter than h1 (#1e3a8a)
+       Creates visual hierarchy: h1 > h2
+       Still strong enough to be clear section labels
+       Maintains brand color consistency */
+    
     margin-bottom: 0.75rem;
+    /* Space below section heading
+       0.75rem = 12px
+       Moderate spacing before input fields
+       Keeps heading connected to its section
+       Tighter than h1 margin (2rem) reinforces hierarchy */
 }
 
-/* font-size: 1rem (16px) prevents iOS auto-zoom on focus */
+/* Settings Input Fields */
 .settings-section input {
+    /* Text input fields for all settings forms */
+    
     width: 100%;
+    /* Full width of parent container
+       Inputs span entire card width (minus padding)
+       Creates consistent, aligned form layout
+       Easy to scan and fill out
+       Mobile-friendly - maximizes usable input space */
+    
     padding: 0.9rem;
+    /* Even padding inside input field
+       0.9rem = 14.4px at default
+       Generous tap target for mobile (min 44x44px recommended)
+       Comfortable spacing for text entry
+       Makes inputs feel spacious and easy to use */
+    
     border: 2px solid #e2e8f0;
+    /* Medium border with light gray color
+       2px: substantial border (not 1px thin line)
+       #e2e8f0: very light gray (subtle)
+       Creates defined input area without being harsh
+       Professional, clean appearance */
+    
     border-radius: 10px;
+    /* Rounded corners (10px radius)
+       Smaller than card (20px) creates nested visual hierarchy
+       Modern, friendly appearance
+       Matches button styling for consistency
+       Softer than sharp rectangular inputs */
+    
     margin-bottom: 0.75rem;
+    /* Space below each input
+       0.75rem = 12px
+       Separates multiple inputs in same section
+       Prevents fields from feeling cramped
+       Allows errors/labels space to appear below */
+    
     font-size: 1rem;
+    /* Font size matching body text
+       1rem = 16px at default (browser default)
+       CRITICAL: 16px prevents iOS zoom on focus
+       Below 16px causes unwanted zoom behavior on iPhone
+       Ensures comfortable, readable text entry */
 }
 
+/* Settings Action Buttons */
 .settings-section button {
+    /* Primary action buttons (Save, Update, etc.) */
+    
     width: 100%;
+    /* Full width of section
+       Matches input field width
+       Creates aligned, consistent form layout
+       Large clickable area improves usability
+       Clear, prominent call-to-action */
+    
     padding: 1rem;
+    /* Even padding all around button
+       1rem = 16px
+       Slightly more than inputs (0.9rem) makes button prominent
+       Generous tap target for mobile accessibility
+       Creates comfortable, easy-to-click button */
+    
     background: linear-gradient(135deg, #2563eb, #3b82f6);
+    /* Blue gradient background
+       135deg: diagonal angle matching site design
+       #2563eb to #3b82f6: darker to lighter blue
+       Matches site primary brand colors
+       Creates premium, modern button appearance
+       More visually interesting than solid color */
+    
     color: white;
+    /* White text for maximum contrast
+       Ensures readability on blue gradient
+       Standard for primary action buttons
+       High contrast meets accessibility standards */
+    
     border-radius: 10px;
+    /* Rounded corners matching inputs
+       10px creates visual consistency across form
+       Modern, friendly appearance
+       Cohesive design language */
+    
     border: none;
+    /* Removes default button border
+       Browsers add borders to buttons by default
+       Gradient provides enough definition
+       Cleaner, more modern appearance */
+    
     font-size: 1rem;
+    /* Same size as input text
+       Creates consistent typography
+       Easy to read button labels */
+    
     font-weight: 700;
+    /* Bold text (700 on scale of 100-900)
+       Makes button text stand out
+       Creates emphasis for primary action
+       Improves scannability of form */
+    
     cursor: pointer;
+    /* Changes cursor to pointing hand on hover
+       Indicates button is clickable
+       Standard UI pattern for interactive elements
+       Provides immediate visual feedback */
 }
 
-/* red = destructive action */
+/* Logout Button */
 .logout-button {
+    /* Destructive action button for logging out */
+    
     width: 100%;
+    /* Full width like other buttons
+       Maintains consistent button sizing */
+    
     margin-top: 1rem;
+    /* Space above logout button
+       1rem = 16px
+       Separates from settings sections above
+       Less than section spacing (2rem) keeps it connected
+       But enough space to indicate different function */
+    
     padding: 1rem;
+    /* Same padding as regular buttons
+       Creates consistent button size
+       Comfortable tap target */
+    
     background: #ef4444;
+    /* Red background (no gradient)
+       #ef4444: bright red color
+       CRITICAL: Red indicates destructive/dangerous action
+       Universal color for delete/logout/danger
+       Solid color (not gradient) feels more serious
+       Makes logout clearly different from save buttons */
+    
     color: white;
+    /* White text for contrast on red
+       Ensures readability
+       Standard for colored buttons */
+    
     border-radius: 10px;
+    /* Rounded corners matching other buttons
+       Maintains design consistency */
+    
     border: none;
+    /* Removes default border
+       Clean, modern appearance */
+    
     font-size: 1rem;
+    /* Same size as other buttons
+       Consistent typography */
+    
     font-weight: 700;
+    /* Bold text like other buttons
+       Creates emphasis and clarity */
+    
     cursor: pointer;
+    /* Pointing hand cursor
+       Indicates clickability
+       Standard interaction pattern */
 }
 
-/* ===================================
-   STATES
-   =================================== */
+/* Mobile Responsive Styles */
+@media (max-width: 768px) {
+    /* Media query: applies when screen is 768px wide or less
+       Tablets and mobile devices in portrait mode
+       768px is common breakpoint (iPad width)
+       Optimizes settings page for small screens */
+    
+    .settings-container {
+        padding: 100px 15px;
+        /* Reduced padding on mobile
+           100px top: less clearance needed for mobile nav (was 120px)
+           15px sides: narrower to maximize card width (was 20px)
+           Adapts to limited screen real estate */
+    }
+    
+    .settings-card {
+        padding: 2rem;
+        /* Reduced card padding on mobile
+           2rem = 32px (was 3rem = 48px)
+           Maximizes usable form space on small screens
+           Prevents excessive white space
+           Still comfortable, just more compact */
+    }
+    
+    .settings-card h1 {
+        font-size: 1.75rem;
+        /* Smaller title on mobile
+           1.75rem = 28px (default h1 is larger)
+           Fits comfortably on narrow screens
+           Still prominent but not overwhelming */
+    }
+    
+    .settings-section h2 {
+        font-size: 1.25rem;
+        /* Smaller section headings on mobile
+           1.25rem = 20px
+           Maintains hierarchy with h1 (1.75rem)
+           Appropriate size for mobile display */
+    }
+}
 
+/* Focus States for Accessibility */
 .settings-section input:focus {
+    /* Styles when input field receives focus (clicked/tabbed) */
+    
     outline: none;
+    /* Removes default browser outline
+       Default blue outline can clash with design */
+    
     border-color: #2563eb;
+    /* Changes border to blue on focus
+       #2563eb: primary brand color
+       Provides clear visual feedback
+       Shows which field is active */
+    
     box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    /* Adds blue glow around focused input
+       0 0 0: no offset (centered)
+       3px: glow width
+       rgba(37, 99, 235, 0.1): blue at 10% opacity
+       Creates subtle highlight effect
+       Improves accessibility and user experience */
 }
 
+/* Button Hover States */
 .settings-section button:hover {
+    /* Effects when hovering over action buttons */
+    
     transform: translateY(-2px);
+    /* Lifts button up 2 pixels
+       Negative Y = upward movement
+       Creates tactile "lift" effect
+       Makes button feel responsive */
+    
     box-shadow: 0 6px 20px rgba(37, 99, 235, 0.3);
+    /* Adds blue shadow on hover
+       0: centered horizontally
+       6px: shadow below button
+       20px: soft blur
+       rgba blue at 30% opacity
+       Enhances lift effect
+       Provides visual feedback */
+    
     transition: all 0.3s ease;
+    /* Smooth transition for hover effects
+       all: applies to transform and box-shadow
+       0.3s: third of a second (responsive feel)
+       ease: smooth acceleration curve */
 }
 
 .logout-button:hover {
+    /* Hover effect for logout button */
+    
     background: #dc2626;
+    /* Darker red on hover
+       #dc2626: darker than default #ef4444
+       Provides visual feedback
+       Reinforces dangerous action */
+    
     transform: translateY(-2px);
+    /* Same lift effect as other buttons
+       Consistent interaction pattern */
+    
     box-shadow: 0 6px 20px rgba(239, 68, 68, 0.3);
+    /* Red shadow instead of blue
+       Matches button color
+       Creates cohesive hover effect */
+    
     transition: all 0.3s ease;
+    /* Smooth transition matching other buttons */
 }
 
+/* Active/Pressed Button States */
 .settings-section button:active,
 .logout-button:active {
+    /* Styles when button is being clicked */
+    
     transform: translateY(0);
+    /* Returns to normal position (no lift)
+       Creates "pressed down" effect
+       Provides tactile feedback */
+    
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    /* Reduced shadow when pressed
+       Enhances pressed-down appearance
+       Button feels like it's being pushed in */
 }
 
+/* Disabled Input States */
 .settings-section input:disabled {
+    /* Styles for disabled/readonly input fields */
+    
     background-color: #f1f5f9;
+    /* Light gray background
+       Indicates field is not editable
+       Visual cue for disabled state */
+    
     cursor: not-allowed;
+    /* Not-allowed cursor (circle with line)
+       Clear indication field can't be edited
+       Standard pattern for disabled elements */
+    
     opacity: 0.6;
+    /* Reduced opacity (60%)
+       Makes field appear faded/inactive
+       Universal indicator of disabled state */
 }
 
+/* Input Validation States */
 .settings-section input.error {
+    /* Error state for invalid input */
+    
     border-color: #ef4444;
+    /* Red border indicates error
+       Immediate visual feedback
+       Universal error color */
+    
     background-color: #fef2f2;
+    /* Very light red background
+       Subtle error indication
+       Doesn't overwhelm user */
 }
 
 .settings-section input.success {
+    /* Success state for valid input */
+    
     border-color: #10b981;
+    /* Green border indicates success
+       Positive feedback
+       Universal success color */
+    
     background-color: #f0fdf4;
+    /* Very light green background
+       Subtle success indication
+       Reinforces valid state */
 }
 
-/* ===================================
-   RESPONSIVE
-   =================================== */
-
-@media (max-width: 768px) {
-    .settings-container {
-        padding: 100px 15px;
-    }
-
-    .settings-card {
-        padding: 2rem;
-    }
-
-    .settings-card h1 {
-        font-size: 1.75rem;
-    }
-
-    .settings-section h2 {
-        font-size: 1.25rem;
-    }
-}
+/* End of settings.css */
