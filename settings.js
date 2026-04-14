@@ -15,13 +15,13 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBohx_5opFEgh2Xb-EO977v3KzQJ89CAf4",
-  authDomain: "nextstep-civic.firebaseapp.com",
-  projectId: "nextstep-civic",
-  storageBucket: "nextstep-civic.firebasestorage.app",
-  messagingSenderId: "428056422654",
-  appId: "1:428056422654:web:2d6ff0d08002134b3cddaf",
-  measurementId: "G-E0YCVB3KK9"
+  apiKey: "AIzaSyArZYz6UMheUgBVrNeWvxWml-0zDTbNur0",
+  authDomain: "nextstep-12b9a.firebaseapp.com",
+  projectId: "nextstep-12b9a",
+  storageBucket: "nextstep-12b9a.firebasestorage.app",
+  messagingSenderId: "630600034259",
+  appId: "1:630600034259:web:6b6284e147a6f79cda7126",
+  measurementId: "G-WH3JL7Y7BR"
 };
 
 const app = initializeApp(firebaseConfig);
