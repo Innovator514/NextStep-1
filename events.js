@@ -56,29 +56,19 @@ function markEventCompleted(eventId) {
         return;
     }
     
-    // Check if already completed
     if (isEventCompleted(eventId)) {
         return;
     }
     
-    // Add to completed events
     const completedEvents = loadCompletedEvents();
     completedEvents.push(eventId);
     saveCompletedEvents(completedEvents);
-    console.log('Event marked as completed:', eventId);
     
-    // Load current user progress
     const userProgress = loadUserProgress();
-    console.log('Current user progress:', userProgress);
     
-    // Update badge progress based on event
     if (event.badgeProgress) {
-        console.log('Updating badge progress with:', event.badgeProgress);
-        
-        // Update each relevant badge progress
         for (const [progressKey, amount] of Object.entries(event.badgeProgress)) {
             if (amount > 0) {
-                console.log(`Updating ${progressKey} by ${amount}`);
                 if (progressKey === 'isFoundingMember') {
                     userProgress[progressKey] = true;
                 } else {
@@ -86,15 +76,9 @@ function markEventCompleted(eventId) {
                 }
             }
         }
-        
-        console.log('Updated user progress:', userProgress);
-        
-        // Save updated progress
         saveUserProgress(userProgress);
-        console.log('Progress saved to localStorage');
     }
     
-    // Re-render events to update button state
     renderEvents(currentFilter);
 }
 
@@ -106,29 +90,19 @@ function markEventUncompleted(eventId) {
         return;
     }
     
-    // Check if event is completed
     if (!isEventCompleted(eventId)) {
         return;
     }
     
-    // Remove from completed events
     const completedEvents = loadCompletedEvents();
     const updatedCompleted = completedEvents.filter(id => id !== eventId);
     saveCompletedEvents(updatedCompleted);
-    console.log('Event marked as uncompleted:', eventId);
     
-    // Load current user progress
     const userProgress = loadUserProgress();
-    console.log('Current user progress before subtraction:', userProgress);
     
-    // Subtract badge progress based on event
     if (event.badgeProgress) {
-        console.log('Subtracting badge progress with:', event.badgeProgress);
-        
-        // Subtract each relevant badge progress
         for (const [progressKey, amount] of Object.entries(event.badgeProgress)) {
             if (amount > 0) {
-                console.log(`Subtracting ${progressKey} by ${amount}`);
                 if (progressKey === 'isFoundingMember') {
                     userProgress[progressKey] = false;
                 } else {
@@ -136,15 +110,9 @@ function markEventUncompleted(eventId) {
                 }
             }
         }
-        
-        console.log('Updated user progress after subtraction:', userProgress);
-        
-        // Save updated progress
         saveUserProgress(userProgress);
-        console.log('Progress saved to localStorage');
     }
     
-    // Re-render events to update button state
     renderEvents(currentFilter);
 }
 
@@ -226,17 +194,10 @@ const filterButtons = document.querySelectorAll('.filter-btn');
 
 filterButtons.forEach(button => {
     button.addEventListener('click', () => {
-        // Remove active class from all buttons
         filterButtons.forEach(btn => btn.classList.remove('active'));
-        
-        // Add active class to clicked button
         button.classList.add('active');
-        
-        // Get filter category
         const category = button.getAttribute('data-category');
         currentFilter = category;
-        
-        // Render filtered events
         renderEvents(category);
     });
 });
@@ -250,9 +211,52 @@ function handleNewsletter(event) {
     input.value = '';
 }
 
-// Initial render
-renderEvents('all');
+// Load events from Firestore and merge with local data
+async function loadFirestoreEvents() {
+    try {
+        const { initializeApp, getApps } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js');
+        const { getFirestore, collection, getDocs } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyArZYz6UMheUgBVrNeWvxWml-0zDTbNur0",
+            authDomain: "nextstep-12b9a.firebaseapp.com",
+            projectId: "nextstep-12b9a",
+            storageBucket: "nextstep-12b9a.firebasestorage.app",
+            messagingSenderId: "630600034259",
+            appId: "1:630600034259:web:6b6284e147a6f79cda7126",
+            measurementId: "G-WH3JL7Y7BR"
+        };
+
+        const app = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        const snapshot = await getDocs(collection(db, 'events'));
+        const firestoreEvents = [];
+
+        snapshot.forEach(doc => {
+            const data = doc.data();
+            const alreadyExists = window.eventsData.some(e => e.id === doc.id);
+            if (!alreadyExists) {
+                firestoreEvents.push({ ...data, id: doc.id });
+            }
+        });
+
+        if (firestoreEvents.length > 0) {
+            window.eventsData = [...window.eventsData, ...firestoreEvents];
+        }
+
+        console.log(`Loaded ${firestoreEvents.length} events from Firestore`);
+    } catch (err) {
+        console.error('Error loading Firestore events:', err);
+    }
+
+    // Always render after attempting to load
+    renderEvents(currentFilter);
+}
 
 // Make functions globally available
 window.markEventCompleted = markEventCompleted;
 window.markEventUncompleted = markEventUncompleted;
+
+// Initial load — fetch Firestore events then render
+loadFirestoreEvents();
