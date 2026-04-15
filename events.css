@@ -775,6 +775,10 @@
        Vibrant yet professional */
 }
 
+.event-header.religious {
+    background: linear-gradient(135deg, #f59e0b, #d97706);
+}
+
 /* Mobile Responsive Styles */
 /* Tablet (769px - 1024px) */
 @media (max-width: 1024px) and (min-width: 769px) {
