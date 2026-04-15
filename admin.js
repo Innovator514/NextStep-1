@@ -466,15 +466,32 @@ window.saveAdminEvent = async function() {
       if (window.eventsData) window.eventsData.push(eventData);
     }
 
-  window.closeAdminModal();
-if (typeof renderEvents === 'function') {
-  renderEvents(window.currentFilter || 'all');
-  setTimeout(() => addAdminButtonsToCards(), 100);
+ // NEW
+window.closeAdminModal();
+
+try {
+  if (typeof renderEvents === 'function') {
+    renderEvents(window.currentFilter || 'all');
+    setTimeout(() => {
+      if (typeof addAdminButtonsToCards === 'function') {
+        addAdminButtonsToCards();
+      }
+    }, 100);
+  }
+} catch (renderErr) {
+  console.warn('renderEvents not available on this page:', renderErr);
 }
-// ✅ Update map if on map page
-if (typeof refreshMapMarkers === 'function') {
-  refreshMapMarkers();
-}
+
+setTimeout(() => {
+  try {
+    if (typeof refreshMapMarkers === 'function') {
+      refreshMapMarkers();
+    }
+  } catch (mapErr) {
+    console.warn('refreshMapMarkers not available on this page:', mapErr);
+  }
+}, 150);
+
 alert(editingId ? '✅ Event updated!' : '✅ Event added!');
   } catch (err) {
     console.error('Error saving event:', err);
@@ -499,15 +516,32 @@ window.confirmDeleteEvent = async function() {
     if (window.eventsData) {
       window.eventsData = window.eventsData.filter(e => e.id !== deletingId);
     }
- window.closeDeleteConfirm();
-if (typeof renderEvents === 'function') {
-  renderEvents(window.currentFilter || 'all');
-  setTimeout(() => addAdminButtonsToCards(), 100);
+// NEW
+window.closeDeleteConfirm();
+
+try {
+  if (typeof renderEvents === 'function') {
+    renderEvents(window.currentFilter || 'all');
+    setTimeout(() => {
+      if (typeof addAdminButtonsToCards === 'function') {
+        addAdminButtonsToCards();
+      }
+    }, 100);
+  }
+} catch (renderErr) {
+  console.warn('renderEvents not available on this page:', renderErr);
 }
-// ✅ Update map if on map page
-if (typeof refreshMapMarkers === 'function') {
-  refreshMapMarkers();
-}
+
+setTimeout(() => {
+  try {
+    if (typeof refreshMapMarkers === 'function') {
+      refreshMapMarkers();
+    }
+  } catch (mapErr) {
+    console.warn('refreshMapMarkers not available on this page:', mapErr);
+  }
+}, 150);
+
 alert('🗑️ Event deleted.');
   } catch (err) {
     console.error('Error deleting event:', err);
