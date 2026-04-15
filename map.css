@@ -122,6 +122,10 @@
     border-left-color: #b325eb;
 }
 
+.filter-religious:hover {
+    border-left-color: #d97706;
+}
+
 /* Zoom control styling */
 .leaflet-control-zoom {
     border: none !important;
