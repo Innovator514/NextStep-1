@@ -271,6 +271,7 @@ function renderAdminUI() {
               <option value="innovation">Innovation</option>
               <option value="environmental">Environmental</option>
               <option value="education">Education</option>
+              <option value="religious">Religious</option>
             </select>
           </div>
           <div class="admin-form-group">
