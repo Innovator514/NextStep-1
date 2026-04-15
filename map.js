@@ -47,6 +47,7 @@ var youth = L.layerGroup();
 var innovation = L.layerGroup();
 var environmental = L.layerGroup();
 var education = L.layerGroup();
+var religious = L.layerGroup();
 
 // Define custom icons with shadows for each category
 const customIcons = {
