@@ -318,3 +318,16 @@ loadFirestoreEventsForMap();
 
 // Zoom control
 L.control.zoom({ position: 'bottomleft' }).addTo(map);
+
+// Refresh all map markers (called by admin after add/edit/delete)
+window.refreshMapMarkers = function() {
+  // Clear all category layer groups
+  political.clearLayers();
+  youth.clearLayers();
+  innovation.clearLayers();
+  environmental.clearLayers();
+  education.clearLayers();
+
+  // Re-add all markers from current eventsData
+  window.eventsData.forEach(event => addMarker(event));
+};
