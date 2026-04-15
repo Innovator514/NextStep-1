@@ -127,7 +127,8 @@ const categoryIconColors = {
 // Add a single event marker to the map
 function addMarker(event) {
     // Skip if no valid coordinates
-    if (!event.lat || !event.lng) return;
+    // In addMarker(), replace the guard at the top
+if (event.lat == null || event.lng == null || isNaN(event.lat) || isNaN(event.lng)) return;
 
     // Use default icon if category icon doesn't exist
     const icon = customIcons[event.category] || customIcons['political'];
@@ -209,18 +210,38 @@ async function loadFirestoreEventsForMap() {
 
         const snapshot = await getDocs(collection(db, 'events'));
 
+        // ✅ Clear all layer groups first
+        political.clearLayers();
+        youth.clearLayers();
+        innovation.clearLayers();
+        environmental.clearLayers();
+        education.clearLayers();
+
+        // ✅ Re-add hardcoded events from events-data.js first
+        window.eventsData.forEach(event => addMarker(event));
+
+        // ✅ Now add ALL Firestore events, overwriting duplicates
         snapshot.forEach(doc => {
             const data = doc.data();
-            const alreadyExists = window.eventsData.some(e => e.id === doc.id);
-            if (!alreadyExists) {
-                const newEvent = { ...data, id: doc.id };
+            const newEvent = { 
+                ...data, 
+                id: doc.id,
+                lat: parseFloat(data.lat),
+                lng: parseFloat(data.lng)
+            };
+
+            // Update or add to eventsData
+            const existingIdx = window.eventsData.findIndex(e => e.id === doc.id);
+            if (existingIdx !== -1) {
+                window.eventsData[existingIdx] = newEvent;
+            } else {
                 window.eventsData.push(newEvent);
-                // Add marker just for this new event
-                addMarker(newEvent);
             }
+
+            addMarker(newEvent);
         });
 
-        console.log('Firestore events loaded for map');
+        console.log('✅ Firestore events loaded for map:', snapshot.size);
     } catch (err) {
         console.error('Error loading Firestore events for map:', err);
     }
