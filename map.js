@@ -5,17 +5,20 @@ var map = L.map('map', {
 }).setView(boca, 13);
 
 // Light mode tile layer
-const lightTiles = L.tileLayer('https://tiles.stadiamaps.com/tiles/alidade_smooth/{z}/{x}/{y}{r}.png?api_key=df5eb423-01ad-47a5-9c4f-79c7c1ff975a
-', {
-  maxZoom: 20,
-  attribution: '&copy; <a href="https://openstreetmap.org">OpenStreetMap</a> &copy; <a href="https://stadiamaps.com">Stadia Maps</a>'
-});
+const lightTiles = L.tileLayer(
+  'https://tiles.stadiamaps.com/tiles/alidade_smooth/{z}/{x}/{y}{r}.png?api_key=df5eb423-01ad-47a5-9c4f-79c7c1ff975a', {
+    maxZoom: 20,
+    attribution: '&copy; <a href="https://openstreetmap.org">OpenStreetMap</a> &copy; <a href="https://stadiamaps.com">Stadia Maps</a>'
+  }
+);
 
 // Dark mode tile layer
-const darkTiles = L.tileLayer('https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png', {
-  maxZoom: 20,
-  attribution: '&copy; <a href="https://openstreetmap.org">OpenStreetMap</a> &copy; <a href="https://stadiamaps.com">Stadia Maps</a>'
-});
+const darkTiles = L.tileLayer(
+  'https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png?api_key=df5eb423-01ad-47a5-9c4f-79c7c1ff975a', {
+    maxZoom: 20,
+    attribution: '&copy; <a href="https://openstreetmap.org">OpenStreetMap</a> &copy; <a href="https://stadiamaps.com">Stadia Maps</a>'
+  }
+);
 
 // Function to apply correct tile layer based on theme
 function applyMapTheme() {
