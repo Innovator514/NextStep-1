@@ -13,13 +13,13 @@
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://nextstep-civic.org/map.html" />
     <meta property="og:site_name" content="NextStep" />
-    <meta property="og:title" content="Interactive Civic Events Map – NextStep" />
+    <meta property="og:title" content="Map – NextStep" />
     <meta property="og:description" content="Explore an interactive map of civic events, town halls, and volunteer opportunities happening near you in Boca Raton." />
     <meta property="og:image" content="https://nextstep-civic.org/images/logo.png" />
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Interactive Civic Events Map – NextStep" />
+    <meta name="twitter:title" content="Map – NextStep" />
     <meta name="twitter:description" content="Explore an interactive map of civic events, town halls, and volunteer opportunities in Boca Raton." />
     <meta name="twitter:image" content="https://nextstep-civic.org/images/logo.png" />
 
@@ -30,7 +30,7 @@
       "@type": "WebPage",
       "@id": "https://nextstep-civic.org/map.html",
       "url": "https://nextstep-civic.org/map.html",
-      "name": "Interactive Civic Events Map – NextStep",
+      "name": "Map – NextStep",
       "description": "Explore an interactive map of civic events, town halls, and volunteer opportunities in Boca Raton.",
       "isPartOf": { "@id": "https://nextstep-civic.org/#website" },
       "breadcrumb": {
@@ -58,7 +58,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
 
-    <title>Interactive Civic Events Map – NextStep</title>
+    <title>Map – NextStep</title>
 
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
       integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
@@ -86,21 +86,20 @@
             <li class="navbar-item"><a href="index.html">Home</a></li>
             <li class="navbar-item"><a href="map.html" class="active">Map</a></li>
             <li class="navbar-item"><a href="events.html">Events</a></li>
-            <li class="navbar-item"><a href="chatbot.html">Compass</a></li>
             <li class="navbar-item"><a href="badges.html">Badges</a></li>
+            <li class="navbar-item"><a href="chatbot.html">Compass</a></li>
             <li class="navbar-item"><a href="contact.html">Contact Us</a></li>
+            <li class="navbar-item"><a href="leaderboard.html">Leader Board</a></li>
           </ul>
         </nav>
 
         <div class="nav-right">
-          <!-- Login/Signup at the end (will be replaced by profile dropdown when logged in) -->
-          <div class="navbar-item"><a href="login.html" class="login">Login</a></div>
-          <div class="navbar-item"><a href="signup.html" class="signup">Sign Up</a></div>
+          <li class="navbar-item"><a href="login.html" class="login">Login</a></li>
+          <li class="navbar-item"><a href="signup.html" class="signup">Sign Up</a></li>
         </div>
       </div>
     </div>
   </nav>
-
   <div class="filter-buttons">
     <button onclick="showPolitical()"> Political</button>
     <button onclick="showYouth()"> Youth</button>

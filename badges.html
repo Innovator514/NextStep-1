@@ -81,17 +81,17 @@
             <li class="navbar-item"><a href="index.html">Home</a></li>
             <li class="navbar-item"><a href="map.html">Map</a></li>
             <li class="navbar-item"><a href="events.html">Events</a></li>
-            <li class="navbar-item"><a href="chatbot.html">Compass</a></li>
             <li class="navbar-item"><a href="badges.html" class="active">Badges</a></li>
+            <li class="navbar-item"><a href="chatbot.html">Compass</a></li>
             <li class="navbar-item"><a href="contact.html">Contact Us</a></li>
+            <li class="navbar-item"><a href="leaderboard.html">Leader Board</a></li>
           </ul>
         </nav>
 
-            <div class="nav-right">
-            <!-- Login/Signup at the end (will be replaced by profile dropdown when logged in) -->
-            <li class="navbar-item"><a href="login.html" class="login">Login</a></li>
-            <li class="navbar-item"><a href="signup.html" class="signup">Sign Up</a></li>
-            </div>
+        <div class="nav-right">
+          <li class="navbar-item"><a href="login.html" class="login">Login</a></li>
+          <li class="navbar-item"><a href="signup.html" class="signup">Sign Up</a></li>
+        </div>
       </div>
     </div>
   </nav>
@@ -100,6 +100,39 @@
         <div class="badges-container">
             <h1><i class="fa-solid fa-trophy"></i> Badges & Achievements <i class="fa-solid fa-trophy"></i> </h1>
             <p class="subtitle">Track your civic engagement journey and unlock new milestones</p>
+
+            <!-- ── Streak Banner ── -->
+            <div class="streak-banner" id="streak-banner">
+                <div class="streak-flame-col">
+                    <div class="streak-flame" id="streak-flame-icon">🔥</div>
+                    <div class="streak-count" id="streak-count">0</div>
+                    <div class="streak-label">Day Streak</div>
+                </div>
+
+                <div class="streak-mid-col">
+                    <div class="streak-week-label">Last 7 Days</div>
+                    <div class="streak-dots" id="streak-dots">
+                        <!-- Filled by JS -->
+                    </div>
+                    <div class="streak-next-milestone" id="streak-next-milestone"></div>
+                </div>
+
+                <div class="streak-right-col">
+                    <div class="streak-best-wrap">
+                        <span class="streak-best-icon">🏆</span>
+                        <div>
+                            <div class="streak-best-num" id="streak-best">0</div>
+                            <div class="streak-best-label">Best Streak</div>
+                        </div>
+                    </div>
+                    <button class="streak-checkin-btn" id="streak-checkin-btn" onclick="streakCheckIn()">
+                        <span id="streak-btn-text">✦ Check In Today</span>
+                    </button>
+                    <div class="streak-checked-msg" id="streak-checked-msg" style="display:none;">
+                        ✓ Checked in today!
+                    </div>
+                </div>
+            </div>
 
             <!-- Badge Statistics -->
             <div class="badge-stats">
@@ -127,6 +160,7 @@
                     <button class="filter-btn" onclick="filterBadges('leadership')">Leadership</button>
                     <button class="filter-btn" onclick="filterBadges('impact')">Impact</button>
                     <button class="filter-btn" onclick="filterBadges('milestone')">Milestone</button>
+                    <button class="filter-btn streak-filter-btn" onclick="filterBadges('streak')">🔥 Streak</button>
                 </div>
             </div>
 

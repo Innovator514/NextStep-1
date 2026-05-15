@@ -1,263 +1,458 @@
-// Chat elements
-const chatMessages = document.getElementById('chat-messages');
-const userInput = document.getElementById('user-input');
-const sendButton = document.getElementById('send-button');
+  /* ═══════════════════════════════════════════════════
+     STATE
+  ═══════════════════════════════════════════════════ */
+  const STORAGE_KEY = 'compass_chats_v2';
 
-// Events data
-const eventsData = [
-    {
-        title: "Town Hall Meeting",
-        date: "November 21, 2025",
-        time: "7:00 PM",
-        location: "Mizner Park Amphitheater",
-        category: "political",
-        description: "Join us for a community discussion on local governance."
-    },
-    {
-        title: "Youth Leadership Workshop",
-        date: "December 5, 2025",
-        time: "3:00 PM",
-        location: "Boca Raton Community Center",
-        category: "youth",
-        description: "Empowering the next generation of civic leaders."
-    },
-    {
-        title: "Tech Innovation Summit",
-        date: "December 10, 2025",
-        time: "9:00 AM",
-        location: "FAU Tech Runway",
-        category: "innovation",
-        description: "Discover cutting-edge technology solutions for civic challenges."
-    },
-    {
-        title: "Beach Clean-Up Day",
-        date: "December 15, 2025",
-        time: "8:00 AM",
-        location: "South Beach Park",
-        category: "environmental",
-        description: "Help keep our beaches clean and beautiful."
-    },
-    {
-        title: "Education Forum",
-        date: "December 20, 2025",
-        time: "6:30 PM",
-        location: "Boca Raton Library",
-        category: "education",
-        description: "Discuss the future of education in our community."
+  let chats = loadChats();          // { id, title, messages[], createdAt, updatedAt }
+  let activeChatId = null;
+  let renameTargetId = null;
+  let isResponding = false;
+
+  /* ═══════════════════════════════════════════════════
+     PERSISTENCE
+  ═══════════════════════════════════════════════════ */
+  function loadChats() {
+    try {
+      return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+    } catch { return []; }
+  }
+
+  function saveChats() {
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(chats)); } catch {}
+  }
+
+  function getChat(id) { return chats.find(c => c.id === id); }
+
+  function createChat() {
+    const chat = {
+      id: 'chat_' + Date.now(),
+      title: 'New conversation',
+      messages: [],
+      createdAt: Date.now(),
+      updatedAt: Date.now()
+    };
+    chats.unshift(chat);
+    saveChats();
+    return chat;
+  }
+
+  function updateChatTitle(id, title) {
+    const c = getChat(id);
+    if (c) { c.title = title.slice(0, 55); c.updatedAt = Date.now(); saveChats(); }
+  }
+
+  function deleteChat(id) {
+    chats = chats.filter(c => c.id !== id);
+    saveChats();
+    if (activeChatId === id) {
+      activeChatId = null;
+      showWelcome();
     }
-];
+    renderHistory();
+  }
 
-// Auto-resize textarea
-userInput.addEventListener('input', function() {
-    this.style.height = 'auto';
-    this.style.height = (this.scrollHeight) + 'px';
-});
+  /* ═══════════════════════════════════════════════════
+     HISTORY SIDEBAR
+  ═══════════════════════════════════════════════════ */
+  function renderHistory(filter = '') {
+    const container = document.getElementById('historyList');
+    const query = filter.toLowerCase();
 
-// Send message on Enter (but Shift+Enter for new line)
-userInput.addEventListener('keydown', function(e) {
-    if (e.key === 'Enter' && !e.shiftKey) {
-        e.preventDefault();
-        sendMessage();
+    const filtered = chats.filter(c =>
+      c.title.toLowerCase().includes(query) ||
+      (c.messages[0]?.content || '').toLowerCase().includes(query)
+    );
+
+    if (filtered.length === 0) {
+      container.innerHTML = `
+        <div style="text-align:center;padding:32px 16px;color:var(--text-3);font-size:0.83rem;">
+          ${filter ? 'No matches found' : 'No conversations yet'}
+        </div>`;
+      return;
     }
-});
 
-// Send button click
-sendButton.addEventListener('click', sendMessage);
+    /* Group by time */
+    const now = Date.now();
+    const groups = { Today: [], Yesterday: [], 'This week': [], Older: [] };
 
-// Add message to chat
-function addMessage(content, isUser = false) {
-    const messageDiv = document.createElement('div');
-    messageDiv.className = `message ${isUser ? 'user-message' : 'bot-message'}`;
-    
-    const contentDiv = document.createElement('div');
-    contentDiv.className = 'message-content';
-    
-    if (!isUser) {
-        contentDiv.innerHTML = `<strong>Compass</strong>${content}`;
+    filtered.forEach(c => {
+      const diff = now - c.updatedAt;
+      const days = diff / 86400000;
+      if (days < 1) groups['Today'].push(c);
+      else if (days < 2) groups['Yesterday'].push(c);
+      else if (days < 7) groups['This week'].push(c);
+      else groups['Older'].push(c);
+    });
+
+    let html = '';
+    Object.entries(groups).forEach(([label, items]) => {
+      if (!items.length) return;
+      html += `<div class="history-group-label">${label}</div>`;
+      items.forEach(c => {
+        const preview = c.messages.find(m => m.role === 'user')?.content || '';
+        const isActive = c.id === activeChatId;
+        html += `
+          <div class="history-item${isActive ? ' active' : ''}" onclick="loadChat('${c.id}')">
+            <div class="history-item-icon"><i class="fas fa-message"></i></div>
+            <div class="history-item-text">
+              <div class="history-item-title">${escHtml(c.title)}</div>
+              <div class="history-item-preview">${escHtml(preview.slice(0, 48))}${preview.length > 48 ? '…' : ''}</div>
+            </div>
+            <div class="history-item-actions">
+              <button class="history-action-btn" title="Rename"
+                onclick="event.stopPropagation(); openRenameModal('${c.id}')">
+                <i class="fas fa-pen"></i>
+              </button>
+              <button class="history-action-btn danger" title="Delete"
+                onclick="event.stopPropagation(); confirmDelete('${c.id}')">
+                <i class="fas fa-trash"></i>
+              </button>
+            </div>
+          </div>`;
+      });
+    });
+
+    container.innerHTML = html;
+  }
+
+  function filterHistory(q) { renderHistory(q); }
+
+  /* ═══════════════════════════════════════════════════
+     CHAT MANAGEMENT
+  ═══════════════════════════════════════════════════ */
+  function startNewChat() {
+    const chat = createChat();
+    activeChatId = chat.id;
+    showWelcome();
+    document.getElementById('chatTitleDisplay').textContent = 'New conversation';
+    renderHistory();
+    closeMobileSidebar();
+  }
+
+  function loadChat(id) {
+    const chat = getChat(id);
+    if (!chat) return;
+    activeChatId = id;
+    document.getElementById('chatTitleDisplay').textContent = chat.title;
+
+    const msgsEl = document.getElementById('chatMessages');
+    const welcomeEl = document.getElementById('welcomeScreen');
+
+    if (chat.messages.length === 0) {
+      showWelcome();
     } else {
-        contentDiv.innerHTML = `<p>${content}</p>`;
+      welcomeEl.classList.add('hidden');
+      msgsEl.classList.remove('hidden');
+      msgsEl.innerHTML = '';
+      chat.messages.forEach(m => renderBubble(m.role, m.content, false));
+      msgsEl.scrollTop = msgsEl.scrollHeight;
     }
-    
-    messageDiv.appendChild(contentDiv);
-    chatMessages.appendChild(messageDiv);
-    
-    // Scroll to bottom
-    chatMessages.scrollTop = chatMessages.scrollHeight;
-}
 
-// Show typing indicator
-function showTypingIndicator() {
-    const typingDiv = document.createElement('div');
-    typingDiv.className = 'message bot-message';
-    typingDiv.id = 'typing-indicator';
-    
-    const contentDiv = document.createElement('div');
-    contentDiv.className = 'message-content';
-    contentDiv.innerHTML = `
-        <strong>Compass</strong>
-        <div class="typing-indicator">
-            <div class="typing-dot"></div>
-            <div class="typing-dot"></div>
-            <div class="typing-dot"></div>
+    renderHistory();
+    closeMobileSidebar();
+  }
+
+  function clearCurrentChat() {
+    if (!activeChatId) return;
+    const c = getChat(activeChatId);
+    if (!c) return;
+    if (!confirm('Clear this conversation?')) return;
+    c.messages = [];
+    c.title = 'New conversation';
+    c.updatedAt = Date.now();
+    saveChats();
+    showWelcome();
+    document.getElementById('chatTitleDisplay').textContent = 'New conversation';
+    renderHistory();
+  }
+
+  function confirmDelete(id) {
+    if (confirm('Delete this conversation?')) deleteChat(id);
+  }
+
+  function showWelcome() {
+    document.getElementById('welcomeScreen').classList.remove('hidden');
+    document.getElementById('chatMessages').classList.add('hidden');
+    document.getElementById('chatMessages').innerHTML = '';
+  }
+
+  /* ═══════════════════════════════════════════════════
+     SENDING & RENDERING
+  ═══════════════════════════════════════════════════ */
+  function sendSuggestion(btn) {
+    const text = btn.querySelector('.chip-title').textContent;
+    document.getElementById('userInput').value = text;
+    sendMessage();
+  }
+
+  function handleKey(e) {
+    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+    updateSendBtn();
+  }
+
+  function autoResize(ta) {
+    ta.style.height = 'auto';
+    ta.style.height = Math.min(ta.scrollHeight, 180) + 'px';
+    updateSendBtn();
+  }
+
+  function updateCharCount(ta) {
+    const n = ta.value.length;
+    const el = document.getElementById('charCount');
+    el.textContent = n > 200 ? n : '';
+    updateSendBtn();
+  }
+
+  function updateSendBtn() {
+    const val = document.getElementById('userInput').value.trim();
+    document.getElementById('sendBtn').disabled = !val || isResponding;
+  }
+
+  function clearInput() {
+    const ta = document.getElementById('userInput');
+    ta.value = '';
+    ta.style.height = 'auto';
+    document.getElementById('charCount').textContent = '';
+    updateSendBtn();
+    ta.focus();
+  }
+
+  async function sendMessage() {
+    const ta = document.getElementById('userInput');
+    const text = ta.value.trim();
+    if (!text || isResponding) return;
+
+    /* Ensure we have an active chat */
+    if (!activeChatId) {
+      const chat = createChat();
+      activeChatId = chat.id;
+    }
+
+    const chat = getChat(activeChatId);
+
+    /* Hide welcome, show messages */
+    document.getElementById('welcomeScreen').classList.add('hidden');
+    const msgsEl = document.getElementById('chatMessages');
+    msgsEl.classList.remove('hidden');
+
+    /* Push user message */
+    const userMsg = { role: 'user', content: text, ts: Date.now() };
+    chat.messages.push(userMsg);
+    saveChats();
+    renderBubble('user', text);
+
+    /* Auto-title from first user message */
+    if (chat.messages.filter(m => m.role === 'user').length === 1) {
+      const autoTitle = text.length > 50 ? text.slice(0, 50) + '…' : text;
+      updateChatTitle(activeChatId, autoTitle);
+      document.getElementById('chatTitleDisplay').textContent = chat.title;
+      renderHistory();
+    }
+
+    clearInput();
+    isResponding = true;
+    updateSendBtn();
+
+    /* Typing indicator */
+    const typingId = 'typing_' + Date.now();
+    const typingRow = document.createElement('div');
+    typingRow.className = 'msg-row bot';
+    typingRow.id = typingId;
+    typingRow.innerHTML = `
+      <div class="msg-avatar"><i class="fas fa-compass"></i></div>
+      <div class="msg-bubble-wrap">
+        <div class="typing-bubble">
+          <div class="typing-dot"></div>
+          <div class="typing-dot"></div>
+          <div class="typing-dot"></div>
         </div>
+      </div>`;
+    msgsEl.appendChild(typingRow);
+    msgsEl.scrollTop = msgsEl.scrollHeight;
+
+    /* Call API */
+    let reply = '';
+    try {
+      reply = await callCompassAPI(chat.messages);
+    } catch (err) {
+      reply = 'Sorry, I had trouble connecting. Please try again in a moment.';
+      console.error('Compass API error:', err);
+    }
+
+    /* Remove typing, render reply */
+    document.getElementById(typingId)?.remove();
+
+    const botMsg = { role: 'assistant', content: reply, ts: Date.now() };
+    chat.messages.push(botMsg);
+    chat.updatedAt = Date.now();
+    saveChats();
+    renderBubble('bot', reply);
+
+    isResponding = false;
+    updateSendBtn();
+    renderHistory();
+  }
+
+  function renderBubble(role, content, scroll = true) {
+    const msgsEl = document.getElementById('chatMessages');
+    const row = document.createElement('div');
+    row.className = `msg-row ${role === 'user' ? 'user' : 'bot'}`;
+
+    const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    const avatarHTML = role === 'user'
+      ? `<div class="msg-avatar"><i class="fas fa-user"></i></div>`
+      : `<div class="msg-avatar"><i class="fas fa-compass"></i></div>`;
+
+    row.innerHTML = `
+      ${role === 'bot' ? avatarHTML : ''}
+      <div class="msg-bubble-wrap">
+        <div class="msg-bubble">${formatContent(content)}</div>
+        <div class="msg-meta">${time}</div>
+      </div>
+      ${role === 'user' ? avatarHTML : ''}
     `;
-    
-    typingDiv.appendChild(contentDiv);
-    chatMessages.appendChild(typingDiv);
-    chatMessages.scrollTop = chatMessages.scrollHeight;
-}
 
-// Remove typing indicator
-function removeTypingIndicator() {
-    const typingIndicator = document.getElementById('typing-indicator');
-    if (typingIndicator) {
-        typingIndicator.remove();
-    }
-}
+    msgsEl.appendChild(row);
+    if (scroll) msgsEl.scrollTop = msgsEl.scrollHeight;
+  }
 
-// Generate response based on user input
-function generateResponse(message) {
-    const lowerMessage = message.toLowerCase();
-    
-    // Events queries
-    if (lowerMessage.includes('event') || lowerMessage.includes('happening') || lowerMessage.includes('upcoming')) {
-        let response = '<p>Here are our upcoming events in Boca Raton:</p><ul>';
-        eventsData.forEach(event => {
-            response += `<li><strong>${event.title}</strong><br>${event.date} at ${event.time}<br>Location: ${event.location}<br><em>${event.description}</em></li>`;
-        });
-        response += '</ul><p>Visit our Events page or Map to see more details!</p>';
-        return response;
-    }
-    
-    // Specific event categories
-    if (lowerMessage.includes('political') || lowerMessage.includes('government') || lowerMessage.includes('council')) {
-        const politicalEvents = eventsData.filter(e => e.category === 'political');
-        let response = '<p>Here are our political/government events:</p><ul>';
-        politicalEvents.forEach(event => {
-            response += `<li><strong>${event.title}</strong><br>${event.date} at ${event.time}<br>${event.location}</li>`;
-        });
-        response += '</ul>';
-        return response;
-    }
-    
-    if (lowerMessage.includes('youth') || lowerMessage.includes('young') || lowerMessage.includes('student')) {
-        const youthEvents = eventsData.filter(e => e.category === 'youth');
-        let response = '<p>Here are our youth-focused events:</p><ul>';
-        youthEvents.forEach(event => {
-            response += `<li><strong>${event.title}</strong><br>${event.date} at ${event.time}<br>${event.location}</li>`;
-        });
-        response += '</ul>';
-        return response;
-    }
-    
-    if (lowerMessage.includes('environment') || lowerMessage.includes('clean') || lowerMessage.includes('beach')) {
-        const envEvents = eventsData.filter(e => e.category === 'environmental');
-        let response = '<p>Here are our environmental events:</p><ul>';
-        envEvents.forEach(event => {
-            response += `<li><strong>${event.title}</strong><br>${event.date} at ${event.time}<br>${event.location}</li>`;
-        });
-        response += '</ul>';
-        return response;
-    }
-    
-    if (lowerMessage.includes('education') || lowerMessage.includes('school')) {
-        const eduEvents = eventsData.filter(e => e.category === 'education');
-        let response = '<p>Here are our education-related events:</p><ul>';
-        eduEvents.forEach(event => {
-            response += `<li><strong>${event.title}</strong><br>${event.date} at ${event.time}<br>${event.location}</li>`;
-        });
-        response += '</ul>';
-        return response;
-    }
-    
-    if (lowerMessage.includes('innovation') || lowerMessage.includes('tech') || lowerMessage.includes('technology')) {
-        const techEvents = eventsData.filter(e => e.category === 'innovation');
-        let response = '<p>Here are our innovation and technology events:</p><ul>';
-        techEvents.forEach(event => {
-            response += `<li><strong>${event.title}</strong><br>${event.date} at ${event.time}<br>${event.location}</li>`;
-        });
-        response += '</ul>';
-        return response;
-    }
-    
-    // Civic engagement info
-    if (lowerMessage.includes('civic') || lowerMessage.includes('engagement') || lowerMessage.includes('get involved') || lowerMessage.includes('participate')) {
-        return `<p>Civic engagement means actively participating in your community to make a positive difference. Here's how you can get involved:</p>
-        <ul>
-            <li><strong>Attend Local Events:</strong> Check out our Events page for upcoming community gatherings</li>
-            <li><strong>Volunteer:</strong> Many of our events welcome volunteers</li>
-            <li><strong>Stay Informed:</strong> Attend town halls and city council meetings</li>
-            <li><strong>Voice Your Opinion:</strong> Participate in community forums and discussions</li>
-        </ul>
-        <p>Every action, no matter how small, contributes to a stronger community!</p>`;
-    }
-    
-    // About NextStep
-    if (lowerMessage.includes('nextstep') || lowerMessage.includes('about') || lowerMessage.includes('who are you')) {
-        return `<p>NextStep is a civic engagement platform dedicated to strengthening democracy by connecting citizens with local civic opportunities in Boca Raton, Florida.</p>
-        <p>We believe that engaged communities create positive change, and every voice matters in shaping our shared future. Our mission is to make civic participation accessible, engaging, and impactful for everyone.</p>
-        <p>Through our platform, you can discover local events, connect with your community, and make a real difference!</p>`;
-    }
-    
-    // Contact info
-    if (lowerMessage.includes('contact') || lowerMessage.includes('email') || lowerMessage.includes('reach')) {
-        return `<p>You can reach us at:</p>
-        <p><strong>Email:</strong> info@nextstep.org</p>
-        <p>Or visit our Contact page to send us a message directly!</p>`;
-    }
-    
-    // Volunteer
-    if (lowerMessage.includes('volunteer') || lowerMessage.includes('help out')) {
-        return `<p>We'd love to have you volunteer! Here are some ways you can help:</p>
-        <ul>
-            <li>Assist at our community events</li>
-            <li>Help with event planning and coordination</li>
-            <li>Spread the word about civic engagement opportunities</li>
-            <li>Share your skills and expertise with the community</li>
-        </ul>
-        <p>Contact us at info@nextstep.org to learn more about volunteer opportunities!</p>`;
-    }
-    
-    // Default response
-    return `<p>I'm here to help you learn about civic engagement and local events in Boca Raton! You can ask me about:</p>
-    <ul>
-        <li>Upcoming events (political, youth, environmental, education, innovation)</li>
-        <li>How to get involved in your community</li>
-        <li>Information about NextStep</li>
-        <li>Volunteer opportunities</li>
-        <li>How to contact us</li>
-    </ul>
-    <p>What would you like to know?</p>`;
-}
+  function formatContent(text) {
+    /* Very light markdown-to-HTML */
+    return text
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+      .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+      .replace(/\*(.+?)\*/g, '<em>$1</em>')
+      .replace(/^### (.+)$/gm, '<strong>$1</strong>')
+      .replace(/^- (.+)$/gm, '• $1')
+      .replace(/\n{2,}/g, '</p><p>')
+      .replace(/\n/g, '<br>')
+      .replace(/^/, '<p>').replace(/$/, '</p>');
+  }
 
-// Send message
-async function sendMessage() {
-    const message = userInput.value.trim();
-    
-    if (!message) return;
-    
-    // Add user message
-    addMessage(message, true);
-    
-    // Clear input
-    userInput.value = '';
-    userInput.style.height = 'auto';
-    
-    // Disable send button
-    sendButton.disabled = true;
-    
-    // Show typing indicator
-    showTypingIndicator();
-    
-    // Simulate thinking time
-    setTimeout(() => {
-        removeTypingIndicator();
-        
-        // Generate and add response
-        const response = generateResponse(message);
-        addMessage(response);
-        
-        // Re-enable send button
-        sendButton.disabled = false;
-    }, 1000);
-}
+  /* ═══════════════════════════════════════════════════
+     API CALL
+  ═══════════════════════════════════════════════════ */
+  async function callCompassAPI(messages) {
+    const systemPrompt = `You are Compass, NextStep's AI civic guide for Boca Raton, Florida.
+You help residents discover local events, understand how local government works, find volunteer opportunities, learn about civic engagement, and navigate the NextStep platform.
+
+Key facts about NextStep:
+- NextStep is a civic engagement platform focused on Boca Raton, FL
+- Features: interactive event map, event listings, badge system for engagement, leaderboard, and Compass (you)
+- Event categories: Political, Youth, Innovation, Environmental, Education, Religious
+- Users earn badges by attending events, volunteering, speaking at town halls, and other civic actions
+- The platform uses Firebase for auth and Firestore for data
+
+Personality: Warm, knowledgeable, concise. You care deeply about local democracy. Use plain language. Avoid jargon. When you don't know specific local details (like exact dates), say so honestly and direct the user to check the Events page or official city sources.
+
+Keep responses focused and conversational. Use bullet points sparingly. Aim for 2-4 paragraphs unless a list genuinely helps.`;
+
+    const apiMessages = messages
+      .filter(m => m.role === 'user' || m.role === 'assistant')
+      .map(m => ({ role: m.role, content: m.content }));
+
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        system: systemPrompt,
+        messages: apiMessages
+      })
+    });
+
+    if (!response.ok) throw new Error(`API error ${response.status}`);
+    const data = await response.json();
+    return data.content?.[0]?.text || 'I didn\'t get a response. Please try again.';
+  }
+
+  /* ═══════════════════════════════════════════════════
+     EXPORT
+  ═══════════════════════════════════════════════════ */
+  function exportChat() {
+    if (!activeChatId) return;
+    const chat = getChat(activeChatId);
+    if (!chat || !chat.messages.length) {
+      alert('Nothing to export yet.');
+      return;
+    }
+    const lines = [`# ${chat.title}\n`, `Exported ${new Date().toLocaleString()}\n\n`];
+    chat.messages.forEach(m => {
+      lines.push(`**${m.role === 'user' ? 'You' : 'Compass'}:** ${m.content}\n\n`);
+    });
+    const blob = new Blob([lines.join('')], { type: 'text/markdown' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = `compass-chat-${chat.id}.md`;
+    a.click();
+  }
+
+  /* ═══════════════════════════════════════════════════
+     RENAME MODAL
+  ═══════════════════════════════════════════════════ */
+  function openRenameModal(id) {
+    renameTargetId = id;
+    const c = getChat(id);
+    document.getElementById('renameInput').value = c?.title || '';
+    document.getElementById('renameModal').classList.add('show');
+    setTimeout(() => document.getElementById('renameInput').focus(), 80);
+  }
+
+  function closeRenameModal() {
+    document.getElementById('renameModal').classList.remove('show');
+    renameTargetId = null;
+  }
+
+  function saveRename() {
+    const val = document.getElementById('renameInput').value.trim();
+    if (val && renameTargetId) {
+      updateChatTitle(renameTargetId, val);
+      if (renameTargetId === activeChatId) {
+        document.getElementById('chatTitleDisplay').textContent = val;
+      }
+      renderHistory();
+    }
+    closeRenameModal();
+  }
+
+  document.getElementById('renameInput').addEventListener('keydown', e => {
+    if (e.key === 'Enter') saveRename();
+    if (e.key === 'Escape') closeRenameModal();
+  });
+
+  document.getElementById('renameModal').addEventListener('click', e => {
+    if (e.target === e.currentTarget) closeRenameModal();
+  });
+
+  /* ═══════════════════════════════════════════════════
+     MOBILE SIDEBAR
+  ═══════════════════════════════════════════════════ */
+  function toggleMobileSidebar() {
+    const sb = document.getElementById('sidebar');
+    const ov = document.getElementById('sidebarOverlay');
+    sb.classList.toggle('mobile-open');
+    ov.classList.toggle('show');
+  }
+
+  function closeMobileSidebar() {
+    document.getElementById('sidebar').classList.remove('mobile-open');
+    document.getElementById('sidebarOverlay').classList.remove('show');
+  }
+
+  /* ═══════════════════════════════════════════════════
+     UTILS
+  ═══════════════════════════════════════════════════ */
+  function escHtml(s) {
+    return String(s)
+      .replace(/&/g,'&amp;').replace(/</g,'&lt;')
+      .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  /* Input enable/disable on typing */
+  document.getElementById('userInput').addEventListener('input', updateSendBtn);
+
+  /* ═══════════════════════════════════════════════════
+     INIT
+  ═══════════════════════════════════════════════════ */
+  renderHistory();

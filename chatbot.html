@@ -1,92 +1,53 @@
 <!DOCTYPE html>
-<html lang="en" class="h-full" dir="ltr">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content="Compass is NextStep's AI-powered civic guide. Ask questions about local government, how to get involved, upcoming events, and more in Boca Raton." />
-    <meta name="keywords" content="civic AI assistant, Boca Raton guide, NextStep Compass, civic engagement chatbot" />
-    <meta name="author" content="NextStep" />
-    <meta name="robots" content="index, follow" />
-    <link rel="canonical" href="https://nextstep-civic.org/chatbot.html" />
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Compass is NextStep's AI-powered civic guide. Ask questions about local government, how to get involved, upcoming events, and more in Boca Raton." />
+  <link rel="canonical" href="https://nextstep-civic.org/chatbot.html" />
 
-    <!-- Open Graph -->
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://nextstep-civic.org/chatbot.html" />
-    <meta property="og:site_name" content="NextStep" />
-    <meta property="og:title" content="Compass – Your AI Civic Guide | NextStep" />
-    <meta property="og:description" content="Ask Compass anything about civic engagement, local events, and how to get involved in Boca Raton." />
-    <meta property="og:image" content="https://nextstep-civic.org/images/logo.png" />
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+  <link rel="manifest" href="site.webmanifest">
 
-    <!-- Twitter Card -->
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Compass – Your AI Civic Guide | NextStep" />
-    <meta name="twitter:description" content="Ask Compass anything about civic engagement, local events, and how to get involved in Boca Raton." />
-    <meta name="twitter:image" content="https://nextstep-civic.org/images/logo.png" />
+  <link rel="stylesheet" href="style.css" type="text/css"/>
+  <link rel="stylesheet" href="dark-mode.css" type="text/css"/>
+  <link rel="stylesheet" href="chatbot.css" type="text/css" />
 
-    <!-- JSON-LD Structured Data -->
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "WebPage",
-      "@id": "https://nextstep-civic.org/chatbot.html",
-      "url": "https://nextstep-civic.org/chatbot.html",
-      "name": "Compass – Your AI Civic Guide | NextStep",
-      "description": "Ask Compass anything about civic engagement, local events, and how to get involved in Boca Raton.",
-      "isPartOf": { "@id": "https://nextstep-civic.org/#website" },
-      "breadcrumb": {
-        "@type": "BreadcrumbList",
-        "itemListElement": [
-          { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://nextstep-civic.org/" },
-          { "@type": "ListItem", "position": 2, "name": "Compass", "item": "https://nextstep-civic.org/chatbot.html" }
-        ]
-      }
-    }
-    </script>
-
-    <!-- Favicon -->
-    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
-    <link rel="manifest" href="site.webmanifest">
-
-    <link rel="stylesheet" href="style.css" type="text/css"/>
-    <link rel="stylesheet" href="chatbot.css" type="text/css"/>
-    <link rel="stylesheet" href="dark-mode.css" type="text/css"/>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
-
-    <!-- Font Awesome for Footer -->
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 
-    <title>Compass – Your AI Civic Guide | NextStep</title>
+  <title>Compass | NextStep</title>
 
-  </head>
-  <body>
+  <style>
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
   <nav>
     <div class="navbar">
       <div class="navdiv">
-        <!-- Logo -->
         <div class="logo">
           <a href="index.html">
             <img src="images/logo.png" alt="NextStep Logo" class="logo-image">
           </a>
         </div>
-
-        <!-- Navigation links -->
         <nav class="nav-links">
           <ul>
             <li class="navbar-item"><a href="index.html">Home</a></li>
             <li class="navbar-item"><a href="map.html">Map</a></li>
             <li class="navbar-item"><a href="events.html">Events</a></li>
-            <li class="navbar-item"><a href="chatbot.html" class="active">Compass</a></li>
             <li class="navbar-item"><a href="badges.html">Badges</a></li>
+            <li class="navbar-item"><a href="chatbot.html" class="active">Compass</a></li>
             <li class="navbar-item"><a href="contact.html">Contact Us</a></li>
+            <li class="navbar-item"><a href="leaderboard.html">Leader Board</a></li>
           </ul>
         </nav>
-
-        <!-- Login/Sign Up -->
         <div class="nav-right">
           <li class="navbar-item"><a href="login.html" class="login">Login</a></li>
           <li class="navbar-item"><a href="signup.html" class="signup">Sign Up</a></li>
@@ -95,111 +56,143 @@
     </div>
   </nav>
 
-    <main class="chatbot-main">
-      <div class="chat-container">
-        <div class="chat-header">
-          <h1>Compass</h1>
-          <p>Ask me anything about civic engagement, local events, or how to get involved!</p>
-        </div>
+  <!-- Mobile sidebar overlay -->
+  <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeMobileSidebar()"></div>
 
-        <div class="chat-messages" id="chat-messages">
-          <div class="message bot-message">
-            <div class="message-content">
-              <strong>Compass</strong>
-              <p>Hello! I'm your civic engagement assistant. I can help you with:</p>
-              <ul>
-                <li>Finding local events in Boca Raton</li>
-                <li>Learning about civic engagement opportunities</li>
-                <li>Understanding how to get involved in your community</li>
-                <li>Answering questions about NextStep</li>
-              </ul>
-              <p>How can I help you today?</p>
-            </div>
+  <div class="compass-shell">
+
+    <!-- ── Sidebar ── -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-top">
+        <button class="new-chat-btn" onclick="startNewChat()">
+          <i class="fas fa-plus"></i>
+          New conversation
+        </button>
+        <div class="sidebar-search">
+          <i class="fas fa-search"></i>
+          <input type="text" placeholder="Search conversations…" id="searchInput" oninput="filterHistory(this.value)">
+        </div>
+      </div>
+
+      <div class="sidebar-history" id="historyList">
+        <!-- Injected by JS -->
+      </div>
+
+      <div class="sidebar-footer">
+        <div class="sidebar-footer-info">
+          <div class="compass-badge"><i class="fas fa-compass"></i></div>
+          <div class="sidebar-footer-text">
+            <div class="sidebar-footer-name">Compass</div>
+            <div class="sidebar-footer-sub">Civic AI · Boca Raton</div>
           </div>
         </div>
+      </div>
+    </aside>
 
-        <div class="chat-input-container">
-          <div class="input-wrapper">
-            <textarea 
-              id="user-input" 
-              placeholder="Type your message here..." 
-              rows="1"
-            ></textarea>
-            <button id="send-button" class="send-button">
-              <span>Send</span>
+    <!-- ── Main ── -->
+    <main class="chat-main">
+
+      <!-- Top bar -->
+      <div class="chat-topbar">
+        <div class="topbar-left">
+          <button class="mobile-sidebar-toggle" onclick="toggleMobileSidebar()" aria-label="Toggle sidebar">
+            <i class="fas fa-bars"></i>
+          </button>
+          <div class="chat-title-area">
+            <div class="chat-title" id="chatTitleDisplay">New conversation</div>
+            <div class="chat-subtitle">Ask me anything about Boca Raton civic life</div>
+          </div>
+        </div>
+        <div class="topbar-right">
+          <button class="topbar-btn" onclick="clearCurrentChat()" title="Clear chat">
+            <i class="fas fa-eraser"></i>
+          </button>
+          <button class="topbar-btn" onclick="exportChat()" title="Export chat">
+            <i class="fas fa-download"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Welcome screen -->
+      <div class="welcome-screen" id="welcomeScreen">
+        <div class="welcome-hero">
+          <div class="welcome-compass-icon"><i class="fas fa-compass"></i></div>
+          <h1 class="welcome-title">Hi, I'm Compass</h1>
+          <p class="welcome-sub">Your AI guide to civic engagement in Boca Raton. Ask me about local events, how government works, volunteer opportunities, or anything community-related.</p>
+        </div>
+
+        <div class="suggestion-grid">
+          <button class="suggestion-chip" onclick="sendSuggestion(this)">
+            <span class="chip-icon">🗓️</span>
+            <span class="chip-title">What events are coming up?</span>
+            <span class="chip-sub">See upcoming civic events near you</span>
+          </button>
+          <button class="suggestion-chip" onclick="sendSuggestion(this)">
+            <span class="chip-icon">🏛️</span>
+            <span class="chip-title">How does local government work?</span>
+            <span class="chip-sub">City commission, boards & more</span>
+          </button>
+          <button class="suggestion-chip" onclick="sendSuggestion(this)">
+            <span class="chip-icon">🤝</span>
+            <span class="chip-title">How can I volunteer?</span>
+            <span class="chip-sub">Find the right opportunity for you</span>
+          </button>
+          <button class="suggestion-chip" onclick="sendSuggestion(this)">
+            <span class="chip-icon">🏅</span>
+            <span class="chip-title">How do I earn badges?</span>
+            <span class="chip-sub">Track your civic engagement journey</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Messages -->
+      <div class="chat-messages hidden" id="chatMessages"></div>
+
+      <!-- Input bar -->
+      <div class="chat-input-bar">
+        <div class="input-shell">
+          <textarea
+            class="input-textarea"
+            id="userInput"
+            placeholder="Ask Compass anything about Boca Raton…"
+            rows="1"
+            onkeydown="handleKey(event)"
+            oninput="autoResize(this); updateCharCount(this)"
+          ></textarea>
+          <div class="input-toolbar">
+            <div class="input-left-tools">
+              <button class="input-tool-btn" title="Clear input" onclick="clearInput()">
+                <i class="fas fa-times"></i>
+              </button>
+              <span class="char-count" id="charCount"></span>
+            </div>
+            <button class="send-btn" id="sendBtn" onclick="sendMessage()" disabled aria-label="Send message">
+              <i class="fas fa-paper-plane"></i>
             </button>
           </div>
         </div>
+        <div class="input-hint">Compass may make mistakes. Verify important civic information with official sources.</div>
       </div>
+
     </main>
-  <footer>
-    <div class="footer-content">
-      <div class="footer-grid">
-        <!-- About Section -->
-        <div class="footer-section footer-about">
-          <h3>NEXTSTEP</h3>
-          <p>Empowering communities through civic engagement. Discover local events, connect with your neighbors, and
-            make a real difference in Boca Raton.</p>
-          <div class="social-links">
-              <a href="#" class="social-link" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
-              <a href="#" class="social-link" aria-label="X (Twitter)"><i class="fab fa-x-twitter"></i></a>
-              <a href="#" class="social-link" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-              <a href="#" class="social-link" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
-          </div>
-        </div>
+  </div>
 
-        <!-- Quick Links -->
-        <div class="footer-section">
-          <h4>Quick Links</h4>
-          <ul class="footer-links">
-            <li><a href="index.html">Home</a></li>
-            <li><a href="map.html">Map</a></li>
-            <li><a href="events.html">Events</a></li>
-            <li><a href="chatbot.html">Compass</a></li>
-            <li><a href="contact.html">Contact Us</a></li>
-          </ul>
-        </div>
-
-        <!-- Resources -->
-        <div class="footer-section">
-          <h4>Resources</h4>
-          <ul class="footer-links">
-            <li><a href="#">About Us</a></li>
-            <li><a href="#">Blog</a></li>
-            <li><a href="#">FAQs</a></li>
-            <li><a href="#">Volunteer</a></li>
-            <li><a href="#">Partners</a></li>
-          </ul>
-        </div>
-
-        <!-- Newsletter -->
-        <div class="footer-section">
-          <h4>Stay Updated</h4>
-          <p style="opacity: 0.5; font-size: 0.95rem; margin-bottom: 1rem;">Subscribe to our newsletter for the latest
-            civic events and opportunities.</p>
-          <form class="newsletter-form" onsubmit="handleNewsletter(event)">
-            <input type="email" class="newsletter-input" placeholder="Your email" required>
-            <button type="submit" class="newsletter-button">Join</button>
-          </form>
-        </div>
-      </div>
-
-      <!-- Footer Bottom -->
-      <div class="footer-bottom">
-        <p>&copy; 2025 NextStep. All rights reserved.</p>
-        <div class="footer-bottom-links">
-          <a href="#">Privacy Policy</a>
-          <a href="#">Terms of Service</a>
-          <a href="#">Accessibility</a>
-        </div>
+  <!-- Rename modal -->
+  <div class="modal-overlay" id="renameModal">
+    <div class="modal-box">
+      <div class="modal-title">Rename conversation</div>
+      <input class="modal-input" id="renameInput" type="text" placeholder="Conversation title…" maxlength="60">
+      <div class="modal-actions">
+        <button class="modal-cancel" onclick="closeRenameModal()">Cancel</button>
+        <button class="modal-save" onclick="saveRename()">Save</button>
       </div>
     </div>
-  </footer>
+  </div>
 
-    <script src="chatbot.js"></script>
-    <script type="module" src="auth-check.js"></script>
-    <script src="dark-mode.js"></script>
-    <script src="mobile-nav.js"></script>
+  <script src="chatbot.js"></script>
+  <script src="dark-mode.js"></script>
+  <script src="mobile-nav.js"></script>
+  <script type="module" src="auth-check.js"></script>
 
-  </body>
+</body>
 </html>

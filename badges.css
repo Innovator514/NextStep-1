@@ -396,3 +396,253 @@ h1 {
     height: 100%;
     filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.1));
 }
+/* ══════════════════════════════════════════════
+   STREAK BANNER
+   ══════════════════════════════════════════════ */
+
+.streak-banner {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    background: linear-gradient(135deg, #fff7ed 0%, #fff 50%, #fef3c7 100%);
+    border: 2px solid #fed7aa;
+    border-radius: 24px;
+    padding: 1.75rem 2.5rem;
+    margin-bottom: 2.5rem;
+    box-shadow: 0 8px 32px rgba(249, 115, 22, 0.12);
+    animation: fadeInUp 0.6s ease;
+    flex-wrap: wrap;
+}
+
+/* ── Left column: flame + count ── */
+.streak-flame-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 80px;
+}
+
+.streak-flame {
+    font-size: 3rem;
+    line-height: 1;
+    filter: drop-shadow(0 4px 8px rgba(249, 115, 22, 0.4));
+    transition: transform 0.3s ease;
+    cursor: default;
+    user-select: none;
+}
+
+.streak-flame:hover { transform: scale(1.15) rotate(-5deg); }
+
+.streak-count {
+    font-size: 2.8rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, #f97316, #ef4444);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1.1;
+    margin-top: 0.25rem;
+}
+
+.streak-label {
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: #9a3412;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* ── Middle column: 7-day dots + hint ── */
+.streak-mid-col {
+    flex: 1;
+    min-width: 220px;
+}
+
+.streak-week-label {
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 0.6rem;
+}
+
+.streak-dots {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.streak-dot {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+}
+
+.streak-dot-day {
+    font-size: 0.68rem;
+    font-weight: 700;
+    color: #94a3b8;
+    text-transform: uppercase;
+}
+
+.streak-dot-circle {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 2px solid #e2e8f0;
+    background: #f8fafc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #94a3b8;
+    transition: all 0.3s ease;
+}
+
+.streak-dot.active .streak-dot-day { color: #f97316; }
+
+.streak-dot.active .streak-dot-circle {
+    background: linear-gradient(135deg, #f97316, #ef4444);
+    border-color: #f97316;
+    color: white;
+    box-shadow: 0 2px 8px rgba(249, 115, 22, 0.4);
+}
+
+.streak-next-milestone {
+    margin-top: 0.75rem;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: #92400e;
+    background: rgba(249, 115, 22, 0.08);
+    padding: 0.3rem 0.75rem;
+    border-radius: 20px;
+    display: inline-block;
+}
+
+/* ── Right column: best streak + button ── */
+.streak-right-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    min-width: 160px;
+}
+
+.streak-best-wrap {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    background: rgba(251, 191, 36, 0.12);
+    border: 1px solid rgba(251, 191, 36, 0.35);
+    border-radius: 14px;
+    padding: 0.6rem 1rem;
+    width: 100%;
+}
+
+.streak-best-icon { font-size: 1.5rem; }
+
+.streak-best-num {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: #b45309;
+    line-height: 1;
+}
+
+.streak-best-label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: #92400e;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+.streak-checkin-btn {
+    width: 100%;
+    padding: 0.875rem 1.25rem;
+    background: linear-gradient(135deg, #f97316, #ef4444);
+    color: white;
+    border: none;
+    border-radius: 14px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    font-family: 'Open Sans', sans-serif;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 0 4px 16px rgba(249, 115, 22, 0.35);
+}
+
+.streak-checkin-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px rgba(249, 115, 22, 0.5);
+}
+
+.streak-checkin-btn:active { transform: translateY(-1px); }
+
+.streak-checked-msg {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #15803d;
+    background: rgba(16, 185, 129, 0.1);
+    border: 1px solid rgba(16, 185, 129, 0.3);
+    border-radius: 12px;
+    padding: 0.6rem 1.2rem;
+    text-align: center;
+    width: 100%;
+}
+
+/* ── Streak badge cards ── */
+.streak-badge-card {
+    background: linear-gradient(135deg, #fff7ed 0%, #fff 100%) !important;
+    border: 2px solid #fed7aa !important;
+}
+
+.streak-badge-card.earned {
+    background: linear-gradient(135deg, #fff7ed 0%, #fef3c7 100%) !important;
+    border-color: #f97316 !important;
+    box-shadow: 0 4px 20px rgba(249, 115, 22, 0.18) !important;
+}
+
+.streak-badge-card:hover {
+    box-shadow: 0 15px 40px rgba(249, 115, 22, 0.25) !important;
+}
+
+.streak-emoji-icon {
+    font-size: 3rem !important;
+    background: linear-gradient(135deg, rgba(249,115,22,0.12), rgba(239,68,68,0.08)) !important;
+    border: 2px solid rgba(249, 115, 22, 0.2) !important;
+}
+
+.category-streak {
+    color: #f97316 !important;
+    background: rgba(249, 115, 22, 0.1) !important;
+}
+
+/* Streak filter button special styling */
+.streak-filter-btn { border-color: rgba(249, 115, 22, 0.3) !important; }
+.streak-filter-btn:hover { background: rgba(249, 115, 22, 0.1) !important; color: #f97316 !important; }
+.streak-filter-btn.active {
+    background: linear-gradient(135deg, #f97316, #ef4444) !important;
+    box-shadow: 0 4px 15px rgba(249, 115, 22, 0.35) !important;
+}
+
+/* ── Mobile ── */
+@media (max-width: 768px) {
+    .streak-banner {
+        flex-direction: column;
+        align-items: stretch;
+        padding: 1.5rem;
+        gap: 1.5rem;
+        text-align: center;
+    }
+    .streak-flame-col { flex-direction: row; justify-content: center; gap: 1rem; align-items: baseline; }
+    .streak-dots { justify-content: center; }
+    .streak-right-col { min-width: unset; }
+    .streak-best-wrap { justify-content: center; }
+}

@@ -32,14 +32,7 @@
       "url": "https://nextstep-civic.org/contact.html",
       "name": "Contact Us – NextStep",
       "description": "Get in touch with the NextStep team about civic engagement and community events in Boca Raton.",
-      "isPartOf": { "@id": "https://nextstep-civic.org/#website" },
-      "breadcrumb": {
-        "@type": "BreadcrumbList",
-        "itemListElement": [
-          { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://nextstep-civic.org/" },
-          { "@type": "ListItem", "position": 2, "name": "Contact Us", "item": "https://nextstep-civic.org/contact.html" }
-        ]
-      }
+      "isPartOf": { "@id": "https://nextstep-civic.org/#website" }
     }
     </script>
 
@@ -56,35 +49,481 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
-
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 
     <title>Contact Us – NextStep</title>
+
+    <style>
+      /* ================================================
+         MEET THE TEAM SECTION
+         ================================================ */
+      .team-section {
+        max-width: 1200px;
+        margin: 0 auto 3rem;
+        padding: 0 2rem;
+      }
+
+      .team-toggle-btn {
+        width: 100%;
+        background: white;
+        border: none;
+        border-radius: 20px;
+        padding: 1.75rem 2rem;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+        transition: all 0.3s ease;
+        font-family: 'Open Sans', sans-serif;
+      }
+
+      .team-toggle-btn:hover {
+        box-shadow: 0 12px 40px rgba(37, 99, 235, 0.15);
+        transform: translateY(-2px);
+      }
+
+      .team-toggle-left {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+      }
+
+      .team-toggle-icon {
+        width: 52px;
+        height: 52px;
+        background: linear-gradient(135deg, #2563eb, #3b82f6);
+        border-radius: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 1.3rem;
+        flex-shrink: 0;
+      }
+
+      .team-toggle-text h2 {
+        font-size: 1.35rem;
+        font-weight: 800;
+        color: rgb(1, 9, 67);
+        margin: 0 0 0.2rem;
+        text-align: left;
+      }
+
+      .team-toggle-text p {
+        font-size: 0.9rem;
+        color: #64748b;
+        margin: 0;
+        font-weight: 500;
+      }
+
+      .team-chevron {
+        width: 36px;
+        height: 36px;
+        background: #f1f5f9;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #2563eb;
+        font-size: 0.9rem;
+        transition: all 0.35s ease;
+        flex-shrink: 0;
+      }
+
+      .team-toggle-btn.open .team-chevron {
+        transform: rotate(180deg);
+        background: #eff6ff;
+      }
+
+      /* Collapsible team drawer */
+      .team-drawer {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      .team-drawer.open {
+        max-height: 1200px;
+      }
+
+      .team-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        gap: 1.5rem;
+        padding: 1.5rem 0 0.5rem;
+      }
+
+      /* Individual member card */
+      .team-card {
+        background: white;
+        border-radius: 18px;
+        padding: 1.75rem 1.5rem;
+        text-align: center;
+        box-shadow: 0 4px 20px rgba(37, 99, 235, 0.07);
+        transition: all 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        border: 1px solid rgba(37, 99, 235, 0.06);
+        animation: cardReveal 0.4s ease both;
+      }
+
+      .team-card:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 16px 40px rgba(37, 99, 235, 0.15);
+        border-color: rgba(37, 99, 235, 0.15);
+      }
+
+      @keyframes cardReveal {
+        from { opacity: 0; transform: translateY(18px); }
+        to   { opacity: 1; transform: translateY(0); }
+      }
+
+      .team-avatar {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #2563eb, #3b82f6);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.8rem;
+        font-weight: 800;
+        color: white;
+        margin: 0 auto 1rem;
+        border: 3px solid rgba(37, 99, 235, 0.15);
+        overflow: hidden;
+      }
+
+      .team-avatar img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .team-member-name {
+        font-size: 1rem;
+        font-weight: 800;
+        color: rgb(1, 9, 67);
+        margin-bottom: 0.25rem;
+      }
+
+      .team-member-role {
+        font-size: 0.78rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.7px;
+        color: #2563eb;
+        background: rgba(37, 99, 235, 0.08);
+        padding: 0.3rem 0.75rem;
+        border-radius: 20px;
+        display: inline-block;
+        margin-bottom: 0.75rem;
+      }
+
+      .team-member-bio {
+        font-size: 0.85rem;
+        color: #64748b;
+        line-height: 1.6;
+        margin-bottom: 1rem;
+      }
+
+      .team-member-links {
+        display: flex;
+        justify-content: center;
+        gap: 0.6rem;
+      }
+
+      .team-social-link {
+        width: 32px;
+        height: 32px;
+        border-radius: 8px;
+        background: #f1f5f9;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #64748b;
+        font-size: 0.85rem;
+        text-decoration: none;
+        transition: all 0.2s ease;
+      }
+
+      .team-social-link:hover {
+        background: linear-gradient(135deg, #2563eb, #3b82f6);
+        color: white;
+        transform: translateY(-2px);
+      }
+
+      /* ================================================
+         WAVE BLOG SECTION
+         ================================================ */
+      .wave-section {
+        max-width: 1200px;
+        margin: 0 auto 4rem;
+        padding: 0 2rem;
+      }
+
+      .wave-header {
+        text-align: center;
+        margin-bottom: 2.5rem;
+      }
+
+      .wave-wordmark {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.6rem;
+        margin-bottom: 0.75rem;
+      }
+
+      .wave-logo-badge {
+        width: 44px;
+        height: 44px;
+        background: linear-gradient(135deg, #2563eb, #3b82f6);
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 1.2rem;
+      }
+
+      .wave-title {
+        font-size: 2.5rem;
+        font-weight: 800;
+        background: linear-gradient(135deg, #2563eb, #3b82f6);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        letter-spacing: -0.5px;
+        line-height: 1;
+      }
+
+      .wave-tagline {
+        color: #64748b;
+        font-size: 1.05rem;
+        font-weight: 500;
+      }
+
+      /* Blog grid */
+      .wave-grid {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 1.5rem;
+        margin-bottom: 1.5rem;
+      }
+
+      @media (max-width: 900px) {
+        .wave-grid { grid-template-columns: 1fr; }
+        .wave-grid .wave-card:first-child { grid-column: auto; }
+      }
+
+      /* The featured (tall) card */
+      .wave-card {
+        background: white;
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 4px 20px rgba(37, 99, 235, 0.07);
+        transition: all 0.3s ease;
+        display: flex;
+        flex-direction: column;
+        border: 1px solid rgba(37, 99, 235, 0.06);
+        text-decoration: none;
+        cursor: pointer;
+      }
+
+      .wave-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 16px 48px rgba(37, 99, 235, 0.15);
+      }
+
+      .wave-card-img {
+        height: 200px;
+        background: linear-gradient(135deg, #2563eb, #1e40af);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 3rem;
+        flex-shrink: 0;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .wave-card-img::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(to bottom, transparent 50%, rgba(0,0,0,0.15) 100%);
+      }
+
+      .wave-card.featured .wave-card-img { height: 240px; }
+
+      /* Pill category label */
+      .wave-card-cat {
+        position: absolute;
+        top: 14px;
+        left: 14px;
+        z-index: 2;
+        font-size: 0.7rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.8px;
+        color: white;
+        background: rgba(255,255,255,0.25);
+        backdrop-filter: blur(8px);
+        padding: 0.3rem 0.75rem;
+        border-radius: 20px;
+      }
+
+      .wave-card-body {
+        padding: 1.5rem;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .wave-card-meta {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        margin-bottom: 0.6rem;
+        font-size: 0.78rem;
+        color: #94a3b8;
+        font-weight: 600;
+      }
+
+      .wave-card-meta span { display: flex; align-items: center; gap: 0.3rem; }
+
+      .wave-card-title {
+        font-size: 1.05rem;
+        font-weight: 800;
+        color: rgb(1, 9, 67);
+        margin-bottom: 0.6rem;
+        line-height: 1.4;
+      }
+
+      .wave-card.featured .wave-card-title { font-size: 1.25rem; }
+
+      .wave-card-excerpt {
+        font-size: 0.88rem;
+        color: #64748b;
+        line-height: 1.65;
+        flex: 1;
+        margin-bottom: 1rem;
+      }
+
+      .wave-read-more {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        color: #2563eb;
+        font-size: 0.85rem;
+        font-weight: 700;
+        text-decoration: none;
+        transition: gap 0.2s ease;
+      }
+
+      .wave-card:hover .wave-read-more { gap: 0.65rem; }
+
+      /* Sidebar stack */
+      .wave-sidebar {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+      }
+
+      /* Bottom row — 3 equal cards */
+      .wave-bottom-row {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1.5rem;
+      }
+
+      @media (max-width: 768px) {
+        .wave-bottom-row { grid-template-columns: 1fr; }
+      }
+
+      .wave-bottom-row .wave-card-img { height: 140px; }
+
+      /* "See all posts" CTA */
+      .wave-cta-row {
+        text-align: center;
+        margin-top: 2rem;
+      }
+
+      .wave-all-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.9rem 2rem;
+        background: linear-gradient(135deg, #2563eb, #3b82f6);
+        color: white;
+        border: none;
+        border-radius: 50px;
+        font-family: 'Open Sans', sans-serif;
+        font-size: 0.95rem;
+        font-weight: 700;
+        cursor: pointer;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 20px rgba(37, 99, 235, 0.3);
+      }
+
+      .wave-all-btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 32px rgba(37, 99, 235, 0.45);
+      }
+
+      /* ---- Dark mode support ---- */
+      [data-theme="dark"] .team-toggle-btn,
+      [data-theme="dark"] .team-card,
+      [data-theme="dark"] .wave-card {
+        background: var(--bg-secondary);
+        border-color: var(--border-color);
+      }
+
+      [data-theme="dark"] .team-toggle-text h2,
+      [data-theme="dark"] .team-member-name,
+      [data-theme="dark"] .wave-card-title {
+        color: var(--text-primary) !important;
+      }
+
+      [data-theme="dark"] .team-toggle-text p,
+      [data-theme="dark"] .team-member-bio,
+      [data-theme="dark"] .wave-card-excerpt,
+      [data-theme="dark"] .wave-tagline {
+        color: var(--text-secondary) !important;
+      }
+
+      [data-theme="dark"] .team-chevron,
+      [data-theme="dark"] .team-social-link {
+        background: var(--hover-bg);
+      }
+
+      @media (max-width: 768px) {
+        .team-section, .wave-section { padding: 0 1rem; }
+        .team-grid { grid-template-columns: 1fr 1fr; }
+        .wave-title { font-size: 1.9rem; }
+      }
+    </style>
   </head>
   <body>
   <nav>
     <div class="navbar">
       <div class="navdiv">
-        <!-- Logo -->
         <div class="logo">
           <a href="index.html">
             <img src="images/logo.png" alt="NextStep Logo" class="logo-image">
           </a>
         </div>
-
-        <!-- Navigation links -->
         <nav class="nav-links">
           <ul>
             <li class="navbar-item"><a href="index.html">Home</a></li>
             <li class="navbar-item"><a href="map.html">Map</a></li>
             <li class="navbar-item"><a href="events.html">Events</a></li>
-            <li class="navbar-item"><a href="chatbot.html">Compass</a></li>
             <li class="navbar-item"><a href="badges.html">Badges</a></li>
+            <li class="navbar-item"><a href="chatbot.html">Compass</a></li>
             <li class="navbar-item"><a href="contact.html" class="active">Contact Us</a></li>
             <li class="navbar-item"><a href="leaderboard.html">Leader Board</a></li>
           </ul>
         </nav>
-
         <div class="nav-right">
           <li class="navbar-item"><a href="login.html" class="login">Login</a></li>
           <li class="navbar-item"><a href="signup.html" class="signup">Sign Up</a></li>
@@ -101,14 +540,13 @@
       <p>Have questions or want to get involved? We'd love to hear from you!</p>
     </div>
 
-    <!-- Main Two-Column Layout: Form Left, Info Right -->
+    <!-- Main Two-Column Layout -->
     <div class="contact-container">
 
-      <!-- LEFT: Contact Form (larger/primary) -->
+      <!-- LEFT: Contact Form -->
       <div class="form-card">
         <h2>Send Us a Message</h2>
 
-        <!-- Progress Bar -->
         <div class="form-progress">
           <div class="progress-step active" data-step="1">
             <div class="step-circle">1</div>
@@ -127,7 +565,6 @@
         </div>
 
         <form id="contact-form">
-          <!-- Step 1: Basic Info -->
           <div class="form-step active" data-step="1">
             <div class="form-row">
               <div class="form-group">
@@ -149,7 +586,6 @@
             </button>
           </div>
 
-          <!-- Step 2: Inquiry Details -->
           <div class="form-step" data-step="2">
             <div class="form-group">
               <label for="inquiry-type">What brings you here? *</label>
@@ -168,17 +604,14 @@
             </div>
             <div class="button-row">
               <button type="button" class="nav-button prev-button">
-                <span class="button-icon">←</span>
-                <span>Back</span>
+                <span class="button-icon">←</span><span>Back</span>
               </button>
               <button type="button" class="nav-button next-button">
-                <span>Next Step</span>
-                <span class="button-icon">→</span>
+                <span>Next Step</span><span class="button-icon">→</span>
               </button>
             </div>
           </div>
 
-          <!-- Step 3: Message -->
           <div class="form-step" data-step="3">
             <div class="form-group">
               <label for="message">Your Message *</label>
@@ -186,22 +619,19 @@
             </div>
             <div class="button-row">
               <button type="button" class="nav-button prev-button">
-                <span class="button-icon">←</span>
-                <span>Back</span>
+                <span class="button-icon">←</span><span>Back</span>
               </button>
               <button type="submit" class="submit-button">
-                <span>Send Message</span>
-                <span class="button-icon">✓</span>
+                <span>Send Message</span><span class="button-icon">✓</span>
               </button>
             </div>
           </div>
         </form>
       </div>
 
-      <!-- RIGHT: Info Cards Sidebar -->
+      <!-- RIGHT: Info Sidebar -->
       <div class="contact-info-sidebar">
 
-        <!-- Response Time -->
         <div class="info-card">
           <div class="info-card-icon" style="background: linear-gradient(135deg, #10b981, #059669);">
             <i class="fas fa-clock" style="color:white;font-size:1.3rem;"></i>
@@ -214,7 +644,6 @@
           </div>
         </div>
 
-        <!-- Email -->
         <div class="info-card">
           <div class="info-card-icon">
             <i class="fas fa-envelope" style="color:white;font-size:1.3rem;"></i>
@@ -224,16 +653,14 @@
           <a href="mailto:nextstep.civic@gmail.com" style="color:#2563eb;">nextstep.civic@gmail.com</a>
         </div>
 
-        <!-- Location / Area Served -->
         <div class="info-card">
           <div class="info-card-icon" style="background: linear-gradient(135deg, #f59e0b, #d97706);">
             <i class="fas fa-map-marker-alt" style="color:white;font-size:1.3rem;"></i>
           </div>
           <h3>Serving Boca Raton</h3>
-          <p>We're focused on making civic engagement accessible for everyone in the Boca Raton community, FL. </p>
+          <p>We're focused on making civic engagement accessible for everyone in the Boca Raton community, FL.</p>
         </div>
 
-        <!-- Social Media -->
         <div class="info-card">
           <div class="info-card-icon" style="background: linear-gradient(135deg, #8b5cf6, #7c3aed);">
             <i class="fas fa-share-alt" style="color:white;font-size:1.3rem;"></i>
@@ -244,14 +671,162 @@
             <a href="#" class="social-link-btn" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
             <a href="#" class="social-link-btn" aria-label="X (Twitter)"><i class="fab fa-x-twitter"></i></a>
             <a href="#" class="social-link-btn" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-            <a href="#" class="social-link-btn" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+            <a href="https://www.youtube.com/@NextStep-Civic" target="_blank" class="social-link-btn" aria-label="YouTube"><i class="fa-brands fa-youtube"></i></a>
           </div>
         </div>
 
       </div>
     </div>
 
-    <!-- FAQ Section — Full Width Below -->
+    <!-- ================================================
+         MEET THE TEAM
+         ================================================ -->
+    <div class="team-section">
+      <button class="team-toggle-btn" id="teamToggleBtn" onclick="toggleTeam()" aria-expanded="false">
+        <div class="team-toggle-left">
+          <div class="team-toggle-icon">
+            <i class="fas fa-users"></i>
+          </div>
+          <div class="team-toggle-text">
+            <h2>Meet the Team</h2>
+            <p>The people behind NextStep — click to say hello</p>
+          </div>
+        </div>
+        <div class="team-chevron">
+          <i class="fas fa-chevron-down"></i>
+        </div>
+      </button>
+
+      <div class="team-drawer" id="teamDrawer">
+        <div class="team-grid" id="teamGrid">
+          <!-- Cards injected by JS -->
+        </div>
+      </div>
+    </div>
+
+    <!-- ================================================
+         WAVE BLOG
+         ================================================ -->
+    <div class="wave-section">
+      <div class="wave-header">
+        <div class="wave-wordmark">
+          <div class="wave-logo-badge">
+            <i class="fas fa-water"></i>
+          </div>
+          <span class="wave-title">Wave</span>
+        </div>
+        <p class="wave-tagline">Stories, insights, and ideas from the NextStep community</p>
+      </div>
+
+      <!-- Top row: featured + sidebar stack -->
+      <div class="wave-grid">
+        <!-- Featured post -->
+        <a class="wave-card featured" href="#" onclick="openPost(0); return false;">
+          <div class="wave-card-img" style="background: linear-gradient(135deg, #2563eb 0%, #1e3a8a 100%);">
+            <span>🗳️</span>
+            <span class="wave-card-cat">Civic Engagement</span>
+          </div>
+          <div class="wave-card-body">
+            <div class="wave-card-meta">
+              <span><i class="fas fa-calendar-alt"></i> May 10, 2025</span>
+              <span><i class="fas fa-clock"></i> 5 min read</span>
+            </div>
+            <div class="wave-card-title">Why Local Elections Matter More Than You Think</div>
+            <div class="wave-card-excerpt">Your city council, school board, and county commissioners shape daily life far more directly than national politics. Here's why showing up for local races is the highest-leverage civic act you can take.</div>
+            <span class="wave-read-more">Read more <i class="fas fa-arrow-right"></i></span>
+          </div>
+        </a>
+
+        <!-- Sidebar stack -->
+        <div class="wave-sidebar">
+          <a class="wave-card" href="#" onclick="openPost(1); return false;">
+            <div class="wave-card-img" style="background: linear-gradient(135deg, #10b981 0%, #065f46 100%);">
+              <span>🌿</span>
+              <span class="wave-card-cat">Environment</span>
+            </div>
+            <div class="wave-card-body">
+              <div class="wave-card-meta">
+                <span><i class="fas fa-calendar-alt"></i> Apr 22, 2025</span>
+              </div>
+              <div class="wave-card-title">Boca's Green Future: 5 Local Initiatives to Watch</div>
+              <div class="wave-card-excerpt">From mangrove restoration to solar incentives, the city is quietly building an environmental track record worth knowing.</div>
+              <span class="wave-read-more">Read more <i class="fas fa-arrow-right"></i></span>
+            </div>
+          </a>
+
+          <a class="wave-card" href="#" onclick="openPost(2); return false;">
+            <div class="wave-card-img" style="background: linear-gradient(135deg, #f59e0b 0%, #92400e 100%);">
+              <span>🧑‍🎓</span>
+              <span class="wave-card-cat">Youth</span>
+            </div>
+            <div class="wave-card-body">
+              <div class="wave-card-meta">
+                <span><i class="fas fa-calendar-alt"></i> Apr 5, 2025</span>
+              </div>
+              <div class="wave-card-title">How Gen Z Is Reshaping Civic Participation</div>
+              <div class="wave-card-excerpt">Forget apathy stereotypes — young Boca residents are leading workshops, petitions, and community art projects.</div>
+              <span class="wave-read-more">Read more <i class="fas fa-arrow-right"></i></span>
+            </div>
+          </a>
+        </div>
+      </div>
+
+      <!-- Bottom row: 3 equal cards -->
+      <div class="wave-bottom-row">
+        <a class="wave-card" href="#" onclick="openPost(3); return false;">
+          <div class="wave-card-img" style="background: linear-gradient(135deg, #8b5cf6 0%, #4c1d95 100%);">
+            <span>💡</span>
+            <span class="wave-card-cat">Innovation</span>
+          </div>
+          <div class="wave-card-body">
+            <div class="wave-card-meta">
+              <span><i class="fas fa-calendar-alt"></i> Mar 28, 2025</span>
+            </div>
+            <div class="wave-card-title">Tech Tools Every Civic Advocate Should Know</div>
+            <div class="wave-card-excerpt">From open data portals to petition platforms, technology is making civic action faster and smarter.</div>
+            <span class="wave-read-more">Read more <i class="fas fa-arrow-right"></i></span>
+          </div>
+        </a>
+
+        <a class="wave-card" href="#" onclick="openPost(4); return false;">
+          <div class="wave-card-img" style="background: linear-gradient(135deg, #ec4899 0%, #831843 100%);">
+            <span>🏘️</span>
+            <span class="wave-card-cat">Community</span>
+          </div>
+          <div class="wave-card-body">
+            <div class="wave-card-meta">
+              <span><i class="fas fa-calendar-alt"></i> Mar 14, 2025</span>
+            </div>
+            <div class="wave-card-title">Neighbors Who Changed Their Block</div>
+            <div class="wave-card-excerpt">Three Boca Raton residents share their stories of organizing, petitioning, and turning frustration into real change.</div>
+            <span class="wave-read-more">Read more <i class="fas fa-arrow-right"></i></span>
+          </div>
+        </a>
+
+        <a class="wave-card" href="#" onclick="openPost(5); return false;">
+          <div class="wave-card-img" style="background: linear-gradient(135deg, #0ea5e9 0%, #0c4a6e 100%);">
+            <span>📚</span>
+            <span class="wave-card-cat">Education</span>
+          </div>
+          <div class="wave-card-body">
+            <div class="wave-card-meta">
+              <span><i class="fas fa-calendar-alt"></i> Feb 28, 2025</span>
+            </div>
+            <div class="wave-card-title">A Beginner's Guide to the City Budget Process</div>
+            <div class="wave-card-excerpt">Where does your tax dollar actually go? We break down Boca's budget cycle and show you when to show up.</div>
+            <span class="wave-read-more">Read more <i class="fas fa-arrow-right"></i></span>
+          </div>
+        </a>
+      </div>
+
+      <div class="wave-cta-row">
+        <a href="#" class="wave-all-btn">
+          <i class="fas fa-water"></i> Explore All Wave Posts
+        </a>
+      </div>
+    </div>
+
+    <!-- FAQ Section -->
     <div class="faq-section">
       <div class="faq-header">
         <h2>Frequently Asked Questions</h2>
@@ -321,14 +896,27 @@
       </div>
     </div>
 
-    <img src="images/bocaBeach.jpg" alt="boca Beach">
-
   </main>
+
+  <!-- Blog Post Modal -->
+  <div id="wave-modal-overlay" style="
+    display:none; position:fixed; inset:0;
+    background:rgba(0,0,0,0.65); backdrop-filter:blur(6px);
+    z-index:9999; align-items:center; justify-content:center; padding:20px;
+  ">
+    <div style="
+      background:white; border-radius:24px; max-width:660px; width:100%;
+      max-height:88vh; overflow-y:auto;
+      box-shadow:0 24px 80px rgba(0,0,0,0.3);
+      animation:popIn 0.3s ease;
+    ">
+      <div id="wave-modal-content"></div>
+    </div>
+  </div>
 
   <footer>
     <div class="footer-content">
       <div class="footer-grid">
-        <!-- About Section -->
         <div class="footer-section footer-about">
           <h3>NEXTSTEP</h3>
           <p>Empowering communities through civic engagement. Discover local events, connect with your neighbors, and make a real difference in Boca Raton.</p>
@@ -336,11 +924,9 @@
             <a href="#" class="social-link" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
             <a href="#" class="social-link" aria-label="X (Twitter)"><i class="fab fa-x-twitter"></i></a>
             <a href="#" class="social-link" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-            <a href="#" class="social-link" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+            <a href="https://www.youtube.com/@NextStep-Civic" target="_blank" class="social-link" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
           </div>
         </div>
-
-        <!-- Quick Links -->
         <div class="footer-section">
           <h4>Quick Links</h4>
           <ul class="footer-links">
@@ -351,8 +937,6 @@
             <li><a href="contact.html">Contact Us</a></li>
           </ul>
         </div>
-
-        <!-- Resources -->
         <div class="footer-section">
           <h4>Resources</h4>
           <ul class="footer-links">
@@ -363,19 +947,15 @@
             <li><a href="#">Partners</a></li>
           </ul>
         </div>
-
-        <!-- Newsletter -->
         <div class="footer-section">
           <h4>Stay Updated</h4>
-          <p style="opacity: 0.5; font-size: 0.95rem; margin-bottom: 1rem;">Subscribe to our newsletter for the latest civic events and opportunities.</p>
+          <p style="opacity:0.5;font-size:0.95rem;margin-bottom:1rem;">Subscribe to our newsletter for the latest civic events and opportunities.</p>
           <form class="newsletter-form" onsubmit="handleNewsletter(event)">
             <input type="email" class="newsletter-input" placeholder="Your email" required>
             <button type="submit" class="newsletter-button">Join</button>
           </form>
         </div>
       </div>
-
-      <!-- Footer Bottom -->
       <div class="footer-bottom">
         <p>&copy; 2025 NextStep. All rights reserved.</p>
         <div class="footer-bottom-links">
@@ -391,6 +971,13 @@
   <script type="module" src="auth-check.js"></script>
   <script src="dark-mode.js"></script>
   <script src="mobile-nav.js"></script>
+
+  <style>
+    @keyframes popIn {
+      from { opacity:0; transform:scale(0.94) translateY(10px); }
+      to   { opacity:1; transform:scale(1) translateY(0); }
+    }
+  </style>
 
   </body>
 </html>

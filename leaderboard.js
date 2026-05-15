@@ -8,7 +8,7 @@ import {
 import {
   getFirestore,
   collection,
-  getDocs
+  onSnapshot
 } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 
 const firebaseConfig = {
@@ -37,43 +37,51 @@ onAuthStateChanged(auth, (user) => {
 });
 
 // ── Fetch all user progress docs from Firestore ────────
-async function loadLeaderboard() {
-  try {
-    const snapshot = await getDocs(collection(db, 'userProgress'));
+function loadLeaderboard() {
+  const q = collection(db, 'userProgress');
 
-    allUsers = [];
-    snapshot.forEach(docSnap => {
-      const data = docSnap.data();
-      allUsers.push({
-        uid:       docSnap.id,
-        name:      data.displayName  || data.name || 'Anonymous',
-        photoURL:  data.photoURL     || null,
-        events:    Number(data.eventsAttended)   || 0,
-        badges:    Number(data.badgesEarned)      || 0,
-        hours:     Number(data.volunteeredHours)  || 0,
-        // combined = weighted sum: events×3 + badges×5 + hours×2
-        combined:  (Number(data.eventsAttended) || 0) * 3
-                 + (Number(data.badgesEarned)    || 0) * 5
-                 + (Number(data.volunteeredHours)|| 0) * 2
-      });
+onSnapshot(collection(db, 'userProgress'), (snapshot) => {
+  console.log("🔥 SNAPSHOT FIRED:", snapshot.docs.length);
+
+  allUsers = snapshot.docs.map(docSnap => {
+    const data = docSnap.data();
+
+      return {
+        uid: docSnap.id,
+        name: data.displayName || data.name || 'Anonymous',
+        photoURL: data.photoURL || null,
+        events: Number(data.eventsAttended) || 0,
+        badges: Number(data.badgesEarned) || 0,
+        hours: Number(data.volunteeredHours) || 0,
+        combined:
+          (Number(data.eventsAttended) || 0) * 3 +
+          (Number(data.badgesEarned) || 0) * 5 +
+          (Number(data.volunteeredHours) || 0) * 2
+      };
     });
 
-    // Update footer timestamp
+  console.log("📊 DATA:", allUsers);
+
+  renderTab(currentTab);
+});
     const footer = document.getElementById('lb-footer');
-    if (footer) footer.textContent = `Last updated: ${new Date().toLocaleString()}`;
+    if (footer) {
+      footer.textContent = `Last updated: ${new Date().toLocaleString()}`;
+    }
 
     renderTab(currentTab);
+  } (err) => {
+    console.error('Leaderboard listener error:', err);
 
-  } catch (err) {
-    console.error('Error loading leaderboard:', err);
     document.getElementById('lb-podium').innerHTML = `
       <div class="lb-empty">
         <i class="fas fa-exclamation-circle"></i>
-        Could not load leaderboard. Please refresh.
+        Could not load leaderboard.
       </div>`;
+
     document.getElementById('lb-list').innerHTML = '';
-  }
-}
+  };
+
 
 // ── Tab switching ──────────────────────────────────────
 window.switchTab = function(tab, btn) {
