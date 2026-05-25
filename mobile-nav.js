@@ -32,7 +32,6 @@
       }
 
       // ── Auth / profile area ──
-      // Always read .nav-right at open time (auth-check may have swapped it)
       const navRight = document.querySelector('.nav-right');
       if (navRight) {
         const rightClone = document.createElement('div');
@@ -42,7 +41,6 @@
         const profileDropdown = navRight.querySelector('.profile-dropdown');
         if (profileDropdown) {
           const pd = profileDropdown.cloneNode(true);
-          // Make the cloned profile button close the panel when clicked
           const btn = pd.querySelector('.profile-btn');
           if (btn) {
             btn.onclick = function () {
@@ -50,14 +48,13 @@
               if (menu) menu.classList.toggle('show');
             };
           }
-          // Close panel when a profile menu link is clicked
           pd.querySelectorAll('a').forEach(a => {
             a.addEventListener('click', closeMenu);
           });
           rightClone.appendChild(pd);
         } else {
-          // Not logged in — clone login/signup links
-          navRight.querySelectorAll('a, li').forEach(el => {
+          // Not logged in — clone only <li> elements (not <a> separately)
+          navRight.querySelectorAll('li').forEach(el => {
             rightClone.appendChild(el.cloneNode(true));
           });
         }
@@ -66,15 +63,14 @@
 
       // Close on link click
       mobilePanel.querySelectorAll('a').forEach(a => {
-        a.addEventListener('click', function (e) {
-          // Only close if it's a real navigation (not profile sub-menu toggle)
+        a.addEventListener('click', function () {
           if (!a.closest('.profile-menu')) closeMenu();
         });
       });
     }
 
     function openMenu() {
-      buildPanel(); // re-build every time so auth state is current
+      buildPanel();
       hamburger.classList.add('active');
       hamburger.setAttribute('aria-expanded', 'true');
       mobilePanel.classList.add('open');
