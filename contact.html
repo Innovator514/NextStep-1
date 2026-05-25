@@ -50,7 +50,16 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-
+<link rel="stylesheet" href="loading-screen.css" type="text/css"/>
+<script src="loading-screen.js"></script>
+<link rel="stylesheet" href="back-to-top.css" type="text/css"/>
+<script src="back-to-top.js"></script>
+<link rel="stylesheet" href="cookie-consent.css" type="text/css"/>
+<script src="cookie-consent.js"></script>
+<link rel="stylesheet" href="scroll-progress.css" type="text/css"/>
+<script src="scroll-progress.js"></script>
+<link rel="stylesheet" href="announcement-banner.css" type="text/css"/>
+<script src="announcement-banner.js"></script>
     <title>Contact Us – NextStep</title>
 
     <style>
@@ -521,7 +530,7 @@
             <li class="navbar-item"><a href="badges.html">Badges</a></li>
             <li class="navbar-item"><a href="chatbot.html">Compass</a></li>
             <li class="navbar-item"><a href="contact.html" class="active">Contact Us</a></li>
-            <li class="navbar-item"><a href="leaderboard.html">Leader Board</a></li>
+            <li class="navbar-item"><a href="the-podium.html">Leader Board</a></li>
           </ul>
         </nav>
         <div class="nav-right">
@@ -547,85 +556,43 @@
       <div class="form-card">
         <h2>Send Us a Message</h2>
 
-        <div class="form-progress">
-          <div class="progress-step active" data-step="1">
-            <div class="step-circle">1</div>
-            <span class="step-label">Your Info</span>
-          </div>
-          <div class="progress-line"></div>
-          <div class="progress-step" data-step="2">
-            <div class="step-circle">2</div>
-            <span class="step-label">Details</span>
-          </div>
-          <div class="progress-line"></div>
-          <div class="progress-step" data-step="3">
-            <div class="step-circle">3</div>
-            <span class="step-label">Message</span>
-          </div>
-        </div>
-
         <form id="contact-form">
-          <div class="form-step active" data-step="1">
-            <div class="form-row">
-              <div class="form-group">
-                <label for="name">Name *</label>
-                <input type="text" id="name" name="name" required placeholder="Your full name">
-              </div>
-              <div class="form-group">
-                <label for="email">Email *</label>
-                <input type="email" id="email" name="email" required placeholder="your@email.com">
-              </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="name">Name *</label>
+              <input type="text" id="name" name="name" required placeholder="Your full name">
             </div>
             <div class="form-group">
-              <label for="phone">Phone <span style="font-weight:400;color:#94a3b8;">(optional)</span></label>
-              <input type="tel" id="phone" name="phone" placeholder="(123) 456-7890">
-            </div>
-            <button type="button" class="nav-button next-button">
-              <span>Next Step</span>
-              <span class="button-icon">→</span>
-            </button>
-          </div>
-
-          <div class="form-step" data-step="2">
-            <div class="form-group">
-              <label for="inquiry-type">What brings you here? *</label>
-              <select id="inquiry-type" name="inquiry_type" required>
-                <option value="">Select a topic...</option>
-                <option value="volunteer">Volunteer Opportunities</option>
-                <option value="partnership">Partnership Inquiry</option>
-                <option value="event">Event Information</option>
-                <option value="feedback">Feedback</option>
-                <option value="other">Other</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label for="subject">Subject *</label>
-              <input type="text" id="subject" name="subject" required placeholder="Brief summary of your inquiry">
-            </div>
-            <div class="button-row">
-              <button type="button" class="nav-button prev-button">
-                <span class="button-icon">←</span><span>Back</span>
-              </button>
-              <button type="button" class="nav-button next-button">
-                <span>Next Step</span><span class="button-icon">→</span>
-              </button>
+              <label for="email">Email *</label>
+              <input type="email" id="email" name="email" required placeholder="your@email.com">
             </div>
           </div>
-
-          <div class="form-step" data-step="3">
-            <div class="form-group">
-              <label for="message">Your Message *</label>
-              <textarea id="message" name="message" rows="8" required placeholder="Tell us more about how we can help you..."></textarea>
-            </div>
-            <div class="button-row">
-              <button type="button" class="nav-button prev-button">
-                <span class="button-icon">←</span><span>Back</span>
-              </button>
-              <button type="submit" class="submit-button">
-                <span>Send Message</span><span class="button-icon">✓</span>
-              </button>
-            </div>
+          <div class="form-group">
+            <label for="phone">Phone <span style="font-weight:400;color:#94a3b8;">(optional)</span></label>
+            <input type="tel" id="phone" name="phone" placeholder="(123) 456-7890">
           </div>
+          <div class="form-group">
+            <label for="inquiry-type">What brings you here? *</label>
+            <select id="inquiry-type" name="inquiry_type" required>
+              <option value="">Select a topic...</option>
+              <option value="volunteer">Volunteer Opportunities</option>
+              <option value="partnership">Partnership Inquiry</option>
+              <option value="event">Event Information</option>
+              <option value="feedback">Feedback</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="subject">Subject *</label>
+            <input type="text" id="subject" name="subject" required placeholder="Brief summary of your inquiry">
+          </div>
+          <div class="form-group">
+            <label for="message">Your Message *</label>
+            <textarea id="message" name="message" rows="6" required placeholder="Tell us more about how we can help you..."></textarea>
+          </div>
+          <button type="submit" class="submit-button">
+            <span>Send Message</span><span class="button-icon">✓</span>
+          </button>
         </form>
       </div>
 
@@ -950,18 +917,18 @@
         <div class="footer-section">
           <h4>Stay Updated</h4>
           <p style="opacity:0.5;font-size:0.95rem;margin-bottom:1rem;">Subscribe to our newsletter for the latest civic events and opportunities.</p>
-          <form class="newsletter-form" onsubmit="handleNewsletter(event)">
-            <input type="email" class="newsletter-input" placeholder="Your email" required>
-            <button type="submit" class="newsletter-button">Join</button>
-          </form>
+          <form class="newsletter-form" method="POST" action="https://app.kit.com/forms/9372116/subscriptions">
+  <input type="email" name="email_address" class="newsletter-input" placeholder="Your email" required>
+  <button type="submit" class="newsletter-button">Join</button>
+</form>
         </div>
       </div>
       <div class="footer-bottom">
         <p>&copy; 2025 NextStep. All rights reserved.</p>
         <div class="footer-bottom-links">
-          <a href="#">Privacy Policy</a>
-          <a href="#">Terms of Service</a>
-          <a href="#">Accessibility</a>
+          <a href="privacy-policy.html">Privacy Policy</a>
+<a href="terms-of-service.html">Terms of Service</a>
+<a href="accessibility.html">Accessibility</a>
         </div>
       </div>
     </div>

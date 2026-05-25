@@ -338,7 +338,7 @@ You help residents discover local events, understand how local government works,
 
 Key facts about NextStep:
 - NextStep is a civic engagement platform focused on Boca Raton, FL
-- Features: interactive event map, event listings, badge system for engagement, leaderboard, and Compass (you)
+- Features: interactive event map, event listings, badge system for engagement, the podium, and Compass (you)
 - Event categories: Political, Youth, Innovation, Environmental, Education, Religious
 - Users earn badges by attending events, volunteering, speaking at town halls, and other civic actions
 - The platform uses Firebase for auth and Firestore for data

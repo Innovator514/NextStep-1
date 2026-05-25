@@ -246,124 +246,7 @@
    MULTI-STEP PROGRESS BAR
    =================================== */
 
-/* Progress Indicator Container */
-/* Shows current step in the multi-step form */
-.form-progress {
-    display: flex;
-    align-items: center; /* Vertically center items */
-    justify-content: space-between; /* Spread steps evenly */
-    margin-bottom: 2.5rem;
-    position: relative;
-}
 
-/* Individual Step Indicator */
-/* Contains circle number and label */
-.progress-step {
-    display: flex;
-    flex-direction: column; /* Stack circle above label */
-    align-items: center;
-    gap: 0.5rem; /* Space between circle and label */
-    position: relative;
-    z-index: 2; /* Ensure step appears above connecting line */
-}
-
-/* Step Number Circle */
-/* Circular indicator showing step number */
-.step-circle {
-    width: 45px;
-    height: 45px;
-    border-radius: 50%; /* Perfect circle */
-    background: #e2e8f0; /* Light gray (inactive) */
-    color: #94a3b8; /* Gray text (inactive) */
-    display: flex;
-    align-items: center; /* Center number vertically */
-    justify-content: center; /* Center number horizontally */
-    font-weight: 700;
-    font-size: 1.1rem;
-    transition: all 0.3s ease; /* Smooth state changes */
-}
-
-/* Active Step Circle */
-/* Blue gradient for current step */
-.progress-step.active .step-circle {
-    background: linear-gradient(135deg, #2563eb, #3b82f6); /* Blue gradient */
-    color: white;
-    box-shadow: 0 4px 15px rgba(37, 99, 235, 0.4); /* Glowing shadow */
-}
-
-/* Completed Step Circle */
-/* Green background for finished steps */
-.progress-step.completed .step-circle {
-    background: #10b981; /* Green */
-    color: white;
-}
-
-/* Step Label Text */
-/* Text below each step circle */
-.step-label {
-    font-size: 0.85rem;
-    font-weight: 600;
-    color: #94a3b8; /* Gray (inactive) */
-    transition: color 0.3s; /* Smooth color change */
-}
-
-/* Active Step Label */
-.progress-step.active .step-label {
-    color: #2563eb; /* Blue */
-}
-
-/* Completed Step Label */
-.progress-step.completed .step-label {
-    color: #10b981; /* Green */
-}
-
-/* Line Connecting Progress Steps */
-/* Horizontal line between step indicators */
-.progress-line {
-    flex: 1; /* Take up remaining space */
-    height: 3px;
-    background: #e2e8f0; /* Light gray (inactive) */
-    margin: 0 0.5rem; /* Space from circles */
-    position: relative;
-    top: -1rem; /* Move up to align with circles */
-    transition: background 0.3s; /* Smooth color change */
-}
-
-/* Completed Progress Line */
-/* Green line for completed sections */
-.progress-line.completed {
-    background: #10b981; /* Green */
-}
-
-/* ===================================
-   FORM STEPS
-   =================================== */
-
-/* Form Step Container */
-/* Each step of the form (hidden by default) */
-.form-step {
-    display: none; /* Hidden by default */
-    animation: fadeInStep 0.4s ease; /* Slide-in animation when shown */
-}
-
-/* Active Step Display */
-/* Shows the current step */
-.form-step.active {
-    display: block;
-}
-
-/* Step Transition Animation */
-/* Slides in from right with fade effect */
-@keyframes fadeInStep {
-    from {
-        opacity: 0;
-        transform: translateX(20px); /* Start off to the right */
-    }
-    to {
-        opacity: 1;
-        transform: translateX(0); /* End in normal position */
-    }
-}
 
 /* Two-Column Form Row */
 /* Places two form fields side by side */
@@ -423,58 +306,13 @@
    FORM NAVIGATION BUTTONS
    =================================== */
 
-/* Button Row Container */
-/* Holds navigation buttons (Previous/Next/Submit) */
-.button-row {
-    display: flex;
-    gap: 1rem; /* Space between buttons */
-}
 
-/* Navigation Button Base Style */
-/* Previous and Next buttons */
-.nav-button {
-    flex: 1; /* Take equal width */
-    padding: 1rem 2rem;
-    background: white;
-    color: #2563eb; /* Blue text */
-    border: 2px solid #2563eb; /* Blue border */
-    border-radius: 10px;
-    font-size: 1rem;
-    font-weight: 700;
-    cursor: pointer;
-    transition: all 0.3s ease; /* Smooth hover effect */
-    display: flex;
-    align-items: center; /* Center content vertically */
-    justify-content: center; /* Center content horizontally */
-    gap: 0.5rem; /* Space between text and icon */
-}
-
-/* Navigation Button Hover Effect */
-.nav-button:hover {
-    background: #f1f5f9; /* Light gray background */
-    transform: translateY(-2px); /* Lift up slightly */
-}
-
-/* Next Button Styling */
-/* Blue gradient background */
-.nav-button.next-button {
-    background: linear-gradient(135deg, #2563eb, #3b82f6); /* Blue gradient */
-    color: white;
-    border: none; /* No border */
-}
-
-/* Next Button Hover Effect */
-.nav-button.next-button:hover {
-    transform: translateY(-3px); /* Lift up more */
-    box-shadow: 0 8px 25px rgba(37, 99, 235, 0.4); /* Blue glowing shadow */
-}
 
 /* Submit Button Styling */
-/* Green gradient for final submission */
 .submit-button {
-    flex: 1; /* Take full width in button row */
+    width: 100%;
     padding: 1rem 2rem;
-    background: linear-gradient(135deg, #10b981, #059669); /* Green gradient */
+    background: linear-gradient(135deg, #2563eb, #3b82f6);
     color: white;
     border: none;
     border-radius: 10px;
@@ -489,10 +327,9 @@
 }
 
 /* Submit Button Hover Effect */
-/* Only applies when button is not disabled */
 .submit-button:hover:not(:disabled) {
-    transform: translateY(-3px); /* Lift up */
-    box-shadow: 0 10px 30px rgba(16, 185, 129, 0.4); /* Green glowing shadow */
+    transform: translateY(-3px);
+    box-shadow: 0 10px 30px rgba(37, 99, 235, 0.4);
 }
 
 /* Disabled Submit Button */
@@ -757,26 +594,6 @@
         font-size: 1.75rem;
     }
 
-    .form-progress {
-        padding: 0 0.25rem;
-    }
-
-    .step-label {
-        font-size: 0.72rem;
-    }
-
-    .step-circle {
-        width: 38px;
-        height: 38px;
-        font-size: 0.95rem;
-    }
-
-    .button-row {
-        flex-direction: column;
-        gap: 0.75rem;
-    }
-
-    .nav-button,
     .submit-button {
         width: 100%;
         justify-content: center;
