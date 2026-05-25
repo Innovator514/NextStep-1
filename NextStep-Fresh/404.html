@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Page not found – NextStep" />
+  <meta name="robots" content="noindex" />
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+  <link rel="stylesheet" href="style.css" type="text/css"/>
+  <link rel="stylesheet" href="dark-mode.css" type="text/css"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="loading-screen.css" type="text/css"/>
+<script src="loading-screen.js"></script>
+ <link rel="stylesheet" href="back-to-top.css" type="text/css"/>
+<script src="back-to-top.js"></script>
+<link rel="stylesheet" href="cookie-consent.css" type="text/css"/>
+<script src="cookie-consent.js"></script>
+<link rel="stylesheet" href="scroll-progress.css" type="text/css"/>
+<script src="scroll-progress.js"></script>
+<link rel="stylesheet" href="announcement-banner.css" type="text/css"/>
+<script src="announcement-banner.js"></script>
+<title>Page Not Found – NextStep</title>
+  <style>
+    .error-main {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #f8fafc 0%, #e0e7ff 100%);
+      padding: 100px 20px 60px;
+      text-align: center;
+    }
+
+    .error-container {
+      max-width: 580px;
+      width: 100%;
+    }
+
+    .error-number {
+      font-size: 8rem;
+      font-weight: 800;
+      line-height: 1;
+      background: linear-gradient(135deg, #2563eb, #3b82f6);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 0.25rem;
+      animation: fadeDown 0.6s ease both;
+    }
+
+    .error-icon {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      animation: fadeDown 0.6s ease 0.1s both;
+    }
+
+    .error-title {
+      font-size: 1.75rem;
+      font-weight: 800;
+      color: #1e3a8a;
+      margin-bottom: 1rem;
+      animation: fadeDown 0.6s ease 0.2s both;
+    }
+
+    .error-subtitle {
+      color: #64748b;
+      font-size: 1.05rem;
+      line-height: 1.7;
+      margin-bottom: 2.5rem;
+      animation: fadeDown 0.6s ease 0.3s both;
+    }
+
+    .error-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      justify-content: center;
+      margin-bottom: 2.5rem;
+      animation: fadeDown 0.6s ease 0.4s both;
+    }
+
+    .error-btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.9rem 2rem;
+      background: linear-gradient(135deg, #2563eb, #3b82f6);
+      color: white;
+      text-decoration: none;
+      border-radius: 25px;
+      font-weight: 700;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 20px rgba(37, 99, 235, 0.3);
+    }
+
+    .error-btn-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 30px rgba(37, 99, 235, 0.45);
+    }
+
+    .error-btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.9rem 2rem;
+      background: white;
+      color: #2563eb;
+      text-decoration: none;
+      border-radius: 25px;
+      font-weight: 700;
+      font-size: 1rem;
+      border: 2px solid #2563eb;
+      transition: all 0.3s ease;
+    }
+
+    .error-btn-secondary:hover {
+      background: #eff6ff;
+      transform: translateY(-3px);
+    }
+
+    .error-quick-links {
+      animation: fadeDown 0.6s ease 0.5s both;
+    }
+
+    .error-quick-links p {
+      color: #94a3b8;
+      font-size: 0.9rem;
+      font-weight: 600;
+      margin-bottom: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .error-quick-links ul {
+      list-style: none;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      justify-content: center;
+      padding: 0;
+      margin: 0;
+    }
+
+    .error-quick-links ul li a {
+      display: inline-block;
+      padding: 0.45rem 1.1rem;
+      background: white;
+      color: #334155;
+      text-decoration: none;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      border: 1px solid #e2e8f0;
+      transition: all 0.2s ease;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+
+    .error-quick-links ul li a:hover {
+      background: #eff6ff;
+      color: #2563eb;
+      border-color: #2563eb;
+      transform: translateY(-2px);
+    }
+
+    @keyframes fadeDown {
+      from { opacity: 0; transform: translateY(-20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 480px) {
+      .error-number { font-size: 5.5rem; }
+      .error-title  { font-size: 1.4rem; }
+      .error-links  { flex-direction: column; align-items: center; }
+      .error-btn-primary,
+      .error-btn-secondary { width: 100%; justify-content: center; }
+    }
+
+    /* Dark mode */
+    [data-theme="dark"] .error-title { color: #e2e8f0; }
+    [data-theme="dark"] .error-quick-links ul li a {
+      background: rgba(255,255,255,0.05);
+      border-color: rgba(255,255,255,0.1);
+      color: #e2e8f0;
+    }
+    [data-theme="dark"] .error-btn-secondary {
+      background: transparent;
+      color: #60a5fa;
+      border-color: #60a5fa;
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="navbar">
+      <div class="navdiv">
+        <div class="logo">
+          <a href="index.html">
+            <img src="images/logo.png" alt="NextStep Logo" class="logo-image">
+          </a>
+        </div>
+        <nav class="nav-links">
+          <ul>
+            <li class="navbar-item"><a href="index.html">Home</a></li>
+            <li class="navbar-item"><a href="map.html">Map</a></li>
+            <li class="navbar-item"><a href="events.html">Events</a></li>
+            <li class="navbar-item"><a href="badges.html">Badges</a></li>
+            <li class="navbar-item"><a href="chatbot.html">Compass</a></li>
+            <li class="navbar-item"><a href="contact.html">Contact Us</a></li>
+            <li class="navbar-item"><a href="leaderboard.html">The Podium</a></li>
+          </ul>
+        </nav>
+        <div class="nav-right">
+          <li class="navbar-item"><a href="login.html" class="login">Login</a></li>
+          <li class="navbar-item"><a href="signup.html" class="signup">Sign Up</a></li>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <main class="error-main">
+    <div class="error-container">
+      <div class="error-number">404</div>
+      <div class="error-icon">🗺️</div>
+      <h1 class="error-title">Looks like you took a wrong turn</h1>
+      <p class="error-subtitle">
+        This page doesn't exist or may have been moved. Let's get you back on the path to civic engagement!
+      </p>
+
+      <div class="error-links">
+        <a href="index.html" class="error-btn-primary">
+          <i class="fas fa-home"></i> Back to Home
+        </a>
+        <a href="events.html" class="error-btn-secondary">
+          <i class="fas fa-calendar-alt"></i> Browse Events
+        </a>
+      </div>
+
+      <div class="error-quick-links">
+        <p>Or jump to</p>
+        <ul>
+          <li><a href="map.html">Map</a></li>
+          <li><a href="badges.html">Badges</a></li>
+          <li><a href="chatbot.html">Compass</a></li>
+          <li><a href="leaderboard.html">The Podium</a></li>
+          <li><a href="contact.html">Contact Us</a></li>
+        </ul>
+      </div>
+    </div>
+  </main>
+
+  <script type="module" src="auth-check.js"></script>
+  <script src="dark-mode.js"></script>
+  <script src="mobile-nav.js"></script>
+</body>
+</html>

@@ -1,0 +1,111 @@
+/* ================================
+   NEXTSTEP ANNOUNCEMENT BANNER
+   ================================ */
+
+#announcement-banner {
+  position: fixed;
+  top: 70px; /* sits just below the navbar */
+  left: 0;
+  right: 0;
+  z-index: 999;
+  background: linear-gradient(135deg, #0ea5e9, #10b981);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding: 0.65rem 3rem 0.65rem 1.5rem;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 0.92rem;
+  font-weight: 600;
+  text-align: center;
+  flex-wrap: wrap;
+  transform: translateY(-100%);
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+}
+
+#announcement-banner.visible {
+  transform: translateY(0);
+}
+
+#announcement-banner.hidden {
+  transform: translateY(-100%);
+}
+
+.announcement-emoji {
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+
+.announcement-text {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.announcement-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: white;
+  color: #0ea5e9;
+  text-decoration: none;
+  padding: 0.3rem 1rem;
+  border-radius: 20px;
+  font-weight: 700;
+  font-size: 0.85rem;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.announcement-link:hover {
+  background: #f0f9ff;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.announcement-close {
+  position: absolute;
+  right: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  color: white;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  transition: background 0.2s ease;
+  flex-shrink: 0;
+}
+
+.announcement-close:hover {
+  background: rgba(255, 255, 255, 0.35);
+}
+
+/* Push page content down when banner is visible */
+body.banner-visible .navbar {
+  top: 38px;
+}
+
+@media (max-width: 768px) {
+  #announcement-banner {
+    top: 64px;
+    font-size: 0.82rem;
+    padding: 0.6rem 2.5rem 0.6rem 1rem;
+    gap: 0.5rem;
+  }
+
+  body.banner-visible .navbar {
+    top: 52px;
+  }
+}

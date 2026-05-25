@@ -1,0 +1,15 @@
+/* ================================
+   NEXTSTEP SCROLL PROGRESS BAR
+   ================================ */
+
+#scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 0%;
+  height: 3px;
+  background: linear-gradient(90deg, #2563eb, #3b82f6, #60a5fa);
+  z-index: 99999;
+  transition: width 0.1s linear;
+  border-radius: 0 2px 2px 0;
+}
