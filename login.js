@@ -76,6 +76,7 @@ function showMessage(message, type) {
 }
 
 // Error messages
+// Error messages dictionary
 function getErrorMessage(code) {
   const messages = {
     'auth/invalid-email': 'Invalid email address format.',
@@ -90,9 +91,13 @@ function getErrorMessage(code) {
     'auth/unauthorized-domain': 'This domain is not authorized. Please contact support.'
   };
   
+  // Clean fallback if error.code is missing or undefined
+  if (!code) {
+    return 'An unexpected authentication error occurred. Please try again.';
+  }
+  
   return messages[code] || `Error: ${code}. Please try again.`;
 }
-
 // Flag to prevent double redirects
 let isRedirecting = false;
 

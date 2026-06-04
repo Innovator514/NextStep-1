@@ -1,4 +1,6 @@
 // auth-navbar.js — Global NextStep Navbar Access Control Engine
+// Only manages Admin Dashboard link visibility.
+// All login/logout/profile UI is handled exclusively by auth-check.js.
 import { initializeApp, getApps } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
 import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
 import { getFirestore, doc, getDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
@@ -17,23 +19,15 @@ const app = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-// Listen globally for account updates
+// Listen globally — only toggles the Admin Dashboard nav link.
+// auth-check.js handles all login/logout/profile dropdown UI.
 onAuthStateChanged(auth, async (user) => {
   const adminNavLink = document.getElementById('admin-nav-link');
-  const loginBtn = document.getElementById('nav-login');
-  const signupBtn = document.getElementById('nav-signup');
 
   if (!user) {
-    // Force reset state if user logs out or has no profile token
     if (adminNavLink) adminNavLink.style.display = 'none';
-    if (loginBtn) { loginBtn.textContent = 'Login'; loginBtn.href = 'login.html'; }
-    if (signupBtn) signupBtn.style.display = 'block';
     return;
   }
-
-  // Manage profile button modifications
-  if (loginBtn) { loginBtn.textContent = 'Log Out'; loginBtn.href = '#'; loginBtn.onclick = () => auth.signOut(); }
-  if (signupBtn) signupBtn.style.display = 'none';
 
   // Run Firestore Admin privilege filter check
   try {
@@ -41,7 +35,7 @@ onAuthStateChanged(auth, async (user) => {
     if (userSnap.exists()) {
       const data = userSnap.data();
       if (data.isAdmin === true || data.role === 'admin') {
-        if (adminNavLink) adminNavLink.style.display = 'block'; // Unhide tab!
+        if (adminNavLink) adminNavLink.style.display = 'block';
       }
     }
   } catch (err) {
