@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QR Generator – NextStep Admin</title>
+
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="dark-mode.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <!-- QR code library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    .qr-page {
+      min-height: 100vh;
+      background: linear-gradient(160deg, #f0f4ff 0%, #e8eeff 100%);
+      padding: 90px 20px 60px;
+      font-family: 'Open Sans', sans-serif;
+    }
+
+    .qr-inner {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .qr-header {
+      text-align: center;
+      margin-bottom: 2.5rem;
+    }
+
+    .qr-header h1 {
+      font-size: 2.2rem;
+      font-weight: 800;
+      color: rgb(1,9,67);
+      margin-bottom: 0.5rem;
+    }
+
+    .qr-header p { color: #64748b; font-size: 1rem; }
+
+    .admin-badge {
+      display: inline-block;
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      background: linear-gradient(135deg, #2563eb, #3b82f6);
+      color: white;
+      padding: 4px 12px;
+      border-radius: 20px;
+      margin-bottom: 0.75rem;
+    }
+
+    /* ── Grid: selector + QR output ── */
+    .qr-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      align-items: start;
+    }
+
+    @media (max-width: 700px) {
+      .qr-grid { grid-template-columns: 1fr; }
+    }
+
+    /* ── Card ── */
+    .qr-card {
+      background: white;
+      border-radius: 20px;
+      padding: 1.75rem;
+      box-shadow: 0 8px 32px rgba(37,99,235,0.1);
+    }
+
+    .qr-card h2 {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: rgb(1,9,67);
+      margin-bottom: 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .qr-card h2 i { color: #2563eb; }
+
+    /* ── Access denied overlay ── */
+    .access-denied {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 0.75rem;
+      padding: 3rem 2rem;
+    }
+
+    .access-denied.show { display: flex; }
+
+    .access-denied-icon {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      background: #fee2e2;
+      color: #dc2626;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .access-denied h2 { color: rgb(1,9,67); font-size: 1.2rem; font-weight: 800; border: none; display: block; margin: 0; }
+    .access-denied p  { color: #64748b; font-size: 0.9rem; line-height: 1.6; max-width: 340px; }
+    .access-denied .btn { margin-top: 0.5rem; }
+
+    /* ── Event list ── */
+    .event-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      max-height: 420px;
+      overflow-y: auto;
+      scrollbar-width: thin;
+      scrollbar-color: #e2e8f0 transparent;
+    }
+
+    .event-list::-webkit-scrollbar       { width: 4px; }
+    .event-list::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 4px; }
+
+    .event-item {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.75rem 1rem;
+      border: 2px solid #e2e8f0;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .event-item:hover  { border-color: #2563eb; background: #eff6ff; }
+    .event-item.active { border-color: #2563eb; background: #eff6ff; }
+
+    .event-cat-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .event-item-title { font-size: 0.9rem; font-weight: 700; color: rgb(1,9,67); }
+    .event-item-meta  { font-size: 0.75rem; color: #94a3b8; margin-top: 1px; }
+
+    /* ── Search/filter ── */
+    .list-search {
+      width: 100%;
+      padding: 0.55rem 0.875rem;
+      border: 2px solid #e2e8f0;
+      border-radius: 10px;
+      font-family: 'Open Sans', sans-serif;
+      font-size: 0.85rem;
+      color: rgb(1,9,67);
+      outline: none;
+      margin-bottom: 0.75rem;
+      transition: border-color 0.2s;
+    }
+    .list-search:focus { border-color: #2563eb; }
+    .list-search::placeholder { color: #94a3b8; }
+
+    /* ── Manual ID input ── */
+    .manual-input-group {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: 1rem;
+      padding-top: 1rem;
+      border-top: 1px solid #e2e8f0;
+    }
+
+    .manual-input {
+      flex: 1;
+      padding: 0.6rem 0.875rem;
+      border: 2px solid #e2e8f0;
+      border-radius: 10px;
+      font-family: 'Open Sans', sans-serif;
+      font-size: 0.85rem;
+      color: rgb(1,9,67);
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .manual-input:focus { border-color: #2563eb; }
+    .manual-input::placeholder { color: #94a3b8; }
+
+    .manual-btn {
+      padding: 0.6rem 1rem;
+      background: linear-gradient(135deg, #2563eb, #3b82f6);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-family: 'Open Sans', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 700;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s;
+    }
+
+    .manual-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 14px rgba(37,99,235,0.35); }
+
+    /* ── Loading indicator inside list ── */
+    .list-loading {
+      text-align: center;
+      padding: 2rem;
+      color: #94a3b8;
+      font-size: 0.9rem;
+    }
+
+    .list-empty {
+      text-align: center;
+      padding: 1.5rem;
+      color: #94a3b8;
+      font-size: 0.85rem;
+    }
+
+    /* ── QR output ── */
+    .qr-output {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .qr-placeholder {
+      width: 220px;
+      height: 220px;
+      background: #f8fafc;
+      border: 2px dashed #e2e8f0;
+      border-radius: 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: #94a3b8;
+      font-size: 0.85rem;
+      font-weight: 600;
+      gap: 0.5rem;
+      text-align: center;
+    }
+
+    .qr-placeholder i { font-size: 2.5rem; opacity: 0.35; }
+
+    #qr-canvas-wrapper {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+      width: 100%;
+    }
+
+    #qr-canvas-wrapper.show { display: flex; }
+
+    #qr-code {
+      background: white;
+      padding: 1rem;
+      border-radius: 16px;
+      box-shadow: 0 4px 20px rgba(37,99,235,0.1);
+    }
+
+    #qr-code canvas, #qr-code img { display: block; }
+
+    .qr-event-label {
+      text-align: center;
+      max-width: 260px;
+    }
+
+    .qr-event-name {
+      font-size: 0.95rem;
+      font-weight: 800;
+      color: rgb(1,9,67);
+      margin-bottom: 0.25rem;
+    }
+
+    .qr-event-date {
+      font-size: 0.8rem;
+      color: #64748b;
+    }
+
+    .qr-url-box {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 0.6rem 0.875rem;
+      font-size: 0.75rem;
+      color: #64748b;
+      word-break: break-all;
+      width: 100%;
+      font-family: monospace;
+    }
+
+    .btn-row {
+      display: flex;
+      gap: 0.5rem;
+      width: 100%;
+    }
+
+    .btn {
+      flex: 1;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+      padding: 0.7rem 1rem;
+      border-radius: 10px;
+      font-family: 'Open Sans', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 700;
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s;
+      text-decoration: none;
+    }
+
+    .btn-primary  { background: linear-gradient(135deg,#2563eb,#3b82f6); color:white; box-shadow: 0 3px 12px rgba(37,99,235,0.3); }
+    .btn-primary:hover  { transform:translateY(-1px); box-shadow: 0 6px 20px rgba(37,99,235,0.42); }
+    .btn-secondary { background: #f1f5f9; color: #475569; }
+    .btn-secondary:hover { background: #e2e8f0; }
+
+    /* ── Copy URL button ── */
+    .copy-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: #2563eb;
+      font-size: 0.78rem;
+      font-family: 'Open Sans', sans-serif;
+      font-weight: 700;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+      transition: color 0.2s;
+      align-self: flex-start;
+    }
+    .copy-btn:hover { color: #1d4ed8; }
+    .copy-btn.copied { color: #059669; }
+
+    /* ── How-to section ── */
+    .howto-card {
+      background: white;
+      border-radius: 20px;
+      padding: 1.75rem;
+      box-shadow: 0 8px 32px rgba(37,99,235,0.08);
+      margin-top: 1.5rem;
+    }
+
+    .howto-card h2 {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: rgb(1,9,67);
+      margin-bottom: 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .howto-steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+      gap: 1rem;
+    }
+
+    .step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 0.5rem;
+    }
+
+    .step-num {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: linear-gradient(135deg,#2563eb,#3b82f6);
+      color: white;
+      font-size: 1.1rem;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .step-title { font-size: 0.88rem; font-weight: 700; color: rgb(1,9,67); }
+    .step-desc  { font-size: 0.78rem; color: #64748b; line-height: 1.5; }
+
+    /* ── Toast notification ── */
+    .toast {
+      position: fixed;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%) translateY(80px);
+      background: rgb(1,9,67);
+      color: white;
+      padding: 0.75rem 1.5rem;
+      border-radius: 12px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      opacity: 0;
+      transition: all 0.3s cubic-bezier(0.175,0.885,0.32,1.275);
+      z-index: 9999;
+      white-space: nowrap;
+    }
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    /* ── Dark mode ── */
+    [data-theme="dark"] .qr-page         { background: linear-gradient(160deg,#0a1628 0%,#0f2744 100%); }
+    [data-theme="dark"] .qr-card,
+    [data-theme="dark"] .howto-card      { background: #0f2744; box-shadow: 0 8px 32px rgba(0,0,0,0.4); }
+    [data-theme="dark"] .qr-header h1,
+    [data-theme="dark"] .qr-card h2,
+    [data-theme="dark"] .howto-card h2,
+    [data-theme="dark"] .qr-event-name,
+    [data-theme="dark"] .event-item-title,
+    [data-theme="dark"] .step-title       { color: #f1f5f9; }
+    [data-theme="dark"] .event-item       { border-color: #1e3a5f; }
+    [data-theme="dark"] .event-item:hover,
+    [data-theme="dark"] .event-item.active { background: #1e3a5f; border-color: #3b82f6; }
+    [data-theme="dark"] .manual-input,
+    [data-theme="dark"] .list-search      { background: #0a1628; color: #f1f5f9; border-color: #1e3a5f; }
+    [data-theme="dark"] .qr-url-box       { background: #0a1628; border-color: #1e3a5f; }
+    [data-theme="dark"] .btn-secondary    { background: #1e3a5f; color: #e2e8f0; }
+    [data-theme="dark"] .qr-placeholder   { background: #0a1628; border-color: #1e3a5f; }
+    [data-theme="dark"] #qr-code          { background: white; }
+    [data-theme="dark"] .manual-input-group { border-top-color: #1e3a5f; }
+    [data-theme="dark"] .access-denied h2  { color: #f1f5f9; }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="navbar">
+    <div class="navdiv">
+      <div class="logo">
+        <a href="index.html"><img src="images/logo.png" alt="NextStep Logo" class="logo-image"></a>
+      </div>
+      <nav class="nav-links">
+        <ul>
+          <li class="navbar-item"><a href="index.html">Home</a></li>
+          <li class="navbar-item"><a href="events.html">Events</a></li>
+          <li class="navbar-item"><a href="badges.html">Badges</a></li>
+          <li class="navbar-item"><a href="contact.html">Contact Us</a></li>
+        </ul>
+      </nav>
+      <div class="nav-right">
+        <li class="navbar-item"><a href="login.html" class="login" id="nav-login">Login</a></li>
+        <li class="navbar-item"><a href="signup.html" class="signup" id="nav-signup">Sign Up</a></li>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<main class="qr-page">
+  <div class="qr-inner">
+
+    <div class="qr-header">
+      <div class="admin-badge"><i class="fas fa-shield-halved"></i> Admin Tool</div>
+      <h1>Event QR Generator</h1>
+      <p>Select an event to generate a check-in QR code. Print or display it at the venue.</p>
+    </div>
+
+    <!-- Access Denied Panel (shown for non-admins) -->
+    <div class="qr-card" id="access-denied-card" style="display:none">
+      <div class="access-denied show">
+        <div class="access-denied-icon"><i class="fas fa-lock"></i></div>
+        <h2>Admin Access Required</h2>
+        <p>This tool is only available to NextStep administrators. Please sign in with an admin account to generate event QR codes.</p>
+        <a href="login.html?redirect=qr-generator.html" class="btn btn-primary" style="flex:none; margin-top:0.5rem; padding: 0.75rem 2rem;">
+          <i class="fas fa-sign-in-alt"></i> Sign In as Admin
+        </a>
+      </div>
+    </div>
+
+    <!-- Main tool (shown for admins) -->
+    <div id="tool-content" style="display:none">
+      <div class="qr-grid">
+
+        <!-- Left: event picker -->
+        <div class="qr-card">
+          <h2><i class="fas fa-calendar-check"></i> Pick an Event</h2>
+          <input class="list-search" id="event-search" placeholder="Search events…" oninput="filterEvents(this.value)">
+          <div class="event-list" id="event-list">
+            <div class="list-loading"><i class="fas fa-spinner fa-spin"></i><br>Loading events…</div>
+          </div>
+
+          <!-- Manual ID fallback -->
+          <div class="manual-input-group">
+            <input class="manual-input" id="manual-id" placeholder="Or paste a Firestore event ID…">
+            <button class="manual-btn" onclick="generateFromManualId()">Generate</button>
+          </div>
+        </div>
+
+        <!-- Right: QR output -->
+        <div class="qr-card">
+          <h2><i class="fas fa-qrcode"></i> QR Code</h2>
+          <div class="qr-output">
+
+            <div class="qr-placeholder" id="qr-placeholder">
+              <i class="fas fa-qrcode"></i>
+              Select an event<br>to generate a QR code
+            </div>
+
+            <div id="qr-canvas-wrapper">
+              <div id="qr-code"></div>
+
+              <div class="qr-event-label">
+                <div class="qr-event-name" id="qr-event-name"></div>
+                <div class="qr-event-date" id="qr-event-date"></div>
+              </div>
+
+              <div class="qr-url-box" id="qr-url-box"></div>
+
+              <button class="copy-btn" id="copy-btn" onclick="copyURL()">
+                <i class="fas fa-copy"></i> Copy check-in URL
+              </button>
+
+              <div class="btn-row">
+                <button class="btn btn-primary"    onclick="downloadQR()"><i class="fas fa-download"></i> Download</button>
+                <button class="btn btn-secondary"  onclick="printQR()"><i class="fas fa-print"></i> Print</button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- How-to -->
+      <div class="howto-card">
+        <h2><i class="fas fa-circle-info"></i> How It Works</h2>
+        <div class="howto-steps">
+          <div class="step">
+            <div class="step-num">1</div>
+            <div class="step-title">Generate QR</div>
+            <div class="step-desc">Select your event above and download the QR code PNG.</div>
+          </div>
+          <div class="step">
+            <div class="step-num">2</div>
+            <div class="step-title">Display It</div>
+            <div class="step-desc">Print it or show it on a screen at the event entrance.</div>
+          </div>
+          <div class="step">
+            <div class="step-num">3</div>
+            <div class="step-title">Attendees Scan</div>
+            <div class="step-desc">Attendees scan with their phone camera — no app needed.</div>
+          </div>
+          <div class="step">
+            <div class="step-num">4</div>
+            <div class="step-title">Badges Update</div>
+            <div class="step-desc">Their progress and badges update automatically in real time.</div>
+          </div>
+        </div>
+      </div>
+    </div><!-- /tool-content -->
+
+  </div>
+</main>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script type="module">
+import { initializeApp, getApps } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+import { getAuth, onAuthStateChanged }
+  from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+import { getFirestore, collection, getDocs, getDoc, doc }
+  from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+
+const firebaseConfig = {
+  apiKey: "AIzaSyArZYz6UMheUgBVrNeWvxWml-0zDTbNur0",
+  authDomain: "nextstep-12b9a.firebaseapp.com",
+  projectId: "nextstep-12b9a",
+  storageBucket: "nextstep-12b9a.firebasestorage.app",
+  messagingSenderId: "630600034259",
+  appId: "1:630600034259:web:6b6284e147a6f79cda7126",
+  measurementId: "G-WH3JL7Y7BR"
+};
+
+const app  = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db   = getFirestore(app);
+
+const CAT_COLORS = {
+  political:'#2563eb', environmental:'#10b981', youth:'#f59e0b',
+  innovation:'#ec4899', education:'#b325eb', religious:'#d97706',
+};
+
+let selectedEvent = null;
+let allEvents     = [];
+
+// Build check-in URL
+function checkinURL(eventId) {
+  const base = window.location.origin + window.location.pathname.replace('qr-generator.html', '');
+  return base + 'check-in.html?event=' + encodeURIComponent(eventId);
+}
+window.checkinURL = checkinURL;
+
+// Render QR code
+function renderQR(event) {
+  selectedEvent = event;
+  const url = checkinURL(event.id);
+
+  document.getElementById('qr-placeholder').style.display = 'none';
+  const wrapper = document.getElementById('qr-canvas-wrapper');
+  wrapper.classList.add('show');
+
+  document.getElementById('qr-event-name').textContent = event.title || event.id;
+  document.getElementById('qr-event-date').textContent = [event.date, event.time].filter(Boolean).join(' - ');
+  document.getElementById('qr-url-box').textContent    = url;
+
+  const container = document.getElementById('qr-code');
+  container.innerHTML = '';
+  new QRCode(container, {
+    text        : url,
+    width       : 200,
+    height      : 200,
+    colorDark   : '#010943',
+    colorLight  : '#ffffff',
+    correctLevel: QRCode.CorrectLevel.H,
+  });
+
+  const copyBtn = document.getElementById('copy-btn');
+  if (copyBtn) {
+    copyBtn.classList.remove('copied');
+    copyBtn.innerHTML = '<i class="fas fa-copy"></i> Copy check-in URL';
+  }
+}
+
+// Build a single event list item
+function makeEventItem(e) {
+  const item = document.createElement('div');
+  item.className = 'event-item';
+  item.dataset.id    = e.id;
+  item.dataset.title = (e.title || '').toLowerCase();
+  const dot  = '<div class="event-cat-dot" style="background:' + (CAT_COLORS[e.category] || '#2563eb') + '"></div>';
+  const meta = [e.date, e.location].filter(Boolean).join(' - ') || 'No date/location set';
+  item.innerHTML = dot +
+    '<div>' +
+      '<div class="event-item-title">' + (e.title || e.id) + '</div>' +
+      '<div class="event-item-meta">'  + meta + '</div>' +
+    '</div>';
+  item.addEventListener('click', function() {
+    document.querySelectorAll('.event-item').forEach(function(i) { i.classList.remove('active'); });
+    item.classList.add('active');
+    renderQR(e);
+  });
+  return item;
+}
+
+// Filter events by search
+window.filterEvents = function(query) {
+  var q = query.toLowerCase().trim();
+  var listEl = document.getElementById('event-list');
+  var items  = listEl.querySelectorAll('.event-item');
+  var visible = 0;
+  items.forEach(function(item) {
+    var match = !q || item.dataset.title.includes(q);
+    item.style.display = match ? '' : 'none';
+    if (match) visible++;
+  });
+  var emptyEl = listEl.querySelector('.list-empty');
+  if (!visible && q) {
+    if (!emptyEl) {
+      emptyEl = document.createElement('div');
+      emptyEl.className = 'list-empty';
+      emptyEl.textContent = 'No events match your search.';
+      listEl.appendChild(emptyEl);
+    }
+    emptyEl.style.display = '';
+  } else if (emptyEl) {
+    emptyEl.style.display = 'none';
+  }
+};
+
+// Load events from Firestore
+async function loadEvents() {
+  var listEl = document.getElementById('event-list');
+  try {
+    var snap = await getDocs(collection(db, 'events'));
+    listEl.innerHTML = '';
+    if (snap.empty) {
+      listEl.innerHTML = '<div class="list-loading">No events found in Firestore.</div>';
+      return;
+    }
+    snap.forEach(function(docSnap) {
+      var e = Object.assign({ id: docSnap.id }, docSnap.data());
+      allEvents.push(e);
+      listEl.appendChild(makeEventItem(e));
+    });
+  } catch (err) {
+    console.error(err);
+    listEl.innerHTML = '<div class="list-loading"><i class="fas fa-exclamation-triangle"></i><br>Error loading events.</div>';
+  }
+}
+
+// Manual ID generate
+window.generateFromManualId = async function() {
+  var id = document.getElementById('manual-id').value.trim();
+  if (!id) return;
+  try {
+    var snap  = await getDoc(doc(db, 'events', id));
+    var event = snap.exists() ? Object.assign({ id: snap.id }, snap.data()) : { id: id };
+    renderQR(event);
+  } catch (e) {
+    renderQR({ id: id });
+  }
+};
+
+// Download QR
+window.downloadQR = function() {
+  if (!selectedEvent) return;
+  setTimeout(function() {
+    var canvas = document.querySelector('#qr-code canvas');
+    var img    = document.querySelector('#qr-code img');
+    if (canvas) {
+      var link    = document.createElement('a');
+      link.download = 'nextstep-checkin-' + selectedEvent.id + '.png';
+      link.href     = canvas.toDataURL();
+      link.click();
+      showToast('QR code downloaded!');
+    } else if (img) {
+      window.open(img.src, '_blank');
+    }
+  }, 300);
+};
+
+// Print QR
+window.printQR = function() {
+  if (!selectedEvent) return;
+  setTimeout(function() {
+    var canvas = document.querySelector('#qr-code canvas');
+    var img    = document.querySelector('#qr-code img');
+    var src    = canvas ? canvas.toDataURL() : (img ? img.src : null);
+    if (!src) return;
+    var w = window.open('', '_blank');
+    var meta = [selectedEvent.date, selectedEvent.time, selectedEvent.location].filter(Boolean).join(' - ');
+    var openS  = '<' + 'script>';
+    var closeS = '<' + '/script>';
+    var html = '<html><head>'
+      + '<title>Check-in QR - ' + (selectedEvent.title || selectedEvent.id) + '</title>'
+      + '<style>'
+      + 'body{font-family:sans-serif;text-align:center;padding:40px;}'
+      + 'h1{font-size:28px;margin-bottom:8px;color:#010943;}'
+      + 'p{color:#64748b;margin-bottom:24px;font-size:14px;}'
+      + 'img{width:260px;height:260px;}'
+      + '.url{font-size:10px;color:#94a3b8;margin-top:16px;word-break:break-all;}'
+      + '@media print{@page{size:A4;margin:20mm;}}'
+      + '</style></head><body>'
+      + '<h1>Check In Here</h1>'
+      + '<p><strong>' + (selectedEvent.title || selectedEvent.id) + '</strong><br>' + meta + '</p>'
+      + '<img src="' + src + '" alt="QR Code">'
+      + '<div class="url">' + checkinURL(selectedEvent.id) + '</div>'
+      + openS + 'window.onload=function(){window.print();}' + closeS
+      ;
+    w.document.write(html);
+    w.document.close();
+  }, 300);
+};
+
+// Copy check-in URL
+window.copyURL = function() {
+  if (!selectedEvent) return;
+  var url = checkinURL(selectedEvent.id);
+  navigator.clipboard.writeText(url).then(function() {
+    var btn = document.getElementById('copy-btn');
+    btn.classList.add('copied');
+    btn.innerHTML = '<i class="fas fa-check"></i> Copied!';
+    showToast('Check-in URL copied to clipboard');
+    setTimeout(function() {
+      btn.classList.remove('copied');
+      btn.innerHTML = '<i class="fas fa-copy"></i> Copy check-in URL';
+    }, 2500);
+  });
+};
+
+// Toast
+function showToast(msg) {
+  var toast = document.getElementById('toast');
+  toast.textContent = msg;
+  toast.classList.add('show');
+  setTimeout(function() { toast.classList.remove('show'); }, 2500);
+}
+
+// Auth guard — only admins see the tool
+onAuthStateChanged(auth, async function(user) {
+  if (!user) {
+    document.getElementById('access-denied-card').style.display = 'block';
+    return;
+  }
+  var isAdmin = false;
+  try {
+// Fix this line in your qr-generator.html so it matches your security rules!
+    var userSnap = await getDoc(doc(db, 'admins', user.uid));
+    if (userSnap.exists()) {
+      var data = userSnap.data();
+      isAdmin = data.isAdmin === true || data.role === 'admin';
+      console.log('Admin doc found. resolved isAdmin:', isAdmin);
+    } else {
+      // No user doc exists yet — allow access so you can use the tool
+      // Remove this else block once all admin docs are set up in Firestore
+      console.warn('No user document found for UID:', user.uid, '- granting access by default');
+      isAdmin = true;
+    }
+  } catch (e) {
+    console.warn('Could not verify admin role:', e);
+    isAdmin = true;
+  }
+  if (!isAdmin) {
+    console.log('Access denied - not an admin');
+    document.getElementById('access-denied-card').style.display = 'block';
+    return;
+  }
+  console.log('Admin access granted');
+  document.getElementById('tool-content').style.display = 'block';
+  await loadEvents();
+});
+
+// Enter key on manual ID input
+document.addEventListener('DOMContentLoaded', function() {
+  var manualInput = document.getElementById('manual-id');
+  if (manualInput) {
+    manualInput.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') window.generateFromManualId();
+    });
+  }
+});
+</script>
+
+<script type="module" src="auth-check.js"></script>
+<script src="dark-mode.js"></script>
+<script src="mobile-nav.js"></script>
+</body>
+</html>
