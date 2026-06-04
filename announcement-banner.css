@@ -118,3 +118,18 @@ body.banner-visible .leaderboard-main {
     margin-top: 55px !important; /* Slightly larger margin to accommodate stacked mobile lines */
   }
 }
+/* ── Compass (chatbot) page fix ──
+   .compass-shell is a div, not main, so needs its own banner rule.
+   When the banner is visible, shrink the shell height and push it down. */
+body.banner-visible .compass-shell {
+  margin-top: calc(var(--nav-h, 70px) + 40px);
+  height: calc(100vh - var(--nav-h, 70px) - 40px);
+  transition: margin-top 0.4s ease, height 0.4s ease;
+}
+
+@media (max-width: 768px) {
+  body.banner-visible .compass-shell {
+    margin-top: calc(64px + 55px);
+    height: calc(100vh - 64px - 55px);
+  }
+}
