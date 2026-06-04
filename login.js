@@ -33,10 +33,26 @@ try {
   googleProvider = new GoogleAuthProvider();
   
   // Set persistence
-  setPersistence(auth, browserLocalPersistence).catch((error) => {
-    console.error('Error setting persistence:', error);
-  });
-  
+// Optimized Persistence for Mobile Compatibility
+setPersistence(auth, browserLocalPersistence)
+  .then(() => {
+    console.log('✅ Local persistence set successfully');
+  })
+  .catch((error) => {
+    console.warn('⚠️ Local storage restricted by mobile browser. Trying session backup...', error);
+    
+    // Import browserSessionPersistence from your auth package if not already there
+    import('https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js')
+      .then(({ browserSessionPersistence }) => {
+        return setPersistence(auth, browserSessionPersistence);
+      })
+      .then(() => {
+        console.log('✅ Session backup persistence enabled successfully');
+      })
+      .catch((fallbackError) => {
+        console.error('❌ Complete persistence lockdown:', fallbackError);
+      });
+  });  
   // Export auth for other modules
   window.firebaseAuth = auth;
   
