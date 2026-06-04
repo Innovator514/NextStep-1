@@ -172,7 +172,189 @@ nav li a:hover {
   color: #2563eb;
   transform: translateY(-2px);
 }
+/* ═══════════════════════════════════════════════════════════
+   navbar-dropdown.css
+   Adds a hover/click dropdown under "Contact Us" in the navbar.
+   Add <link rel="stylesheet" href="navbar-dropdown.css"> in <head>
+   on every page that uses the shared navbar.
+═══════════════════════════════════════════════════════════ */
 
+/* Make Contact Us parent a positioning context */
+.navbar-item.has-dropdown {
+    position: relative;
+}
+
+/* The "Contact Us" link arrow indicator */
+.navbar-item.has-dropdown > a::after {
+    content: '';
+    display: inline-block;
+    margin-left: 5px;
+    width: 0;
+    height: 0;
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+    border-top: 5px solid currentColor;
+    vertical-align: middle;
+    opacity: 0.6;
+    transition: transform 0.22s ease;
+}
+
+.navbar-item.has-dropdown:hover > a::after,
+.navbar-item.has-dropdown.open > a::after {
+    transform: rotate(180deg);
+    opacity: 1;
+}
+
+/* ── Dropdown Panel ── */
+.nav-dropdown {
+    position: absolute;
+    top: calc(100% + 10px);
+    left: 50%;
+    transform: translateX(-50%) translateY(-6px);
+    min-width: 230px;
+    background: white;
+    border-radius: 14px;
+    box-shadow: 0 12px 40px rgba(37,99,235,0.15), 0 2px 8px rgba(0,0,0,0.08);
+    border: 1px solid rgba(37,99,235,0.1);
+    padding: 0.5rem;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 0.22s ease, transform 0.22s ease, visibility 0.22s;
+    z-index: 9999;
+}
+
+/* Small arrow pointing up */
+.nav-dropdown::before {
+    content: '';
+    position: absolute;
+    top: -7px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-left: 7px solid transparent;
+    border-right: 7px solid transparent;
+    border-bottom: 7px solid white;
+    filter: drop-shadow(0 -2px 2px rgba(37,99,235,0.08));
+}
+
+/* Open state */
+.navbar-item.has-dropdown:hover .nav-dropdown,
+.navbar-item.has-dropdown.open   .nav-dropdown {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transform: translateX(-50%) translateY(0);
+}
+
+/* ── Dropdown Items ── */
+.nav-dropdown-item {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    padding: 0.65rem 0.9rem;
+    border-radius: 9px;
+    text-decoration: none;
+    color: #334155;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 0.88rem;
+    font-weight: 600;
+    transition: background 0.18s ease, color 0.18s ease, transform 0.18s ease;
+    white-space: nowrap;
+}
+
+.nav-dropdown-item:hover {
+    background: #eff6ff;
+    color: #2563eb;
+    transform: translateX(3px);
+}
+
+/* Icon circle */
+.nav-dropdown-item .dd-icon {
+    width: 30px;
+    height: 30px;
+    border-radius: 8px;
+    background: #eff6ff;
+    color: #2563eb;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.78rem;
+    flex-shrink: 0;
+    transition: background 0.18s ease;
+}
+
+.nav-dropdown-item:hover .dd-icon {
+    background: #2563eb;
+    color: white;
+}
+
+/* Divider */
+.nav-dropdown-divider {
+    height: 1px;
+    background: rgba(37,99,235,0.08);
+    margin: 0.3rem 0.5rem;
+}
+
+/* ── Dark mode ── */
+[data-theme="dark"] .nav-dropdown {
+    background: var(--bg-secondary, #1e293b);
+    border-color: var(--border-color, #334155);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+}
+[data-theme="dark"] .nav-dropdown::before {
+    border-bottom-color: var(--bg-secondary, #1e293b);
+}
+[data-theme="dark"] .nav-dropdown-item {
+    color: var(--text-primary, #e2e8f0);
+}
+[data-theme="dark"] .nav-dropdown-item:hover {
+    background: rgba(96,165,250,0.1);
+    color: #60a5fa;
+}
+[data-theme="dark"] .nav-dropdown-item .dd-icon {
+    background: rgba(96,165,250,0.1);
+    color: #60a5fa;
+}
+[data-theme="dark"] .nav-dropdown-item:hover .dd-icon {
+    background: #2563eb;
+    color: white;
+}
+[data-theme="dark"] .nav-dropdown-divider { background: var(--border-color, #334155); }
+
+/* ── Mobile: turn into a plain list, no hover needed ── */
+@media (max-width: 768px) {
+    /* On mobile the nav collapses into a sidebar/hamburger,
+       so we let the parent mobile-nav.js handle the toggle.
+       The dropdown becomes a flush sub-list. */
+    .navbar-item.has-dropdown > a::after { display: none; }
+
+    .nav-dropdown {
+        position: static;
+        transform: none;
+        opacity: 1;
+        visibility: visible;
+        pointer-events: auto;
+        box-shadow: none;
+        border: none;
+        border-radius: 0;
+        padding: 0 0 0 1rem;
+        background: transparent;
+        display: none;         /* toggled by JS below */
+        min-width: unset;
+    }
+    .nav-dropdown::before { display: none; }
+
+    .navbar-item.has-dropdown.open .nav-dropdown { display: block; }
+
+    .nav-dropdown-item {
+        color: inherit;
+        font-size: 0.9rem;
+        padding: 0.5rem 0.6rem;
+        border-radius: 6px;
+    }
+    .nav-dropdown-item .dd-icon { display: none; }
+    .nav-dropdown-divider { display: none; }
+}
 /* Active Link */
 nav li a.active {
   background: linear-gradient(135deg, #2563eb, #3b82f6);

@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard – NextStep</title>
+
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="dark-mode.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+  <link rel="stylesheet" href="loading-screen.css" type="text/css"/>
+  <script src="loading-screen.js"></script>
+  <link rel="stylesheet" href="back-to-top.css" type="text/css"/>
+  <script src="back-to-top.js"></script>
+  <link rel="stylesheet" href="cookie-consent.css" type="text/css"/>
+  <script src="cookie-consent.js"></script>
+  <link rel="stylesheet" href="scroll-progress.css" type="text/css"/>
+  <script src="scroll-progress.js"></script>
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    .qr-page {
+      min-height: 100vh;
+      background: linear-gradient(160deg, #f0f4ff 0%, #e8eeff 100%);
+      padding: 90px 20px 60px;
+      font-family: 'Open Sans', sans-serif;
+    }
+
+    .qr-inner { max-width: 1100px; margin: 0 auto; }
+    .qr-header { text-align: center; margin-bottom: 2.5rem; }
+    .qr-header h1 { font-size: 2.2rem; font-weight: 800; color: rgb(1,9,67); margin-bottom: 0.5rem; }
+    .qr-header p { color: #64748b; font-size: 1rem; }
+
+    .admin-badge {
+      display: inline-block;
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      background: linear-gradient(135deg, #2563eb, #3b82f6);
+      color: white;
+      padding: 4px 12px;
+      border-radius: 20px;
+      margin-bottom: 0.75rem;
+    }
+
+    .dashboard-section-title {
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: rgb(1,9,67);
+      margin: 2.5rem 0 1rem 0;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      border-bottom: 2px solid #e2e8f0;
+      padding-bottom: 0.5rem;
+    }
+
+    .qr-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      align-items: start;
+      margin-bottom: 1rem;
+    }
+
+    @media (max-width: 850px) {
+      .qr-grid { grid-template-columns: 1fr; }
+    }
+
+    .qr-card {
+      background: white;
+      border-radius: 20px;
+      padding: 1.75rem;
+      box-shadow: 0 8px 32px rgba(37,99,235,0.1);
+    }
+
+    .qr-card h2 {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: rgb(1,9,67);
+      margin-bottom: 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .qr-card h2 i { color: #2563eb; }
+
+    /* Access Denied Elements */
+    .access-denied { display: none; flex-direction: column; align-items: center; text-align: center; gap: 0.75rem; padding: 3rem 2rem; }
+    .access-denied.show { display: flex; }
+    .access-denied-icon { width: 72px; height: 72px; border-radius: 50%; background: #fee2e2; color: #dc2626; display: flex; align-items: center; justify-content: center; font-size: 2rem; margin-bottom: 0.5rem; }
+
+    /* Scroll Containers */
+    .event-list, .announcement-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      max-height: 380px;
+      overflow-y: auto;
+      scrollbar-width: thin;
+    }
+
+    .event-item, .announcement-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      padding: 0.75rem 1rem;
+      border: 2px solid #e2e8f0;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .event-item:hover, .announcement-item:hover, .event-item.active { border-color: #2563eb; background: #eff6ff; }
+
+    .item-main-info { display: flex; align-items: center; gap: 0.75rem; width: 70%; }
+    .event-cat-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+    .event-item-title, .announcement-item-text { font-size: 0.9rem; font-weight: 700; color: rgb(1,9,67); text-overflow: ellipsis; overflow: hidden; white-space: nowrap; }
+    .event-item-meta, .announcement-item-meta { font-size: 0.75rem; color: #94a3b8; margin-top: 1px; }
+
+    /* Custom Admin Operation Status Badges */
+    .status-badge { font-size: 0.7rem; padding: 2px 8px; border-radius: 10px; font-weight: 700; text-transform: uppercase; white-space: nowrap; }
+    .status-active { background: #dcfce7; color: #15803d; }
+    .status-expired { background: #fee2e2; color: #991b1b; }
+    .status-disabled { background: #f1f5f9; color: #475569; }
+
+    /* Interactive Fields */
+    .list-search, .form-input {
+      width: 100%; padding: 0.55rem 0.875rem; border: 2px solid #e2e8f0; border-radius: 10px;
+      font-family: 'Open Sans', sans-serif; font-size: 0.85rem; color: rgb(1,9,67); outline: none; transition: border-color 0.2s;
+    }
+    .list-search { margin-bottom: 0.75rem; }
+    .list-search:focus, .form-input:focus { border-color: #2563eb; }
+    
+    .manual-input-group { display: flex; gap: 0.5rem; margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #e2e8f0; }
+
+    .expiry-group { width: 100%; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1rem; margin-bottom: 1rem; }
+    .expiry-label { font-size: 0.8rem; font-weight: 700; color: rgb(1,9,67); display: flex; align-items: center; gap: 0.4rem; margin-bottom: 0.5rem; }
+
+    /* Rendering Context Layouts */
+    .qr-output { display: flex; flex-direction: column; align-items: center; gap: 1rem; width: 100%; }
+    .qr-placeholder {
+      width: 220px; height: 220px; background: #f8fafc; border: 2px dashed #e2e8f0; border-radius: 16px;
+      display: flex; flex-direction: column; align-items: center; justify-content: center; color: #94a3b8; font-size: 0.85rem; font-weight: 600; gap: 0.5rem; text-align: center;
+    }
+    #qr-canvas-wrapper { display: none; flex-direction: column; align-items: center; gap: 1rem; width: 100%; }
+    #qr-canvas-wrapper.show { display: flex; }
+    #qr-code { background: white; padding: 1rem; border-radius: 16px; box-shadow: 0 4px 20px rgba(37,99,235,0.1); }
+    .qr-url-box { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 0.6rem 0.875rem; font-size: 0.75rem; color: #64748b; word-break: break-all; width: 100%; font-family: monospace; }
+
+    /* Buttons Configuration */
+    .btn { display: inline-flex; align-items: center; justify-content: center; gap: 0.4rem; padding: 0.7rem 1rem; border-radius: 10px; font-family: 'Open Sans', sans-serif; font-size: 0.85rem; font-weight: 700; cursor: pointer; border: none; transition: all 0.2s; text-decoration: none; }
+    .btn-primary { background: linear-gradient(135deg,#2563eb,#3b82f6); color:white; box-shadow: 0 3px 12px rgba(37,99,235,0.3); }
+    .btn-primary:hover { transform:translateY(-1px); box-shadow: 0 6px 20px rgba(37,99,235,0.42); }
+    .btn-secondary { background: #f1f5f9; color: #475569; }
+    .btn-secondary:hover { background: #e2e8f0; }
+    .btn-danger { background: #fee2e2; color: #dc2626; }
+    .btn-danger:hover { background: #fca5a5; }
+    .btn-row { display: flex; gap: 0.5rem; width: 100%; }
+    .copy-btn { background: none; border: none; cursor: pointer; color: #2563eb; font-size: 0.78rem; font-family: 'Open Sans', sans-serif; font-weight: 700; padding: 0; display: flex; align-items: center; gap: 0.3rem; align-self: flex-start; }
+
+    /* Global Dynamic Toast Elements */
+    .toast { position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%) translateY(80px); background: rgb(1,9,67); color: white; padding: 0.75rem 1.5rem; border-radius: 12px; font-size: 0.88rem; font-weight: 600; opacity: 0; transition: all 0.3s cubic-bezier(0.175,0.885,0.32,1.275); z-index: 9999; white-space: nowrap; }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    /* Theme Engine Extensions Mapping */
+    [data-theme="dark"] .qr-page { background: linear-gradient(160deg,#0a1628 0%,#0f2744 100%); }
+    [data-theme="dark"] .qr-card { background: #0f2744; box-shadow: 0 8px 32px rgba(0,0,0,0.4); }
+    [data-theme="dark"] .qr-header h1, [data-theme="dark"] .qr-card h2, [data-theme="dark"] .dashboard-section-title, [data-theme="dark"] .event-item-title, [data-theme="dark"] .announcement-item-text { color: #f1f5f9; }
+    [data-theme="dark"] .event-item, [data-theme="dark"] .announcement-item { border-color: #1e3a5f; }
+    [data-theme="dark"] .event-item:hover, [data-theme="dark"] .announcement-item:hover, [data-theme="dark"] .event-item.active { background: #1e3a5f; border-color: #3b82f6; }
+    [data-theme="dark"] .form-input, [data-theme="dark"] .list-search { background: #0a1628; color: #f1f5f9; border-color: #1e3a5f; }
+    [data-theme="dark"] .qr-url-box { background: #0a1628; border-color: #1e3a5f; }
+    [data-theme="dark"] .btn-secondary { background: #1e3a5f; color: #e2e8f0; }
+    [data-theme="dark"] .qr-placeholder { background: #0a1628; border-color: #1e3a5f; }
+    [data-theme="dark"] .expiry-group { background: #0a1628; border-color: #1e3a5f; }
+    [data-theme="dark"] .expiry-label { color: #f1f5f9; }
+    [data-theme="dark"] #qr-code { background: white; }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="navbar">
+    <div class="navdiv">
+      <div class="logo">
+        <a href="index.html">
+          <img src="images/logo.png" alt="NextStep Logo" class="logo-image">
+        </a>
+      </div>
+      <nav class="nav-links">
+        <ul>
+          <li class="navbar-item"><a href="index.html">Home</a></li>
+          <li class="navbar-item"><a href="map.html">Map</a></li>
+          <li class="navbar-item"><a href="events.html">Events</a></li>
+          <li class="navbar-item"><a href="badges.html">Badges</a></li>
+          <li class="navbar-item" id="admin-nav-link" style="display: none;"><a href="admin-dashboard.html" class="active">Admin Dashboard</a></li>
+          <li class="navbar-item"><a href="chatbot.html">Compass</a></li>
+          <li class="navbar-item"><a href="contact.html">Contact Us</a></li>
+          <li class="navbar-item"><a href="the-podium.html">The Podium</a></li>
+        </ul>
+      </nav>
+
+      <div class="nav-right">
+        <li class="navbar-item"><a href="login.html" class="login" id="nav-login">Login</a></li>
+        <li class="navbar-item"><a href="signup.html" class="signup" id="nav-signup">Sign Up</a></li>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<main class="qr-page">
+  <div class="qr-inner">
+
+    <div class="qr-header">
+      <div class="admin-badge"><i class="fas fa-shield-halved"></i> Master Control Panel</div>
+      <h1>NextStep Administrative Dashboard</h1>
+      <p>Configure dynamic metrics, deploy automated tracking targets, and post system alert banners.</p>
+    </div>
+
+    <div class="qr-card" id="access-denied-card" style="display:none">
+      <div class="access-denied show">
+        <div class="access-denied-icon"><i class="fas fa-lock"></i></div>
+        <h2>Admin Access Required</h2>
+        <p>This master workspace is restricted to verified administrators. Please log in using an approved user profile script.</p>
+        <a href="login.html?redirect=admin-dashboard.html" class="btn btn-primary" style="flex:none; padding: 0.75rem 2rem;">
+          <i class="fas fa-sign-in-alt"></i> Sign In as Admin
+        </a>
+      </div>
+    </div>
+
+    <div id="tool-content" style="display:none">
+      
+      <div class="dashboard-section-title"><i class="fas fa-qrcode"></i> Operational Tracking Codes</div>
+      <div class="qr-grid">
+        <div class="qr-card">
+          <h2><i class="fas fa-calendar-check"></i> Target Check-In Event</h2>
+          <input class="list-search" id="event-search" placeholder="Search operational event registries…" oninput="filterEvents(this.value)">
+          <div class="event-list" id="event-list">
+            <div class="list-loading"><i class="fas fa-spinner fa-spin"></i><br>Gathering system entries...</div>
+          </div>
+          <div class="manual-input-group">
+            <input class="form-input" id="manual-id" placeholder="Paste direct Firestore Event ID reference…">
+            <button class="btn btn-primary" style="border-radius:10px; font-size:0.85rem;" onclick="generateFromManualId()">Locate</button>
+          </div>
+        </div>
+
+        <div class="qr-card">
+          <h2><i class="fas fa-sliders"></i> QR Directives & Status Control</h2>
+          <div class="qr-output">
+            <div class="expiry-group">
+              <label class="expiry-label" for="qr-expiry-input">
+                <i class="fas fa-clock"></i> Assign Automatic Invalidation Expiry (Optional)
+              </label>
+              <input type="datetime-local" class="form-input" id="qr-expiry-input">
+            </div>
+
+            <button class="btn btn-primary" id="btn-save-expiration" style="width: 100%; margin-bottom: 0.5rem; display: none;" onclick="saveQRExpiration()">
+              <i class="fas fa-floppy-disk"></i> Lock Settings & Sync QR Target
+            </button>
+
+            <button class="btn btn-danger" id="btn-stop-qr" style="width: 100%; margin-bottom: 0.5rem; display: none;" onclick="terminateQR()">
+              <i class="fas fa-ban"></i> Revoke Active Code Privileges Immediately
+            </button>
+
+            <div class="qr-placeholder" id="qr-placeholder">
+              <i class="fas fa-qrcode"></i> Select a valid target index parameter event to render vector content blocks.
+            </div>
+
+            <div id="qr-canvas-wrapper">
+              <div id="qr-code"></div>
+              <div style="text-align:center;">
+                <div class="qr-event-name" id="qr-event-name" style="font-weight:800; color:rgb(1,9,67);"></div>
+                <div class="qr-event-date" id="qr-event-date" style="font-size:0.8rem; color:#64748b;"></div>
+              </div>
+              <div class="qr-url-box" id="qr-url-box"></div>
+              <button class="copy-btn" id="copy-btn" onclick="copyURL()">
+                <i class="fas fa-copy"></i> Copy target payload tracking URL
+              </button>
+              <div class="btn-row">
+                <button class="btn btn-primary" onclick="downloadQR()"><i class="fas fa-download"></i> Save PNG</button>
+                <button class="btn btn-secondary" onclick="printQR()"><i class="fas fa-print"></i> Print</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="dashboard-section-title"><i class="fas fa-bullhorn"></i> Ecosystem Notification Banners</div>
+      <div class="qr-grid">
+        <div class="qr-card">
+          <h2><i class="fas fa-pen-to-square"></i> Broadcast Live Alerts</h2>
+          <form id="announcement-form" onsubmit="publishAnnouncement(event)">
+            <div style="margin-bottom: 1rem;">
+              <label style="display:block; font-weight:700; margin-bottom:0.3rem; font-size:0.8rem;">Banner Notification Message Text</label>
+              <input type="text" id="announcement-text-input" placeholder="NextStep Beach Cleanup — Join us at the South Pavilion June 7th!" required class="form-input">
+            </div>
+            <div style="display:flex; gap:10px; margin-bottom:1rem;">
+              <div style="width:25%;">
+                <label style="display:block; font-weight:700; margin-bottom:0.3rem; font-size:0.8rem;">Emoji Icon</label>
+                <input type="text" id="announcement-emoji-input" placeholder="🏖️" required class="form-input" style="text-align:center;">
+              </div>
+              <div style="width:75%;">
+                <label style="display:block; font-weight:700; margin-bottom:0.3rem; font-size:0.8rem;">Action Engagement Link URL Target</label>
+                <input type="url" id="announcement-link-input" placeholder="https://docs.google.com/forms/..." required class="form-input">
+              </div>
+            </div>
+            <div style="margin-bottom: 1.5rem;">
+              <label style="display:block; font-weight:700; margin-bottom:0.3rem; font-size:0.8rem;">Automated Expiration Rule Timer (Optional)</label>
+              <input type="datetime-local" id="announcement-expiry-input" class="form-input">
+            </div>
+            <button type="submit" class="btn btn-primary" style="width:100%; background:linear-gradient(135deg, #0ea5e9, #10b981);">
+              Deploy Live Content Banner
+            </button>
+          </form>
+        </div>
+
+        <div class="qr-card">
+          <h2><i class="fas fa-history"></i> Audit Stream Feed Log</h2>
+          <div class="announcement-list" id="announcement-list">
+            <div class="list-loading"><i class="fas fa-spinner fa-spin"></i><br>Pulling database history models...</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</main>
+
+<div class="toast" id="toast"></div>
+
+<script type="module">
+import { initializeApp, getApps } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+import { getFirestore, collection, getDocs, getDoc, doc, updateDoc, addDoc, query, orderBy } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+
+const firebaseConfig = {
+  apiKey: "AIzaSyArZYz6UMheUgBVrNeWvxWml-0zDTbNur0",
+  authDomain: "nextstep-12b9a.firebaseapp.com",
+  projectId: "nextstep-12b9a",
+  storageBucket: "nextstep-12b9a.firebasestorage.app",
+  messagingSenderId: "630600034259",
+  appId: "1:630600034259:web:6b6284e147a6f79cda7126",
+  measurementId: "G-WH3JL7Y7BR"
+};
+
+const app  = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db   = getFirestore(app);
+
+const CAT_COLORS = { political:'#2563eb', environmental:'#10b981', youth:'#f59e0b', innovation:'#ec4899', education:'#b325eb', religious:'#d97706' };
+let selectedEvent = null;
+let allEvents     = [];
+
+function checkinURL(eventId) {
+  const base = window.location.origin + window.location.pathname.replace('admin-dashboard.html', '');
+  return base + 'check-in.html?event=' + encodeURIComponent(eventId);
+}
+
+// Render administrative elements for target event structures
+function renderQR(event) {
+  selectedEvent = event;
+  const url = checkinURL(event.id);
+
+  document.getElementById('qr-placeholder').style.display = 'none';
+  document.getElementById('qr-canvas-wrapper').classList.add('show');
+  document.getElementById('btn-save-expiration').style.display = 'block';
+  
+  // Set visibility on immediate termination control configurations
+  document.getElementById('btn-stop-qr').style.display = event.qrGenerated ? 'block' : 'none';
+
+  const expiryInputEl = document.getElementById('qr-expiry-input');
+  if (event.qrExpiresAt) {
+    let rawDateObj = (typeof event.qrExpiresAt.toDate === 'function') ? event.qrExpiresAt.toDate() : new Date(event.qrExpiresAt);
+    const tzOffset = rawDateObj.getTimezoneOffset() * 60000;
+    expiryInputEl.value = (new Date(rawDateObj.getTime() - tzOffset)).toISOString().slice(0, 16);
+  } else {
+    expiryInputEl.value = '';
+  }
+
+  document.getElementById('qr-event-name').textContent = event.title || event.id;
+  document.getElementById('qr-event-date').textContent = [event.date, event.time].filter(Boolean).join(' - ');
+  document.getElementById('qr-url-box').textContent    = url;
+
+  const container = document.getElementById('qr-code');
+  container.innerHTML = '';
+  new QRCode(container, { text: url, width: 200, height: 200, colorDark: '#010943', colorLight: '#ffffff', correctLevel: QRCode.CorrectLevel.H });
+}
+
+window.saveQRExpiration = async function() {
+  if (!selectedEvent) return alert("Select an event registry context block first.");
+  const expiryVal = document.getElementById('qr-expiry-input').value;
+  const expiresAtDate = expiryVal ? new Date(expiryVal) : null;
+
+  try {
+    await updateDoc(doc(db, 'events', selectedEvent.id), { qrExpiresAt: expiresAtDate, qrGenerated: true });
+    selectedEvent.qrExpiresAt = expiresAtDate;
+    selectedEvent.qrGenerated = true;
+    renderQR(selectedEvent);
+    showToast("QR tracking timeline saved onto Firestore.");
+    loadEvents();
+  } catch (err) {
+    alert("Database transaction rejected: Properties cannot sync.");
+  }
+};
+
+window.terminateQR = async function() {
+  if (!selectedEvent) return;
+  if (!confirm("Revoke QR generation checking rights instantly for this record entry?")) return;
+
+  try {
+    // Set parameters back down to force client check-in script protection layers to drop traffic 
+    await updateDoc(doc(db, 'events', selectedEvent.id), { qrGenerated: false, qrExpiresAt: new Date(0) });
+    selectedEvent.qrGenerated = false;
+    selectedEvent.qrExpiresAt = new Date(0);
+    renderQR(selectedEvent);
+    showToast("Event monitoring privileges cancelled.");
+    loadEvents();
+  } catch (err) {
+    alert("Database status transition encountered structural exception errors.");
+  }
+};
+
+function makeEventItem(e) {
+  const item = document.createElement('div');
+  item.className = 'event-item';
+  if(selectedEvent && selectedEvent.id === e.id) item.classList.add('active');
+  
+  let statusHTML = '';
+  if (e.qrGenerated) {
+    const isExpired = e.qrExpiresAt && new Date(e.qrExpiresAt.toDate ? e.qrExpiresAt.toDate() : e.qrExpiresAt) < new Date();
+    statusHTML = isExpired ? '<span class="status-badge status-expired">Expired</span>' : '<span class="status-badge status-active">Active</span>';
+  } else {
+    statusHTML = '<span class="status-badge status-disabled">Off Display</span>';
+  }
+
+  const dot = '<div class="event-cat-dot" style="background:' + (CAT_COLORS[e.category] || '#2563eb') + '"></div>';
+  const meta = [e.date, e.location].filter(Boolean).join(' - ') || 'Metrics unassigned';
+  
+  item.innerHTML = `<div class="item-main-info">${dot}<div><div class="event-item-title">${e.title || e.id}</div><div class="event-item-meta">${meta}</div></div></div>${statusHTML}`;
+  item.addEventListener('click', () => {
+    document.querySelectorAll('.event-item').forEach(i => i.classList.remove('active'));
+    item.classList.add('active');
+    renderQR(e);
+  });
+  return item;
+}
+
+async function loadEvents() {
+  var listEl = document.getElementById('event-list');
+  try {
+    var snap = await getDocs(collection(db, 'events'));
+    listEl.innerHTML = '';
+    allEvents = [];
+    snap.forEach(docSnap => {
+      var e = Object.assign({ id: docSnap.id }, docSnap.data());
+      allEvents.push(e);
+      listEl.appendChild(makeEventItem(e));
+    });
+  } catch (err) {
+    listEl.innerHTML = '<div class="list-loading">Exception processing background operational streams.</div>';
+  }
+}
+
+window.filterEvents = function(query) {
+  var q = query.toLowerCase().trim();
+  document.getElementById('event-list').querySelectorAll('.event-item').forEach(item => {
+    item.style.display = (!q || item.innerText.toLowerCase().includes(q)) ? '' : 'none';
+  });
+};
+
+window.generateFromManualId = async function() {
+  var id = document.getElementById('manual-id').value.trim();
+  if (!id) return;
+  try {
+    var snap = await getDoc(doc(db, 'events', id));
+    renderQR(snap.exists() ? Object.assign({ id: snap.id }, snap.data()) : { id: id });
+  } catch (e) { renderQR({ id: id }); }
+};
+
+// DIRECT ANNOUNCEMENT BUSINESS PROCESSING ENGINE
+window.publishAnnouncement = async function(event) {
+  event.preventDefault();
+  const text = document.getElementById('announcement-text-input').value.trim();
+  const emoji = document.getElementById('announcement-emoji-input').value.trim();
+  const link = document.getElementById('announcement-link-input').value.trim();
+  const expiryVal = document.getElementById('announcement-expiry-input').value;
+  const expiresAt = expiryVal ? new Date(expiryVal) : null;
+
+  try {
+    await addDoc(collection(db, 'announcements'), {
+      text, emoji, link, expiresAt,
+      createdAt: new Date(),
+      isActive: true
+    });
+    showToast("Dynamic banner context pushed into pipeline successfully.");
+    document.getElementById('announcement-form').reset();
+    loadAnnouncements();
+  } catch (err) {
+    alert("Failed to queue record tracking block parameters into Firestore.");
+  }
+};
+
+async function loadAnnouncements() {
+  const listEl = document.getElementById('announcement-list');
+  try {
+    const q = query(collection(db, 'announcements'), orderBy('createdAt', 'desc'));
+    const snap = await getDocs(q);
+    listEl.innerHTML = '';
+    
+    if(snap.empty) {
+      listEl.innerHTML = '<div class="list-loading">No historic alert entries registered inside database fields.</div>';
+      return;
+    }
+
+    snap.forEach(docSnap => {
+      const data = docSnap.data();
+      const id = docSnap.id;
+      const createdDate = data.createdAt ? new Date(data.createdAt.toDate()).toLocaleDateString() : 'Unknown';
+      
+      let isExpired = false;
+      if (data.expiresAt) {
+        const expDate = new Date(data.expiresAt.toDate ? data.expiresAt.toDate() : data.expiresAt);
+        if (expDate < new Date()) isExpired = true;
+      }
+
+      let statusBadge = '<span class="status-badge status-active">Working</span>';
+      if (!data.isActive) statusBadge = '<span class="status-badge status-disabled">Stopped</span>';
+      if (isExpired) statusBadge = '<span class="status-badge status-expired">Expired</span>';
+
+      const item = document.createElement('div');
+      item.className = 'announcement-item';
+      item.innerHTML = `
+        <div class="item-main-info">
+          <div style="font-size:1.1rem; flex-shrink:0;">${data.emoji || '📢'}</div>
+          <div style="overflow:hidden;">
+            <div class="announcement-item-text" title="${data.text}">${data.text}</div>
+            <div class="announcement-item-meta">Pushed: ${createdDate}</div>
+          </div>
+        </div>
+        <div style="display:flex; align-items:center; gap:8px;">
+          ${statusBadge}
+          ${data.isActive && !isExpired ? `<button class="btn btn-danger" style="padding:4px 8px; font-size:0.75rem; border-radius:6px;" onclick="terminateAnnouncement('${id}')">Stop</button>` : ''}
+        </div>
+      `;
+      listEl.appendChild(item);
+    });
+  } catch (err) {
+    listEl.innerHTML = '<div class="list-loading">Failed to monitor target archive database nodes.</div>';
+  }
+}
+
+window.terminateAnnouncement = async function(id) {
+  if(!confirm("Kill deployment visualization pipelines immediately for this specific alert instance?")) return;
+  try {
+    await updateDoc(doc(db, 'announcements', id), { isActive: false });
+    showToast("Public view criteria updated: Banner flagged out.");
+    loadAnnouncements();
+  } catch (err) {
+    alert("Failed to issue execution write instruction commands.");
+  }
+};
+
+// CORE UTILITIES
+window.downloadQR = function() {
+  if (!selectedEvent) return;
+  setTimeout(() => {
+    var canvas = document.querySelector('#qr-code canvas');
+    if (canvas) {
+      var link = document.createElement('a');
+      link.download = 'nextstep-checkin-' + selectedEvent.id + '.png';
+      link.href = canvas.toDataURL();
+      link.click();
+      showToast('File compiled and downloaded.');
+    }
+  }, 100);
+};
+
+window.printQR = function() {
+  if (!selectedEvent) return;
+  var canvas = document.querySelector('#qr-code canvas');
+  if (!canvas) return;
+  var w = window.open('', '_blank');
+  var meta = [selectedEvent.date, selectedEvent.time, selectedEvent.location].filter(Boolean).join(' - ');
+  w.document.write(`<html><head><title>Print QR Canvas</title><style>body{font-family:sans-serif;text-align:center;padding:40px;}img{width:260px;}</style></head><body><h1>Check In Entry</h1><p><strong>${selectedEvent.title || selectedEvent.id}</strong><br>${meta}</p><img src="${canvas.toDataURL()}"><script>window.onload=function(){window.print();}<\/script>`);
+  w.document.close();
+};
+
+window.copyURL = function() {
+  if (!selectedEvent) return;
+  navigator.clipboard.writeText(checkinURL(selectedEvent.id)).then(() => {
+    showToast('Payload path string added to clipboard.');
+  });
+};
+
+function showToast(msg) {
+  var toast = document.getElementById('toast');
+  toast.textContent = msg;
+  toast.classList.add('show');
+  setTimeout(() => { toast.classList.remove('show'); }, 2500);
+}
+
+// SECURITY STATE VALIDATION FILTER
+// SECURITY STATE VALIDATION FILTER
+onAuthStateChanged(auth, async user => {
+  const loginBtn = document.getElementById('nav-login');
+  const signupBtn = document.getElementById('nav-signup');
+
+  if (!user) { 
+    // If not logged in, reset navbar to default settings
+    if (loginBtn) { loginBtn.textContent = 'Login'; loginBtn.href = 'login.html'; }
+    if (signupBtn) signupBtn.style.display = 'block';
+    
+    document.getElementById('access-denied-card').style.display = 'block'; 
+    return; 
+  }
+
+  // --- NEW NAVBAR STATE MANAGEMENT SECTION ---
+  if (loginBtn) {
+    // Dynamically replace the login link text with a signed-in status badge
+    loginBtn.innerHTML = `<i class="fas fa-user-shield"></i> Admin Log Out`;
+    loginBtn.href = '#';
+    loginBtn.className = 'login profile-active'; // Optional: for styling
+    
+    // Make clicking it log the admin out safely
+    loginBtn.onclick = async function(e) {
+      e.preventDefault();
+      if (confirm("Are you sure you want to log out of the NextStep Panel?")) {
+        await auth.signOut();
+        window.location.href = 'login.html';
+      }
+    };
+  }
+  
+  // Completely hide the Sign Up button since they are already authenticated
+  if (signupBtn) {
+    signupBtn.style.display = 'none';
+  }
+  // -------------------------------------------
+
+  let isAdmin = false;
+  try {
+    var userSnap = await getDoc(doc(db, 'admins', user.uid));
+    if (userSnap.exists()) {
+      var data = userSnap.data();
+      isAdmin = data.isAdmin === true || data.role === 'admin';
+    }
+  } catch (e) { isAdmin = false; }
+  
+  if (!isAdmin) { document.getElementById('access-denied-card').style.display = 'block'; return; }
+
+  if(document.getElementById('admin-nav-link')) document.getElementById('admin-nav-link').style.display = 'block';
+  document.getElementById('tool-content').style.display = 'block';
+  
+  await loadEvents();
+  await loadAnnouncements();
+});
+</script>
+<script src="dark-mode.js"></script>
+<script src="mobile-nav.js"></script>
+<script src="navbar.js"></script>
+<script type="module" src="auth-navbar.js"></script>
+<script type="module" src="auth-check.js"></script>
+
+</body>
+</html>

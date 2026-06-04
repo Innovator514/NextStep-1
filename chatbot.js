@@ -1,4 +1,4 @@
-  /* ═══════════════════════════════════════════════════
+/* ═══════════════════════════════════════════════════
      STATE
   ═══════════════════════════════════════════════════ */
   const STORAGE_KEY = 'compass_chats_v2';
@@ -330,7 +330,7 @@
   }
 
   /* ═══════════════════════════════════════════════════
-     API CALL
+     API CALL — via Puter.js (no API key needed)
   ═══════════════════════════════════════════════════ */
   async function callCompassAPI(messages) {
     const systemPrompt = `You are Compass, NextStep's AI civic guide for Boca Raton, Florida.
@@ -351,20 +351,22 @@ Keep responses focused and conversational. Use bullet points sparingly. Aim for 
       .filter(m => m.role === 'user' || m.role === 'assistant')
       .map(m => ({ role: m.role, content: m.content }));
 
-    const response = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
-        max_tokens: 1000,
-        system: systemPrompt,
-        messages: apiMessages
-      })
+    // Build a single prompt string: system context + full conversation history
+    const fullPrompt = [
+      `[SYSTEM]\n${systemPrompt}`,
+      ...apiMessages.map(m => `[${m.role.toUpperCase()}]\n${m.content}`)
+    ].join('\n\n');
+
+    const response = await puter.ai.chat(fullPrompt, {
+      model: 'claude-sonnet-4-20250514'
     });
 
-    if (!response.ok) throw new Error(`API error ${response.status}`);
-    const data = await response.json();
-    return data.content?.[0]?.text || 'I didn\'t get a response. Please try again.';
+    // puter.ai.chat may return a string or a structured object
+    if (typeof response === 'string') return response;
+    return response?.message?.content?.[0]?.text
+      || response?.text
+      || response?.content?.[0]?.text
+      || "I didn't get a response. Please try again.";
   }
 
   /* ═══════════════════════════════════════════════════

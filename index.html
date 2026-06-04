@@ -41,7 +41,7 @@
 <link rel="stylesheet" href="scroll-progress.css" type="text/css"/>
 <script src="scroll-progress.js"></script>
 <link rel="stylesheet" href="announcement-banner.css" type="text/css"/>
-<script src="announcement-banner.js"></script>
+<script src="announcement-banner.js" defer></script>
   <title>NextStep – Civic Engagement for Boca Raton</title>
 
   <!-- Open Graph / Social Sharing -->
@@ -145,20 +145,18 @@
   <nav>
     <div class="navbar">
       <div class="navdiv">
-        <!-- Logo -->
         <div class="logo">
           <a href="index.html">
             <img src="images/logo.png" alt="NextStep Logo" class="logo-image">
           </a>
         </div>
-
-        <!-- Navigation links -->
         <nav class="nav-links">
           <ul>
             <li class="navbar-item"><a href="index.html" class="active">Home</a></li>
             <li class="navbar-item"><a href="map.html">Map</a></li>
             <li class="navbar-item"><a href="events.html">Events</a></li>
             <li class="navbar-item"><a href="badges.html">Badges</a></li>
+            <li class="navbar-item" id="admin-nav-link" style="display: none;"><a href="admin-dashboard.html">Admin Dashboard</a></li>
             <li class="navbar-item"><a href="chatbot.html">Compass</a></li>
             <li class="navbar-item"><a href="contact.html">Contact Us</a></li>
             <li class="navbar-item"><a href="the-podium.html">The Podium</a></li>
@@ -166,12 +164,13 @@
         </nav>
 
         <div class="nav-right">
-          <li class="navbar-item"><a href="login.html" class="login">Login</a></li>
-          <li class="navbar-item"><a href="signup.html" class="signup">Sign Up</a></li>
+          <li class="navbar-item"><a href="login.html" class="login" id="nav-login">Login</a></li>
+          <li class="navbar-item"><a href="signup.html" class="signup" id="nav-signup">Sign Up</a></li>
         </div>
       </div>
     </div>
   </nav>
+
 
   <main>
 
@@ -373,7 +372,9 @@
   <script src="script.js"></script>
   <script src="dark-mode.js"></script>
   <script src="mobile-nav.js"></script>
-
+  <script src="navbar.js"></script>
+  <script src="admin.js"></script>
+  <script type="module" src="auth-navbar.js"></script>
 </body>
 
 

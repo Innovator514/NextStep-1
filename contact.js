@@ -288,66 +288,162 @@ showStep(1);
        TEAM DATA — edit this array to update the team
        ================================================ */
     const teamMembers = [
-      {
-        name: "Alex Rivera",
-        role: "Co-Founder & CEO",
-        bio: "Passionate about local democracy and tech. Former city council aide turned civic-tech builder.",
-        emoji: "AR",
-        gradient: "linear-gradient(135deg, #2563eb, #1e40af)",
-        linkedin: "#",
-        twitter: "#",
-        email: "alex@nextstep-civic.org"
-      },
-      {
-        name: "Jordan Kim",
-        role: "Co-Founder & CTO",
-        bio: "Full-stack engineer who believes good software can bring people to the table — literally.",
-        emoji: "JK",
-        gradient: "linear-gradient(135deg, #10b981, #065f46)",
-        linkedin: "#",
-        github: "#",
-        email: "jordan@nextstep-civic.org"
-      },
-      {
-        name: "Maya Chen",
-        role: "Head of Community",
-        bio: "Veteran organizer with 8 years building grassroots movements across South Florida.",
-        emoji: "MC",
-        gradient: "linear-gradient(135deg, #8b5cf6, #4c1d95)",
-        linkedin: "#",
-        twitter: "#",
-        email: "maya@nextstep-civic.org"
-      },
-      {
-        name: "Dev Patel",
-        role: "Lead Designer",
-        bio: "Designs experiences that make civic life feel approachable, warm, and worth showing up for.",
-        emoji: "DP",
-        gradient: "linear-gradient(135deg, #ec4899, #831843)",
-        linkedin: "#",
-        twitter: "#",
-        email: "dev@nextstep-civic.org"
-      },
-      {
-        name: "Sofia Morales",
-        role: "Events Coordinator",
-        bio: "Coordinates 30+ community events per year. Runs on coffee and community spirit.",
-        emoji: "SM",
-        gradient: "linear-gradient(135deg, #f59e0b, #92400e)",
-        linkedin: "#",
-        email: "sofia@nextstep-civic.org"
-      },
-      {
-        name: "Marcus Webb",
-        role: "Outreach & Partnerships",
-        bio: "Connects NextStep with local orgs, schools, and businesses who care about Boca Raton's future.",
-        emoji: "MW",
-        gradient: "linear-gradient(135deg, #0ea5e9, #0c4a6e)",
-        linkedin: "#",
-        email: "marcus@nextstep-civic.org"
-      }
+    {
+        name: "Emily Yu",
+        role: "President & Founder",
+        bio: "Emily is a student leader passionate about STEM, innovation, and community engagement. At school, she participates in organizations such as Mu Alpha Theta, FTC Robotics, and DECA, where she enjoys teamwork, problem-solving, and leadership. As part of NextStep, she hopes to empower students by making opportunities and resources more accessible. Outside of academics, Emily enjoys playing the clarinet, ",
+        image: "images/team/emily.png",
+        email: "mailto:emilysmile315@gmail.com",
+        instagram: "#",
+        linkedin: "#"
+    },
+    {
+        name: "Julia Spett",
+        role: "President & Founder",
+        bio: "Julia manages logistics, event systems, and internal coordination to keep projects organized and scalable.",
+        image: "images/team/julia.jpg",
+        email: "mailto:julia@nextstep-civic.org",
+        instagram: "#",
+        linkedin: "#"
+    },
+    {
+        name: "Arianna Shaprow",
+        role: "Vice President of Partnership and Outreach",
+        bio: "Arianna is an award-winning poet and social activist who has been featured in news outlets across the country, including ABC, Fox, CBS, NBC, and The CW. Arianna’s exhibitions in museums and writings have been highlighted in The New York Times Kids Edition, Miami Voyage Magazine, and the Boca Raton Observer. She is passionate about civil service, social activism, and her artistic endeavors.",
+        image: "images/team/arianna.jpeg",
+        email: "mailto:ariannashaprow@gmail.com",
+        instagram: "https://www.instagram.com/ariannashaprow/",
+    },
+    {
+        name: "Sophie Bollela",
+        role: "Vice President of Outreach",
+        bio: "Sophie Bollella is the Vice President of the department of social media and engagement. She has received diverse academic awards. Including the principles award, which means being well-rounded in sports, academics, and social aspects of the community. This was given due to playing sports her whole life and being a captain, being in high level classes, and being apart of clubs. This then allows her to be able to see and hear the needs of different types of people. Additionally in helping out the local community by doing volunteer work for beach cleanups, fun runs, and animal welfare.",
+        image: "images/team/sophie.jpeg",
+        email: "mailto:sophiebollella10@gmail.com",
+    },
+    {
+        name: "Zakia",
+        role: "Vice President of Outreach",
+        bio: "She is an award-winning poet and social activist who has been featured in news outlets across the country, including ABC, Fox, CBS, NBC, and The CW. Arianna’s exhibitions in museums and writings have been highlighted in The New York Times Kids Edition, Miami Voyage Magazine, and the Boca Raton Observer. She is passionate about civil service, social activism, and her artistic endeavors.",
+        image: "images/team/zakia.jpeg",
+        email: "mailto:zakia@nextstep-civic.org",
+        instagram: "#",
+        linkedin: "#"
+    },
+    {
+        name: "Lily Montero",
+        role: "Marketing & Social Media Director",
+        bio: "She is an award-winning poet and social activist who has been featured in news outlets across the country, including ABC, Fox, CBS, NBC, and The CW. Arianna’s exhibitions in museums and writings have been highlighted in The New York Times Kids Edition, Miami Voyage Magazine, and the Boca Raton Observer. She is passionate about civil service, social activism, and her artistic endeavors.",
+        image: "images/team/lily.jpg",
+        email: "mailto:lilymontero@gmail.com",
+        instagram: "#",
+        linkedin: "#"
+    },
+    {
+        name: "Cynthia Chen",
+        role: "Director of Product & Web Development",
+        bio: "She is an award-winning poet and social activist who has been featured in news outlets across the country, including ABC, Fox, CBS, NBC, and The CW. Arianna’s exhibitions in museums and writings have been highlighted in The New York Times Kids Edition, Miami Voyage Magazine, and the Boca Raton Observer. She is passionate about civil service, social activism, and her artistic endeavors.",
+        image: "images/team/cynthia.jpg",
+        email: "mailto:cynthia@nextstep-civic.org",
+        instagram: "#",
+        linkedin: "#"
+    },
+        {
+        name: "Keerith Mahal",
+        role: "Events & Engagement Director",
+        bio: "Keerith Mahal is an accomplished student, writer, and honor student recognized for her academic achievement and creativity. She earned first place in the Palm Beach County Insight Through Education Kindness Contest for promoting positive community values through communication and storytelling. As a writer for the Sikh Youth Writers Association, she creates engaging content about her Sikh faith and culture, demonstrating strong writing skills and a commitment to personal growth and meaningful impact.",
+        image: "images/team/keerith.png",
+        email: "mailto:keerith@nextstep-civic.org",
+        instagram: "#",
+        linkedin: "#"
+    },
+    {
+        name: "Jasmine Behroozi",
+        role: "Director of Partnerships",
+        bio: "Hi, I’m Jasmine! I’m a student who enjoys being involved in my community and helping out with local projects and events. I’m especially interested in environmental initiatives and finding ways to bring people together. Through NextStep, I hope to help make a positive impact and encourage others to get more involved in the community too.",
+        image: "images/team/jasmine.jpeg",
+        email: "mailto:behroozijasmine@gmail.com",
+        instagram: "#",
+        linkedin: "#"
+    },
+    {
+        name: "Kiran Behroozi",
+        role: "Research & Policy Coordinator",
+        bio: "She is an award-winning poet and social activist who has been featured in news outlets across the country, including ABC, Fox, CBS, NBC, and The CW. Arianna’s exhibitions in museums and writings have been highlighted in The New York Times Kids Edition, Miami Voyage Magazine, and the Boca Raton Observer. She is passionate about civil service, social activism, and her artistic endeavors.",
+        image: "images/team/kiran.jpeg",
+        email: "mailto:kiran.behroozi@gmail.com",
+        instagram: "#",
+        linkedin: "#"
+    }
     ];
 
+function createTeamCard(member) {
+  return `
+    <div class="team-card">
+
+      <div class="team-image-wrapper">
+        <img src="${member.image}" alt="${member.name}" class="team-image">
+      </div>
+
+      <div class="team-card-content">
+
+        <h3 class="team-member-name">
+          ${member.name}
+        </h3>
+
+        <div class="team-member-role">
+          ${member.role}
+        </div>
+
+        <p class="team-member-bio">
+          ${member.bio}
+        </p>
+
+        <div class="team-member-links">
+
+          <a href="${member.email}" class="team-contact-btn">
+            <i class="fas fa-envelope"></i>
+          </a>
+
+          <a href="${member.instagram}" class="team-contact-btn">
+            <i class="fab fa-instagram"></i>
+          </a>
+
+          <a href="${member.linkedin}" class="team-contact-btn">
+            <i class="fab fa-linkedin-in"></i>
+          </a>
+
+        </div>
+
+      </div>
+
+    </div>
+  `;
+}
+
+function renderTeamGrid() {
+  const grid = document.getElementById("teamGrid");
+
+  const topTwo = teamMembers.slice(0, 2);
+  const middleThree = teamMembers.slice(2, 5);
+  const remaining = teamMembers.slice(5);
+
+  grid.innerHTML = `
+  
+    <div class="team-row top-row">
+      ${topTwo.map(createTeamCard).join("")}
+    </div>
+
+    <div class="team-row middle-row">
+      ${middleThree.map(createTeamCard).join("")}
+    </div>
+
+    <div class="team-row bottom-row">
+      ${remaining.map(createTeamCard).join("")}
+    </div>
+
+  `;
+}
     /* Build team cards */
     function buildTeamCards() {
       const grid = document.getElementById('teamGrid');

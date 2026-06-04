@@ -321,7 +321,7 @@ function updateStats() {
     if (pEl) pEl.textContent = pct + '%';
 }
 
-// ── updateProgress (called by events.js) ─────────────────────
+// ── updateProgress (called by check-in process) ───────────────
 function updateProgress(progressKey, amount) {
     if (amount === undefined) amount = 1;
     const old = Object.assign({}, userProgress);

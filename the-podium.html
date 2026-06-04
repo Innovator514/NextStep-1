@@ -7,7 +7,6 @@
     <meta name="author" content="NextStep" />
     <link rel="canonical" href="https://nextstep-civic.org/the-podium.html" />
 
-    <!-- Favicon -->
     <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
     <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
@@ -21,16 +20,14 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="loading-screen.css" type="text/css"/>
-<script src="loading-screen.js"></script>
-<link rel="stylesheet" href="back-to-top.css" type="text/css"/>
-<script src="back-to-top.js"></script>
-<link rel="stylesheet" href="cookie-consent.css" type="text/css"/>
-<script src="cookie-consent.js"></script>
-<link rel="stylesheet" href="scroll-progress.css" type="text/css"/>
-<script src="scroll-progress.js"></script>
-    <link rel="stylesheet" href="announcement-banner.css" type="text/css"/>
-    <script src="announcement-banner.js"></script>
+    <link rel="stylesheet" href="loading-screen.css" type="text/css"/>
+    <script src="loading-screen.js"></script>
+    <link rel="stylesheet" href="back-to-top.css" type="text/css"/>
+    <script src="back-to-top.js"></script>
+    <link rel="stylesheet" href="cookie-consent.css" type="text/css"/>
+    <script src="cookie-consent.js"></script>
+    <link rel="stylesheet" href="scroll-progress.css" type="text/css"/>
+    <script src="scroll-progress.js"></script>
     <title>The Podium – NextStep</title>
 
     <style>
@@ -347,8 +344,8 @@
       /* ── "You" highlight ── */
       .lb-row.is-me,
       .podium-card.is-me {
-        border: 2px solid #2563eb;
-        background: linear-gradient(135deg, #eff6ff, #dbeafe);
+        border: 2px solid #2563eb !important;
+        background: linear-gradient(135deg, #eff6ff, #dbeafe) !important;
       }
 
       .lb-row.is-me .lb-row-name::after,
@@ -356,6 +353,7 @@
         content: ' (You)';
         color: #2563eb;
         font-size: 12px;
+        font-weight: 800;
       }
 
       /* ── Loading / Empty states ── */
@@ -365,6 +363,7 @@
         color: #94a3b8;
         font-size: 1rem;
         font-weight: 600;
+        width: 100%;
       }
 
       .lb-loading i { font-size: 2rem; margin-bottom: 1rem; display: block; animation: spin 1s linear infinite; }
@@ -393,7 +392,6 @@
   </head>
   <body>
 
-  <!-- Navbar -->
   <nav>
     <div class="navbar">
       <div class="navdiv">
@@ -402,13 +400,13 @@
             <img src="images/logo.png" alt="NextStep Logo" class="logo-image">
           </a>
         </div>
-        <!-- Navigation links -->
         <nav class="nav-links">
           <ul>
             <li class="navbar-item"><a href="index.html">Home</a></li>
             <li class="navbar-item"><a href="map.html">Map</a></li>
             <li class="navbar-item"><a href="events.html">Events</a></li>
             <li class="navbar-item"><a href="badges.html">Badges</a></li>
+            <li class="navbar-item" id="admin-nav-link" style="display: none;"><a href="admin-dashboard.html">Admin Dashboard</a></li>
             <li class="navbar-item"><a href="chatbot.html">Compass</a></li>
             <li class="navbar-item"><a href="contact.html">Contact Us</a></li>
             <li class="navbar-item"><a href="the-podium.html" class="active">The Podium</a></li>
@@ -416,23 +414,22 @@
         </nav>
 
         <div class="nav-right">
-          <li class="navbar-item"><a href="login.html" class="login">Login</a></li>
-          <li class="navbar-item"><a href="signup.html" class="signup">Sign Up</a></li>
+          <li class="navbar-item"><a href="login.html" class="login" id="nav-login">Login</a></li>
+          <li class="navbar-item"><a href="signup.html" class="signup" id="nav-signup">Sign Up</a></li>
         </div>
       </div>
     </div>
   </nav>
+  
   <main class="leaderboard-main">
     <div class="leaderboard-inner">
 
-      <!-- Header -->
       <div class="lb-header">
         <span class="lb-trophy">🏆</span>
         <h1>Community Podium</h1>
         <p>Boca Raton's most engaged civic champions</p>
       </div>
 
-      <!-- Tab switcher -->
       <div class="lb-tabs">
         <button class="lb-tab active" data-tab="combined" onclick="switchTab('combined', this)">
           <i class="fas fa-star"></i> Combined Score
@@ -448,12 +445,10 @@
         </button>
       </div>
 
-      <!-- Podium -->
       <div id="lb-podium" class="lb-podium">
-        <div class="lb-loading"><i class="fas fa-spinner"></i>Loading podium…</div>
+        <div class="lb-loading"><i class="fas fa-spinner fa-spin"></i>Loading podium…</div>
       </div>
 
-      <!-- Rest of list -->
       <div id="lb-list" class="lb-list"></div>
 
       <div class="lb-footer" id="lb-footer"></div>
@@ -461,7 +456,6 @@
     </div>
   </main>
 
-  <!-- Footer -->
   <footer>
     <div class="footer-content">
       <div class="footer-grid">
@@ -499,26 +493,199 @@
           <h4>Stay Updated</h4>
           <p style="opacity:0.5;font-size:0.95rem;margin-bottom:1rem;">Subscribe for the latest civic events and opportunities.</p>
           <form class="newsletter-form" method="POST" action="https://app.kit.com/forms/bf804aa149/subscriptions">
-  <input type="email" name="email_address" class="newsletter-input" placeholder="Your email" required>
-  <button type="submit" class="newsletter-button">Join</button>
-</form>
+            <input type="email" name="email_address" class="newsletter-input" placeholder="Your email" required>
+            <button type="submit" class="newsletter-button">Join</button>
+          </form>
         </div>
       </div>
       <div class="footer-bottom">
         <p>&copy; 2026 NextStep. All rights reserved.</p>
         <div class="footer-bottom-links">
           <a href="privacy-policy.html">Privacy Policy</a>
-<a href="terms-of-service.html">Terms of Service</a>
-<a href="accessibility.html">Accessibility</a>
+          <a href="terms-of-service.html">Terms of Service</a>
+          <a href="accessibility.html">Accessibility</a>
         </div>
       </div>
     </div>
   </footer>
 
   <script type="module" src="auth-check.js"></script>
-  <script type="module" src="the-podium.js"></script>
+<script type="module">
+    import { initializeApp, getApps } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+    import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+    import { getFirestore, collection, getDocs, doc, getDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyArZYz6UMheUgBVrNeWvxWml-0zDTbNur0",
+      authDomain: "nextstep-12b9a.firebaseapp.com",
+      projectId: "nextstep-12b9a",
+      storageBucket: "nextstep-12b9a.firebasestorage.app",
+      messagingSenderId: "630600034259",
+      appId: "1:630600034259:web:6b6284e147a6f79cda7126",
+      measurementId: "G-WH3JL7Y7BR"
+    };
+
+    const app = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    let currentTab = 'combined';
+    let userLeaderboardData = [];
+    let currentUserId = null;
+
+    const LABELS = {
+      combined: 'Points',
+      events: 'Events',
+      badges: 'Badges',
+      hours: 'Hours'
+    };
+
+    window.switchTab = function(tabName, buttonEl) {
+      currentTab = tabName;
+      document.querySelectorAll('.lb-tab').forEach(btn => btn.classList.remove('active'));
+      if (buttonEl) {
+        buttonEl.classList.add('active');
+      } else {
+        const foundBtn = document.querySelector(`[data-tab="${tabName}"]`);
+        if (foundBtn) foundBtn.classList.add('active');
+      }
+      renderLeaderboard();
+    };
+
+    function renderLeaderboard() {
+      const podiumContainer = document.getElementById('lb-podium');
+      const listContainer = document.getElementById('lb-list');
+      
+      if (userLeaderboardData.length === 0) {
+        podiumContainer.innerHTML = '<div class="lb-empty"><i class="fas fa-users-slash"></i><br>No community champions discovered yet.</div>';
+        listContainer.innerHTML = '';
+        return;
+      }
+
+      // Sort users dynamically based on active tab metrics
+      userLeaderboardData.sort((a, b) => b.scores[currentTab] - a.scores[currentTab]);
+
+      podiumContainer.innerHTML = '';
+      listContainer.innerHTML = '';
+
+      let top3 = userLeaderboardData.slice(0, 3);
+      let rest = userLeaderboardData.slice(3);
+
+      // Render Top 3
+      top3.forEach((user, index) => {
+        const rank = index + 1;
+        const scoreVal = user.scores[currentTab];
+        const label = LABELS[currentTab];
+        const initials = (user.displayName || 'User').split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
+        const isMeClass = (user.uid === currentUserId) ? 'is-me' : '';
+        const crown = (rank === 1) ? '<span class="podium-crown">👑</span>' : '';
+
+        const card = document.createElement('div');
+        card.className = `podium-card rank-${rank} ${isMeClass}`;
+        card.innerHTML = `
+          ${crown}
+          <div class="podium-rank-badge">${rank}</div>
+          <div class="podium-avatar">${initials}</div>
+          <div class="podium-name">${user.displayName}</div>
+          <div class="podium-score">${scoreVal}</div>
+          <div class="podium-score-label">${label}</div>
+        `;
+        podiumContainer.appendChild(card);
+      });
+
+      // Render Rank 4+
+      rest.forEach((user, index) => {
+        const rank = index + 4;
+        const scoreVal = user.scores[currentTab];
+        const label = LABELS[currentTab];
+        const initials = (user.displayName || 'User').split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
+        const isMeClass = (user.uid === currentUserId) ? 'is-me' : '';
+
+        const row = document.createElement('div');
+        row.className = `lb-row ${isMeClass}`;
+        row.innerHTML = `
+          <div class="lb-row-rank">${rank}</div>
+          <div class="lb-row-avatar">${initials}</div>
+          <div class="lb-row-info">
+            <div class="lb-row-name">${user.displayName}</div>
+            <div class="lb-row-sub">Active Community Participant</div>
+          </div>
+          <div>
+            <div class="lb-row-score">${scoreVal}</div>
+            <div class="lb-row-score-label">${label}</div>
+          </div>
+        `;
+        listContainer.appendChild(row);
+      });
+
+      document.getElementById('lb-footer').textContent = `Live leaderboard ranking • Last updated ${new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}`;
+    }
+
+    async function loadLeaderboardData() {
+      try {
+        console.log("Fetching collection 'userProgress' from Firestore...");
+        const querySnapshot = await getDocs(collection(db, 'userProgress'));
+        userLeaderboardData = [];
+
+        if (querySnapshot.empty) {
+          console.warn("Collection 'userProgress' exists but contains zero documents.");
+        }
+
+        querySnapshot.forEach((docSnap) => {
+          const data = docSnap.data();
+          console.log("Processing user document ID:", docSnap.id, data);
+          
+          // MATCHING EXACT FIELDS FROM check-in.html:
+          const eventsCount = data.eventsAttended || 0;
+          const badgesCount = data.badgesEarned || 0;
+          const volunteerHours = data.volunteeredHours || 0; // Fixed key spelling map
+          
+          // Weight calculation formula matching your scoring points rule
+          const combinedScore = (eventsCount * 10) + (badgesCount * 25) + (volunteerHours * 5);
+
+          // Resolve display names correctly matching transaction records
+          const nameToDisplay = data.displayName || 'Civic Champion';
+
+          userLeaderboardData.push({
+            uid: docSnap.id,
+            displayName: nameToDisplay,
+            scores: {
+              combined: combinedScore,
+              events: eventsCount,
+              badges: badgesCount,
+              hours: volunteerHours
+            }
+          });
+        });
+
+        renderLeaderboard();
+      } catch (err) {
+        console.error("Leaderboard metrics engine extraction failure:", err);
+        document.getElementById('lb-podium').innerHTML = '<div class="lb-loading"><i class="fas fa-exclamation-triangle"></i><br>Failed to compute ranking metrics. Check developer console.</div>';
+      }
+    }
+
+    onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        currentUserId = user.uid;
+        try {
+          const adminSnap = await getDoc(doc(db, 'admins', user.uid));
+          if (adminSnap.exists() && (adminSnap.data().isAdmin === true || adminSnap.data().role === 'admin')) {
+            const adminNavLink = document.getElementById('admin-nav-link');
+            if (adminNavLink) adminNavLink.style.display = 'block';
+          }
+        } catch (e) { console.warn("Admin profile check bypassed:", e); }
+      }
+      
+      // Load and update the dashboard layout
+      await loadLeaderboardData();
+    });
+  </script>
+
   <script src="dark-mode.js"></script>
   <script src="mobile-nav.js"></script>
+  <script src="navbar.js"></script>
+  <script type="module" src="auth-navbar.js"></script>
 
   </body>
 </html>

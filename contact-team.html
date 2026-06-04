@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="description" content="Meet the passionate team behind NextStep, Boca Raton's civic engagement platform."/>
+  <meta name="author" content="NextStep"/>
+  <meta name="robots" content="index, follow"/>
+  <link rel="canonical" href="https://nextstep-civic.org/contact-team.html"/>
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+  <link rel="manifest" href="site.webmanifest">
+  <link rel="stylesheet" href="style.css" type="text/css"/>
+  <link rel="stylesheet" href="contact.css" type="text/css"/>
+  <link rel="stylesheet" href="dark-mode.css" type="text/css"/>
+  <link rel="stylesheet" href="navbar-dropdown.css" type="text/css"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <link rel="stylesheet" href="loading-screen.css" type="text/css"/>
+  <script src="loading-screen.js"></script>
+  <link rel="stylesheet" href="back-to-top.css" type="text/css"/>
+  <script src="back-to-top.js"></script>
+  <link rel="stylesheet" href="cookie-consent.css" type="text/css"/>
+  <script src="cookie-consent.js"></script>
+  <link rel="stylesheet" href="scroll-progress.css" type="text/css"/>
+  <script src="scroll-progress.js"></script>
+  <link rel="stylesheet" href="announcement-banner.css" type="text/css"/>
+  <script src="announcement-banner.js"></script>
+  <title>Meet the Team – NextStep</title>
+  <style>
+    /* ── Page base ── */
+    .contact-subpage-main {
+      padding-top: 100px;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #f8fafc 0%, #e0e7ff 100%);
+    }
+    /* ── Section subnav ── */
+    .contact-subnav {
+      position: sticky; top: 0; z-index: 200;
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-bottom: 1px solid rgba(37,99,235,0.1);
+      padding: 0.6rem 1.5rem;
+      display: flex; align-items: center;
+      justify-content: space-between; gap: 1rem; flex-wrap: wrap;
+    }
+    .subnav-label {
+      font-size: 0.75rem; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.7px;
+      color: #94a3b8; white-space: nowrap;
+      font-family: 'Open Sans', sans-serif;
+    }
+    .subnav-pills { display: flex; gap: 0.4rem; flex-wrap: wrap; }
+    .subnav-pill {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      padding: 0.42rem 1rem; border: none; border-radius: 50px;
+      background: #f1f5f9; color: #64748b;
+      font-family: 'Open Sans', sans-serif;
+      font-size: 0.82rem; font-weight: 700;
+      cursor: pointer; text-decoration: none;
+      transition: all 0.2s ease; white-space: nowrap;
+    }
+    .subnav-pill:hover { background: #eff6ff; color: #2563eb; transform: translateY(-1px); }
+    .subnav-pill.active {
+      background: linear-gradient(135deg, #2563eb, #3b82f6);
+      color: white; box-shadow: 0 4px 14px rgba(37,99,235,0.3);
+    }
+    /* ── Page hero ── */
+    .cp-hero {
+      text-align: center; padding: 3.5rem 1rem 2.5rem;
+      max-width: 780px; margin: 0 auto;
+    }
+    .cp-hero-icon {
+      width: 72px; height: 72px;
+      background: linear-gradient(135deg, #2563eb, #3b82f6);
+      border-radius: 22px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.8rem; color: white;
+      margin: 0 auto 1.25rem;
+      box-shadow: 0 8px 28px rgba(37,99,235,0.3);
+    }
+    .cp-hero h1 {
+      font-size: 2.8rem; font-weight: 800;
+      background: linear-gradient(135deg, #2563eb, #3b82f6);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text; margin-bottom: 0.75rem;
+      font-family: 'Open Sans', sans-serif;
+    }
+    .cp-hero p {
+      font-size: 1.1rem; color: #64748b; font-weight: 500;
+      font-family: 'Open Sans', sans-serif;
+    }
+    /* ── Shared card ── */
+    .cp-content-wrap {
+      max-width: 1100px; margin: 0 auto; padding: 0 2rem 5rem;
+    }
+    /* Dark mode */
+    [data-theme="dark"] .contact-subnav {
+      background: rgba(15,23,42,0.92); border-color: var(--border-color);
+    }
+    [data-theme="dark"] .subnav-pill {
+      background: var(--bg-secondary); color: var(--text-secondary);
+    }
+    [data-theme="dark"] .subnav-pill:hover {
+      background: var(--hover-bg); color: #60a5fa;
+    }
+    [data-theme="dark"] .subnav-pill.active {
+      background: linear-gradient(135deg,#2563eb,#3b82f6); color: white;
+    }
+    @media (max-width: 640px) {
+      .cp-hero h1 { font-size: 2rem; }
+      .cp-content-wrap { padding: 0 1rem 4rem; }
+    }
+  </style>
+</head>
+<body>
+<style>
+  /* Team page extra styles */
+  .mission-strip {
+    background: linear-gradient(135deg, #2563eb, #1e40af);
+    color: white;
+    border-radius: 20px;
+    padding: 3rem 2.5rem;
+    margin-bottom: 3rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 2rem;
+    text-align: center;
+  }
+  .mission-strip h2 {
+    font-size: 1rem; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.7px; opacity: 0.75; margin-bottom: 0.5rem;
+    font-family: 'Open Sans', sans-serif;
+  }
+  .mission-stat {
+    font-size: 2.8rem; font-weight: 800;
+    font-family: 'Open Sans', sans-serif; line-height: 1;
+  }
+  .mission-stat-label {
+    font-size: 0.88rem; opacity: 0.8; margin-top: 0.3rem;
+    font-family: 'Open Sans', sans-serif;
+  }
+  @media(max-width:640px){ .mission-strip { grid-template-columns: 1fr; gap: 1.5rem; }}
+
+  .about-block {
+    background: white;
+    border-radius: 20px;
+    padding: 2.5rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 4px 24px rgba(37,99,235,0.07);
+    border: 1px solid rgba(37,99,235,0.06);
+  }
+  .about-block h2 {
+    font-size: 1.5rem; font-weight: 800;
+    color: rgb(1,9,67); margin-bottom: 1rem;
+    font-family: 'Open Sans', sans-serif;
+    display: flex; align-items: center; gap: 0.6rem;
+  }
+  .about-block h2 i { color: #2563eb; font-size: 1.2rem; }
+  .about-block p {
+    color: #475569; line-height: 1.75;
+    font-family: 'Open Sans', sans-serif; font-size: 0.97rem;
+    margin-bottom: 0.85rem;
+  }
+  .values-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1.25rem; margin-top: 1.25rem;
+  }
+  .value-card {
+    background: #f8faff;
+    border-radius: 14px; padding: 1.25rem;
+    border: 1px solid rgba(37,99,235,0.08);
+    transition: transform 0.2s ease;
+  }
+  .value-card:hover { transform: translateY(-3px); }
+  .value-icon {
+    font-size: 1.6rem; margin-bottom: 0.6rem;
+  }
+  .value-card h3 {
+    font-size: 0.95rem; font-weight: 800; color: rgb(1,9,67);
+    margin-bottom: 0.35rem; font-family: 'Open Sans', sans-serif;
+  }
+  .value-card p {
+    font-size: 0.82rem; color: #64748b; line-height: 1.55;
+    font-family: 'Open Sans', sans-serif; margin: 0;
+  }
+
+.team-grid-full {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+/* Shared row styling */
+.team-row {
+  display: grid;
+  gap: 2rem;
+}
+
+/* Top leadership row */
+.team-row.top-row {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+/* Second leadership row */
+.team-row.middle-row {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+/* Remaining members */
+.team-row.bottom-row {
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+}
+
+/* Mobile responsiveness */
+@media (max-width: 900px) {
+  .team-row.top-row,
+  .team-row.middle-row,
+  .team-row.bottom-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+.team-card {
+  background: white;
+  border-radius: 24px;
+  overflow: hidden;
+  border: 1px solid rgba(37,99,235,0.08);
+  box-shadow: 0 10px 30px rgba(37,99,235,0.08);
+  transition: all 0.35s ease;
+  position: relative;
+}
+
+.team-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 24px 50px rgba(37,99,235,0.18);
+}
+
+.team-image-wrapper {
+  width: 100%;
+  height: 280px;
+  overflow: hidden;
+  position: relative;
+}
+
+.team-image-wrapper::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(0,0,0,0.35),
+    rgba(0,0,0,0)
+  );
+}
+
+.team-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.45s ease;
+}
+
+.team-card:hover .team-image {
+  transform: scale(1.05);
+}
+
+.team-card-content {
+  padding: 1.7rem;
+}
+
+.team-member-name {
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: rgb(1,9,67);
+  margin-bottom: 0.85rem;
+  line-height: 1.2;
+  font-family: 'Open Sans', sans-serif;
+}
+
+.team-member-role {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.55rem 1rem;
+  background: linear-gradient(
+    135deg,
+    rgba(37,99,235,0.10),
+    rgba(59,130,246,0.16)
+  );
+  color: #2563eb;
+  border: 1px solid rgba(37,99,235,0.12);
+  border-radius: 14px;
+  font-size: 0.78rem;
+  font-weight: 750;
+  letter-spacing: 0.3px;
+  line-height: 1.4;
+  text-align: center;
+  margin-bottom: 1rem;
+  font-family: 'Open Sans', sans-serif;
+  max-width: 100%;
+  word-break: break-word;
+}
+
+.team-member-bio {
+  color: #64748b;
+  line-height: 1.75;
+  font-size: 0.92rem;
+  margin-bottom: 1.5rem;
+  font-family: 'Open Sans', sans-serif;
+  flex-grow: 1;
+}
+.team-member-links {
+  display: flex;
+  gap: 0.7rem;
+}
+
+.team-contact-btn {
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  background: #f1f5f9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #64748b;
+  text-decoration: none;
+  transition: all 0.25s ease;
+  font-size: 0.95rem;
+}
+
+.team-contact-btn:hover {
+  background: linear-gradient(135deg,#2563eb,#3b82f6);
+  color: white;
+  transform: translateY(-3px);
+}
+  [data-theme="dark"] .about-block { background: var(--bg-secondary); border-color: var(--border-color); }
+  [data-theme="dark"] .about-block h2, [data-theme="dark"] .team-member-name, [data-theme="dark"] .value-card h3 { color: var(--text-primary) !important; }
+  [data-theme="dark"] .about-block p, [data-theme="dark"] .team-member-bio, [data-theme="dark"] .value-card p { color: var(--text-secondary) !important; }
+  [data-theme="dark"] .value-card, [data-theme="dark"] .team-card { background: var(--bg-primary); border-color: var(--border-color); }
+  [data-theme="dark"] .team-social-link { background: var(--hover-bg); color: var(--text-secondary); }
+</style>
+  <nav>
+    <div class="navbar">
+      <div class="navdiv">
+        <div class="logo">
+          <a href="index.html">
+            <img src="images/logo.png" alt="NextStep Logo" class="logo-image">
+          </a>
+        </div>
+        <nav class="nav-links">
+          <ul>
+            <li class="navbar-item"><a href="index.html">Home</a></li>
+            <li class="navbar-item"><a href="map.html">Map</a></li>
+            <li class="navbar-item"><a href="events.html">Events</a></li>
+            <li class="navbar-item"><a href="badges.html">Badges</a></li>
+            <li class="navbar-item" id="admin-nav-link" style="display: none;"><a href="admin-dashboard.html">Admin Dashboard</a></li>
+            <li class="navbar-item"><a href="chatbot.html">Compass</a></li>
+            <li class="navbar-item"><a href="contact.html" class="active">Contact Us</a></li>
+            <li class="navbar-item"><a href="the-podium.html">The Podium</a></li>
+          </ul>
+        </nav>
+
+        <div class="nav-right">
+          <li class="navbar-item"><a href="login.html" class="login" id="nav-login">Login</a></li>
+          <li class="navbar-item"><a href="signup.html" class="signup" id="nav-signup">Sign Up</a></li>
+        </div>
+      </div>
+    </div>
+  </nav>
+  <nav class="contact-subnav" aria-label="Contact sections">
+    <span class="subnav-label"><i class="fas fa-map-signs"></i> Contact</span>
+    <div class="subnav-pills"><a class="subnav-pill" href="contact.html"><i class="fas fa-paper-plane"></i> Message Us</a>
+      <a class="subnav-pill active" href="contact-team.html"><i class="fas fa-users"></i> Meet the Team</a>
+      <a class="subnav-pill" href="contact-blog.html"><i class="fas fa-water"></i> Wave Blog</a>
+      <a class="subnav-pill" href="contact-faq.html"><i class="fas fa-question-circle"></i> FAQ</a>
+      </div>
+  </nav>
+  <main class="contact-subpage-main">
+    <div class="cp-hero">
+      <div class="cp-hero-icon"><i class="fas fa-users"></i></div>
+      <h1>Meet the Team</h1>
+      <p>We're a group of students, designers, and civic advocates who believe local democracy deserves better tools.</p>
+    </div>
+
+    <div class="cp-content-wrap">
+
+      <!-- Stats strip -->
+      <div class="mission-strip">
+        <div>
+          <div class="mission-stat">30+</div>
+          <div class="mission-stat-label">Team Members</div>
+        </div>
+        <div>
+          <div class="mission-stat">2025</div>
+          <div class="mission-stat-label">Founded in Boca Raton</div>
+        </div>
+        <div>
+          <div class="mission-stat">1</div>
+          <div class="mission-stat-label">Community, Together</div>
+        </div>
+      </div>
+
+      <!-- Our Story -->
+      <div class="about-block">
+        <h2><i class="fas fa-book-open"></i> Our Story</h2>
+        <p>NextStep was born out of a simple frustration: civic life in Boca Raton was happening everywhere — town halls, volunteer days, school board meetings, park cleanups — but there was no single place to find it, follow it, or feel like you were part of it.</p>
+        <p>We're a team of students and local advocates who saw that gap and decided to build the platform we wished existed. What started as a side project turned into a full civic engagement suite — event maps, a badge system, an AI guide, and a community blog — all focused on making participation feel rewarding, not intimidating.</p>
+        <p>Our goal isn't to replace traditional civic institutions. It's to make them more accessible, especially for young residents and newcomers who don't yet know where to start. Every feature we build asks one question: does this make it easier for a person to show up?</p>
+      </div>
+
+      <!-- Mission & Values -->
+      <div class="about-block">
+        <h2><i class="fas fa-compass"></i> What We Stand For</h2>
+        <p>These are the principles that guide every decision we make — from design choices to which events we highlight.</p>
+        <div class="values-grid">
+          <div class="value-card">
+            <div class="value-icon">🗳️</div>
+            <h3>Civic Accessibility</h3>
+            <p>Participation shouldn't require insider knowledge. We lower the barrier for everyone.</p>
+          </div>
+          <div class="value-card">
+            <div class="value-icon">🤝</div>
+            <h3>Community First</h3>
+            <p>Every feature exists to serve residents, not metrics. We build for people, not platforms.</p>
+          </div>
+          <div class="value-card">
+            <div class="value-icon">🌱</div>
+            <h3>Long-Term Thinking</h3>
+            <p>Real change takes time. We celebrate small wins and build habits that last.</p>
+          </div>
+          <div class="value-card">
+            <div class="value-icon">🔍</div>
+            <h3>Transparency</h3>
+            <p>We're honest about what we know, what we don't, and how Compass works.</p>
+          </div>
+          <div class="value-card">
+            <div class="value-icon">⚡</div>
+            <h3>Student Energy</h3>
+            <p>We're young, we move fast, and we're not afraid to try things that haven't been done before.</p>
+          </div>
+          <div class="value-card">
+            <div class="value-icon">🏙️</div>
+            <h3>Local Focus</h3>
+            <p>Boca Raton first. Deep local knowledge beats shallow global reach every time.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Team Grid -->
+      <div class="about-block">
+        <h2><i class="fas fa-id-badge"></i> The People</h2>
+        <p>Say hello to the humans behind the platform.</p>
+        <div class="team-grid-full" id="teamGrid">
+          <!-- Populated by contact.js -->
+        </div>
+      </div>
+
+      <!-- Join CTA -->
+      <div class="about-block" style="text-align:center;">
+        <h2 style="justify-content:center;"><i class="fas fa-hand-holding-heart"></i> Join the Team</h2>
+        <p>We're always looking for passionate people — designers, developers, writers, community organizers. If you care about Boca Raton and want to help build something meaningful, we'd love to hear from you.</p>
+        <a href="contact.html" class="wave-all-btn" style="display:inline-flex;align-items:center;gap:0.5rem;padding:0.9rem 2rem;background:linear-gradient(135deg,#2563eb,#3b82f6);color:white;border-radius:50px;font-family:'Open Sans',sans-serif;font-size:0.95rem;font-weight:700;text-decoration:none;box-shadow:0 4px 20px rgba(37,99,235,0.3);transition:all 0.3s ease;">
+          <i class="fas fa-paper-plane"></i> Get In Touch
+        </a>
+      </div>
+
+    </div>
+  </main>
+  <footer>
+    <div class="footer-content">
+      <div class="footer-grid">
+        <div class="footer-section footer-about">
+          <h3>NEXTSTEP</h3>
+          <p>Empowering communities through civic engagement. Discover local events, connect with your neighbors, and make a real difference in Boca Raton.</p>
+          <div class="social-links">
+            <a href="#" class="social-link" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+            <a href="#" class="social-link" aria-label="X (Twitter)"><i class="fab fa-x-twitter"></i></a>
+            <a href="#" class="social-link" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+            <a href="https://www.youtube.com/@NextStep-Civic" target="_blank" class="social-link" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+          </div>
+        </div>
+        <div class="footer-section">
+          <h4>Quick Links</h4>
+          <ul class="footer-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="map.html">Map</a></li>
+            <li><a href="events.html">Events</a></li>
+            <li><a href="chatbot.html">Compass</a></li>
+            <li><a href="contact.html">Contact Us</a></li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h4>Resources</h4>
+          <ul class="footer-links">
+            <li><a href="contact-team.html">About Us</a></li>
+            <li><a href="contact-blog.html">Blog</a></li>
+            <li><a href="contact-faq.html">FAQs</a></li>
+            <li><a href="contact.html">Volunteer</a></li>
+            <li><a href="contact.html">Partners</a></li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h4>Stay Updated</h4>
+          <p style="opacity:0.5;font-size:0.95rem;margin-bottom:1rem;">Subscribe to our newsletter for the latest civic events and opportunities.</p>
+          <form class="newsletter-form" method="POST" action="https://app.kit.com/forms/bf804aa149/subscriptions">
+            <input type="email" name="email_address" class="newsletter-input" placeholder="Your email" required>
+            <button type="submit" class="newsletter-button">Join</button>
+          </form>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 NextStep. All rights reserved.</p>
+        <div class="footer-bottom-links">
+          <a href="privacy-policy.html">Privacy Policy</a>
+          <a href="terms-of-service.html">Terms of Service</a>
+          <a href="accessibility.html">Accessibility</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+  <script src="contact.js"></script>
+  <script type="module" src="auth-check.js"></script>
+  <script src="dark-mode.js"></script>
+  <script src="mobile-nav.js"></script>
+  <script src="navbar.js"></script>
+  <script type="module" src="auth-navbar.js"></script>
+  <script>document.addEventListener("DOMContentLoaded",()=>{if(typeof renderTeamGrid==="function")renderTeamGrid()});</script>
+</body>
+</html>

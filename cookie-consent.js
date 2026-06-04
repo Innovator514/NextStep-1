@@ -1,44 +1,182 @@
 // cookie-consent.js — NextStep cookie consent banner
 (function () {
-  // Don't show if already decided
+  // 1. Exit immediately if the user has already accepted or declined
   if (localStorage.getItem('nextstep-cookies')) return;
 
-  // Create banner
-  const banner = document.createElement('div');
-  banner.id = 'cookie-banner';
-  banner.innerHTML = `
-    <div class="cookie-text">
-      <p>
-        <strong>🍪 We use cookies</strong> — NextStep uses cookies and similar technologies to keep you signed in,
-        remember your preferences (like dark mode), and analyze how our platform is used via Firebase.
-        By continuing, you agree to our
-        <a href="privacy-policy.html">Privacy Policy</a>.
-      </p>
-    </div>
-    <div class="cookie-buttons">
-      <button class="cookie-btn-decline" id="cookie-decline">Decline</button>
-      <button class="cookie-btn-accept" id="cookie-accept">Accept All</button>
-    </div>
+  // 2. Inject CSS rules dynamically into the document head
+  const style = document.createElement('style');
+  style.textContent = `
+    #cookie-banner {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 99998;
+      background: white;
+      border-top: 1px solid rgba(37, 99, 235, 0.15);
+      box-shadow: 0 -4px 30px rgba(0, 0, 0, 0.1);
+      padding: 1.25rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 2rem;
+      flex-wrap: wrap;
+      transform: translateY(100%);
+      transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    #cookie-banner.visible {
+      transform: translateY(0);
+    }
+    #cookie-banner.hidden {
+      transform: translateY(100%);
+    }
+    .cookie-text {
+      flex: 1;
+      min-width: 260px;
+    }
+    .cookie-text p {
+      font-family: 'Open Sans', sans-serif;
+      font-size: 0.9rem;
+      color: #475569;
+      line-height: 1.6;
+      margin: 0;
+    }
+    .cookie-text a {
+      color: #2563eb;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .cookie-text a:hover {
+      text-decoration: underline;
+    }
+    .cookie-text strong {
+      color: #1e3a8a;
+    }
+    .cookie-buttons {
+      display: flex;
+      gap: 0.75rem;
+      flex-shrink: 0;
+    }
+    .cookie-btn-accept {
+      padding: 0.65rem 1.5rem;
+      background: linear-gradient(135deg, #2563eb, #3b82f6);
+      color: white;
+      border: none;
+      border-radius: 25px;
+      font-family: 'Open Sans', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
+      white-space: nowrap;
+    }
+    .cookie-btn-accept:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(37, 99, 235, 0.45);
+    }
+    .cookie-btn-decline {
+      padding: 0.65rem 1.5rem;
+      background: white;
+      color: #64748b;
+      border: 2px solid #e2e8f0;
+      border-radius: 25px;
+      font-family: 'Open Sans', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      white-space: nowrap;
+    }
+    .cookie-btn-decline:hover {
+      border-color: #94a3b8;
+      color: #334155;
+      transform: translateY(-2px);
+    }
+    
+    /* Dark mode configurations */
+    [data-theme="dark"] #cookie-banner {
+      background: #0f172a;
+      border-top-color: rgba(96, 165, 250, 0.15);
+      box-shadow: 0 -4px 30px rgba(0, 0, 0, 0.4);
+    }
+    [data-theme="dark"] .cookie-text p { color: #94a3b8; }
+    [data-theme="dark"] .cookie-text strong { color: #e2e8f0; }
+    [data-theme="dark"] .cookie-btn-decline {
+      background: transparent;
+      border-color: rgba(255, 255, 255, 0.15);
+      color: #94a3b8;
+    }
+    
+    @media (max-width: 600px) {
+      #cookie-banner {
+        padding: 1.25rem;
+        gap: 1rem;
+      }
+      .cookie-buttons {
+        width: 100%;
+      }
+      .cookie-btn-accept,
+      .cookie-btn-decline {
+        flex: 1;
+        text-align: center;
+      }
+    }
   `;
-  document.body.appendChild(banner);
+  document.head.appendChild(style);
 
-  // Slide in after short delay
-  setTimeout(function () {
-    banner.classList.add('visible');
-  }, 800);
+  // 3. Setup structural logic to safely compile and mount elements
+  function initCookieBanner() {
+    if (document.getElementById('cookie-banner')) return; // Avoid duplicate layout instances
 
-  function dismiss(choice) {
-    localStorage.setItem('nextstep-cookies', choice);
-    banner.classList.remove('visible');
-    banner.classList.add('hidden');
-    setTimeout(function () { banner.remove(); }, 400);
+    const banner = document.createElement('div');
+    banner.id = 'cookie-banner';
+    banner.innerHTML = `
+      <div class="cookie-text">
+        <p>
+          <strong>🍪 We use cookies</strong> — NextStep uses cookies and similar technologies to keep you signed in,
+          remember your preferences (like dark mode), and analyze how our platform is used via Firebase.
+          By continuing, you agree to our
+          <a href="privacy-policy.html">Privacy Policy</a>.
+        </p>
+      </div>
+      <div class="cookie-buttons">
+        <button class="cookie-btn-decline" id="cookie-decline">Decline</button>
+        <button class="cookie-btn-accept" id="cookie-accept">Accept All</button>
+      </div>
+    `;
+    document.body.appendChild(banner);
+
+    // Slide in smoothly after a tiny visual delay
+    setTimeout(function () {
+      banner.classList.add('visible');
+    }, 800);
+
+    // Handle dismissing the banner securely
+    function dismiss(choice) {
+      localStorage.setItem('nextstep-cookies', choice);
+      banner.classList.remove('visible');
+      banner.classList.add('hidden');
+      
+      setTimeout(function () { 
+        banner.remove(); 
+        // We leave the style tag active so other pages can still safely map dark-mode theme variables
+      }, 400);
+    }
+
+    document.getElementById('cookie-accept').addEventListener('click', function () {
+      dismiss('accepted');
+    });
+
+    document.getElementById('cookie-decline').addEventListener('click', function () {
+      dismiss('declined');
+    });
   }
 
-  document.getElementById('cookie-accept').addEventListener('click', function () {
-    dismiss('accepted');
-  });
-
-  document.getElementById('cookie-decline').addEventListener('click', function () {
-    dismiss('declined');
-  });
+  // 4. Safely verify execution mapping based on whether document body is generated
+  if (document.body) {
+    initCookieBanner();
+  } else {
+    document.addEventListener('DOMContentLoaded', initCookieBanner);
+  }
 })();

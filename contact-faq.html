@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="description" content="Answers to the most common questions about NextStep, events, badges, and Compass."/>
+  <meta name="author" content="NextStep"/>
+  <meta name="robots" content="index, follow"/>
+  <link rel="canonical" href="https://nextstep-civic.org/contact-faq.html"/>
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+  <link rel="manifest" href="site.webmanifest">
+  <link rel="stylesheet" href="style.css" type="text/css"/>
+  <link rel="stylesheet" href="contact.css" type="text/css"/>
+  <link rel="stylesheet" href="dark-mode.css" type="text/css"/>
+  <link rel="stylesheet" href="navbar-dropdown.css" type="text/css"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <link rel="stylesheet" href="loading-screen.css" type="text/css"/>
+  <script src="loading-screen.js"></script>
+  <link rel="stylesheet" href="back-to-top.css" type="text/css"/>
+  <script src="back-to-top.js"></script>
+  <link rel="stylesheet" href="cookie-consent.css" type="text/css"/>
+  <script src="cookie-consent.js"></script>
+  <link rel="stylesheet" href="scroll-progress.css" type="text/css"/>
+  <script src="scroll-progress.js"></script>
+  <link rel="stylesheet" href="announcement-banner.css" type="text/css"/>
+  <script src="announcement-banner.js"></script>
+  <title>FAQ – NextStep</title>
+  <style>
+    /* ── Page base ── */
+    .contact-subpage-main {
+      padding-top: 100px;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #f8fafc 0%, #e0e7ff 100%);
+    }
+    /* ── Section subnav ── */
+    .contact-subnav {
+      position: sticky; top: 0; z-index: 200;
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-bottom: 1px solid rgba(37,99,235,0.1);
+      padding: 0.6rem 1.5rem;
+      display: flex; align-items: center;
+      justify-content: space-between; gap: 1rem; flex-wrap: wrap;
+    }
+    .subnav-label {
+      font-size: 0.75rem; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.7px;
+      color: #94a3b8; white-space: nowrap;
+      font-family: 'Open Sans', sans-serif;
+    }
+    .subnav-pills { display: flex; gap: 0.4rem; flex-wrap: wrap; }
+    .subnav-pill {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      padding: 0.42rem 1rem; border: none; border-radius: 50px;
+      background: #f1f5f9; color: #64748b;
+      font-family: 'Open Sans', sans-serif;
+      font-size: 0.82rem; font-weight: 700;
+      cursor: pointer; text-decoration: none;
+      transition: all 0.2s ease; white-space: nowrap;
+    }
+    .subnav-pill:hover { background: #eff6ff; color: #2563eb; transform: translateY(-1px); }
+    .subnav-pill.active {
+      background: linear-gradient(135deg, #2563eb, #3b82f6);
+      color: white; box-shadow: 0 4px 14px rgba(37,99,235,0.3);
+    }
+    /* ── Page hero ── */
+    .cp-hero {
+      text-align: center; padding: 3.5rem 1rem 2.5rem;
+      max-width: 780px; margin: 0 auto;
+    }
+    .cp-hero-icon {
+      width: 72px; height: 72px;
+      background: linear-gradient(135deg, #2563eb, #3b82f6);
+      border-radius: 22px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.8rem; color: white;
+      margin: 0 auto 1.25rem;
+      box-shadow: 0 8px 28px rgba(37,99,235,0.3);
+    }
+    .cp-hero h1 {
+      font-size: 2.8rem; font-weight: 800;
+      background: linear-gradient(135deg, #2563eb, #3b82f6);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text; margin-bottom: 0.75rem;
+      font-family: 'Open Sans', sans-serif;
+    }
+    .cp-hero p {
+      font-size: 1.1rem; color: #64748b; font-weight: 500;
+      font-family: 'Open Sans', sans-serif;
+    }
+    /* ── Shared card ── */
+    .cp-content-wrap {
+      max-width: 1100px; margin: 0 auto; padding: 0 2rem 5rem;
+    }
+    /* Dark mode */
+    [data-theme="dark"] .contact-subnav {
+      background: rgba(15,23,42,0.92); border-color: var(--border-color);
+    }
+    [data-theme="dark"] .subnav-pill {
+      background: var(--bg-secondary); color: var(--text-secondary);
+    }
+    [data-theme="dark"] .subnav-pill:hover {
+      background: var(--hover-bg); color: #60a5fa;
+    }
+    [data-theme="dark"] .subnav-pill.active {
+      background: linear-gradient(135deg,#2563eb,#3b82f6); color: white;
+    }
+    @media (max-width: 640px) {
+      .cp-hero h1 { font-size: 2rem; }
+      .cp-content-wrap { padding: 0 1rem 4rem; }
+    }
+  </style>
+</head>
+<body>
+<style>
+  .faq-section-group { margin-bottom: 2.5rem; }
+  .faq-group-label {
+    font-size: 0.8rem; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.8px; color: #2563eb;
+    padding: 0 0.5rem 0.75rem;
+    display: flex; align-items: center; gap: 0.5rem;
+    font-family: 'Open Sans', sans-serif;
+    border-bottom: 2px solid rgba(37,99,235,0.1);
+    margin-bottom: 0.75rem;
+  }
+  .faq-container { display: flex; flex-direction: column; gap: 0.75rem; }
+  .faq-item {
+    background: white; border-radius: 14px; overflow: hidden;
+    box-shadow: 0 2px 12px rgba(37,99,235,0.06);
+    border: 1px solid rgba(37,99,235,0.07);
+    transition: box-shadow 0.2s ease;
+  }
+  .faq-item:hover { box-shadow: 0 6px 24px rgba(37,99,235,0.12); }
+  .faq-question {
+    width: 100%; display: flex; align-items: center;
+    justify-content: space-between; padding: 1.2rem 1.5rem;
+    background: none; border: none; cursor: pointer;
+    font-family: 'Open Sans', sans-serif; font-size: 0.97rem;
+    font-weight: 700; color: rgb(1,9,67);
+    text-align: left; gap: 1rem;
+    transition: color 0.2s ease;
+  }
+  .faq-question:hover { color: #2563eb; }
+  .faq-icon {
+    font-size: 1.3rem; font-weight: 300; color: #2563eb;
+    flex-shrink: 0; transition: transform 0.3s ease;
+    line-height: 1;
+  }
+  .faq-item.open .faq-icon { transform: rotate(45deg); }
+  .faq-answer {
+    max-height: 0; overflow: hidden;
+    transition: max-height 0.4s cubic-bezier(0.4,0,0.2,1), padding 0.3s ease;
+    padding: 0 1.5rem;
+  }
+  .faq-item.open .faq-answer { max-height: 300px; padding: 0 1.5rem 1.25rem; }
+  .faq-answer p {
+    color: #475569; line-height: 1.75; font-size: 0.93rem;
+    font-family: 'Open Sans', sans-serif; margin: 0;
+  }
+  /* Search bar */
+  .faq-search-wrap {
+    background: white; border-radius: 14px;
+    padding: 0.5rem 1.25rem; margin-bottom: 2rem;
+    display: flex; align-items: center; gap: 0.75rem;
+    box-shadow: 0 4px 20px rgba(37,99,235,0.08);
+    border: 1px solid rgba(37,99,235,0.1);
+  }
+  .faq-search-wrap i { color: #94a3b8; }
+  .faq-search-input {
+    flex: 1; border: none; outline: none; padding: 0.65rem 0;
+    font-family: 'Open Sans', sans-serif; font-size: 0.95rem;
+    color: #334155; background: transparent;
+  }
+  .faq-search-input::placeholder { color: #94a3b8; }
+  /* Still need help CTA */
+  .faq-cta {
+    background: linear-gradient(135deg,#2563eb,#1e40af);
+    border-radius: 20px; padding: 2.5rem; text-align: center;
+    color: white; margin-top: 1rem;
+  }
+  .faq-cta h2 { font-size:1.5rem; font-weight:800; margin-bottom:0.5rem; font-family:'Open Sans',sans-serif; }
+  .faq-cta p { opacity:0.85; margin-bottom:1.5rem; font-family:'Open Sans',sans-serif; }
+  .faq-cta-btns { display:flex; gap:1rem; justify-content:center; flex-wrap:wrap; }
+  .faq-cta-btn {
+    display:inline-flex; align-items:center; gap:0.5rem;
+    padding:0.8rem 1.75rem; border-radius:50px;
+    font-family:'Open Sans',sans-serif; font-size:0.9rem; font-weight:700;
+    text-decoration:none; cursor:pointer; transition:all 0.25s ease;
+  }
+  .faq-cta-btn.primary { background:white; color:#2563eb; box-shadow:0 4px 14px rgba(0,0,0,0.15); }
+  .faq-cta-btn.primary:hover { transform:translateY(-2px); box-shadow:0 8px 24px rgba(0,0,0,0.2); }
+  .faq-cta-btn.secondary { background:rgba(255,255,255,0.15); color:white; border:2px solid rgba(255,255,255,0.4); }
+  .faq-cta-btn.secondary:hover { background:rgba(255,255,255,0.25); }
+
+  [data-theme="dark"] .faq-item { background:var(--bg-secondary); border-color:var(--border-color); }
+  [data-theme="dark"] .faq-question { color:var(--text-primary); }
+  [data-theme="dark"] .faq-answer p { color:var(--text-secondary); }
+  [data-theme="dark"] .faq-search-wrap { background:var(--bg-secondary); border-color:var(--border-color); }
+  [data-theme="dark"] .faq-search-input { color:var(--text-primary); }
+</style>
+  <nav>
+    <div class="navbar">
+      <div class="navdiv">
+        <div class="logo">
+          <a href="index.html">
+            <img src="images/logo.png" alt="NextStep Logo" class="logo-image">
+          </a>
+        </div>
+        <nav class="nav-links">
+          <ul>
+            <li class="navbar-item"><a href="index.html">Home</a></li>
+            <li class="navbar-item"><a href="map.html">Map</a></li>
+            <li class="navbar-item"><a href="events.html">Events</a></li>
+            <li class="navbar-item"><a href="badges.html">Badges</a></li>
+            <li class="navbar-item" id="admin-nav-link" style="display: none;"><a href="admin-dashboard.html">Admin Dashboard</a></li>
+            <li class="navbar-item"><a href="chatbot.html">Compass</a></li>
+            <li class="navbar-item"><a href="contact.html" class="active">Contact Us</a></li>
+            <li class="navbar-item"><a href="the-podium.html">The Podium</a></li>
+          </ul>
+        </nav>
+
+        <div class="nav-right">
+          <li class="navbar-item"><a href="login.html" class="login" id="nav-login">Login</a></li>
+          <li class="navbar-item"><a href="signup.html" class="signup" id="nav-signup">Sign Up</a></li>
+        </div>
+      </div>
+    </div>
+  </nav>  <nav class="contact-subnav" aria-label="Contact sections">
+    <span class="subnav-label"><i class="fas fa-map-signs"></i> Contact</span>
+    <div class="subnav-pills"><a class="subnav-pill" href="contact.html"><i class="fas fa-paper-plane"></i> Message Us</a>
+      <a class="subnav-pill" href="contact-team.html"><i class="fas fa-users"></i> Meet the Team</a>
+      <a class="subnav-pill" href="contact-blog.html"><i class="fas fa-water"></i> Wave Blog</a>
+      <a class="subnav-pill active" href="contact-faq.html"><i class="fas fa-question-circle"></i> FAQ</a>
+      </div>
+  </nav>
+  <main class="contact-subpage-main">
+    <div class="cp-hero">
+      <div class="cp-hero-icon"><i class="fas fa-question-circle"></i></div>
+      <h1>FAQ</h1>
+      <p>Quick answers to the most common questions about NextStep.</p>
+    </div>
+
+    <div class="cp-content-wrap">
+
+      <!-- Search -->
+      <div class="faq-search-wrap">
+        <i class="fas fa-search"></i>
+        <input type="text" class="faq-search-input" id="faqSearch"
+               placeholder="Search questions…" oninput="filterFaqs(this.value)">
+      </div>
+
+      <!-- FAQ groups -->
+      
+      <div class="faq-section-group">
+        <div class="faq-group-label"><i class="fas fa-folder-open"></i> Getting Started</div>
+        <div class="faq-container">
+          <div class="faq-item">
+            <button class="faq-question" onclick="toggleFaq(this)">
+              <span>How do I create a NextStep account?</span>
+              <span class="faq-icon">+</span>
+            </button>
+            <div class="faq-answer"><p>Creating an account is free and takes under a minute. Click Sign Up in the top navigation, enter your name, email, and a password, then verify your email address. Once verified you'll have access to event tracking, badge progress, and your personalized civic dashboard.</p></div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-question" onclick="toggleFaq(this)">
+              <span>How do I get started as a volunteer?</span>
+              <span class="faq-icon">+</span>
+            </button>
+            <div class="faq-answer"><p>After signing up, head to the Events page and browse upcoming opportunities. You can filter by category — political, youth, environmental, and more. Click any event card to see full details and register. Our Compass AI guide can also give you personalized recommendations if you tell it your interests.</p></div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-question" onclick="toggleFaq(this)">
+              <span>Is NextStep free to use?</span>
+              <span class="faq-icon">+</span>
+            </button>
+            <div class="faq-answer"><p>Yes — NextStep is completely free for residents. We're a civic platform, not a subscription service. We may offer optional premium features in the future, but core access to events, the map, badges, and Compass will always be free.</p></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="faq-section-group">
+        <div class="faq-group-label"><i class="fas fa-folder-open"></i> Events & Participation</div>
+        <div class="faq-container">
+          <div class="faq-item">
+            <button class="faq-question" onclick="toggleFaq(this)">
+              <span>What types of events do you list?</span>
+              <span class="faq-icon">+</span>
+            </button>
+            <div class="faq-answer"><p>NextStep lists a wide variety of civic engagement events: town halls, community cleanups, voter registration drives, school board meetings, neighborhood association sessions, environmental projects, youth workshops, and more. Events come from both our curated data and community submissions.</p></div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-question" onclick="toggleFaq(this)">
+              <span>Can I submit an event?</span>
+              <span class="faq-icon">+</span>
+            </button>
+            <div class="faq-answer"><p>Yes! If you're organizing a civic event in Boca Raton, use the contact form and select 'Event Information' as your topic. Include the event name, date, time, location, and a short description. Our team reviews submissions and adds approved events within 48 hours.</p></div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-question" onclick="toggleFaq(this)">
+              <span>How do I mark an event as completed?</span>
+              <span class="faq-icon">+</span>
+            </button>
+            <div class="faq-answer"><p>On any event card, click the green 'Mark as Completed' button. This logs your participation and adds progress toward relevant badges. You can undo this at any time by clicking the button again.</p></div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-question" onclick="toggleFaq(this)">
+              <span>Are events only in Boca Raton?</span>
+              <span class="faq-icon">+</span>
+            </button>
+            <div class="faq-answer"><p>Currently yes — we're focused on making civic life in Boca Raton as visible and accessible as possible. If you're interested in bringing NextStep to another city, get in touch. We'd love to talk about expansion.</p></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="faq-section-group">
+        <div class="faq-group-label"><i class="fas fa-folder-open"></i> Badges & Progress</div>
+        <div class="faq-container">
+          <div class="faq-item">
+            <button class="faq-question" onclick="toggleFaq(this)">
+              <span>How do I earn badges?</span>
+              <span class="faq-icon">+</span>
+            </button>
+            <div class="faq-answer"><p>Badges are earned by attending events and completing civic activities. Each event card shows which badge categories it contributes to. Visit the Badges page to see every badge, what's required to earn it, and how far along you are.</p></div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-question" onclick="toggleFaq(this)">
+              <span>Can I lose badge progress?</span>
+              <span class="faq-icon">+</span>
+            </button>
+            <div class="faq-answer"><p>Only if you manually unmark a completed event. Your progress is stored locally in your browser, so clearing browser data will reset it. We recommend creating an account to sync your progress to the cloud (coming soon).</p></div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-question" onclick="toggleFaq(this)">
+              <span>What's the Founding Member badge?</span>
+              <span class="faq-icon">+</span>
+            </button>
+            <div class="faq-answer"><p>The Founding Member badge is awarded to early users who participated in NextStep during our launch period. It's a permanent recognition of being part of the founding community.</p></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="faq-section-group">
+        <div class="faq-group-label"><i class="fas fa-folder-open"></i> Platform & Technical</div>
+        <div class="faq-container">
+          <div class="faq-item">
+            <button class="faq-question" onclick="toggleFaq(this)">
+              <span>What is Compass?</span>
+              <span class="faq-icon">+</span>
+            </button>
+            <div class="faq-answer"><p>Compass is NextStep's AI civic guide, powered by Claude. You can ask it anything about Boca Raton civic life — how local government works, what events are coming up, how to volunteer, how to earn badges, and more. It's conversational, remembers your chat history, and gets smarter with context.</p></div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-question" onclick="toggleFaq(this)">
+              <span>Is my data private?</span>
+              <span class="faq-icon">+</span>
+            </button>
+            <div class="faq-answer"><p>We take privacy seriously. Account data is stored securely via Firebase. Chat conversations with Compass are not stored server-side. For full details, see our Privacy Policy.</p></div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-question" onclick="toggleFaq(this)">
+              <span>Can organizations partner with NextStep?</span>
+              <span class="faq-icon">+</span>
+            </button>
+            <div class="faq-answer"><p>Absolutely. We partner with nonprofits, civic groups, schools, and local government offices to list events and amplify their outreach. Use the contact form and select 'Partnership Inquiry', or email nextstep.civic@gmail.com.</p></div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-question" onclick="toggleFaq(this)">
+              <span>How can I stay updated on new events?</span>
+              <span class="faq-icon">+</span>
+            </button>
+            <div class="faq-answer"><p>Follow us on social media, subscribe to our Wave newsletter, check the Events page, or enable notifications in your account settings. Our announcement banner on the site also highlights upcoming major events.</p></div>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- Still need help -->
+      <div class="faq-cta">
+        <h2>Still Have Questions?</h2>
+        <p>Can't find what you're looking for? Our team is happy to help, and Compass can answer most platform questions instantly.</p>
+        <div class="faq-cta-btns">
+          <a href="contact.html" class="faq-cta-btn primary"><i class="fas fa-paper-plane"></i> Message Us</a>
+          <a href="chatbot.html" class="faq-cta-btn secondary"><i class="fas fa-compass"></i> Ask Compass</a>
+        </div>
+      </div>
+
+    </div>
+  </main>
+  <footer>
+    <div class="footer-content">
+      <div class="footer-grid">
+        <div class="footer-section footer-about">
+          <h3>NEXTSTEP</h3>
+          <p>Empowering communities through civic engagement. Discover local events, connect with your neighbors, and make a real difference in Boca Raton.</p>
+          <div class="social-links">
+            <a href="#" class="social-link" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+            <a href="#" class="social-link" aria-label="X (Twitter)"><i class="fab fa-x-twitter"></i></a>
+            <a href="#" class="social-link" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+            <a href="https://www.youtube.com/@NextStep-Civic" target="_blank" class="social-link" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+          </div>
+        </div>
+        <div class="footer-section">
+          <h4>Quick Links</h4>
+          <ul class="footer-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="map.html">Map</a></li>
+            <li><a href="events.html">Events</a></li>
+            <li><a href="chatbot.html">Compass</a></li>
+            <li><a href="contact.html">Contact Us</a></li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h4>Resources</h4>
+          <ul class="footer-links">
+            <li><a href="contact-team.html">About Us</a></li>
+            <li><a href="contact-blog.html">Blog</a></li>
+            <li><a href="contact-faq.html">FAQs</a></li>
+            <li><a href="contact.html">Volunteer</a></li>
+            <li><a href="contact.html">Partners</a></li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h4>Stay Updated</h4>
+          <p style="opacity:0.5;font-size:0.95rem;margin-bottom:1rem;">Subscribe to our newsletter for the latest civic events and opportunities.</p>
+          <form class="newsletter-form" method="POST" action="https://app.kit.com/forms/bf804aa149/subscriptions">
+            <input type="email" name="email_address" class="newsletter-input" placeholder="Your email" required>
+            <button type="submit" class="newsletter-button">Join</button>
+          </form>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 NextStep. All rights reserved.</p>
+        <div class="footer-bottom-links">
+          <a href="privacy-policy.html">Privacy Policy</a>
+          <a href="terms-of-service.html">Terms of Service</a>
+          <a href="accessibility.html">Accessibility</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+  <script src="contact.js"></script>
+  <script type="module" src="auth-check.js"></script>
+  <script src="dark-mode.js"></script>
+  <script src="mobile-nav.js"></script>
+  <script src="navbar.js"></script>
+  <script>
+function toggleFaq(btn) {
+  const item = btn.closest(".faq-item");
+  const wasOpen = item.classList.contains("open");
+  document.querySelectorAll(".faq-item.open").forEach(i => i.classList.remove("open"));
+  if (!wasOpen) item.classList.add("open");
+}
+function filterFaqs(q) {
+  const query = q.toLowerCase();
+  document.querySelectorAll(".faq-item").forEach(item => {
+    const text = item.textContent.toLowerCase();
+    item.style.display = text.includes(query) ? "" : "none";
+  });
+  document.querySelectorAll(".faq-section-group").forEach(grp => {
+    const visible = [...grp.querySelectorAll(".faq-item")].some(i => i.style.display !== "none");
+    grp.style.display = visible ? "" : "none";
+  });
+}
+</script>
+<script type="module" src="auth-navbar.js"></script>
+</body>
+</html>

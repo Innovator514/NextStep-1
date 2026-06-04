@@ -381,8 +381,6 @@
   </style>
 </head>
 <body>
-
-<!-- Navbar -->
 <nav>
   <div class="navbar">
     <div class="navdiv">
@@ -394,15 +392,19 @@
       <nav class="nav-links">
         <ul>
           <li class="navbar-item"><a href="index.html">Home</a></li>
+          <li class="navbar-item"><a href="map.html">Map</a></li>
           <li class="navbar-item"><a href="events.html">Events</a></li>
           <li class="navbar-item"><a href="badges.html">Badges</a></li>
+          <li class="navbar-item" id="admin-nav-link" style="display: none;"><a href="admin-dashboard.html">Admin Dashboard</a></li>
           <li class="navbar-item"><a href="chatbot.html">Compass</a></li>
           <li class="navbar-item"><a href="contact.html">Contact Us</a></li>
+          <li class="navbar-item"><a href="the-podium.html">The Podium</a></li>
         </ul>
       </nav>
+
       <div class="nav-right">
-        <li class="navbar-item"><a href="login.html" class="login">Login</a></li>
-        <li class="navbar-item"><a href="signup.html" class="signup">Sign Up</a></li>
+        <li class="navbar-item"><a href="login.html" class="login" id="nav-login">Login</a></li>
+        <li class="navbar-item"><a href="signup.html" class="signup" id="nav-signup">Sign Up</a></li>
       </div>
     </div>
   </div>
@@ -411,7 +413,6 @@
 <main class="checkin-page">
   <div class="checkin-card">
 
-    <!-- Event banner — populated by JS -->
     <div class="checkin-banner banner-default" id="checkin-banner">
       <div class="banner-category" id="banner-category">
         <i class="fas fa-calendar-check"></i> Event
@@ -426,14 +427,12 @@
 
     <div class="checkin-body">
 
-      <!-- ① Loading -->
       <div class="state-panel active" id="state-loading">
         <div class="state-icon icon-loading"><i class="fas fa-spinner"></i></div>
         <div class="state-title">Loading…</div>
         <div class="state-sub">Grabbing event details and checking your account.</div>
       </div>
 
-      <!-- ② Not logged in -->
       <div class="state-panel" id="state-login">
         <div class="state-icon icon-lock"><i class="fas fa-lock"></i></div>
         <div class="state-title">Sign In to Check In</div>
@@ -448,7 +447,6 @@
         </div>
       </div>
 
-      <!-- ③ Already checked in -->
       <div class="state-panel" id="state-already">
         <div class="state-icon icon-already"><i class="fas fa-check-double"></i></div>
         <div class="state-title">Already Checked In!</div>
@@ -461,7 +459,6 @@
         </div>
       </div>
 
-      <!-- ④ Event not found / error -->
       <div class="state-panel" id="state-error">
         <div class="state-icon icon-error"><i class="fas fa-exclamation-triangle"></i></div>
         <div class="state-title">Something Went Wrong</div>
@@ -474,13 +471,11 @@
         </div>
       </div>
 
-      <!-- ⑤ Success -->
       <div class="state-panel" id="state-success">
         <div class="state-icon icon-success"><i class="fas fa-check"></i></div>
         <div class="state-title" id="success-title">Checked In! 🎉</div>
         <div class="state-sub"  id="success-sub">Your attendance has been recorded.</div>
 
-        <!-- Streak display -->
         <div class="streak-row" id="streak-row" style="display:none">
           <div class="streak-flame" id="streak-flame">🔥</div>
           <div class="streak-info-text">
@@ -493,10 +488,8 @@
           </div>
         </div>
 
-        <!-- Newly unlocked badges -->
         <div class="badge-unlocks" id="badge-unlocks"></div>
 
-        <!-- Progress toward next badge -->
         <div class="progress-group" id="progress-group" style="display:none">
           <div class="progress-label-row">
             <span id="progress-label-left">Events attended</span>
@@ -515,10 +508,7 @@
         </div>
       </div>
 
-    </div><!-- /checkin-body -->
-
-    <!-- Stats strip — shown on success -->
-    <div class="stats-strip" id="stats-strip">
+    </div><div class="stats-strip" id="stats-strip">
       <div class="stat-cell">
         <div class="stat-n" id="stat-events">0</div>
         <div class="stat-l">Events</div>
@@ -537,19 +527,15 @@
       </div>
     </div>
 
-  </div><!-- /checkin-card -->
-</main>
+  </div></main>
 
-<!-- ═══════════════════════════════════════════════════════════
-     Firebase + Check-in Logic
-     ═══════════════════════════════════════════════════════════ -->
 <script type="module">
 import { initializeApp, getApps }
   from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
 import { getAuth, onAuthStateChanged }
   from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
 import {
-  getFirestore, doc, getDoc, setDoc, updateDoc,
+  getFirestore, doc, getDoc, setDoc, updateDoc, runTransaction,
   collection, serverTimestamp, increment
 } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 
@@ -568,10 +554,6 @@ const auth = getAuth(app);
 const db   = getFirestore(app);
 
 /* ─── Badge definitions (mirrors badges.js) ────────────────── */
-/*
-   Every badge in badges.js is listed here so we can detect
-   the moment a user crosses a threshold after this check-in.
-*/
 const BADGES = [
   { id:1,  name:"First Step",         icon:"👣",  progressKey:"eventsAttended",            required:1,   isStreak:false },
   { id:2,  name:"Active Citizen",     icon:"🏙️", progressKey:"eventsAttended",            required:5,   isStreak:false },
@@ -600,25 +582,21 @@ const BADGES = [
   { id:25, name:"Century Strong",     icon:"💯",  progressKey:"currentStreak",             required:100, isStreak:true  },
 ];
 
-/*
-   Map from event category → which progressKey(s) to increment.
-   Each entry is { key: string, amount: number }.
-   eventsAttended is ALWAYS incremented (+1) on top of these.
-*/
+/* Map from event category → which progressKey(s) to increment */
 const CATEGORY_PROGRESS = {
   environmental : [{ key:'environmentalEvents',      amount:1 }, { key:'sustainabilityInitiatives', amount:1 }],
   youth         : [{ key:'youthEvents',               amount:1 }],
   innovation    : [{ key:'innovationSummits',          amount:1 }],
-  volunteer     : [{ key:'volunteeredHours',           amount:2 }],  // default 2 hours per volunteer event
+  volunteer     : [{ key:'volunteeredHours',           amount:2 }],
   service       : [{ key:'serviceProjects',            amount:1 }],
-  political     : [],  // eventsAttended only
+  political     : [],
   education     : [],
   religious     : [],
 };
 
 const STREAK_MILESTONES = [3, 7, 14, 30, 100];
 
-/* ─── Streak helpers (stored in Firestore under userProgress) ─ */
+/* ─── Streak helpers ─── */
 function todayStr() {
   const d = new Date();
   return d.getFullYear() + '-' +
@@ -632,47 +610,34 @@ function daysBetween(a, b) {
   );
 }
 
-/*
-   Given the user's progress doc (from Firestore), compute the
-   new streak after a check-in today, and which milestones
-   were just crossed.
-
-   Returns: { currentStreak, longestStreak, milestonesCrossed[] }
-*/
 function computeStreak(progress) {
   const lastCheckin = progress.lastStreakCheckin || null;
   let current = progress.currentStreak || 0;
   let longest = progress.longestStreak  || 0;
   const today = todayStr();
 
-  // Already checked in today — don't advance streak again
   if (lastCheckin === today) {
     return { currentStreak: current, longestStreak: longest, milestonesCrossed: [] };
   }
 
   const gap = lastCheckin ? daysBetween(lastCheckin, today) : 1;
-
   const prev = current;
-  current = (gap === 1) ? current + 1 : 1;  // reset if gap > 1
+  current = (gap === 1) ? current + 1 : 1;
   longest = Math.max(longest, current);
 
   const milestonesCrossed = STREAK_MILESTONES.filter(m => prev < m && current >= m);
-
   return { currentStreak: current, longestStreak: longest, milestonesCrossed };
 }
 
-/* ─── Show a single state panel ──────────────────────────────── */
 function showState(id) {
   document.querySelectorAll('.state-panel').forEach(p => p.classList.remove('active'));
   document.getElementById(id).classList.add('active');
 }
 
-/* ─── URL param helper ──────────────────────────────────────── */
 function param(name) {
   return new URLSearchParams(window.location.search).get(name) || '';
 }
 
-/* ─── Banner colour class ───────────────────────────────────── */
 function bannerClass(cat) {
   const map = {
     political    : 'banner-political',
@@ -687,36 +652,24 @@ function bannerClass(cat) {
   return map[(cat || '').toLowerCase()] || 'banner-default';
 }
 
-/* ─── Badge changed: was not earned before, is earned after ─── */
 function computeNewBadges(before, after) {
   return BADGES.filter(b => {
-    const prev = b.progressKey === 'isFoundingMember'
-      ? (before[b.progressKey] ? 1 : 0)
-      : (before[b.progressKey] || 0);
-    const next = b.progressKey === 'isFoundingMember'
-      ? (after[b.progressKey]  ? 1 : 0)
-      : (after[b.progressKey]  || 0);
+    const prev = b.progressKey === 'isFoundingMember' ? (before[b.progressKey] ? 1 : 0) : (before[b.progressKey] || 0);
+    const next = b.progressKey === 'isFoundingMember' ? (after[b.progressKey] ? 1 : 0) : (after[b.progressKey] || 0);
     return prev < b.required && next >= b.required;
   });
 }
 
-/* ─── Sync Firestore progress back to localStorage ──────────── */
-/*
-   badges.html reads localStorage, so we keep it in sync.
-   We only store the fields badges.js uses.
-*/
 function syncToLocalStorage(progressAfter, streakData) {
   try {
     const local = JSON.parse(localStorage.getItem('userProgress') || '{}');
     const merged = { ...local, ...progressAfter };
-    // Ensure streak fields are current
     if (streakData) {
       merged.currentStreak = streakData.currentStreak;
       merged.longestStreak  = streakData.longestStreak;
     }
     localStorage.setItem('userProgress', JSON.stringify(merged));
 
-    // Also write streakData in its own key (used by the streak banner on badges.html)
     if (streakData) {
       const existingSD = JSON.parse(localStorage.getItem('streakData') || '{}');
       const history    = Array.isArray(existingSD.history) ? existingSD.history : [];
@@ -730,10 +683,9 @@ function syncToLocalStorage(progressAfter, streakData) {
         history,
       }));
     }
-  } catch (e) { /* localStorage unavailable — not critical */ }
+  } catch (e) {}
 }
 
-/* ─── Confetti ───────────────────────────────────────────────── */
 function spawnConfetti() {
   const colors = ['#2563eb','#3b82f6','#f97316','#ef4444','#10b981','#fbbf24','#ec4899'];
   for (let i = 0; i < 70; i++) {
@@ -755,7 +707,6 @@ function spawnConfetti() {
   }
 }
 
-/* ─── Render badge-unlock row ────────────────────────────────── */
 function renderBadgeRow(badge, delay) {
   const row = document.createElement('div');
   row.className = 'badge-unlock-row' + (badge.isStreak ? ' streak-unlock' : '');
@@ -774,18 +725,18 @@ function renderBadgeRow(badge, delay) {
 /* ═══════════════════════════════════════════════════════════════
    MAIN FLOW
    ═══════════════════════════════════════════════════════════════ */
+/* ═══════════════════════════════════════════════════════════════
+   MAIN FLOW (With Detailed Error Diagnostics)
+   ═══════════════════════════════════════════════════════════════ */
 async function run() {
   const eventId = param('event');
 
-  /* Build login / signup URLs that bounce back here after auth */
   const returnURL = encodeURIComponent(window.location.href);
   document.getElementById('login-link').href  = `login.html?redirect=${returnURL}`;
   document.getElementById('signup-link').href = `signup.html?redirect=${returnURL}`;
 
-  /* ── Step 1: load event data ── */
   if (!eventId) {
-    document.getElementById('error-message').textContent =
-      'No event ID was found in the QR code. Please re-scan or ask a volunteer.';
+    document.getElementById('error-message').innerHTML = '<strong>Error:</strong> No event ID was found in the QR code. Please re-scan or ask a volunteer.';
     showState('state-error');
     return;
   }
@@ -801,47 +752,56 @@ async function run() {
     console.warn('Firestore event fetch failed:', e);
   }
 
-  /* Fallback: check window.eventsData if your site loads it */
   if (!eventData && window.eventsData) {
     eventData = window.eventsData.find(e => String(e.id) === String(eventId)) || null;
   }
 
   if (!eventData) {
-    document.getElementById('error-message').textContent =
-      'This event could not be found. The QR code may be expired or invalid.';
+    document.getElementById('error-message').innerHTML = '<strong>Error:</strong> This event could not be found. The QR code may be expired or invalid.';
     showState('state-error');
     return;
   }
 
-  /* ── Step 2: Populate the banner ── */
+  // Check expiration safely
+  if (eventData.qrExpiresAt) {
+    const expireTime = (typeof eventData.qrExpiresAt.toDate === 'function') 
+      ? eventData.qrExpiresAt.toDate() 
+      : new Date(eventData.qrExpiresAt);
+    
+    if (new Date() > expireTime) {
+      document.getElementById('error-message').innerHTML = '<strong>Error:</strong> This check-in window has closed! This QR code has expired. Please see a volunteer for assistance.';
+      showState('state-error');
+      return;
+    }
+  }
+
+  /* ── Populate the banner ── */
   const banner   = document.getElementById('checkin-banner');
   const category = (eventData.category || 'default').toLowerCase();
   banner.className = `checkin-banner ${bannerClass(category)}`;
 
   const catLabel = (eventData.category || 'Event');
-  document.getElementById('banner-category').innerHTML =
-    `<i class="fas fa-calendar-check"></i> ${catLabel.charAt(0).toUpperCase() + catLabel.slice(1)}`;
+  document.getElementById('banner-category').innerHTML = `<i class="fas fa-calendar-check"></i> ${catLabel.charAt(0).toUpperCase() + catLabel.slice(1)}`;
   document.getElementById('banner-title').textContent    = eventData.title    || 'Civic Event';
   document.getElementById('banner-date').textContent     = eventData.date     || '—';
   document.getElementById('banner-time').textContent     = eventData.time     || '—';
   document.getElementById('banner-location').textContent = eventData.location || '—';
   document.title = `Check In: ${eventData.title || 'Event'} – NextStep`;
 
-  /* ── Step 3: wait for Firebase Auth ── */
-  onAuthStateChanged(auth, async (user) => {
+  /* ── Wait for Firebase Auth ── */
+  let isProcessingCheckIn = false;
 
-    /* Not logged in */
+  onAuthStateChanged(auth, async (user) => {
     if (!user) {
       showState('state-login');
       return;
     }
 
-    /* ── Step 4: check for duplicate check-in ── */
-    /*
-       We use the composite key  uid_eventId  as the Firestore
-       document ID in the "checkins" collection, so it's
-       naturally unique — no duplicates possible.
-    */
+    if (isProcessingCheckIn) {
+      console.warn("Check-in request blocked: already processing a submission.");
+      return;
+    }
+
     const checkinDocId  = `${user.uid}_${eventId}`;
     const checkinRef    = doc(db, 'checkins', checkinDocId);
     const progressRef   = doc(db, 'userProgress', user.uid);
@@ -850,8 +810,8 @@ async function run() {
     try {
       const ciSnap = await getDoc(checkinRef);
       alreadyIn    = ciSnap.exists();
-    } catch (e) {
-      console.warn('Checkin read error:', e);
+    } catch (e) { 
+      console.warn('Checkin read error:', e); 
     }
 
     if (alreadyIn) {
@@ -859,65 +819,38 @@ async function run() {
       return;
     }
 
-    /* ── Step 5: load current progress from Firestore ── */
+    isProcessingCheckIn = true;
+
     let progressBefore = {};
     try {
       const pSnap = await getDoc(progressRef);
       if (pSnap.exists()) progressBefore = pSnap.data();
-    } catch (e) {
-      console.warn('Progress read error:', e);
+    } catch (e) { 
+      console.warn('Progress read error:', e); 
     }
 
-    /* ── Step 6: compute streak ── */
     const streakResult = computeStreak(progressBefore);
-
-    /* ── Step 7: build progress delta ── */
-    /*
-       delta holds all the numeric increments for this check-in.
-       We pass these to Firestore's increment() so there are no
-       race conditions if the same user somehow triggers two writes.
-    */
     const delta = { eventsAttended: 1 };
 
-    // Category-specific increments
     const catIncrements = CATEGORY_PROGRESS[category] || [];
-    catIncrements.forEach(({ key, amount }) => {
-      delta[key] = (delta[key] || 0) + amount;
-    });
+    catIncrements.forEach(({ key, amount }) => { delta[key] = (delta[key] || 0) + amount; });
 
-    // Custom overrides from the event doc itself
-    // (admin can set  badgeProgress: { volunteeredHours: 3 }  etc.)
     if (eventData.badgeProgress && typeof eventData.badgeProgress === 'object') {
       Object.entries(eventData.badgeProgress).forEach(([k, v]) => {
         if (typeof v === 'number') delta[k] = (delta[k] || 0) + v;
       });
     }
 
-    // Streak fields
-    delta.currentStreak      = streakResult.currentStreak;   // we'll use set() not increment() for these
+    delta.currentStreak      = streakResult.currentStreak;
     delta.longestStreak      = streakResult.longestStreak;
     delta.lastStreakCheckin  = todayStr();
 
-    /* ── Step 8: build "after" snapshot for badge comparison ── */
     const progressAfter = { ...progressBefore };
     Object.entries(delta).forEach(([k, v]) => {
       if (k === 'currentStreak' || k === 'longestStreak' || k === 'lastStreakCheckin') {
-        progressAfter[k] = v; // direct set
+        progressAfter[k] = v;
       } else {
         progressAfter[k] = (progressAfter[k] || 0) + v;
-      }
-    });
-
-    /* ── Step 9: write to Firestore ── */
-    /*
-       We split the update into two parts:
-         a) incrementable fields  → use increment()
-         b) streak fields         → set directly (they aren't simple increments)
-    */
-    const incrementFields = {};
-    Object.entries(delta).forEach(([k, v]) => {
-      if (k !== 'currentStreak' && k !== 'longestStreak' && k !== 'lastStreakCheckin') {
-        incrementFields[k] = increment(v);
       }
     });
 
@@ -925,66 +858,82 @@ async function run() {
     const photoURL    = user.photoURL    || null;
 
     try {
-      await Promise.all([
-        // Record the check-in event
-        setDoc(checkinRef, {
+      await runTransaction(db, async (transaction) => {
+        const sfDoc = await transaction.get(checkinRef);
+        if (sfDoc.exists()) {
+          throw new Error("already checked into");
+        }
+
+        const updatedPayload = {
+          currentStreak: streakResult.currentStreak,
+          longestStreak: streakResult.longestStreak,
+          lastStreakCheckin: todayStr(),
+          displayName,
+          photoURL
+        };
+
+        Object.entries(delta).forEach(([k, v]) => {
+          if (k !== 'currentStreak' && k !== 'longestStreak' && k !== 'lastStreakCheckin') {
+            updatedPayload[k] = (progressBefore[k] || 0) + v;
+          }
+        });
+
+        transaction.set(checkinRef, {
           userId     : user.uid,
           eventId,
           eventTitle : eventData.title    || '',
           category   : eventData.category || '',
-          checkedInAt: serverTimestamp(),
+          checkedInAt: new Date(),
           displayName,
-        }),
-        // Update user progress
-        setDoc(progressRef, {
-          ...incrementFields,
-          currentStreak     : streakResult.currentStreak,
-          longestStreak     : streakResult.longestStreak,
-          lastStreakCheckin  : todayStr(),
-          displayName,
-          photoURL,
-        }, { merge: true }),
-      ]);
+        });
+
+        transaction.set(progressRef, updatedPayload, { merge: true });
+      });
+
     } catch (e) {
-      console.error('Firestore write failed:', e);
-      document.getElementById('error-message').textContent =
-        'There was a problem saving your check-in. Please try again or ask a volunteer.';
-      showState('state-error');
+      console.error('Detailed Debug Error Object:', e);
+      isProcessingCheckIn = false;
+      
+      if (e?.message && e.message.includes('already checked into')) {
+        showState('state-already'); 
+      } else {
+        // Here we expose the diagnostic details directly into the UI component
+        const errorMsgElement = document.getElementById('error-message');
+        errorMsgElement.innerHTML = `
+          <strong>Database Save Failed.</strong><br>
+          <span style="color: #dc2626; font-size: 0.85rem; display: block; margin-top: 8px; font-family: monospace; background: #fff5f5; padding: 8px; border-radius: 6px; border: 1px solid #fecaca; text-align: left;">
+            Code: ${e.code || 'N/A'}<br>
+            Message: ${e.message || e}
+          </span>
+        `;
+        showState('state-error');
+      }
       return;
     }
 
-    /* ── Step 10: sync back to localStorage for badges.html ── */
     syncToLocalStorage(progressAfter, streakResult);
-
-    /* ── Step 11: compute newly unlocked badges ── */
     const newBadges = computeNewBadges(progressBefore, progressAfter);
 
-    // Add streak milestone badges to the list
     streakResult.milestonesCrossed.forEach(m => {
       const sb = BADGES.find(b => b.isStreak && b.required === m);
       if (sb && !newBadges.find(nb => nb.id === sb.id)) newBadges.push(sb);
     });
 
-    // Count total badges now earned (for stats strip)
     const totalBadgesNow = BADGES.filter(b => {
-      const val = b.progressKey === 'isFoundingMember'
-        ? (progressAfter[b.progressKey] ? 1 : 0)
-        : (progressAfter[b.progressKey] || 0);
+      const val = b.progressKey === 'isFoundingMember' ? (progressAfter[b.progressKey] ? 1 : 0) : (progressAfter[b.progressKey] || 0);
       return val >= b.required;
     }).length;
 
-    // Non-critical: update badgesEarned field in Firestore
-    updateDoc(progressRef, { badgesEarned: totalBadgesNow }).catch(() => {});
+    try {
+      await setDoc(progressRef, { badgesEarned: totalBadgesNow }, { merge: true });
+    } catch (err) { console.warn("Deferred badge save metrics caught:", err); }
 
-    /* ── Step 12: Render success UI ── */
     const firstName = (user.displayName || displayName).split(' ')[0];
-    document.getElementById('success-title').textContent =
-      `Welcome, ${firstName}! 🎉`;
+    document.getElementById('success-title').textContent = `Welcome, ${firstName}! 🎉`;
     document.getElementById('success-sub').textContent = newBadges.length > 0
       ? `You've checked in to "${eventData.title}". You just unlocked new badges!`
       : `You've checked in to "${eventData.title}". Keep coming back to earn badges!`;
 
-    // Streak row
     const streakRowEl = document.getElementById('streak-row');
     if (streakResult.currentStreak > 0) {
       streakRowEl.style.display = 'flex';
@@ -996,37 +945,28 @@ async function run() {
       else                                        flameEl.textContent = '🔥';
     }
 
-    // Badge unlock rows
     const unlocksEl = document.getElementById('badge-unlocks');
-    newBadges.forEach((b, i) => {
-      unlocksEl.appendChild(renderBadgeRow(b, i * 0.12));
-    });
+    newBadges.forEach((b, i) => { unlocksEl.appendChild(renderBadgeRow(b, i * 0.12)); });
 
-    // Progress bar: events attended toward next milestone
     const eventsNow      = progressAfter.eventsAttended || 0;
     const milestones     = [1, 5, 10, 25, 50, 100];
     const nextMilestone  = milestones.find(m => m > eventsNow);
     if (nextMilestone) {
       const prevMilestone = milestones.filter(m => m <= eventsNow).pop() || 0;
-      const pct = Math.min(
-        ((eventsNow - prevMilestone) / (nextMilestone - prevMilestone)) * 100, 100
-      );
+      const pct = Math.min(((eventsNow - prevMilestone) / (nextMilestone - prevMilestone)) * 100, 100);
       document.getElementById('progress-label-left').textContent  = 'Events attended';
       document.getElementById('progress-label-right').textContent = `${eventsNow} / ${nextMilestone}`;
       document.getElementById('progress-group').style.display     = 'block';
-      // Small delay so the CSS transition plays
-      setTimeout(() => {
-        document.getElementById('progress-fill').style.width = pct + '%';
-      }, 300);
+      setTimeout(() => { document.getElementById('progress-fill').style.width = pct + '%'; }, 300);
     }
 
-    // Stats strip
     document.getElementById('stat-events').textContent = eventsNow;
     document.getElementById('stat-badges').textContent = totalBadgesNow;
     document.getElementById('stat-streak').textContent = streakResult.currentStreak;
     document.getElementById('stat-hours').textContent  = (progressAfter.volunteeredHours || 0) + 'h';
     document.getElementById('stats-strip').classList.add('show');
 
+    isProcessingCheckIn = false;
     showState('state-success');
     spawnConfetti();
   });
@@ -1035,10 +975,10 @@ async function run() {
 document.addEventListener('DOMContentLoaded', run);
 </script>
 
-<!-- Auth nav dropdown + dark mode (your existing scripts) -->
 <script type="module" src="auth-check.js"></script>
 <script src="dark-mode.js"></script>
 <script src="mobile-nav.js"></script>
+<script type="module" src="auth-navbar.js"></script>
 
 </body>
 </html>

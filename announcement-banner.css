@@ -4,7 +4,7 @@
 
 #announcement-banner {
   position: fixed;
-  top: 70px; /* sits just below the navbar */
+  top: 70px; /* Sits cleanly just below your standard fixed navbar */
   left: 0;
   right: 0;
   z-index: 999;
@@ -20,17 +20,17 @@
   font-weight: 600;
   text-align: center;
   flex-wrap: wrap;
-  transform: translateY(-100%);
+  transform: translateY(-150%); /* Start completely hidden above the navbar view */
   transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
 }
 
 #announcement-banner.visible {
-  transform: translateY(0);
+  transform: translateY(0); /* Drops into place below the navbar */
 }
 
 #announcement-banner.hidden {
-  transform: translateY(-100%);
+  transform: translateY(-150%);
 }
 
 .announcement-emoji {
@@ -92,20 +92,29 @@
   background: rgba(255, 255, 255, 0.35);
 }
 
-/* Push page content down when banner is visible */
-body.banner-visible .navbar {
-  top: 38px;
+/* 
+   FIX: Keep the navbar at top: 0, 
+   Instead, push your main page container element downward 
+   to make space for the banner without overlapping grids.
+*/
+body.banner-visible main,
+body.banner-visible .main-content,
+body.banner-visible .leaderboard-main {
+  margin-top: 40px !important; /* Pushes content down smoothly while banner shows */
+  transition: margin-top 0.4s ease;
 }
 
 @media (max-width: 768px) {
   #announcement-banner {
-    top: 64px;
+    top: 60px; /* Adjusts to fit a smaller mobile navbar height */
     font-size: 0.82rem;
     padding: 0.6rem 2.5rem 0.6rem 1rem;
     gap: 0.5rem;
   }
 
-  body.banner-visible .navbar {
-    top: 52px;
+  body.banner-visible main,
+  body.banner-visible .main-content,
+  body.banner-visible .leaderboard-main {
+    margin-top: 55px !important; /* Slightly larger margin to accommodate stacked mobile lines */
   }
 }
