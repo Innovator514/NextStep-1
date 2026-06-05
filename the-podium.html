@@ -540,6 +540,64 @@
       hours: 'Hours'
     };
 
+    function toNumber(value) {
+      const numberValue = Number(value);
+      return Number.isFinite(numberValue) ? numberValue : 0;
+    }
+
+    function getDisplayName(data, fallbackName = 'Civic Champion') {
+      return String(data?.displayName || data?.name || fallbackName);
+    }
+
+    function getInitials(name) {
+      return String(name || 'User')
+        .trim()
+        .split(/\s+/)
+        .map(part => part[0])
+        .join('')
+        .toUpperCase()
+        .slice(0, 2) || 'U';
+    }
+
+    function escapeHtml(value) {
+      return String(value)
+        .replaceAll('&', '&amp;')
+        .replaceAll('<', '&lt;')
+        .replaceAll('>', '&gt;')
+        .replaceAll('"', '&quot;')
+        .replaceAll("'", '&#039;');
+    }
+
+    function buildLeaderboardEntry(uid, data, fallbackName) {
+      const eventsCount = toNumber(data?.eventsAttended);
+      const badgesCount = toNumber(data?.badgesEarned);
+      const volunteerHours = toNumber(data?.volunteeredHours);
+      const combinedScore = (eventsCount * 10) + (badgesCount * 25) + (volunteerHours * 5);
+
+      return {
+        uid,
+        displayName: getDisplayName(data, fallbackName),
+        scores: {
+          combined: combinedScore,
+          events: eventsCount,
+          badges: badgesCount,
+          hours: volunteerHours
+        }
+      };
+    }
+
+    function showPodiumMessage(iconClass, message, actionHtml = '') {
+      document.getElementById('lb-podium').innerHTML = `
+        <div class="lb-empty">
+          <i class="${iconClass}"></i><br>
+          ${message}
+          ${actionHtml}
+        </div>
+      `;
+      document.getElementById('lb-list').innerHTML = '';
+      document.getElementById('lb-footer').textContent = '';
+    }
+
     window.switchTab = function(tabName, buttonEl) {
       currentTab = tabName;
       document.querySelectorAll('.lb-tab').forEach(btn => btn.classList.remove('active'));
@@ -576,7 +634,8 @@
         const rank = index + 1;
         const scoreVal = user.scores[currentTab];
         const label = LABELS[currentTab];
-        const initials = (user.displayName || 'User').split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
+        const initials = getInitials(user.displayName);
+        const displayName = escapeHtml(user.displayName);
         const isMeClass = (user.uid === currentUserId) ? 'is-me' : '';
         const crown = (rank === 1) ? '<span class="podium-crown">👑</span>' : '';
 
@@ -586,7 +645,7 @@
           ${crown}
           <div class="podium-rank-badge">${rank}</div>
           <div class="podium-avatar">${initials}</div>
-          <div class="podium-name">${user.displayName}</div>
+          <div class="podium-name">${displayName}</div>
           <div class="podium-score">${scoreVal}</div>
           <div class="podium-score-label">${label}</div>
         `;
@@ -598,7 +657,8 @@
         const rank = index + 4;
         const scoreVal = user.scores[currentTab];
         const label = LABELS[currentTab];
-        const initials = (user.displayName || 'User').split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
+        const initials = getInitials(user.displayName);
+        const displayName = escapeHtml(user.displayName);
         const isMeClass = (user.uid === currentUserId) ? 'is-me' : '';
 
         const row = document.createElement('div');
@@ -607,7 +667,7 @@
           <div class="lb-row-rank">${rank}</div>
           <div class="lb-row-avatar">${initials}</div>
           <div class="lb-row-info">
-            <div class="lb-row-name">${user.displayName}</div>
+            <div class="lb-row-name">${displayName}</div>
             <div class="lb-row-sub">Active Community Participant</div>
           </div>
           <div>
@@ -621,7 +681,48 @@
       document.getElementById('lb-footer').textContent = `Live leaderboard ranking • Last updated ${new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}`;
     }
 
-    async function loadLeaderboardData() {
+    async function loadCurrentUserFallback(user, footerMessage) {
+      try {
+        const progressSnap = await getDoc(doc(db, 'userProgress', user.uid));
+        if (!progressSnap.exists()) {
+          showPodiumMessage(
+            'fas fa-chart-line',
+            'No Podium progress yet. Check in to an event to appear here.',
+            '<br><a href="events.html" style="color:#2563eb;text-decoration:underline;margin-top:12px;display:inline-block;">Find events</a>'
+          );
+          return;
+        }
+
+        userLeaderboardData = [
+          buildLeaderboardEntry(
+            user.uid,
+            progressSnap.data(),
+            user.displayName || user.email?.split('@')[0] || 'You'
+          )
+        ];
+        renderLeaderboard();
+        document.getElementById('lb-footer').textContent = footerMessage;
+      } catch (fallbackErr) {
+        console.error("Podium fallback profile load failed:", fallbackErr);
+        showPodiumMessage(
+          'fas fa-exclamation-triangle',
+          'The Podium could not load your progress right now. Please try again shortly.'
+        );
+      }
+    }
+
+    async function loadLeaderboardData(user) {
+      if (!user) {
+        userLeaderboardData = [];
+        currentUserId = null;
+        showPodiumMessage(
+          'fas fa-lock',
+          'Sign in to view the Community Podium.',
+          '<br><a href="login.html" style="color:#2563eb;text-decoration:underline;margin-top:12px;display:inline-block;">Login to continue</a>'
+        );
+        return;
+      }
+
       try {
         console.log("Fetching collection 'userProgress' from Firestore...");
         const querySnapshot = await getDocs(collection(db, 'userProgress'));
@@ -634,34 +735,16 @@
         querySnapshot.forEach((docSnap) => {
           const data = docSnap.data();
           console.log("Processing user document ID:", docSnap.id, data);
-          
-          // MATCHING EXACT FIELDS FROM check-in.html:
-          const eventsCount = data.eventsAttended || 0;
-          const badgesCount = data.badgesEarned || 0;
-          const volunteerHours = data.volunteeredHours || 0; // Fixed key spelling map
-          
-          // Weight calculation formula matching your scoring points rule
-          const combinedScore = (eventsCount * 10) + (badgesCount * 25) + (volunteerHours * 5);
-
-          // Resolve display names correctly matching transaction records
-          const nameToDisplay = data.displayName || 'Civic Champion';
-
-          userLeaderboardData.push({
-            uid: docSnap.id,
-            displayName: nameToDisplay,
-            scores: {
-              combined: combinedScore,
-              events: eventsCount,
-              badges: badgesCount,
-              hours: volunteerHours
-            }
-          });
+          userLeaderboardData.push(buildLeaderboardEntry(docSnap.id, data));
         });
 
         renderLeaderboard();
       } catch (err) {
         console.error("Leaderboard metrics engine extraction failure:", err);
-        document.getElementById('lb-podium').innerHTML = '<div class="lb-loading"><i class="fas fa-exclamation-triangle"></i><br>Failed to compute ranking metrics. Check developer console.</div>';
+        await loadCurrentUserFallback(
+          user,
+          'Showing your progress only. Full community rankings are unavailable with the current database permissions.'
+        );
       }
     }
 
@@ -678,7 +761,7 @@
       }
       
       // Load and update the dashboard layout
-      await loadLeaderboardData();
+      await loadLeaderboardData(user);
     });
   </script>
 
