@@ -421,7 +421,7 @@ if (document.querySelector('.form-step')) {
         name: "Lily Montero",
         role: "Marketing & Social Media Director",
         bio: "She is an award-winning poet and social activist who has been featured in news outlets across the country, including ABC, Fox, CBS, NBC, and The CW. Arianna’s exhibitions in museums and writings have been highlighted in The New York Times Kids Edition, Miami Voyage Magazine, and the Boca Raton Observer. She is passionate about civil service, social activism, and her artistic endeavors.",
-        image: "images/team/lily.jpg",
+        image: "images/team/lily.JPG",
         email: "mailto:lilymontero@gmail.com",
         instagram: "#",
         linkedin: "#"
@@ -439,7 +439,7 @@ if (document.querySelector('.form-step')) {
         name: "Keerith Mahal",
         role: "Events & Engagement Director",
         bio: "Keerith Mahal is an accomplished student, writer, and honor student recognized for her academic achievement and creativity. She earned first place in the Palm Beach County Insight Through Education Kindness Contest for promoting positive community values through communication and storytelling. As a writer for the Sikh Youth Writers Association, she creates engaging content about her Sikh faith and culture, demonstrating strong writing skills and a commitment to personal growth and meaningful impact.",
-        image: "images/team/keerith.png",
+        image: "images/team/keerith.PNG",
         email: "mailto:keerith@nextstep-civic.org",
         instagram: "#",
         linkedin: "#"
@@ -448,7 +448,7 @@ if (document.querySelector('.form-step')) {
         name: "Jasmine Behroozi",
         role: "Director of Partnerships",
         bio: "Hi, I’m Jasmine! I’m a student who enjoys being involved in my community and helping out with local projects and events. I’m especially interested in environmental initiatives and finding ways to bring people together. Through NextStep, I hope to help make a positive impact and encourage others to get more involved in the community too.",
-        image: "images/team/jasmine.jpeg",
+        image: "images/team/jasmine.JPEG",
         email: "mailto:behroozijasmine@gmail.com",
         instagram: "#",
         linkedin: "#"
