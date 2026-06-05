@@ -139,6 +139,11 @@ function doCheckIn() {
     userProgress.longestStreak = data.longestStreak;
     saveUserProgress();
 
+    // Persist streak to Firestore so it survives across sessions and devices
+    if (typeof persistStreakToFirestore === 'function') {
+        persistStreakToFirestore(data.currentStreak, data.longestStreak);
+    }
+
     return { alreadyDone: false, newStreak: data.currentStreak, milestones };
 }
 
@@ -246,6 +251,7 @@ window.streakCheckIn = function () {
     });
 
     if (document.getElementById('badges-grid')) renderBadges(currentFilter);
+
 };
 
 // ── Render badges ────────────────────────────────────────────
@@ -388,6 +394,79 @@ function handleNewsletter(event) {
     input.value = '';
 }
 
+// ── Firestore sync ────────────────────────────────────────────
+// Fetches the user's real progress from Firestore and merges it
+// into userProgress + localStorage, then re-renders badges.
+async function syncFromFirestore() {
+    try {
+        const { initializeApp, getApps } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js');
+        const { getAuth, onAuthStateChanged } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js');
+        const { getFirestore, doc, getDoc } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
+
+        const firebaseConfig = {
+            apiKey           : "AIzaSyArZYz6UMheUgBVrNeWvxWml-0zDTbNur0",
+            authDomain       : "nextstep-12b9a.firebaseapp.com",
+            projectId        : "nextstep-12b9a",
+            storageBucket    : "nextstep-12b9a.firebasestorage.app",
+            messagingSenderId: "630600034259",
+            appId            : "1:630600034259:web:6b6284e147a6f79cda7126",
+        };
+
+        const app  = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db   = getFirestore(app);
+
+        onAuthStateChanged(auth, async function(user) {
+            if (!user) return; // not logged in — localStorage values stay
+
+            try {
+                const snap = await getDoc(doc(db, 'userProgress', user.uid));
+                if (snap.exists()) {
+                    const remote = snap.data();
+                    // Merge remote data (source of truth) over local
+                    userProgress = Object.assign({}, userProgress, remote);
+                    saveUserProgress();
+
+                    // Also keep streakData in sync so the streak banner is accurate
+                    const today = todayStr();
+                    const lastCI = remote.lastStreakCheckin || null;
+                    const existingSD = JSON.parse(localStorage.getItem('streakData') || '{}');
+                    const history = Array.isArray(existingSD.history) ? existingSD.history : [];
+                    if (lastCI && !history.includes(lastCI)) history.push(lastCI);
+                    localStorage.setItem('streakData', JSON.stringify({
+                        currentStreak: remote.currentStreak || 0,
+                        longestStreak : remote.longestStreak  || 0,
+                        lastCheckin   : lastCI,
+                        history,
+                    }));
+                }
+            } catch (e) {
+                console.warn('badges.js: Firestore sync failed, using localStorage:', e);
+            }
+
+            // Re-render now that we have fresh data
+            renderStreakBanner();
+            renderBadges(currentFilter);
+        });
+    } catch (e) {
+        console.warn('badges.js: Firebase import failed:', e);
+    }
+}
+
+// ── Persist streak to Firestore ──────────────────────────────
+async function persistStreakToFirestore(currentStreak, longestStreak) {
+    try {
+        const { initializeApp, getApps } = await import("https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js");
+        const { getAuth } = await import("https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js");
+        const { getFirestore, doc, setDoc } = await import("https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js");
+        const firebaseConfig = { apiKey:"AIzaSyArZYz6UMheUgBVrNeWvxWml-0zDTbNur0", authDomain:"nextstep-12b9a.firebaseapp.com", projectId:"nextstep-12b9a", storageBucket:"nextstep-12b9a.firebasestorage.app", messagingSenderId:"630600034259", appId:"1:630600034259:web:6b6284e147a6f79cda7126" };
+        const app  = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
+        const user = getAuth(app).currentUser;
+        if (!user) return;
+        await setDoc(doc(getFirestore(app), "userProgress", user.uid), { currentStreak, longestStreak, lastStreakCheckin: todayStr() }, { merge: true });
+    } catch(e) { console.warn("badges.js: Failed to persist streak to Firestore:", e); }
+}
+
 // ── Init ──────────────────────────────────────────────────────
 function initBadgesPage() {
     if (!document.getElementById('badges-grid')) return;
@@ -403,6 +482,9 @@ function initBadgesPage() {
             }
         });
     });
+
+    // Sync from Firestore so badges always reflect real check-in data
+    syncFromFirestore();
 }
 
 // ── Animation CSS ─────────────────────────────────────────────

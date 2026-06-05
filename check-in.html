@@ -895,7 +895,7 @@ async function run() {
           displayName,
         });
 
-        transaction.set(progressRef, updatedPayload, { merge: true });
+        transaction.set(progressRef, updatedPayload);
       });
 
     } catch (e) {
