@@ -101,7 +101,7 @@
     .access-denied-icon { width: 72px; height: 72px; border-radius: 50%; background: #fee2e2; color: #dc2626; display: flex; align-items: center; justify-content: center; font-size: 2rem; margin-bottom: 0.5rem; }
 
     /* Scroll Containers */
-    .event-list, .announcement-list {
+    .event-list, .announcement-list, .wave-post-list {
       display: flex;
       flex-direction: column;
       gap: 0.5rem;
@@ -110,7 +110,7 @@
       scrollbar-width: thin;
     }
 
-    .event-item, .announcement-item {
+    .event-item, .announcement-item, .wave-post-item {
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -122,12 +122,13 @@
       transition: all 0.2s ease;
     }
 
-    .event-item:hover, .announcement-item:hover, .event-item.active { border-color: #2563eb; background: #eff6ff; }
+    .event-item:hover, .announcement-item:hover, .wave-post-item:hover, .event-item.active { border-color: #2563eb; background: #eff6ff; }
 
     .item-main-info { display: flex; align-items: center; gap: 0.75rem; width: 70%; }
     .event-cat-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
-    .event-item-title, .announcement-item-text { font-size: 0.9rem; font-weight: 700; color: rgb(1,9,67); text-overflow: ellipsis; overflow: hidden; white-space: nowrap; }
+    .event-item-title, .announcement-item-text, .wave-post-title { font-size: 0.9rem; font-weight: 700; color: rgb(1,9,67); text-overflow: ellipsis; overflow: hidden; white-space: nowrap; }
     .event-item-meta, .announcement-item-meta { font-size: 0.75rem; color: #94a3b8; margin-top: 1px; }
+    .wave-post-meta { font-size: 0.75rem; color: #94a3b8; margin-top: 1px; }
 
     /* Custom Admin Operation Status Badges */
     .status-badge { font-size: 0.7rem; padding: 2px 8px; border-radius: 10px; font-weight: 700; text-transform: uppercase; white-space: nowrap; }
@@ -144,6 +145,14 @@
     .list-search:focus, .form-input:focus { border-color: #2563eb; }
     
     .manual-input-group { display: flex; gap: 0.5rem; margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #e2e8f0; }
+
+    .admin-form-stack { display: grid; gap: 0.9rem; }
+    .form-label { display:block; font-weight:700; margin-bottom:0.3rem; font-size:0.8rem; color: rgb(1,9,67); }
+    textarea.form-input { resize: vertical; min-height: 120px; line-height: 1.55; }
+    .wave-form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+    .wave-post-emoji { width: 38px; height: 38px; border-radius: 10px; background: #eff6ff; display:flex; align-items:center; justify-content:center; flex-shrink:0; font-size:1.05rem; }
+    .wave-post-actions { display:flex; align-items:center; gap:0.5rem; flex-shrink:0; }
+    @media (max-width: 650px) { .wave-form-row { grid-template-columns: 1fr; } }
 
     .expiry-group { width: 100%; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1rem; margin-bottom: 1rem; }
     .expiry-label { font-size: 0.8rem; font-weight: 700; color: rgb(1,9,67); display: flex; align-items: center; gap: 0.4rem; margin-bottom: 0.5rem; }
@@ -177,9 +186,9 @@
     /* Theme Engine Extensions Mapping */
     [data-theme="dark"] .qr-page { background: linear-gradient(160deg,#0a1628 0%,#0f2744 100%); }
     [data-theme="dark"] .qr-card { background: #0f2744; box-shadow: 0 8px 32px rgba(0,0,0,0.4); }
-    [data-theme="dark"] .qr-header h1, [data-theme="dark"] .qr-card h2, [data-theme="dark"] .dashboard-section-title, [data-theme="dark"] .event-item-title, [data-theme="dark"] .announcement-item-text { color: #f1f5f9; }
-    [data-theme="dark"] .event-item, [data-theme="dark"] .announcement-item { border-color: #1e3a5f; }
-    [data-theme="dark"] .event-item:hover, [data-theme="dark"] .announcement-item:hover, [data-theme="dark"] .event-item.active { background: #1e3a5f; border-color: #3b82f6; }
+    [data-theme="dark"] .qr-header h1, [data-theme="dark"] .qr-card h2, [data-theme="dark"] .dashboard-section-title, [data-theme="dark"] .event-item-title, [data-theme="dark"] .announcement-item-text, [data-theme="dark"] .wave-post-title, [data-theme="dark"] .form-label { color: #f1f5f9; }
+    [data-theme="dark"] .event-item, [data-theme="dark"] .announcement-item, [data-theme="dark"] .wave-post-item { border-color: #1e3a5f; }
+    [data-theme="dark"] .event-item:hover, [data-theme="dark"] .announcement-item:hover, [data-theme="dark"] .wave-post-item:hover, [data-theme="dark"] .event-item.active { background: #1e3a5f; border-color: #3b82f6; }
     [data-theme="dark"] .form-input, [data-theme="dark"] .list-search { background: #0a1628; color: #f1f5f9; border-color: #1e3a5f; }
     [data-theme="dark"] .qr-url-box { background: #0a1628; border-color: #1e3a5f; }
     [data-theme="dark"] .btn-secondary { background: #1e3a5f; color: #e2e8f0; }
@@ -334,6 +343,68 @@
         </div>
       </div>
 
+      <div class="dashboard-section-title"><i class="fas fa-water"></i> Wave Blog Posts</div>
+      <div class="qr-grid">
+        <div class="qr-card">
+          <h2><i class="fas fa-feather"></i> Publish a Wave Post</h2>
+          <form id="wave-post-form" class="admin-form-stack" onsubmit="publishWavePost(event)">
+            <div>
+              <label class="form-label" for="wave-title-input">Post Title</label>
+              <input type="text" id="wave-title-input" required class="form-input" placeholder="How Students Can Shape Boca's Future">
+            </div>
+            <div class="wave-form-row">
+              <div>
+                <label class="form-label" for="wave-category-input">Category</label>
+                <select id="wave-category-input" class="form-input" required>
+                  <option value="civic">Civic Engagement</option>
+                  <option value="environment">Environment</option>
+                  <option value="youth">Youth</option>
+                  <option value="innovation">Innovation</option>
+                  <option value="community">Community</option>
+                  <option value="education">Education</option>
+                </select>
+              </div>
+              <div>
+                <label class="form-label" for="wave-date-input">Display Date</label>
+                <input type="text" id="wave-date-input" required class="form-input" placeholder="Jun 12, 2026">
+              </div>
+            </div>
+            <div class="wave-form-row">
+              <div>
+                <label class="form-label" for="wave-read-time-input">Read Time</label>
+                <input type="text" id="wave-read-time-input" class="form-input" placeholder="4 min">
+              </div>
+              <div>
+                <label class="form-label" for="wave-emoji-input">Emoji Icon</label>
+                <input type="text" id="wave-emoji-input" class="form-input" placeholder="🌊">
+              </div>
+            </div>
+            <div>
+              <label class="form-label" for="wave-gradient-input">Card Gradient CSS</label>
+              <input type="text" id="wave-gradient-input" class="form-input" placeholder="linear-gradient(135deg,#2563eb,#3b82f6)">
+            </div>
+            <div>
+              <label class="form-label" for="wave-excerpt-input">Card Excerpt</label>
+              <textarea id="wave-excerpt-input" required class="form-input" placeholder="Short summary shown on the Wave card."></textarea>
+            </div>
+            <div>
+              <label class="form-label" for="wave-body-input">Post Body</label>
+              <textarea id="wave-body-input" required class="form-input" placeholder="Write paragraphs here. HTML is supported for links, bold text, and lists."></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary" style="width:100%; background:linear-gradient(135deg, #2563eb, #06b6d4);">
+              <i class="fas fa-paper-plane"></i> Publish Wave Post
+            </button>
+          </form>
+        </div>
+
+        <div class="qr-card">
+          <h2><i class="fas fa-newspaper"></i> Published Wave Posts</h2>
+          <div class="wave-post-list" id="wave-post-list">
+            <div class="list-loading"><i class="fas fa-spinner fa-spin"></i><br>Loading Wave posts...</div>
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
 </main>
@@ -343,7 +414,7 @@
 <script type="module">
 import { initializeApp, getApps } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
 import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
-import { getFirestore, collection, getDocs, getDoc, doc, updateDoc, addDoc, query, orderBy } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+import { getFirestore, collection, getDocs, getDoc, doc, updateDoc, addDoc, deleteDoc, query, orderBy, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 
 const firebaseConfig = {
   apiKey: "AIzaSyArZYz6UMheUgBVrNeWvxWml-0zDTbNur0",
@@ -360,8 +431,40 @@ const auth = getAuth(app);
 const db   = getFirestore(app);
 
 const CAT_COLORS = { political:'#2563eb', environmental:'#10b981', youth:'#f59e0b', innovation:'#ec4899', education:'#b325eb', religious:'#d97706' };
+const WAVE_CATEGORY_LABELS = {
+  civic: 'Civic Engagement',
+  environment: 'Environment',
+  youth: 'Youth',
+  innovation: 'Innovation',
+  community: 'Community',
+  education: 'Education'
+};
+const WAVE_CATEGORY_GRADIENTS = {
+  civic: 'linear-gradient(135deg,#2563eb,#1e3a8a)',
+  environment: 'linear-gradient(135deg,#10b981,#065f46)',
+  youth: 'linear-gradient(135deg,#f59e0b,#92400e)',
+  innovation: 'linear-gradient(135deg,#8b5cf6,#4c1d95)',
+  community: 'linear-gradient(135deg,#ec4899,#831843)',
+  education: 'linear-gradient(135deg,#0ea5e9,#0c4a6e)'
+};
 let selectedEvent = null;
 let allEvents     = [];
+
+function escapeHTML(value) {
+  return String(value || '').replace(/[&<>"']/g, char => ({
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#39;'
+  }[char]));
+}
+
+function readableFirestoreDate(value) {
+  if (!value) return 'Unknown';
+  const date = value.toDate ? value.toDate() : new Date(value);
+  return Number.isNaN(date.getTime()) ? 'Unknown' : date.toLocaleDateString();
+}
 
 function checkinURL(eventId) {
   const base = window.location.origin + window.location.pathname.replace('admin-dashboard.html', '');
@@ -500,6 +603,7 @@ window.publishAnnouncement = async function(event) {
 
   try {
     await addDoc(collection(db, 'announcements'), {
+      type: 'banner',
       text, emoji, link, expiresAt,
       createdAt: new Date(),
       isActive: true
@@ -526,6 +630,7 @@ async function loadAnnouncements() {
 
     snap.forEach(docSnap => {
       const data = docSnap.data();
+      if (data.type === 'wavePost') return;
       const id = docSnap.id;
       const createdDate = data.createdAt ? new Date(data.createdAt.toDate()).toLocaleDateString() : 'Unknown';
       
@@ -572,6 +677,188 @@ window.terminateAnnouncement = async function(id) {
   }
 };
 
+// --- UPDATED WAVE BLOG POST MANAGEMENT WITH EDIT ENGINE ---
+let editingPostId = null; // Tracks if we are editing an existing post or creating a new one
+
+// Function to populate the form with existing post data for editing
+window.editWavePost = async function(id) {
+  try {
+    const docSnap = await getDoc(doc(db, 'announcements', id));
+    if (!docSnap.exists()) {
+      alert("Could not locate that post in the database.");
+      return;
+    }
+    
+    const data = docSnap.data();
+    editingPostId = id; // Lock in the document ID we are changing
+
+    // Populate all form fields with current values
+    document.getElementById('wave-category-input').value = data.category || 'civic';
+    document.getElementById('wave-title-input').value = data.title || '';
+    document.getElementById('wave-date-input').value = data.date || '';
+    document.getElementById('wave-read-time-input').value = data.readTime || '4 min';
+    document.getElementById('wave-emoji-input').value = data.emoji || '🌊';
+    document.getElementById('wave-gradient-input').value = data.gradient || '';
+    document.getElementById('wave-excerpt-input').value = data.excerpt || '';
+    
+    // Convert paragraphs back into raw plain text for the textarea
+    let rawBody = data.body || '';
+    if (rawBody.includes('<p>')) {
+      rawBody = rawBody
+        .replace(/<\/p>\s*<p>/g, '\n\n')
+        .replace(/<p>/g, '')
+        .replace(/<\/p>/g, '')
+        .replace(/<br\s*\/?>/g, '\n');
+    }
+    document.getElementById('wave-body-input').value = rawBody;
+
+    // Change the visual state of the submit button to let the admin know they are editing
+    const submitBtn = document.querySelector('#wave-post-form button[type="submit"]');
+    if (submitBtn) {
+      submitBtn.style.background = 'linear-gradient(135deg, #f59e0b, #ea580c)'; // Shift color to orange/amber
+      submitBtn.innerHTML = '<i class="fas fa-pen-to-square"></i> Save Changes & Update Post';
+    }
+
+    // Scroll smoothly to the form container so the admin sees it populated
+    document.getElementById('wave-post-form').scrollIntoView({ behavior: 'smooth' });
+    showToast('Post loaded into editing buffer.');
+  } catch (err) {
+    console.error('Failed to load post for editing:', err);
+    alert('Error loading post properties: ' + err.message);
+  }
+};
+
+// Function to reset the form back to standard creation state
+function resetWaveForm() {
+  editingPostId = null;
+  document.getElementById('wave-post-form').reset();
+  document.getElementById('wave-category-input').value = 'civic';
+  
+  const submitBtn = document.querySelector('#wave-post-form button[type="submit"]');
+  if (submitBtn) {
+    submitBtn.style.background = 'linear-gradient(135deg, #2563eb, #06b6d4)'; // Reset back to blue
+    submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Publish Wave Post';
+  }
+}
+
+window.publishWavePost = async function(event) {
+  event.preventDefault();
+
+  const category = document.getElementById('wave-category-input').value;
+  const title = document.getElementById('wave-title-input').value.trim();
+  const date = document.getElementById('wave-date-input').value.trim();
+  const readTime = document.getElementById('wave-read-time-input').value.trim() || '4 min';
+  const emoji = document.getElementById('wave-emoji-input').value.trim() || '🌊';
+  const gradient = document.getElementById('wave-gradient-input').value.trim() || WAVE_CATEGORY_GRADIENTS[category] || WAVE_CATEGORY_GRADIENTS.civic;
+  const excerpt = document.getElementById('wave-excerpt-input').value.trim();
+  const rawBody = document.getElementById('wave-body-input').value.trim();
+  
+  const body = rawBody.includes('<')
+    ? rawBody
+    : rawBody.split(/\n{2,}/).map(part => `<p>${escapeHTML(part).replace(/\n/g, '<br>')}</p>`).join('');
+
+  if (!title || !date || !excerpt || !rawBody) {
+    alert('Please fill in the title, date, excerpt, and body.');
+    return;
+  }
+
+  try {
+    const postPayload = {
+      type: 'wavePost',
+      title,
+      category,
+      categoryLabel: WAVE_CATEGORY_LABELS[category] || category,
+      date,
+      readTime,
+      emoji,
+      gradient,
+      excerpt,
+      body,
+      isPublished: true,
+      updatedAt: serverTimestamp()
+    };
+
+    if (editingPostId) {
+      // 📝 EDIT MODE: Update existing document path
+      await updateDoc(doc(db, 'announcements', editingPostId), postPayload);
+      showToast('Wave post modified and saved successfully.');
+    } else {
+      // 🚀 CREATE MODE: Inject a fresh document
+      postPayload.createdAt = serverTimestamp();
+      await addDoc(collection(db, 'announcements'), postPayload);
+      showToast('Wave post published successfully.');
+    }
+
+    resetWaveForm();
+    loadWavePosts();
+  } catch (err) {
+    console.error('Failed to process Wave post transaction:', err);
+    alert('Database write failed: ' + (err.message || 'Unknown permission exception'));
+  }
+};
+
+async function loadWavePosts() {
+  const listEl = document.getElementById('wave-post-list');
+  if (!listEl) return;
+
+  try {
+    const q = query(collection(db, 'announcements'), orderBy('createdAt', 'desc'));
+    const snap = await getDocs(q);
+    listEl.innerHTML = '';
+
+    let wavePostCount = 0;
+
+    snap.forEach(docSnap => {
+      const data = docSnap.data();
+      if (data.type !== 'wavePost') return;
+      wavePostCount += 1;
+      const id = docSnap.id;
+      const item = document.createElement('div');
+      item.className = 'wave-post-item';
+      
+      // Highlight the post card if it's currently open in the editor
+      if (editingPostId === id) {
+        item.style.borderColor = '#f59e0b';
+        item.style.background = '#fffbeb';
+      }
+
+      item.innerHTML = `
+        <div class="item-main-info" onclick="editWavePost('${id}')" style="cursor: pointer; flex-grow: 1;">
+          <div class="wave-post-emoji">${escapeHTML(data.emoji || '🌊')}</div>
+          <div style="overflow:hidden;">
+            <div class="wave-post-title" title="${escapeHTML(data.title)}">${escapeHTML(data.title)}</div>
+            <div class="wave-post-meta">${escapeHTML(data.categoryLabel || WAVE_CATEGORY_LABELS[data.category] || data.category || 'Wave')} • ${escapeHTML(data.date || readableFirestoreDate(data.createdAt))}</div>
+          </div>
+        </div>
+        <div class="wave-post-actions">
+          <button class="btn btn-secondary" style="padding:4px 8px; font-size:0.75rem; border-radius:6px; background:#f1f5f9; color:#2563eb;" onclick="editWavePost('${id}')"><i class="fas fa-edit"></i> Edit</button>
+          <button class="btn btn-danger" style="padding:4px 8px; font-size:0.75rem; border-radius:6px;" onclick="deleteWavePost('${id}')"><i class="fas fa-trash"></i> Delete</button>
+        </div>
+      `;
+      listEl.appendChild(item);
+    });
+
+    if (!wavePostCount) {
+      listEl.innerHTML = '<div class="list-loading">No Wave posts yet. Publish one from the form.</div>';
+    }
+  } catch (err) {
+    console.error('Failed to load Wave posts:', err);
+    listEl.innerHTML = '<div class="list-loading">Failed to load Wave posts from Firestore.</div>';
+  }
+}
+
+window.deleteWavePost = async function(id) {
+  if (!confirm('Delete this Wave blog post permanently?')) return;
+  try {
+    await deleteDoc(doc(db, 'announcements', id));
+    showToast('Wave post deleted.');
+    if (editingPostId === id) resetWaveForm(); // Clear editor if we deleted the post we were editing
+    loadWavePosts();
+  } catch (err) {
+    console.error('Failed to delete Wave post:', err);
+    alert('Failed to delete Wave post: ' + err.message);
+  }
+};
 // CORE UTILITIES
 window.downloadQR = function() {
   if (!selectedEvent) return;
@@ -665,6 +952,7 @@ onAuthStateChanged(auth, async user => {
   
   await loadEvents();
   await loadAnnouncements();
+  await loadWavePosts();
 });
 </script>
 <script src="dark-mode.js"></script>

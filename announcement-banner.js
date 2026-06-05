@@ -32,6 +32,7 @@
           snap.forEach((docSnap) => {
             if (targetBanner) return; // Exit logic loop processing once structural instance satisfies conditions
             const data = docSnap.data();
+            if (data.type && data.type !== 'banner') return;
 
             if (data.isActive === true) {
               if (data.expiresAt) {

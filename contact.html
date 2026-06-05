@@ -200,7 +200,17 @@
             </div>
             <div class="form-group">
               <label for="message">Your Message *</label>
-              <textarea id="message" name="message" rows="7" required placeholder="Tell us more about how we can help you..."></textarea>
+              <textarea id="message" name="message" rows="7" required minlength="25" aria-describedby="message-helper message-count" placeholder="Tell us more about how we can help you..."></textarea>
+              <div class="message-assist" id="message-helper">
+                <div>
+                  <strong>Helpful details:</strong>
+                  <span id="message-prompt">Share what you need, any important dates, and the best way for us to follow up.</span>
+                </div>
+                <button type="button" class="message-fill-button" id="message-fill-button">
+                  Add a starter
+                </button>
+              </div>
+              <div class="message-meter" id="message-count">0 words / 0 characters</div>
             </div>
             <button type="submit" class="submit-button">
               <span>Send Message</span><span class="button-icon">✓</span>
@@ -259,6 +269,72 @@
         </div>
 
       </div>
+
+      <section class="contact-support-grid" aria-label="Ways NextStep can help">
+        <div class="contact-section-heading">
+          <span class="section-kicker">Start Here</span>
+          <h2>What can we help with?</h2>
+          <p>Choose the topic that fits best in the form above. A little context helps us route your message to the right person faster.</p>
+        </div>
+
+        <div class="support-card-grid">
+          <article class="support-card">
+            <div class="support-icon"><i class="fas fa-calendar-plus"></i></div>
+            <h3>Submit an Event</h3>
+            <p>Share town halls, volunteer days, youth workshops, cleanups, school meetings, and other civic opportunities for Boca residents.</p>
+          </article>
+          <article class="support-card">
+            <div class="support-icon"><i class="fas fa-handshake-angle"></i></div>
+            <h3>Partner With Us</h3>
+            <p>Nonprofits, clubs, schools, and local groups can reach out about event listings, outreach, and community collaboration.</p>
+          </article>
+          <article class="support-card">
+            <div class="support-icon"><i class="fas fa-lightbulb"></i></div>
+            <h3>Suggest an Idea</h3>
+            <p>Tell us what would make NextStep more useful, easier to navigate, or more helpful for first-time civic participants.</p>
+          </article>
+          <article class="support-card">
+            <div class="support-icon"><i class="fas fa-bug"></i></div>
+            <h3>Report an Issue</h3>
+            <p>Found a broken link, incorrect event detail, badge problem, or map issue? Send the page name and what you expected to happen.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="contact-process-section" aria-label="What happens after contacting NextStep">
+        <div class="contact-section-heading">
+          <span class="section-kicker">After You Send</span>
+          <h2>How your message moves through NextStep</h2>
+        </div>
+        <div class="process-grid">
+          <div class="process-step">
+            <span class="process-number">1</span>
+            <h3>We read the details</h3>
+            <p>Your message is reviewed and grouped by topic so the right team member can respond.</p>
+          </div>
+          <div class="process-step">
+            <span class="process-number">2</span>
+            <h3>We verify what matters</h3>
+            <p>For event submissions, we check date, location, audience, link, and whether the opportunity is civic-focused.</p>
+          </div>
+          <div class="process-step">
+            <span class="process-number">3</span>
+            <h3>We follow up</h3>
+            <p>If we need more context, we will reply by email. Most messages get a response within 24-48 hours.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="contact-detail-band" aria-label="Helpful details for messages">
+        <div class="detail-panel">
+          <h2><i class="fas fa-list-check"></i> Sending an event?</h2>
+          <p>Include the event name, date, time, location, organizer, registration link, category, and a short description. If there is a deadline or age requirement, include that too.</p>
+        </div>
+        <div class="detail-panel">
+          <h2><i class="fas fa-users-viewfinder"></i> Looking to collaborate?</h2>
+          <p>Tell us who you serve, what kind of civic opportunity you are building, and what support you are looking for from NextStep.</p>
+        </div>
+      </section>
     </div>
   </main>
   <footer>

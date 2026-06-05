@@ -92,12 +92,62 @@
   background: rgba(255, 255, 255, 0.35);
 }
 
+[data-theme="dark"] #announcement-banner {
+  background:
+    radial-gradient(circle at 18% 50%, rgba(16, 185, 129, 0.32), transparent 28%),
+    radial-gradient(circle at 82% 50%, rgba(96, 165, 250, 0.34), transparent 30%),
+    linear-gradient(135deg, #0b1220 0%, #0f2744 48%, #123a63 100%);
+  color: #f1f5f9;
+  border-bottom: 1px solid rgba(125, 211, 252, 0.36);
+  box-shadow:
+    0 12px 30px rgba(0, 0, 0, 0.46),
+    0 0 28px rgba(59, 130, 246, 0.2);
+}
+
+[data-theme="dark"] .announcement-emoji,
+[data-theme="dark"] .announcement-text,
+[data-theme="dark"] .announcement-text span {
+  color: #f1f5f9 !important;
+}
+
+[data-theme="dark"] .announcement-emoji {
+  filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.36));
+}
+
+[data-theme="dark"] .announcement-link {
+  background: linear-gradient(135deg, #ffffff, #dbeafe);
+  color: #0f3f78;
+  border: 1px solid rgba(255, 255, 255, 0.72);
+  box-shadow:
+    0 4px 14px rgba(14, 165, 233, 0.24),
+    inset 0 1px 0 rgba(255, 255, 255, 0.75);
+}
+
+[data-theme="dark"] .announcement-link:hover {
+  background: linear-gradient(135deg, #ffffff, #bfdbfe);
+  color: #082f49;
+  box-shadow:
+    0 8px 22px rgba(14, 165, 233, 0.34),
+    0 0 18px rgba(125, 211, 252, 0.24);
+}
+
+[data-theme="dark"] .announcement-close {
+  background: rgba(255, 255, 255, 0.12);
+  color: #e2e8f0;
+  border: 1px solid rgba(226, 232, 240, 0.28);
+}
+
+[data-theme="dark"] .announcement-close:hover {
+  background: rgba(255, 255, 255, 0.24);
+  color: white;
+}
+
 /* 
    FIX: Keep the navbar at top: 0, 
    Instead, push your main page container element downward 
    to make space for the banner without overlapping grids.
 */
-body.banner-visible main,
+body.banner-visible > main,
 body.banner-visible .main-content,
 body.banner-visible .leaderboard-main {
   margin-top: 40px !important; /* Pushes content down smoothly while banner shows */
@@ -112,7 +162,7 @@ body.banner-visible .leaderboard-main {
     gap: 0.5rem;
   }
 
-  body.banner-visible main,
+  body.banner-visible > main,
   body.banner-visible .main-content,
   body.banner-visible .leaderboard-main {
     margin-top: 55px !important; /* Slightly larger margin to accommodate stacked mobile lines */

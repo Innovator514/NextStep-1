@@ -1095,3 +1095,246 @@ textarea:focus-visible {
 [data-theme="dark"] .event-popup-btn.btn-secondary:hover {
   background: var(--hover-bg);
 }
+
+/* Contact Subpages: Wave Blog, FAQ, Team */
+[data-theme="dark"] .contact-subpage-main {
+  background: linear-gradient(135deg, #0a1628 0%, #0f2744 100%) !important;
+  color: var(--text-primary);
+}
+
+[data-theme="dark"] .contact-subnav {
+  background: rgba(10, 22, 40, 0.94) !important;
+  border-bottom-color: rgba(96, 165, 250, 0.18) !important;
+}
+
+[data-theme="dark"] .subnav-label {
+  color: var(--text-muted) !important;
+}
+
+[data-theme="dark"] .subnav-pill {
+  background: rgba(15, 39, 68, 0.92) !important;
+  color: var(--text-secondary) !important;
+  border: 1px solid rgba(96, 165, 250, 0.14) !important;
+}
+
+[data-theme="dark"] .subnav-pill:hover {
+  background: rgba(30, 58, 95, 0.95) !important;
+  color: var(--accent-secondary) !important;
+}
+
+[data-theme="dark"] .subnav-pill.active {
+  background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary)) !important;
+  color: white !important;
+  border-color: transparent !important;
+}
+
+[data-theme="dark"] .cp-hero p,
+[data-theme="dark"] .cp-hero p[style] {
+  color: var(--text-secondary) !important;
+}
+
+[data-theme="dark"] .cp-hero-icon,
+[data-theme="dark"] .wave-logo-badge {
+  box-shadow: 0 8px 28px rgba(59, 130, 246, 0.35) !important;
+}
+
+[data-theme="dark"] .blog-filter-btn {
+  background: rgba(15, 39, 68, 0.92) !important;
+  color: var(--text-secondary) !important;
+  border: 1px solid rgba(96, 165, 250, 0.14) !important;
+}
+
+[data-theme="dark"] .blog-filter-btn:hover {
+  background: rgba(30, 58, 95, 0.95) !important;
+  color: var(--accent-secondary) !important;
+}
+
+[data-theme="dark"] .blog-filter-btn.active {
+  background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary)) !important;
+  color: white !important;
+  border-color: transparent !important;
+}
+
+[data-theme="dark"] .wave-card {
+  background: var(--bg-secondary) !important;
+  border-color: var(--border-color) !important;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.28) !important;
+}
+
+[data-theme="dark"] .wave-card:hover {
+  box-shadow: 0 18px 48px rgba(0, 0, 0, 0.38) !important;
+}
+
+[data-theme="dark"] .wave-card-title,
+[data-theme="dark"] .wave-read-more {
+  color: var(--accent-secondary) !important;
+}
+
+[data-theme="dark"] .wave-card-excerpt,
+[data-theme="dark"] .wave-card-meta {
+  color: var(--text-secondary) !important;
+}
+
+[data-theme="dark"] .wave-card-cat {
+  background: rgba(10, 22, 40, 0.42) !important;
+  color: white !important;
+}
+
+[data-theme="dark"] .blog-newsletter,
+[data-theme="dark"] .faq-cta,
+[data-theme="dark"] .mission-strip {
+  background: linear-gradient(135deg, #1d4ed8, #0f2744) !important;
+  box-shadow: 0 18px 42px rgba(0, 0, 0, 0.3) !important;
+}
+
+[data-theme="dark"] .blog-newsletter h2,
+[data-theme="dark"] .blog-newsletter p,
+[data-theme="dark"] .faq-cta h2,
+[data-theme="dark"] .faq-cta p,
+[data-theme="dark"] .mission-strip h2,
+[data-theme="dark"] .mission-stat,
+[data-theme="dark"] .mission-stat-label {
+  color: white !important;
+}
+
+[data-theme="dark"] .blog-nl-input,
+[data-theme="dark"] .newsletter-input {
+  background: var(--input-bg) !important;
+  color: var(--text-primary) !important;
+  border: 1px solid var(--border-color) !important;
+}
+
+[data-theme="dark"] .blog-nl-input::placeholder,
+[data-theme="dark"] .newsletter-input::placeholder,
+[data-theme="dark"] .faq-search-input::placeholder {
+  color: var(--text-muted) !important;
+}
+
+[data-theme="dark"] #wave-modal-overlay > div {
+  background: var(--bg-secondary) !important;
+  color: var(--text-primary) !important;
+  border: 1px solid var(--border-color) !important;
+}
+
+[data-theme="dark"] #wave-modal-content,
+[data-theme="dark"] #wave-modal-content p,
+[data-theme="dark"] #wave-modal-content li,
+[data-theme="dark"] #wave-modal-content span,
+[data-theme="dark"] #wave-modal-content div {
+  color: var(--text-secondary) !important;
+}
+
+[data-theme="dark"] #wave-modal-content h1,
+[data-theme="dark"] #wave-modal-content h2,
+[data-theme="dark"] #wave-modal-content h3,
+[data-theme="dark"] #wave-modal-content strong {
+  color: var(--text-primary) !important;
+}
+
+[data-theme="dark"] .faq-group-label {
+  color: var(--accent-secondary) !important;
+  border-bottom-color: rgba(96, 165, 250, 0.22) !important;
+}
+
+[data-theme="dark"] .faq-item {
+  background: var(--bg-secondary) !important;
+  border-color: var(--border-color) !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.24) !important;
+}
+
+[data-theme="dark"] .faq-item:hover {
+  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.34) !important;
+}
+
+[data-theme="dark"] .faq-question {
+  color: var(--text-primary) !important;
+}
+
+[data-theme="dark"] .faq-question:hover,
+[data-theme="dark"] .faq-icon {
+  color: var(--accent-secondary) !important;
+}
+
+[data-theme="dark"] .faq-answer p {
+  color: var(--text-secondary) !important;
+}
+
+[data-theme="dark"] .faq-search-wrap {
+  background: var(--bg-secondary) !important;
+  border-color: var(--border-color) !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.24) !important;
+}
+
+[data-theme="dark"] .faq-search-wrap i {
+  color: var(--text-muted) !important;
+}
+
+[data-theme="dark"] .faq-search-input {
+  color: var(--text-primary) !important;
+}
+
+[data-theme="dark"] .faq-cta-btn.primary {
+  background: white !important;
+  color: #2563eb !important;
+}
+
+[data-theme="dark"] .faq-cta-btn.secondary {
+  background: rgba(255, 255, 255, 0.12) !important;
+  color: white !important;
+  border-color: rgba(255, 255, 255, 0.42) !important;
+}
+
+[data-theme="dark"] .about-block {
+  background: var(--bg-secondary) !important;
+  border-color: var(--border-color) !important;
+  box-shadow: 0 12px 34px rgba(0, 0, 0, 0.28) !important;
+}
+
+[data-theme="dark"] .about-block h2,
+[data-theme="dark"] .team-member-name,
+[data-theme="dark"] .value-card h3 {
+  color: var(--text-primary) !important;
+}
+
+[data-theme="dark"] .about-block h2 i,
+[data-theme="dark"] .value-card h3,
+[data-theme="dark"] .team-member-role {
+  color: var(--accent-secondary) !important;
+}
+
+[data-theme="dark"] .about-block p,
+[data-theme="dark"] .team-member-bio,
+[data-theme="dark"] .value-card p {
+  color: var(--text-secondary) !important;
+}
+
+[data-theme="dark"] .value-card,
+[data-theme="dark"] .team-card {
+  background: var(--bg-tertiary) !important;
+  border-color: var(--border-color) !important;
+}
+
+[data-theme="dark"] .team-card {
+  box-shadow: 0 12px 34px rgba(0, 0, 0, 0.32) !important;
+}
+
+[data-theme="dark"] .team-card:hover {
+  box-shadow: 0 24px 54px rgba(0, 0, 0, 0.42) !important;
+}
+
+[data-theme="dark"] .team-member-role {
+  background: rgba(96, 165, 250, 0.12) !important;
+  border-color: rgba(96, 165, 250, 0.22) !important;
+}
+
+[data-theme="dark"] .team-contact-btn,
+[data-theme="dark"] .team-social-link {
+  background: rgba(30, 58, 95, 0.95) !important;
+  color: var(--text-secondary) !important;
+}
+
+[data-theme="dark"] .team-contact-btn:hover,
+[data-theme="dark"] .team-social-link:hover {
+  background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary)) !important;
+  color: white !important;
+}
