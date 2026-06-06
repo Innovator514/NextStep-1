@@ -1,6 +1,6 @@
 // signup.js - Enhanced Sign Up Page for NextStep
 
-import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+import { initializeApp, getApps } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
 import { 
   getAuth, 
   createUserWithEmailAndPassword,
@@ -31,8 +31,7 @@ let auth;
 let googleProvider;
 
 try {
-  app = initializeApp(firebaseConfig);
-  auth = getAuth(app);
+  app = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);  auth = getAuth(app);
   googleProvider = new GoogleAuthProvider();
   
   // Configure Google Provider for better UX
