@@ -918,3 +918,55 @@ footer {
   from { opacity: 0; transform: translateY(-10px); }
   to   { opacity: 1; transform: translateY(0);     }
 }
+/* iPhone fix: allow hamburger menu + account dropdown to scroll */
+@media (max-width: 820px) {
+  .mobile-panel {
+    max-height: calc(100dvh - 64px);
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding-bottom: calc(1.25rem + env(safe-area-inset-bottom));
+    -webkit-overflow-scrolling: touch;
+  }
+
+  body.menu-open {
+    overflow: hidden;
+  }
+
+  .mobile-nav-right {
+    width: 100%;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .mobile-nav-right .profile-dropdown {
+    width: 100%;
+  }
+
+  .mobile-nav-right .profile-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .mobile-nav-right .profile-menu {
+    position: static;
+    width: 100%;
+    min-width: 0;
+    margin-top: 10px;
+    box-shadow: none;
+    border: 1px solid rgba(37, 99, 235, 0.12);
+    border-radius: 12px;
+    transform: none;
+    display: none;
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .mobile-nav-right .profile-menu.show {
+    display: block;
+    transform: none;
+  }
+
+  .mobile-nav-right .profile-menu-item {
+    padding: 13px 18px;
+  }
+}
