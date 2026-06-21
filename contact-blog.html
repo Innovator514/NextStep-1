@@ -121,12 +121,23 @@
   }
 
   .contact-main {
-    padding-top: 115px !important;
+    padding-top: 130px !important;
   }
 
   .cp-hero,
   .contact-header {
     padding-top: 1.25rem !important;
+  }
+    .subnav-pills {
+    width: 100%;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 4px;
+  }
+
+  .subnav-pill {
+    flex: 0 0 auto;
   }
 }
   </style>
@@ -210,8 +221,19 @@
         </div>
       </div>
     </div>
+    </nav>
+
+  <nav class="contact-subnav" aria-label="Contact sections">
+    <span class="subnav-label"><i class="fas fa-map-signs"></i> Contact</span>
+    <div class="subnav-pills">
+      <a class="subnav-pill" href="contact.html"><i class="fas fa-paper-plane"></i> Message Us</a>
+      <a class="subnav-pill" href="contact-team.html"><i class="fas fa-users"></i> Meet the Team</a>
+      <a class="subnav-pill active" href="contact-blog.html"><i class="fas fa-water"></i> Wave Blog</a>
+      <a class="subnav-pill" href="contact-faq.html"><i class="fas fa-question-circle"></i> FAQ</a>
+    </div>
   </nav>
-    <main class="contact-subpage-main">
+
+  <main class="contact-subpage-main">
     <div class="cp-hero">
       <div class="wave-wordmark" style="justify-content:center;">
         <div class="wave-logo-badge"><i class="fas fa-water"></i></div>

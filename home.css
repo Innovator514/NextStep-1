@@ -314,10 +314,8 @@
   /* CRITICAL: Must be above video (z-index: 0) but below text (z-index: 10)
      Sits on top of video, blocks controls */
      
-  pointer-events: none;
-  /* Allows clicks to pass through overlay
-     Users can still interact with page
-     Overlay is purely visual */
+  pointer-events: auto;
+  
 }
 
 /* Hero Video/Image - Works for both iframe and img */
@@ -336,9 +334,9 @@
   /* CRITICAL: Removes iframe's default border
      Prevents white line around video */
      
-  pointer-events: none;
-  /* Prevents clicking on video/image
-     Users can't accidentally click and pause video */
+  pointer-events: auto;
+  /* Allows clicking on video/image
+     Users can interact with the video */
      
   transform: scale(1);
   /* Initial scale (no zoom)
