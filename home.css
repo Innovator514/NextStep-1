@@ -1267,3 +1267,15 @@ html {
 .nextstep-paragraph {
    text-align: center !important;
 }
+/* Fix first home content section after hero/video scroll */
+.first-point-title {
+  opacity: 1 !important;
+  position: relative;
+  z-index: 2;
+  margin-bottom: 40px;
+}
+
+.first-point {
+  position: relative;
+  z-index: 2;
+}

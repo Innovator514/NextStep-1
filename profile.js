@@ -562,11 +562,58 @@ function saveNotificationPreferences() {
         const emailNotif = document.getElementById('email-notif')?.checked ?? true;
         const eventReminders = document.getElementById('event-reminders')?.checked ?? true;
         const newsletter = document.getElementById('newsletter')?.checked ?? false;
+        // Always save to localStorage as fast local cache
         localStorage.setItem('notif_email', emailNotif);
         localStorage.setItem('notif_events', eventReminders);
         localStorage.setItem('notif_newsletter', newsletter);
+        // Also sync to Firestore if logged in
+        syncNotifToFirestore({ emailNotif, eventReminders, newsletter });
     } catch (e) {
         console.error('Error saving preferences:', e);
+    }
+}
+
+// Sync notification preferences to Firestore
+async function syncNotifToFirestore(prefs) {
+    try {
+        const { getFirestore, doc, setDoc } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
+        const auth = window.firebaseAuth;
+        if (!auth || !auth.currentUser) return;
+        const db = getFirestore();
+        await setDoc(
+            doc(db, 'users', auth.currentUser.uid, 'settings', 'notifications'),
+            { ...prefs, updatedAt: Date.now() },
+            { merge: true }
+        );
+    } catch (e) {
+        console.warn('Could not sync notification prefs to Firestore:', e);
+    }
+}
+
+// Load notification preferences from Firestore (falls back to localStorage)
+async function loadNotifFromFirestore() {
+    try {
+        const auth = window.firebaseAuth;
+        if (!auth || !auth.currentUser) return;
+        const { getFirestore, doc, getDoc } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
+        const db = getFirestore();
+        const snap = await getDoc(doc(db, 'users', auth.currentUser.uid, 'settings', 'notifications'));
+        if (snap.exists()) {
+            const data = snap.data();
+            // Update localStorage cache
+            if (data.emailNotif !== undefined) localStorage.setItem('notif_email', data.emailNotif);
+            if (data.eventReminders !== undefined) localStorage.setItem('notif_events', data.eventReminders);
+            if (data.newsletter !== undefined) localStorage.setItem('notif_newsletter', data.newsletter);
+            // Update UI toggles
+            const emailEl = document.getElementById('email-notif');
+            const eventsEl = document.getElementById('event-reminders');
+            const newsletterEl = document.getElementById('newsletter');
+            if (emailEl && data.emailNotif !== undefined) emailEl.checked = data.emailNotif;
+            if (eventsEl && data.eventReminders !== undefined) eventsEl.checked = data.eventReminders;
+            if (newsletterEl && data.newsletter !== undefined) newsletterEl.checked = data.newsletter;
+        }
+    } catch (e) {
+        console.warn('Could not load notification prefs from Firestore:', e);
     }
 }
 
@@ -686,6 +733,8 @@ function loadNotificationPreferences() {
     } catch (e) {
         console.error('Error loading preferences:', e);
     }
+    // Also load from Firestore (will update UI when ready)
+    loadNotifFromFirestore();
 }
 
 // Setup notification toggles (auto-save on change, except push which needs explicit save)

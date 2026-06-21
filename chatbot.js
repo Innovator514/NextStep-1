@@ -7,9 +7,10 @@
   let activeChatId = null;
   let renameTargetId = null;
   let isResponding = false;
+  let currentUserId = null; // tracks logged-in Firebase user
 
   /* ═══════════════════════════════════════════════════
-     PERSISTENCE
+     PERSISTENCE — localStorage (guest) + Firestore (logged in)
   ═══════════════════════════════════════════════════ */
   function loadChats() {
     try {
@@ -18,8 +19,63 @@
   }
 
   function saveChats() {
+    // Always save to localStorage as a fast local cache
     try { localStorage.setItem(STORAGE_KEY, JSON.stringify(chats)); } catch {}
+    // Also sync to Firestore if logged in
+    if (currentUserId) syncToFirestore();
   }
+
+  // Sync all chats to Firestore under users/{uid}/compass_chats
+  async function syncToFirestore() {
+    try {
+      const { getFirestore, doc, setDoc } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
+      const db = getFirestore();
+      const ref = doc(db, 'users', currentUserId, 'compass', 'chats');
+      await setDoc(ref, { chats: chats, updatedAt: Date.now() });
+    } catch (e) {
+      console.warn('Compass: Firestore sync failed, using localStorage only', e);
+    }
+  }
+
+  // Load chats from Firestore for logged-in user
+  async function loadFromFirestore(uid) {
+    try {
+      const { getFirestore, doc, getDoc } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
+      const db = getFirestore();
+      const ref = doc(db, 'users', uid, 'compass', 'chats');
+      const snap = await getDoc(ref);
+      if (snap.exists()) {
+        const data = snap.data();
+        chats = data.chats || [];
+        // Sync to localStorage cache
+        try { localStorage.setItem(STORAGE_KEY, JSON.stringify(chats)); } catch {}
+        renderHistory();
+      }
+    } catch (e) {
+      console.warn('Compass: Could not load from Firestore, using localStorage', e);
+    }
+  }
+
+  // Watch Firebase auth state to load/unload user chats
+  (async function watchAuth() {
+    try {
+      const { getAuth, onAuthStateChanged } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js');
+      const auth = getAuth();
+      onAuthStateChanged(auth, (user) => {
+        if (user) {
+          currentUserId = user.uid;
+          loadFromFirestore(user.uid);
+        } else {
+          currentUserId = null;
+          // Load from localStorage for guest users
+          chats = loadChats();
+          renderHistory();
+        }
+      });
+    } catch (e) {
+      console.warn('Compass: Auth watch failed', e);
+    }
+  })();
 
   function getChat(id) { return chats.find(c => c.id === id); }
 

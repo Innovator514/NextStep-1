@@ -52,6 +52,7 @@ var innovation = L.layerGroup();
 var environmental = L.layerGroup();
 var education = L.layerGroup();
 var religious = L.layerGroup();
+var volunteer = L.layerGroup();
 
 // Define custom icons with shadows for each category
 const customIcons = {
@@ -118,7 +119,8 @@ const categoryMap = {
     innovation: innovation,
     environmental: environmental,
     education: education,
-    religious: religious
+    religious: religious,
+    volunteer: volunteer
 };
 
 // Category-specific gradients
@@ -128,7 +130,8 @@ const categoryGradients = {
     innovation: 'linear-gradient(135deg, #c95444, #ca3d2a)',
     environmental: 'linear-gradient(135deg, #34d399, #10b981)',
     education: 'linear-gradient(135deg, #ba3eeb, #b325eb)',
-    religious: 'linear-gradient(135deg, #f59e0b, #d97706)'
+    religious: 'linear-gradient(135deg, #f59e0b, #d97706)',
+    volunteer: 'linear-gradient(135deg, #34d399, #059669)'
 };
 
 // Category-specific icon colors
@@ -138,7 +141,8 @@ const categoryIconColors = {
     innovation: '#ca3d2a',
     environmental: '#10b981',
     education: '#b325eb',
-    religious: '#d97706'
+    religious: '#d97706',
+    volunteer: '#059669'
 };
 
 // Add a single event marker to the map
@@ -304,6 +308,7 @@ filterControl.onAdd = function(map) {
         <label class="filter-environmental"><input type="checkbox" id="environmentalCheckbox" checked> Environmental</label>
         <label class="filter-education"><input type="checkbox" id="educationCheckbox" checked> Education</label>
         <label class="filter-religious"><input type="checkbox" id="religiousCheckbox" checked> Religious</label>
+        <label class="filter-volunteer"><input type="checkbox" id="volunteerCheckbox" checked> Volunteer</label>
     `;
     L.DomEvent.disableClickPropagation(div);
     return div;
@@ -343,10 +348,15 @@ function updateLayers() {
     } else {
     map.removeLayer(religious);
     }
+    if (document.getElementById('volunteerCheckbox').checked) {
+    map.addLayer(volunteer);
+    } else {
+    map.removeLayer(volunteer);
+    }
 }
 
 // Add event listeners for checkboxes
-['political', 'youth', 'innovation', 'environmental', 'education', 'religious'].forEach(id => {
+['political', 'youth', 'innovation', 'environmental', 'education', 'religious', 'volunteer'].forEach(id => {
     document.getElementById(id + 'Checkbox').addEventListener('change', updateLayers);
 });
 

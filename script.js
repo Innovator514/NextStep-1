@@ -55,14 +55,26 @@ function smoothParallax() {
   heroTitle.style.transform = `translateY(${translation}px) scale(${fontScale})`;
   heroTagline.style.transform = `translateY(${translation}px) scale(${fontScale})`;
 
-  // 2. DISAPPEAR AT END OF IMAGE
-  if (titleBottom >= imageBottom) {
-    heroTagline.style.opacity = 0;
-    heroTitle.textContent = "Your Next Step";
-  } else {
-    heroTagline.style.opacity = 1;
-    heroTitle.innerHTML = originalTitleHTML;
-  }
+  // 2. HIDE HERO TEXT BEFORE FIRST CONTENT SECTION
+// The hero title should disappear before the "Your Next Step" section,
+// not turn into another heading and overlap the paragraph/typewriter area.
+const firstPointSection = document.querySelector('.first-point');
+const firstPointRect = firstPointSection ? firstPointSection.getBoundingClientRect() : null;
+const firstPointIsEntering = firstPointRect ? firstPointRect.top <= window.innerHeight * 0.9 : false;
+
+const heroShouldBeGone = firstPointIsEntering || titleBottom >= imageBottom - 80;
+
+if (heroShouldBeGone) {
+  heroTagline.style.opacity = '0';
+  heroTitle.style.opacity = '0';
+  heroTitle.style.pointerEvents = 'none';
+  heroTitle.innerHTML = originalTitleHTML;
+} else {
+  heroTagline.style.opacity = '1';
+  heroTitle.style.opacity = '1';
+  heroTitle.style.pointerEvents = '';
+  heroTitle.innerHTML = originalTitleHTML;
+}
 
   // 3. CHECK IF TEXT IS OVER IMAGE
   const titleOverImage = titleRect.bottom > imageRect.top && titleRect.top < imageRect.bottom;

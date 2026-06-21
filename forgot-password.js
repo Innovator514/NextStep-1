@@ -1,6 +1,6 @@
 // forgot-password.js - Password Reset Page for NextStep
 
-import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+import { initializeApp, getApps } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
 import { 
   getAuth, 
   sendPasswordResetEmail
@@ -22,7 +22,7 @@ let app;
 let auth;
 
 try {
-  app = initializeApp(firebaseConfig);
+  app = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
   auth = getAuth(app);
   console.log('✅ Firebase initialized successfully');
 } catch (error) {

@@ -8,7 +8,7 @@
   width: 0%;
   height: 4px; /* Slightly thicker so it's clearly visible */
   background: linear-gradient(90deg, #2563eb, #3b82f6, #60a5fa);
-  z-index: 999999; /* Higher than your sticky navbar (navbar is 999/1000) */
+  z-index: 1001; /* Higher than your sticky navbar (navbar is 999/1000) */
   transition: width 0.05s linear; /* Snappier response time while scrolling */
   border-radius: 0 2px 2px 0;
   pointer-events: none; /* Prevents the bar from stealing clicks at the very top of your navbar */
