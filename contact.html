@@ -38,7 +38,7 @@
     }
     /* ── Section subnav ── */
     .contact-subnav {
-      position: sticky; top: 0; z-index: 200;
+      position: sticky; top: 72px; z-index: 950;
       background: rgba(255,255,255,0.92);
       backdrop-filter: blur(14px);
       -webkit-backdrop-filter: blur(14px);
@@ -114,6 +114,21 @@
       .cp-hero h1 { font-size: 2rem; }
       .cp-content-wrap { padding: 0 1rem 4rem; }
     }
+    @media (max-width: 768px) {
+  .contact-subnav {
+    top: 64px;
+    padding: 0.5rem 1rem;
+  }
+
+  .contact-main {
+    padding-top: 115px !important;
+  }
+
+  .cp-hero,
+  .contact-header {
+    padding-top: 1.25rem !important;
+  }
+}
   </style>
 </head>
 <body>

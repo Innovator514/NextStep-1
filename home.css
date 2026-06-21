@@ -1279,3 +1279,74 @@ html {
   position: relative;
   z-index: 2;
 }
+/* iPhone fix: keep typewriter words from pushing the paragraph down */
+@media (max-width: 768px) {
+  .first-point {
+    padding: 70px 18px 80px;
+    overflow: hidden;
+  }
+
+  .first-point-title,
+  .point-content-split h2 {
+    font-size: clamp(2rem, 9vw, 2.6rem);
+    margin-bottom: 24px;
+  }
+
+  .split-container {
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+  }
+
+  .engage-side,
+  .paragraph-side {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .engage-side {
+    min-height: 120px;
+    text-align: center;
+  }
+
+  .engage-label {
+    font-size: 18px !important;
+    margin-bottom: 8px;
+  }
+
+  .engage-list {
+    width: 100%;
+    min-height: 58px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .engage-item {
+    font-size: clamp(2rem, 9.5vw, 2.7rem) !important;
+    line-height: 1.05;
+    margin-bottom: 0 !important;
+    white-space: nowrap;
+    max-width: 100%;
+    text-align: center;
+  }
+
+  .typewriter-text {
+    display: inline-block;
+    max-width: 100%;
+    white-space: nowrap;
+  }
+
+  .paragraph-side p,
+  .nextstep-paragraph {
+    font-size: 15.5px;
+    line-height: 1.55;
+    text-align: center;
+  }
+}
+
+@media (max-width: 390px) {
+  .engage-item {
+    font-size: clamp(1.65rem, 8.5vw, 2rem) !important;
+  }
+}

@@ -278,6 +278,32 @@
         .lb-tabs { gap: 4px; }
         .lb-tab { min-width: 100px; font-size: 12px; padding: 9px 10px; }
       }
+      /* iPhone fix: make Podium ranking tabs scroll instead of smooshing */
+@media (max-width: 600px) {
+  .lb-tabs {
+    display: flex;
+    justify-content: flex-start;
+    gap: 8px;
+    padding: 8px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x mandatory;
+  }
+
+  .lb-tab {
+    flex: 0 0 auto;
+    min-width: 150px;
+    font-size: 12px;
+    padding: 10px 12px;
+    white-space: nowrap;
+    scroll-snap-align: start;
+  }
+
+  .lb-tab i {
+    flex: 0 0 auto;
+  }
+}
     </style>
   </head>
   <body>
