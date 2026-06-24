@@ -119,25 +119,63 @@
       </div>
 
       <div class="filter-section">
-        <div class="filter-bar">
-          <div class="filter-buttons-horizontal">
-            <button class="filter-btn active" data-category="all">All Events</button>
-            <button class="filter-btn" data-category="political">Political</button>
-            <button class="filter-btn" data-category="youth">Youth</button>
-            <button class="filter-btn" data-category="innovation">Innovation</button>
-            <button class="filter-btn" data-category="environmental">Environmental</button>
-            <button class="filter-btn" data-category="education">Education</button>
-            <button class="filter-btn" data-category="religious">Religious</button>
-            <button class="filter-btn" data-category="volunteer">Volunteer</button>
+        <div class="filter-panel">
+
+          <!-- Header row: title + view toggle -->
+          <div class="fp-header">
+            <div class="fp-header-left">
+              <i class="fas fa-sliders-h fp-icon"></i>
+              <span class="fp-title">Filter Events</span>
+            </div>
+            <div class="fp-header-right">
+              <div class="filter-result-count" id="filter-result-count"></div>
+              <div class="view-toggle-group">
+                <button class="view-toggle-btn active" id="btn-grid" onclick="setView('grid')" title="Grid view" aria-label="Grid view">
+                  <svg width="15" height="15" viewBox="0 0 16 16" fill="currentColor"><rect x="0" y="0" width="7" height="7" rx="1.5"/><rect x="9" y="0" width="7" height="7" rx="1.5"/><rect x="0" y="9" width="7" height="7" rx="1.5"/><rect x="9" y="9" width="7" height="7" rx="1.5"/></svg>
+                </button>
+                <button class="view-toggle-btn" id="btn-calendar" onclick="setView('calendar')" title="Calendar view" aria-label="Calendar view">
+                  <svg width="15" height="15" viewBox="0 0 16 16" fill="currentColor"><path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4H1zm2 2h2v2H3V6zm3 0h2v2H6V6zm3 0h2v2H9V6zm3 0h1v2h-1V6zM3 9h2v2H3V9zm3 0h2v2H6V9zm3 0h2v2H9V9zm3 0h1v2h-1V9zM3 12h2v1H3v-1zm3 0h2v1H6v-1zm3 0h2v1H9v-1z"/></svg>
+                </button>
+              </div>
+            </div>
           </div>
-          <div class="view-toggle-group">
-            <button class="view-toggle-btn active" id="btn-grid" onclick="setView('grid')" title="Grid view" aria-label="Grid view">
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><rect x="0" y="0" width="7" height="7" rx="1"/><rect x="9" y="0" width="7" height="7" rx="1"/><rect x="0" y="9" width="7" height="7" rx="1"/><rect x="9" y="9" width="7" height="7" rx="1"/></svg>
-            </button>
-            <button class="view-toggle-btn" id="btn-calendar" onclick="setView('calendar')" title="Calendar view" aria-label="Calendar view">
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4H1zm2 2h2v2H3V6zm3 0h2v2H6V6zm3 0h2v2H9V6zm3 0h1v2h-1V6zM3 9h2v2H3V9zm3 0h2v2H6V9zm3 0h2v2H9V9zm3 0h1v2h-1V9zM3 12h2v1H3v-1zm3 0h2v1H6v-1zm3 0h2v1H9v-1z"/></svg>
-            </button>
+
+          <!-- Category pills -->
+          <div class="fp-section">
+            <p class="fp-label">Category</p>
+              <button class="filter-btn active" data-category="all"><i class="fas fa-border-all"></i> All Events</button>
+              <button class="filter-btn" data-category="political"><i class="fas fa-landmark"></i> Political</button>
+              <button class="filter-btn" data-category="youth"><i class="fas fa-star"></i> Youth</button>
+              <button class="filter-btn" data-category="innovation"><i class="fas fa-lightbulb"></i> Innovation</button>
+              <button class="filter-btn" data-category="environmental"><i class="fas fa-leaf"></i> Environmental</button>
+              <button class="filter-btn" data-category="education"><i class="fas fa-graduation-cap"></i> Education</button>
+              <button class="filter-btn" data-category="religious"><i class="fas fa-peace"></i> Religious</button>
           </div>
+
+          <!-- Bottom row: sort + quick filters -->
+          <div class="fp-bottom">
+            <div class="fp-bottom-group">
+              <p class="fp-label">Sort by</p>
+              <select id="sort-select" class="sort-select" onchange="applyFilters()">
+                <option value="date-asc">Soonest first</option>
+                <option value="date-desc">Latest first</option>
+                <option value="alpha-asc">A to Z</option>
+                <option value="alpha-desc">Z to A</option>
+              </select>
+            </div>
+            <div class="fp-bottom-group">
+              <p class="fp-label">Quick filters</p>
+              <div class="quick-filters">
+                <button class="quick-filter-btn" id="qf-volunteer" onclick="toggleQuickFilter('volunteer')">
+                  <i class="fas fa-hand-holding-heart"></i><span>Volunteer Hours</span>
+                </button>
+                <button class="quick-filter-btn" id="qf-virtual" onclick="toggleQuickFilter('virtual')">
+                  <i class="fas fa-video"></i><span>Virtual</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
         </div>
       </div>
 

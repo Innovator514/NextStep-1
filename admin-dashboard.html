@@ -176,6 +176,32 @@
     .btn-secondary:hover { background: #e2e8f0; }
     .btn-danger { background: #fee2e2; color: #dc2626; }
     .btn-danger:hover { background: #fca5a5; }
+    .btn-warning { background: #fef3c7; color: #92400e; }
+    .btn-warning:hover { background: #fde68a; }
+    .btn-success { background: #dcfce7; color: #15803d; }
+    .btn-success:hover { background: #bbf7d0; }
+
+    /* Archived events panel */
+    .archived-events-toggle {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0.6rem 0.875rem; margin-top: 0.75rem; margin-bottom: 0;
+      border: 2px dashed #e2e8f0; border-radius: 10px; cursor: pointer;
+      font-size: 0.82rem; font-weight: 700; color: #64748b;
+      background: #f8fafc; transition: all 0.2s;
+    }
+    .archived-events-toggle:hover { border-color: #f59e0b; color: #92400e; background: #fffbeb; }
+    .archived-events-toggle.open { border-color: #f59e0b; border-style: solid; background: #fffbeb; color: #92400e; }
+    .archived-events-toggle .arc-chevron { transition: transform 0.2s; font-size: 0.8rem; }
+    .archived-events-toggle.open .arc-chevron { transform: rotate(180deg); }
+    .archived-events-panel { display: none; margin-top: 0.5rem; }
+    .archived-events-panel.open { display: block; }
+    .event-item.archived-item { opacity: 0.8; border-color: #fde68a; background: #fffbeb; }
+    .event-item.archived-item:hover { border-color: #f59e0b; background: #fef3c7; }
+    .archived-badge { font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; background: #fef3c7; color: #92400e; padding: 2px 6px; border-radius: 6px; margin-left: 4px; }
+    [data-theme="dark"] .archived-events-toggle { background: #1a2744; border-color: #2d4a7a; color: #94a3b8; }
+    [data-theme="dark"] .archived-events-toggle:hover, [data-theme="dark"] .archived-events-toggle.open { border-color: #f59e0b; background: #2a1f0a; color: #fbbf24; }
+    [data-theme="dark"] .event-item.archived-item { background: #1e1a09; border-color: #7c5a08; }
+    [data-theme="dark"] .event-item.archived-item:hover { background: #2a2209; border-color: #f59e0b; }
     .btn-row { display: flex; gap: 0.5rem; width: 100%; }
     .copy-btn { background: none; border: none; cursor: pointer; color: #2563eb; font-size: 0.78rem; font-family: 'Open Sans', sans-serif; font-weight: 700; padding: 0; display: flex; align-items: center; gap: 0.3rem; align-self: flex-start; }
 
@@ -196,6 +222,230 @@
     [data-theme="dark"] .expiry-group { background: #0a1628; border-color: #1e3a5f; }
     [data-theme="dark"] .expiry-label { color: #f1f5f9; }
     [data-theme="dark"] #qr-code { background: white; }
+
+    /* Inbox Section */
+    .recipient-type-toggle { display: flex; gap: 0.4rem; margin-bottom: 0.75rem; flex-wrap: wrap; }
+    .recipient-type-btn { flex: 1; min-width: 0; padding: 0.5rem 0.4rem; border: 2px solid #e2e8f0; border-radius: 10px; background: white; font-family: 'Open Sans', sans-serif; font-size: 0.76rem; font-weight: 700; color: #64748b; cursor: pointer; transition: all 0.2s; white-space: nowrap; }
+    .recipient-type-btn.active { border-color: #2563eb; background: #eff6ff; color: #2563eb; }
+    [data-theme="dark"] .recipient-type-btn { background: #0a1628; color: #94a3b8; border-color: #1e3a5f; }
+    [data-theme="dark"] .recipient-type-btn.active { background: #1e3a5f; color: #60a5fa; border-color: #3b82f6; }
+    .inbox-message-list { display: flex; flex-direction: column; gap: 0.5rem; max-height: 380px; overflow-y: auto; scrollbar-width: thin; }
+    .inbox-message-item { padding: 0.75rem 1rem; border: 2px solid #e2e8f0; border-radius: 12px; transition: all 0.2s; }
+    .inbox-message-item:hover { border-color: #2563eb; background: #eff6ff; }
+    .inbox-msg-subject { font-size: 0.88rem; font-weight: 700; color: rgb(1,9,67); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .inbox-msg-meta { font-size: 0.72rem; color: #94a3b8; margin-top: 2px; }
+    .inbox-msg-actions { display: flex; gap: 0.4rem; margin-top: 0.5rem; }
+    [data-theme="dark"] .inbox-message-item { border-color: #1e3a5f; }
+    [data-theme="dark"] .inbox-message-item:hover { background: #1e3a5f; border-color: #3b82f6; }
+    [data-theme="dark"] .inbox-msg-subject { color: #f1f5f9; }
+    .priority-select { width: 100%; }
+
+    /* ── User search / recipient picker ── */
+    .user-search-wrap { position: relative; }
+    .user-search-input { width: 100%; }
+    .user-search-dropdown {
+      position: absolute; top: calc(100% + 4px); left: 0; right: 0; z-index: 200;
+      background: white; border: 1.5px solid #e2e8f0; border-radius: 10px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.10); overflow: hidden; max-height: 260px; overflow-y: auto;
+    }
+    [data-theme="dark"] .user-search-dropdown { background: #0f1f3d; border-color: #1e3a5f; }
+    .user-search-option {
+      display: flex; align-items: center; gap: 0.65rem;
+      padding: 0.6rem 0.9rem; cursor: pointer; transition: background 0.12s;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .user-search-option:last-child { border-bottom: none; }
+    .user-search-option:hover { background: #eff6ff; }
+    [data-theme="dark"] .user-search-option:hover { background: #1e3a5f; }
+    [data-theme="dark"] .user-search-option { border-color: rgba(255,255,255,0.05); }
+    .user-search-avatar {
+      width: 32px; height: 32px; border-radius: 50%; background: rgba(37,99,235,0.12);
+      color: #2563eb; font-weight: 700; font-size: 0.78rem;
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+    [data-theme="dark"] .user-search-avatar { background: rgba(96,165,250,0.15); color: #60a5fa; }
+    .user-search-info { flex: 1; min-width: 0; }
+    .user-search-name { font-size: 0.85rem; font-weight: 700; color: rgb(1,9,67); }
+    [data-theme="dark"] .user-search-name { color: #f1f5f9; }
+    .user-search-email { font-size: 0.72rem; color: #64748b; }
+    .user-search-msg { padding: 0.75rem 1rem; font-size: 0.8rem; color: #94a3b8; text-align: center; }
+
+    /* Selected user chip */
+    .user-selected-chip {
+      display: flex; align-items: center; gap: 0.65rem;
+      padding: 0.55rem 0.85rem; border: 1.5px solid #bfdbfe;
+      border-radius: 10px; background: #eff6ff; margin-top: 0.4rem;
+    }
+    [data-theme="dark"] .user-selected-chip { background: #1e3a5f; border-color: #2563eb; }
+    .user-chip-info { flex: 1; min-width: 0; }
+    .user-chip-name { font-size: 0.85rem; font-weight: 700; color: rgb(1,9,67); }
+    [data-theme="dark"] .user-chip-name { color: #f1f5f9; }
+    .user-chip-email { font-size: 0.72rem; color: #64748b; }
+    .user-chip-uid-row { margin-top: 3px; }
+    .user-chip-uid-toggle {
+      font-size: 0.68rem; color: #94a3b8; cursor: pointer;
+      background: none; border: none; padding: 0; font-family: inherit;
+      text-decoration: underline; text-underline-offset: 2px;
+    }
+    .user-chip-uid-toggle:hover { color: #2563eb; }
+    .user-chip-uid-value {
+      font-size: 0.68rem; color: #64748b; font-family: monospace;
+      word-break: break-all; margin-top: 2px; display: none;
+    }
+    .user-chip-uid-value.visible { display: block; }
+    .user-chip-clear {
+      background: none; border: none; color: #94a3b8; cursor: pointer;
+      font-size: 0.9rem; padding: 2px 4px; border-radius: 4px; line-height: 1;
+      flex-shrink: 0;
+    }
+    .user-chip-clear:hover { color: #dc2626; background: #fee2e2; }
+    .inbox-priority-badge { font-size: 0.68rem; padding: 2px 7px; border-radius: 8px; font-weight: 700; text-transform: uppercase; }
+    .priority-normal { background: #dbeafe; color: #1d4ed8; }
+    .priority-important { background: #fef3c7; color: #92400e; }
+    .priority-urgent { background: #fee2e2; color: #991b1b; }
+
+    /* ── Archive Panel ───────────────────────────────────────────── */
+    .archive-toggle-bar {
+      display: flex; align-items: center; justify-content: space-between;
+      background: white; border-radius: 16px; padding: 1rem 1.5rem;
+      box-shadow: 0 4px 20px rgba(37,99,235,0.08);
+      margin-bottom: 0.25rem; cursor: pointer;
+      border: 2px solid transparent; transition: border-color 0.2s;
+    }
+    .archive-toggle-bar:hover { border-color: #2563eb; }
+    .archive-toggle-bar.open { border-color: #2563eb; background: #eff6ff; }
+    .archive-toggle-label { display: flex; align-items: center; gap: 0.65rem; font-weight: 800; font-size: 1rem; color: rgb(1,9,67); }
+    .archive-toggle-label i { color: #7c3aed; }
+    .archive-chevron { color: #64748b; transition: transform 0.25s; font-size: 0.9rem; }
+    .archive-toggle-bar.open .archive-chevron { transform: rotate(180deg); }
+
+    .archive-panel {
+      display: none; padding: 0.25rem 0 0;
+    }
+    .archive-panel.open { display: block; }
+
+    /* Stats row */
+    .archive-stats {
+      display: grid; grid-template-columns: repeat(4,1fr); gap: 0.85rem;
+      margin-bottom: 1.5rem;
+    }
+    @media (max-width: 700px) { .archive-stats { grid-template-columns: 1fr 1fr; } }
+    .arc-stat {
+      background: white; border-radius: 14px; padding: 1rem 1.1rem;
+      box-shadow: 0 4px 16px rgba(37,99,235,0.07);
+      display: flex; align-items: center; gap: 0.8rem;
+    }
+    .arc-stat-icon { width: 38px; height: 38px; border-radius: 11px; display: flex; align-items: center; justify-content: center; font-size: 1rem; flex-shrink: 0; }
+    .arc-stat-icon.blue   { background: #eff6ff; color: #2563eb; }
+    .arc-stat-icon.green  { background: #dcfce7; color: #15803d; }
+    .arc-stat-icon.purple { background: #f5f3ff; color: #7c3aed; }
+    .arc-stat-icon.cyan   { background: #ecfeff; color: #0e7490; }
+    .arc-stat-num   { font-size: 1.5rem; font-weight: 800; color: rgb(1,9,67); line-height: 1; }
+    .arc-stat-label { font-size: 0.7rem; color: #64748b; font-weight: 600; margin-top: 2px; }
+
+    /* Archive sub-sections */
+    .arc-section-title {
+      font-size: 1.1rem; font-weight: 800; color: rgb(1,9,67);
+      margin: 1.5rem 0 0.75rem; display: flex; align-items: center; gap: 0.5rem;
+      border-bottom: 2px solid #e2e8f0; padding-bottom: 0.4rem;
+    }
+    .arc-count { margin-left: auto; font-size: 0.72rem; font-weight: 700; background: #eff6ff; color: #2563eb; border-radius: 20px; padding: 2px 9px; }
+
+    /* Toolbar */
+    .arc-toolbar { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 0.85rem; align-items: center; }
+    .arc-search {
+      flex: 1; min-width: 160px; padding: 0.5rem 0.8rem;
+      border: 2px solid #e2e8f0; border-radius: 10px;
+      font-family: 'Open Sans', sans-serif; font-size: 0.82rem; color: rgb(1,9,67); outline: none; transition: border-color 0.2s;
+    }
+    .arc-search:focus { border-color: #2563eb; }
+    .arc-chip {
+      padding: 0.35rem 0.8rem; border-radius: 20px; border: 2px solid #e2e8f0;
+      background: white; font-family: 'Open Sans', sans-serif; font-size: 0.72rem; font-weight: 700; color: #64748b;
+      cursor: pointer; transition: all 0.15s; white-space: nowrap;
+    }
+    .arc-chip.active { border-color: #2563eb; background: #eff6ff; color: #2563eb; }
+    .arc-chip:hover:not(.active) { border-color: #94a3b8; }
+
+    /* Table */
+    .arc-table-wrap { overflow-x: auto; border-radius: 12px; }
+    .arc-table { width: 100%; border-collapse: collapse; font-size: 0.83rem; }
+    .arc-table thead th {
+      text-align: left; padding: 0.55rem 0.8rem; font-size: 0.7rem; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.4px; color: #64748b;
+      border-bottom: 2px solid #e2e8f0; white-space: nowrap;
+    }
+    .arc-table thead th[data-sortable] { cursor: pointer; user-select: none; }
+    .arc-table thead th[data-sortable]:hover { color: #2563eb; }
+    .arc-table tbody tr { border-bottom: 1px solid #f1f5f9; transition: background 0.12s; }
+    .arc-table tbody tr:last-child { border-bottom: none; }
+    .arc-table tbody tr:hover { background: #f8fafc; }
+    .arc-table td { padding: 0.65rem 0.8rem; color: #334155; vertical-align: middle; }
+    .arc-table td.arc-td-title { font-weight: 700; color: rgb(1,9,67); max-width: 220px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .arc-table td.arc-td-meta  { font-size: 0.76rem; color: #64748b; }
+    .arc-table td.arc-td-body  { max-width: 260px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: #475569; font-size: 0.8rem; }
+
+    /* Archive badges */
+    .arc-badge { display: inline-block; font-size: 0.65rem; padding: 2px 8px; border-radius: 9px; font-weight: 700; text-transform: uppercase; white-space: nowrap; }
+    .arc-badge-active    { background: #dcfce7; color: #15803d; }
+    .arc-badge-expired   { background: #fee2e2; color: #991b1b; }
+    .arc-badge-stopped   { background: #f1f5f9; color: #475569; }
+    .arc-badge-normal    { background: #dbeafe; color: #1d4ed8; }
+    .arc-badge-important { background: #fef3c7; color: #92400e; }
+    .arc-badge-urgent    { background: #fee2e2; color: #991b1b; }
+    .arc-badge-cat       { background: #f5f3ff; color: #7c3aed; }
+    .arc-cat-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 4px; }
+
+    /* Detail drawer */
+    .arc-drawer-overlay {
+      display: none; position: fixed; inset: 0; z-index: 9000;
+      background: rgba(1,9,67,0.42); backdrop-filter: blur(3px);
+      align-items: center; justify-content: center; padding: 1.5rem;
+    }
+    .arc-drawer-overlay.show { display: flex; }
+    .arc-drawer {
+      background: white; border-radius: 20px; padding: 1.75rem;
+      max-width: 600px; width: 100%; max-height: 84vh; overflow-y: auto;
+      box-shadow: 0 24px 60px rgba(1,9,67,0.22);
+      animation: arcDrawerIn 0.2s ease;
+    }
+    @keyframes arcDrawerIn { from { transform: translateY(14px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+    .arc-drawer-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; margin-bottom: 1.25rem; }
+    .arc-drawer-title  { font-size: 1.05rem; font-weight: 800; color: rgb(1,9,67); line-height: 1.3; }
+    .arc-drawer-close  { background: #f1f5f9; border: none; border-radius: 9px; width: 32px; height: 32px; cursor: pointer; color: #64748b; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: background 0.15s; }
+    .arc-drawer-close:hover { background: #e2e8f0; }
+    .arc-field { margin-bottom: 0.9rem; }
+    .arc-field-label { font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #94a3b8; margin-bottom: 0.2rem; }
+    .arc-field-value { font-size: 0.88rem; color: #334155; line-height: 1.6; word-break: break-word; }
+    .arc-field-value a { color: #2563eb; text-decoration: underline; }
+    .arc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem 1.25rem; margin-bottom: 0.5rem; }
+    @media (max-width: 480px) { .arc-grid { grid-template-columns: 1fr; } }
+
+    /* Empty state */
+    .arc-empty { text-align: center; padding: 2rem 1rem; color: #94a3b8; font-size: 0.85rem; font-weight: 600; }
+    .arc-empty i { font-size: 1.6rem; margin-bottom: 0.4rem; display: block; }
+
+    /* Dark mode */
+    [data-theme="dark"] .archive-toggle-bar { background: #0f2744; }
+    [data-theme="dark"] .archive-toggle-bar.open { background: #1e3a5f; }
+    [data-theme="dark"] .archive-toggle-label { color: #f1f5f9; }
+    [data-theme="dark"] .arc-stat { background: #0f2744; }
+    [data-theme="dark"] .arc-stat-num { color: #f1f5f9; }
+    [data-theme="dark"] .arc-section-title { color: #f1f5f9; border-color: #1e3a5f; }
+    [data-theme="dark"] .arc-count { background: #1e3a5f; }
+    [data-theme="dark"] .arc-search { background: #0a1628; color: #f1f5f9; border-color: #1e3a5f; }
+    [data-theme="dark"] .arc-chip { background: #0a1628; color: #94a3b8; border-color: #1e3a5f; }
+    [data-theme="dark"] .arc-chip.active { background: #1e3a5f; color: #60a5fa; border-color: #3b82f6; }
+    [data-theme="dark"] .arc-table thead th { color: #94a3b8; border-color: #1e3a5f; }
+    [data-theme="dark"] .arc-table tbody tr { border-color: #1e3a5f; }
+    [data-theme="dark"] .arc-table tbody tr:hover { background: #1e3a5f; }
+    [data-theme="dark"] .arc-table td { color: #cbd5e1; }
+    [data-theme="dark"] .arc-table td.arc-td-title { color: #f1f5f9; }
+    [data-theme="dark"] .arc-drawer { background: #0f2744; }
+    [data-theme="dark"] .arc-drawer-title { color: #f1f5f9; }
+    [data-theme="dark"] .arc-drawer-close { background: #1e3a5f; color: #94a3b8; }
+    [data-theme="dark"] .arc-field-value { color: #cbd5e1; }
+    [data-theme="dark"] .arc-badge-stopped { background: #1e3a5f; color: #94a3b8; }
   </style>
 </head>
 <body>
@@ -306,6 +556,149 @@
         </div>
       </div>
 
+      <div class="dashboard-section-title"><i class="fas fa-calendar-plus"></i> Event Management</div>
+      <div class="qr-grid">
+        <!-- Create / Edit Event Form -->
+        <div class="qr-card">
+          <h2><i class="fas fa-pen-to-square"></i> <span id="event-form-mode-label">Create New Event</span></h2>
+          <form id="event-mgmt-form" class="admin-form-stack" onsubmit="submitEventForm(event)">
+            <input type="hidden" id="event-editing-id">
+
+            <div class="wave-form-row">
+              <div>
+                <label class="form-label" for="ev-title">Title</label>
+                <input type="text" id="ev-title" required class="form-input" placeholder="Town Hall Meeting">
+              </div>
+              <div>
+                <label class="form-label" for="ev-category">Category</label>
+                <select id="ev-category" class="form-input" required>
+                  <option value="political">Political</option>
+                  <option value="youth">Youth</option>
+                  <option value="innovation">Innovation</option>
+                  <option value="environmental">Environmental</option>
+                  <option value="education">Education</option>
+                  <option value="religious">Religious</option>
+                  <option value="volunteer">Volunteer</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="wave-form-row">
+              <div>
+                <label class="form-label" for="ev-date">Date</label>
+                <input type="text" id="ev-date" required class="form-input" placeholder="Jun 28, 2026">
+              </div>
+              <div>
+                <label class="form-label" for="ev-time">Time</label>
+                <input type="text" id="ev-time" class="form-input" placeholder="6:00 PM – 8:00 PM">
+              </div>
+            </div>
+
+            <div>
+              <label class="form-label" for="ev-location">Venue Name</label>
+              <input type="text" id="ev-location" class="form-input" placeholder="Boca Raton Community Center">
+            </div>
+
+            <div>
+              <label class="form-label" for="ev-address">Address (optional)</label>
+              <input type="text" id="ev-address" class="form-input" placeholder="150 Crawford Blvd, Boca Raton, FL 33432">
+            </div>
+
+            <div class="wave-form-row">
+              <div>
+                <label class="form-label" for="ev-lat">Latitude (optional)</label>
+                <input type="number" step="any" id="ev-lat" class="form-input" placeholder="26.3683">
+              </div>
+              <div>
+                <label class="form-label" for="ev-lng">Longitude (optional)</label>
+                <input type="number" step="any" id="ev-lng" class="form-input" placeholder="-80.1289">
+              </div>
+            </div>
+
+            <div>
+              <label class="form-label" for="ev-description">Description</label>
+              <textarea id="ev-description" required class="form-input" style="min-height:100px;" placeholder="Brief description shown on the event card…"></textarea>
+            </div>
+
+            <div>
+              <label class="form-label" for="ev-details">Full Details (HTML supported)</label>
+              <textarea id="ev-details" class="form-input" style="min-height:120px;" placeholder="Longer body shown in the event popup…"></textarea>
+            </div>
+
+            <div class="wave-form-row">
+              <div>
+                <label class="form-label" for="ev-capacity">Capacity (optional)</label>
+                <input type="number" id="ev-capacity" class="form-input" placeholder="100" min="1">
+              </div>
+              <div>
+                <label class="form-label" for="ev-volunteer-hours">Volunteer Hours (optional)</label>
+                <input type="number" step="0.5" min="0" id="ev-volunteer-hours" class="form-input" placeholder="2">
+              </div>
+            </div>
+
+            <div class="wave-form-row">
+              <div>
+                <label class="form-label" for="ev-registration-link">Registration Link (optional)</label>
+                <input type="url" id="ev-registration-link" class="form-input" placeholder="https://forms.google.com/…">
+              </div>
+              <div>
+                <label class="form-label" for="ev-website">Event Website (optional)</label>
+                <input type="url" id="ev-website" class="form-input" placeholder="https://example.org/event">
+              </div>
+            </div>
+
+            <div>
+              <label class="form-label" for="ev-parking">Parking Info (optional)</label>
+              <input type="text" id="ev-parking" class="form-input" placeholder="Free parking available in the east lot">
+            </div>
+
+            <div>
+              <label class="form-label" for="ev-accessibility">Accessibility Info (optional)</label>
+              <input type="text" id="ev-accessibility" class="form-input" placeholder="Wheelchair accessible, ASL interpreter available">
+            </div>
+
+            <div>
+              <label class="form-label" for="ev-contact">Contact / Organizer (optional)</label>
+              <input type="text" id="ev-contact" class="form-input" placeholder="Jane Smith — jane@example.org">
+            </div>
+
+            <div>
+              <label class="form-label" for="ev-tags">Tags (optional, comma-separated)</label>
+              <input type="text" id="ev-tags" class="form-input" placeholder="civic, youth, beach cleanup">
+            </div>
+
+            <div class="btn-row">
+              <button type="submit" class="btn btn-primary" style="flex:1; background:linear-gradient(135deg,#10b981,#0ea5e9);">
+                <i class="fas fa-floppy-disk"></i> <span id="event-submit-label">Publish Event</span>
+              </button>
+              <button type="button" class="btn btn-secondary" id="event-cancel-edit-btn" style="display:none;" onclick="resetEventForm()">
+                <i class="fas fa-xmark"></i> Cancel
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Published Events List -->
+        <div class="qr-card">
+          <h2><i class="fas fa-calendar-days"></i> Published Events</h2>
+          <input class="list-search" id="event-mgmt-search" placeholder="Search events…" oninput="filterMgmtEvents(this.value)">
+          <div class="event-list" id="event-mgmt-list">
+            <div class="list-loading"><i class="fas fa-spinner fa-spin"></i><br>Loading events...</div>
+          </div>
+
+          <!-- Archived Events Collapsible -->
+          <button class="archived-events-toggle" id="archived-events-toggle" onclick="toggleArchivedPanel()">
+            <span><i class="fas fa-box-archive" style="margin-right:0.4rem;"></i> Archived Events <span id="archived-count-badge" style="font-size:0.72rem;background:#e2e8f0;border-radius:8px;padding:1px 7px;margin-left:4px;color:#64748b;">0</span></span>
+            <i class="fas fa-chevron-down arc-chevron"></i>
+          </button>
+          <div class="archived-events-panel" id="archived-events-panel">
+            <div class="event-list" id="archived-mgmt-list" style="margin-top:0.5rem;">
+              <div class="list-loading" style="font-size:0.82rem;color:#94a3b8;">Click above to load archived events.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div class="dashboard-section-title"><i class="fas fa-bullhorn"></i> Ecosystem Notification Banners</div>
       <div class="qr-grid">
         <div class="qr-card">
@@ -339,6 +732,102 @@
           <h2><i class="fas fa-history"></i> Audit Stream Feed Log</h2>
           <div class="announcement-list" id="announcement-list">
             <div class="list-loading"><i class="fas fa-spinner fa-spin"></i><br>Pulling database history models...</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="dashboard-section-title"><i class="fas fa-inbox"></i> User Inbox Messaging</div>
+      <div class="qr-grid">
+        <div class="qr-card">
+          <h2><i class="fas fa-paper-plane"></i> Send Inbox Message</h2>
+          <form id="inbox-form" class="admin-form-stack" onsubmit="sendInboxMessage(event)">
+
+            <!-- Recipient type toggle -->
+            <div>
+              <label class="form-label">Recipient</label>
+              <div class="recipient-type-toggle">
+                <button type="button" class="recipient-type-btn active" id="recip-btn-all" onclick="setRecipientType('all')">
+                  <i class="fas fa-users"></i> All Users
+                </button>
+                <button type="button" class="recipient-type-btn" id="recip-btn-uid" onclick="setRecipientType('uid')">
+                  <i class="fas fa-user"></i> Specific User
+                </button>
+                <button type="button" class="recipient-type-btn" id="recip-btn-event" onclick="setRecipientType('event')">
+                  <i class="fas fa-calendar-check"></i> Event Registrants
+                </button>
+              </div>
+
+              <!-- Specific user search (replaces raw UID input) -->
+              <div id="uid-input-wrap" style="display:none; margin-top:0.5rem;">
+                <div class="user-search-wrap">
+                  <input type="text" id="inbox-user-search" class="form-input user-search-input"
+                    placeholder="Search by name or email…"
+                    autocomplete="off"
+                    oninput="userSearchQuery(this.value)"
+                    onfocus="userSearchQuery(this.value)">
+                  <div class="user-search-dropdown" id="user-search-dropdown" style="display:none;"></div>
+                </div>
+                <!-- Chip shown after selection -->
+                <div id="user-selected-chip" style="display:none;" class="user-selected-chip">
+                  <div class="user-search-avatar" id="user-chip-avatar"></div>
+                  <div class="user-chip-info">
+                    <div class="user-chip-name" id="user-chip-name"></div>
+                    <div class="user-chip-email" id="user-chip-email"></div>
+                    <div class="user-chip-uid-row">
+                      <button type="button" class="user-chip-uid-toggle" onclick="toggleChipUID(this)">Show Firebase UID</button>
+                      <div class="user-chip-uid-value" id="user-chip-uid-display"></div>
+                    </div>
+                  </div>
+                  <button type="button" class="user-chip-clear" title="Clear selection" onclick="clearUserSelection()">
+                    <i class="fas fa-times"></i>
+                  </button>
+                </div>
+                <!-- Hidden real input still used by sendInboxMessage() -->
+                <input type="hidden" id="inbox-uid-input">
+              </div>
+
+              <!-- Event picker (shown when 'event' type selected) -->
+              <div id="event-input-wrap" style="display:none; margin-top:0.5rem;">
+                <select id="inbox-event-select" class="form-input">
+                  <option value="">— Select an event —</option>
+                </select>
+                <div id="inbox-event-registrant-count" style="font-size:0.75rem; color:#64748b; margin-top:0.3rem;"></div>
+              </div>
+            </div>
+
+            <!-- Priority -->
+            <div>
+              <label class="form-label" for="inbox-priority-input">Priority</label>
+              <select id="inbox-priority-input" class="form-input priority-select">
+                <option value="normal">Normal</option>
+                <option value="important">Important</option>
+                <option value="urgent">Urgent</option>
+              </select>
+            </div>
+
+            <!-- Subject -->
+            <div>
+              <label class="form-label" for="inbox-subject-input">Subject</label>
+              <input type="text" id="inbox-subject-input" required class="form-input" placeholder="Welcome to NextStep!">
+            </div>
+
+            <!-- Body -->
+            <div>
+              <label class="form-label" for="inbox-body-input">Message Body</label>
+              <textarea id="inbox-body-input" required class="form-input" style="min-height:140px;" placeholder="Write your message here. HTML is supported for bold, links, and lists."></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-primary" style="width:100%; background:linear-gradient(135deg,#7c3aed,#2563eb);">
+              <i class="fas fa-paper-plane"></i> Send to Inbox
+            </button>
+          </form>
+        </div>
+
+        <div class="qr-card">
+          <h2><i class="fas fa-envelope-open-text"></i> Sent Messages</h2>
+          <input class="list-search" id="inbox-search" placeholder="Search sent messages…" oninput="filterInboxMessages(this.value)">
+          <div class="inbox-message-list" id="inbox-message-list">
+            <div class="list-loading"><i class="fas fa-spinner fa-spin"></i><br>Loading sent messages...</div>
           </div>
         </div>
       </div>
@@ -405,16 +894,183 @@
         </div>
       </div>
 
-    </div>
+      <!-- ══════════════════════════════════════════════════════════ -->
+      <!--  ARCHIVE PANEL                                              -->
+      <!-- ══════════════════════════════════════════════════════════ -->
+      <div class="archive-toggle-bar" id="archive-toggle-bar" onclick="toggleArchive()" style="margin-top:2.5rem;">
+        <div class="archive-toggle-label">
+          <i class="fas fa-box-archive"></i> Content Archive
+          <span style="font-size:0.72rem; font-weight:600; color:#64748b; margin-left:0.25rem;">— Events · Banners · Inbox · Wave Posts</span>
+        </div>
+        <i class="fas fa-chevron-down archive-chevron"></i>
+      </div>
+
+      <div class="archive-panel" id="archive-panel">
+        <div class="qr-card" style="margin-top:0.5rem;">
+
+          <!-- Stats -->
+          <div class="archive-stats">
+            <div class="arc-stat">
+              <div class="arc-stat-icon blue"><i class="fas fa-calendar-days"></i></div>
+              <div><div class="arc-stat-num" id="arc-stat-events">—</div><div class="arc-stat-label">Events</div></div>
+            </div>
+            <div class="arc-stat">
+              <div class="arc-stat-icon green"><i class="fas fa-bullhorn"></i></div>
+              <div><div class="arc-stat-num" id="arc-stat-banners">—</div><div class="arc-stat-label">Banners</div></div>
+            </div>
+            <div class="arc-stat">
+              <div class="arc-stat-icon purple"><i class="fas fa-inbox"></i></div>
+              <div><div class="arc-stat-num" id="arc-stat-inbox">—</div><div class="arc-stat-label">Inbox Messages</div></div>
+            </div>
+            <div class="arc-stat">
+              <div class="arc-stat-icon cyan"><i class="fas fa-water"></i></div>
+              <div><div class="arc-stat-num" id="arc-stat-wave">—</div><div class="arc-stat-label">Wave Posts</div></div>
+            </div>
+          </div>
+
+          <!-- ── Events ─────────────────────────────────────────── -->
+          <div class="arc-section-title">
+            <i class="fas fa-calendar-days"></i> Events
+            <span class="arc-count" id="arc-count-events">—</span>
+          </div>
+          <div class="arc-toolbar">
+            <input class="arc-search" id="arc-ev-search" placeholder="Search by title, category, location…" oninput="arcFilterEvents()">
+            <button class="arc-chip active" onclick="arcSetEvCat(this,'all')">All</button>
+            <button class="arc-chip" onclick="arcSetEvCat(this,'political')">Political</button>
+            <button class="arc-chip" onclick="arcSetEvCat(this,'environmental')">Environmental</button>
+            <button class="arc-chip" onclick="arcSetEvCat(this,'youth')">Youth</button>
+            <button class="arc-chip" onclick="arcSetEvCat(this,'innovation')">Innovation</button>
+            <button class="arc-chip" onclick="arcSetEvCat(this,'education')">Education</button>
+            <button class="arc-chip" onclick="arcSetEvCat(this,'religious')">Religious</button>
+          </div>
+          <div class="arc-table-wrap">
+            <table class="arc-table">
+              <thead><tr>
+                <th data-sortable onclick="arcSortEvents('title')">Title <i class="fas fa-sort" style="font-size:0.6rem;"></i></th>
+                <th data-sortable onclick="arcSortEvents('category')">Category <i class="fas fa-sort" style="font-size:0.6rem;"></i></th>
+                <th data-sortable onclick="arcSortEvents('date')">Date <i class="fas fa-sort" style="font-size:0.6rem;"></i></th>
+                <th>Location</th>
+                <th>QR</th>
+                <th></th>
+              </tr></thead>
+              <tbody id="arc-events-body">
+                <tr><td colspan="6" class="arc-empty"><i class="fas fa-spinner fa-spin"></i> Open archive to load…</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- ── Notification Banners ──────────────────────────── -->
+          <div class="arc-section-title" style="margin-top:2rem;">
+            <i class="fas fa-bullhorn"></i> Notification Banners
+            <span class="arc-count" id="arc-count-banners">—</span>
+          </div>
+          <div class="arc-toolbar">
+            <input class="arc-search" id="arc-bn-search" placeholder="Search by message text or link…" oninput="arcFilterBanners()">
+            <button class="arc-chip active" onclick="arcSetBnStatus(this,'all')">All</button>
+            <button class="arc-chip" onclick="arcSetBnStatus(this,'active')">Active</button>
+            <button class="arc-chip" onclick="arcSetBnStatus(this,'expired')">Expired</button>
+            <button class="arc-chip" onclick="arcSetBnStatus(this,'stopped')">Stopped</button>
+          </div>
+          <div class="arc-table-wrap">
+            <table class="arc-table">
+              <thead><tr>
+                <th style="width:32px;"></th>
+                <th data-sortable onclick="arcSortBanners('text')">Message <i class="fas fa-sort" style="font-size:0.6rem;"></i></th>
+                <th data-sortable onclick="arcSortBanners('createdAt')">Published <i class="fas fa-sort" style="font-size:0.6rem;"></i></th>
+                <th>Expires</th>
+                <th>Status</th>
+                <th></th>
+              </tr></thead>
+              <tbody id="arc-banners-body">
+                <tr><td colspan="6" class="arc-empty"><i class="fas fa-spinner fa-spin"></i> Open archive to load…</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- ── User Inbox Messages ───────────────────────────── -->
+          <div class="arc-section-title" style="margin-top:2rem;">
+            <i class="fas fa-inbox"></i> User Inbox Messages
+            <span class="arc-count" id="arc-count-inbox">—</span>
+          </div>
+          <div class="arc-toolbar">
+            <input class="arc-search" id="arc-ib-search" placeholder="Search by subject, body, or UID…" oninput="arcFilterInbox()">
+            <button class="arc-chip active" onclick="arcSetIbPriority(this,'all')">All</button>
+            <button class="arc-chip" onclick="arcSetIbPriority(this,'normal')">Normal</button>
+            <button class="arc-chip" onclick="arcSetIbPriority(this,'important')">Important</button>
+            <button class="arc-chip" onclick="arcSetIbPriority(this,'urgent')">Urgent</button>
+          </div>
+          <div class="arc-table-wrap">
+            <table class="arc-table">
+              <thead><tr>
+                <th data-sortable onclick="arcSortInbox('subject')">Subject <i class="fas fa-sort" style="font-size:0.6rem;"></i></th>
+                <th>Priority</th>
+                <th>Recipient</th>
+                <th data-sortable onclick="arcSortInbox('sentAt')">Sent <i class="fas fa-sort" style="font-size:0.6rem;"></i></th>
+                <th>Read</th>
+                <th></th>
+              </tr></thead>
+              <tbody id="arc-inbox-body">
+                <tr><td colspan="6" class="arc-empty"><i class="fas fa-spinner fa-spin"></i> Open archive to load…</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- ── Wave Blog Posts ───────────────────────────────── -->
+          <div class="arc-section-title" style="margin-top:2rem;">
+            <i class="fas fa-water"></i> Wave Blog Posts
+            <span class="arc-count" id="arc-count-wave">—</span>
+          </div>
+          <div class="arc-toolbar">
+            <input class="arc-search" id="arc-wp-search" placeholder="Search by title, category, or excerpt…" oninput="arcFilterWave()">
+            <button class="arc-chip active" onclick="arcSetWpCat(this,'all')">All</button>
+            <button class="arc-chip" onclick="arcSetWpCat(this,'civic')">Civic</button>
+            <button class="arc-chip" onclick="arcSetWpCat(this,'environment')">Environment</button>
+            <button class="arc-chip" onclick="arcSetWpCat(this,'youth')">Youth</button>
+            <button class="arc-chip" onclick="arcSetWpCat(this,'innovation')">Innovation</button>
+            <button class="arc-chip" onclick="arcSetWpCat(this,'community')">Community</button>
+            <button class="arc-chip" onclick="arcSetWpCat(this,'education')">Education</button>
+          </div>
+          <div class="arc-table-wrap">
+            <table class="arc-table">
+              <thead><tr>
+                <th style="width:32px;"></th>
+                <th data-sortable onclick="arcSortWave('title')">Title <i class="fas fa-sort" style="font-size:0.6rem;"></i></th>
+                <th>Category</th>
+                <th>Excerpt</th>
+                <th data-sortable onclick="arcSortWave('date')">Date <i class="fas fa-sort" style="font-size:0.6rem;"></i></th>
+                <th>Read Time</th>
+                <th></th>
+              </tr></thead>
+              <tbody id="arc-wave-body">
+                <tr><td colspan="7" class="arc-empty"><i class="fas fa-spinner fa-spin"></i> Open archive to load…</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+        </div><!-- /qr-card -->
+      </div><!-- /archive-panel -->
+
+    </div><!-- /tool-content -->
   </div>
 </main>
+
+<!-- ── Archive Detail Drawer ──────────────────────────────────────── -->
+<div class="arc-drawer-overlay" id="arc-drawer-overlay" onclick="arcCloseDrawer(event)">
+  <div class="arc-drawer" id="arc-drawer">
+    <div class="arc-drawer-header">
+      <div class="arc-drawer-title" id="arc-drawer-title">Details</div>
+      <button class="arc-drawer-close" onclick="arcCloseDrawerDirect()"><i class="fas fa-xmark"></i></button>
+    </div>
+    <div id="arc-drawer-body"></div>
+  </div>
+</div>
 
 <div class="toast" id="toast"></div>
 
 <script type="module">
 import { initializeApp, getApps } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
 import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
-import { getFirestore, collection, getDocs, getDoc, doc, updateDoc, addDoc, deleteDoc, query, orderBy, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+import { getFirestore, collection, getDocs, getDoc, doc, updateDoc, addDoc, deleteDoc, query, where, orderBy, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 
 const firebaseConfig = {
   apiKey: "AIzaSyArZYz6UMheUgBVrNeWvxWml-0zDTbNur0",
@@ -859,6 +1515,1022 @@ window.deleteWavePost = async function(id) {
     alert('Failed to delete Wave post: ' + err.message);
   }
 };
+// ─── EVENT MANAGEMENT ────────────────────────────────────────────────────────
+
+let allMgmtEvents     = [];
+let editingEventId    = null;
+
+async function loadMgmtEvents() {
+  const listEl = document.getElementById('event-mgmt-list');
+  if (!listEl) return;
+  try {
+    const snap = await getDocs(collection(db, 'events'));
+    allMgmtEvents = [];
+    snap.forEach(d => allMgmtEvents.push({ id: d.id, ...d.data() }));
+    allMgmtEvents.sort((a, b) => (a.title || '').localeCompare(b.title || ''));
+    renderMgmtEvents(allMgmtEvents);
+  } catch (err) {
+    listEl.innerHTML = '<div class="list-loading">Failed to load events.</div>';
+    console.error('loadMgmtEvents error:', err);
+  }
+}
+
+function renderMgmtEvents(events) {
+  const listEl = document.getElementById('event-mgmt-list');
+  // Only show active (non-archived) events here
+  const active = events.filter(ev => !ev.archived);
+  if (!active.length) {
+    listEl.innerHTML = '<div class="list-loading">No active events. Create one!</div>';
+  } else {
+    listEl.innerHTML = active.map(ev => {
+      const color = CAT_COLORS[ev.category] || '#2563eb';
+      const isEditing = editingEventId === ev.id;
+      return `
+        <div class="event-item${isEditing ? ' active' : ''}">
+          <div class="item-main-info" style="cursor:pointer;" onclick="startEditEvent('${ev.id}')">
+            <div class="event-cat-dot" style="background:${color};"></div>
+            <div>
+              <div class="event-item-title">${escapeHTML(ev.title || ev.id)}</div>
+              <div class="event-item-meta">${escapeHTML(ev.category || '')}${ev.date ? ' · ' + escapeHTML(ev.date) : ''}</div>
+            </div>
+          </div>
+          <div style="display:flex;gap:0.4rem;flex-shrink:0;">
+            <button class="btn btn-secondary" style="padding:4px 8px;font-size:0.72rem;border-radius:6px;color:#2563eb;" onclick="startEditEvent('${ev.id}')" title="Edit event">
+              <i class="fas fa-edit"></i>
+            </button>
+            <button class="btn btn-warning" style="padding:4px 8px;font-size:0.72rem;border-radius:6px;" onclick="archiveMgmtEvent('${ev.id}')" title="Archive event">
+              <i class="fas fa-box-archive"></i>
+            </button>
+            <button class="btn btn-danger" style="padding:4px 8px;font-size:0.72rem;border-radius:6px;" onclick="deleteMgmtEvent('${ev.id}')" title="Permanently delete">
+              <i class="fas fa-trash"></i>
+            </button>
+          </div>
+        </div>`;
+    }).join('');
+  }
+
+  // Update the archived count badge
+  const archived = events.filter(ev => ev.archived);
+  const badge = document.getElementById('archived-count-badge');
+  if (badge) badge.textContent = archived.length;
+
+  // If the archived panel is open, refresh it too
+  if (document.getElementById('archived-events-panel')?.classList.contains('open')) {
+    renderArchivedEvents(archived);
+  }
+}
+
+function renderArchivedEvents(events) {
+  const listEl = document.getElementById('archived-mgmt-list');
+  if (!listEl) return;
+  if (!events.length) {
+    listEl.innerHTML = '<div class="list-loading" style="font-size:0.82rem;color:#94a3b8;">No archived events.</div>';
+    return;
+  }
+  listEl.innerHTML = events.map(ev => {
+    const color = CAT_COLORS[ev.category] || '#64748b';
+    return `
+      <div class="event-item archived-item">
+        <div class="item-main-info" style="pointer-events:none;">
+          <div class="event-cat-dot" style="background:${color};opacity:0.6;"></div>
+          <div>
+            <div class="event-item-title">${escapeHTML(ev.title || ev.id)}<span class="archived-badge">archived</span></div>
+            <div class="event-item-meta">${escapeHTML(ev.category || '')}${ev.date ? ' · ' + escapeHTML(ev.date) : ''}${ev.archivedAt ? ' · archived ' + new Date(ev.archivedAt).toLocaleDateString() : ''}</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:0.4rem;flex-shrink:0;">
+          <button class="btn btn-success" style="padding:4px 8px;font-size:0.72rem;border-radius:6px;" onclick="restoreMgmtEvent('${ev.id}')" title="Restore event">
+            <i class="fas fa-rotate-left"></i>
+          </button>
+          <button class="btn btn-danger" style="padding:4px 8px;font-size:0.72rem;border-radius:6px;" onclick="deleteMgmtEvent('${ev.id}')" title="Delete permanently">
+            <i class="fas fa-trash"></i>
+          </button>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+window.toggleArchivedPanel = function() {
+  const toggle = document.getElementById('archived-events-toggle');
+  const panel  = document.getElementById('archived-events-panel');
+  const open   = panel.classList.toggle('open');
+  toggle.classList.toggle('open', open);
+  if (open) {
+    renderArchivedEvents(allMgmtEvents.filter(ev => ev.archived));
+  }
+};
+
+window.filterMgmtEvents = function(term) {
+  const t = term.toLowerCase();
+  // Filter active events only; archived panel is separate
+  const matched = allMgmtEvents.filter(ev =>
+    !ev.archived && (
+      (ev.title || '').toLowerCase().includes(t) ||
+      (ev.category || '').toLowerCase().includes(t) ||
+      (ev.location || '').toLowerCase().includes(t)
+    )
+  );
+  // Temporarily render matched active events, preserving archived state
+  const listEl = document.getElementById('event-mgmt-list');
+  if (!matched.length) {
+    listEl.innerHTML = '<div class="list-loading">No events match your search.</div>';
+    return;
+  }
+  listEl.innerHTML = matched.map(ev => {
+    const color = CAT_COLORS[ev.category] || '#2563eb';
+    const isEditing = editingEventId === ev.id;
+    return `
+      <div class="event-item${isEditing ? ' active' : ''}">
+        <div class="item-main-info" style="cursor:pointer;" onclick="startEditEvent('${ev.id}')">
+          <div class="event-cat-dot" style="background:${color};"></div>
+          <div>
+            <div class="event-item-title">${escapeHTML(ev.title || ev.id)}</div>
+            <div class="event-item-meta">${escapeHTML(ev.category || '')}${ev.date ? ' · ' + escapeHTML(ev.date) : ''}</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:0.4rem;flex-shrink:0;">
+          <button class="btn btn-secondary" style="padding:4px 8px;font-size:0.72rem;border-radius:6px;color:#2563eb;" onclick="startEditEvent('${ev.id}')" title="Edit event">
+            <i class="fas fa-edit"></i>
+          </button>
+          <button class="btn btn-warning" style="padding:4px 8px;font-size:0.72rem;border-radius:6px;" onclick="archiveMgmtEvent('${ev.id}')" title="Archive event">
+            <i class="fas fa-box-archive"></i>
+          </button>
+          <button class="btn btn-danger" style="padding:4px 8px;font-size:0.72rem;border-radius:6px;" onclick="deleteMgmtEvent('${ev.id}')" title="Permanently delete">
+            <i class="fas fa-trash"></i>
+          </button>
+        </div>
+      </div>`;
+  }).join('');
+};
+
+window.startEditEvent = function(id) {
+  const ev = allMgmtEvents.find(e => e.id === id);
+  if (!ev) return;
+  editingEventId = id;
+
+  document.getElementById('event-editing-id').value        = id;
+  document.getElementById('ev-title').value                = ev.title || '';
+  document.getElementById('ev-category').value             = ev.category || 'political';
+  document.getElementById('ev-date').value                 = ev.date || '';
+  document.getElementById('ev-time').value                 = ev.time || '';
+  document.getElementById('ev-location').value             = ev.location || '';
+  document.getElementById('ev-address').value              = ev.address || '';
+  document.getElementById('ev-lat').value                  = ev.lat != null ? ev.lat : '';
+  document.getElementById('ev-lng').value                  = ev.lng != null ? ev.lng : '';
+  document.getElementById('ev-description').value          = ev.description || '';
+  document.getElementById('ev-details').value              = ev.details || ev.fullDetails || '';
+  document.getElementById('ev-capacity').value             = ev.capacity || '';
+  document.getElementById('ev-volunteer-hours').value      = ev.volunteerHours != null ? ev.volunteerHours : '';
+  document.getElementById('ev-registration-link').value    = ev.registrationLink || '';
+  document.getElementById('ev-website').value              = ev.website || '';
+  document.getElementById('ev-parking').value              = ev.parking || '';
+  document.getElementById('ev-accessibility').value        = ev.accessibility || '';
+  document.getElementById('ev-contact').value              = ev.contact || '';
+  document.getElementById('ev-tags').value                 = Array.isArray(ev.tags) ? ev.tags.join(', ') : (ev.tags || '');
+
+  document.getElementById('event-form-mode-label').textContent = 'Edit Event';
+  document.getElementById('event-submit-label').textContent    = 'Save Changes';
+  document.getElementById('event-cancel-edit-btn').style.display = 'inline-flex';
+
+  // Scroll to form
+  document.getElementById('event-mgmt-form').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  renderMgmtEvents(allMgmtEvents); // re-render to highlight active row
+};
+
+window.resetEventForm = function() {
+  editingEventId = null;
+  document.getElementById('event-mgmt-form').reset();
+  document.getElementById('event-editing-id').value              = '';
+  document.getElementById('event-form-mode-label').textContent   = 'Create New Event';
+  document.getElementById('event-submit-label').textContent      = 'Publish Event';
+  document.getElementById('event-cancel-edit-btn').style.display = 'none';
+  renderMgmtEvents(allMgmtEvents);
+};
+
+window.submitEventForm = async function(e) {
+  e.preventDefault();
+
+  const _v = id => document.getElementById(id).value.trim();
+  const _n = id => document.getElementById(id).value ? Number(document.getElementById(id).value) : null;
+
+  const payload = {
+    title:            _v('ev-title'),
+    category:         document.getElementById('ev-category').value,
+    date:             _v('ev-date'),
+    time:             _v('ev-time'),
+    location:         _v('ev-location'),
+    description:      _v('ev-description'),
+    details:          _v('ev-details'),
+    capacity:         _n('ev-capacity'),
+    volunteerHours:   _n('ev-volunteer-hours'),
+    registrationLink: _v('ev-registration-link'),
+    website:          _v('ev-website'),
+    address:          _v('ev-address'),
+    lat:              _n('ev-lat'),
+    lng:              _n('ev-lng'),
+    parking:          _v('ev-parking'),
+    accessibility:    _v('ev-accessibility'),
+    contact:          _v('ev-contact'),
+    tags:             _v('ev-tags') ? _v('ev-tags').split(',').map(t => t.trim()).filter(Boolean) : [],
+  };
+
+  // Strip out null/empty strings so Firestore stays clean
+  Object.keys(payload).forEach(k => {
+    if (payload[k] === null || payload[k] === '' || (Array.isArray(payload[k]) && payload[k].length === 0)) {
+      delete payload[k];
+    }
+  });
+
+  try {
+    if (editingEventId) {
+      await updateDoc(doc(db, 'events', editingEventId), payload);
+      showToast('Event updated successfully.');
+    } else {
+      payload.createdAt = serverTimestamp();
+      await addDoc(collection(db, 'events'), payload);
+      showToast('Event published successfully.');
+    }
+    resetEventForm();
+    loadMgmtEvents();
+    loadEvents(); // refresh the QR event picker list too
+  } catch (err) {
+    console.error('submitEventForm error:', err);
+    alert('Failed to save event: ' + (err.message || 'Unknown error'));
+  }
+};
+
+window.archiveMgmtEvent = async function(id) {
+  const ev = allMgmtEvents.find(e => e.id === id);
+  if (!confirm(`Archive "${ev?.title || id}"?\n\nArchived events are hidden from the public events page but can be restored at any time.`)) return;
+  try {
+    await updateDoc(doc(db, 'events', id), {
+      archived: true,
+      archivedAt: new Date().toISOString(),
+    });
+    showToast('Event archived. You can restore it anytime.');
+    if (editingEventId === id) resetEventForm();
+    loadMgmtEvents();
+    loadEvents();
+  } catch (err) {
+    alert('Failed to archive event: ' + err.message);
+  }
+};
+
+window.restoreMgmtEvent = async function(id) {
+  const ev = allMgmtEvents.find(e => e.id === id);
+  if (!confirm(`Restore "${ev?.title || id}" and make it visible on the public events page?`)) return;
+  try {
+    await updateDoc(doc(db, 'events', id), {
+      archived: false,
+      archivedAt: null,
+    });
+    showToast('Event restored and published.');
+    loadMgmtEvents();
+    loadEvents();
+  } catch (err) {
+    alert('Failed to restore event: ' + err.message);
+  }
+};
+
+window.deleteMgmtEvent = async function(id) {
+  const ev = allMgmtEvents.find(e => e.id === id);
+  if (!confirm(`Permanently delete "${ev?.title || id}"?\n\nThis cannot be undone. To hide the event instead, use the Archive button (📦).`)) return;
+  try {
+    await deleteDoc(doc(db, 'events', id));
+    showToast('Event permanently deleted.');
+    if (editingEventId === id) resetEventForm();
+    loadMgmtEvents();
+    loadEvents();
+  } catch (err) {
+    alert('Failed to delete event: ' + err.message);
+  }
+};
+
+// ─── END EVENT MANAGEMENT ─────────────────────────────────────────────────────
+
+// ─── INBOX MESSAGING ────────────────────────────────────────────────────────
+
+let inboxRecipientType = 'all';
+let allInboxMessages   = [];
+let inboxEventsList    = [];   // cached list of events for the event picker
+
+// ── User search for recipient picker ──────────────────────────────────────
+let _userSearchCache  = null;   // loaded once on first open
+let _userSearchTimer  = null;
+
+async function loadUserSearchCache() {
+  if (_userSearchCache) return;
+  _userSearchCache = [];
+  try {
+    // Pull all users from the `members` collection (kept in sync by profile.js
+    // on every sign-in — the old top-level `users` collection never actually
+    // had documents of its own, only subcollections, so it always returned 0 docs)
+    const snap = await getDocs(collection(db, 'members'));
+    snap.forEach(d => {
+      const data = d.data();
+      const name  = data.name || data.displayName || data.fullName || '';
+      const email = data.email || '';
+      if (name || email) {
+        _userSearchCache.push({ uid: d.id, name, email });
+      }
+    });
+  } catch (err) {
+    console.warn('[userSearch] members collection unavailable, falling back to checkins:', err);
+    // Fallback: gather unique UIDs from checkins and attach any name stored there
+    try {
+      const snap = await getDocs(collection(db, 'checkins'));
+      const seen = new Map();
+      snap.forEach(d => {
+        const data = d.data();
+        const uid  = data.userId || data.uid;
+        if (!uid || seen.has(uid)) return;
+        seen.set(uid, {
+          uid,
+          name:  data.userName  || data.name  || data.displayName || '',
+          email: data.userEmail || data.email || '',
+        });
+      });
+      _userSearchCache = Array.from(seen.values());
+    } catch (e2) {
+      console.error('[userSearch] fallback failed:', e2);
+    }
+  }
+}
+
+window.userSearchQuery = async function(val) {
+  const dropdown = document.getElementById('user-search-dropdown');
+  if (!dropdown) return;
+
+  // If a user is already selected, hide dropdown
+  if (document.getElementById('inbox-uid-input').value) {
+    dropdown.style.display = 'none';
+    return;
+  }
+
+  clearTimeout(_userSearchTimer);
+  _userSearchTimer = setTimeout(async () => {
+    await loadUserSearchCache();
+
+    const q = val.trim().toLowerCase();
+    if (!q) {
+      // Show first 8 as a "browse" list
+      renderUserDropdown(_userSearchCache.slice(0, 8), dropdown, true);
+      return;
+    }
+
+    const results = _userSearchCache.filter(u =>
+      u.name.toLowerCase().includes(q) || u.email.toLowerCase().includes(q) || u.uid.toLowerCase().includes(q)
+    ).slice(0, 10);
+
+    renderUserDropdown(results, dropdown, false);
+  }, 180);
+};
+
+function renderUserDropdown(users, dropdown, isBrowse) {
+  if (!users.length) {
+    dropdown.innerHTML = `<div class="user-search-msg">${isBrowse ? 'No users found' : 'No matches — try a different name or email'}</div>`;
+    dropdown.style.display = 'block';
+    return;
+  }
+  dropdown.innerHTML = users.map(u => {
+    const initials = u.name
+      ? u.name.trim().split(' ').map(p => p[0]).slice(0, 2).join('').toUpperCase()
+      : (u.email[0] || '?').toUpperCase();
+    return `
+      <div class="user-search-option" data-uid="${escapeHTML(u.uid)}">
+        <div class="user-search-avatar">${initials}</div>
+        <div class="user-search-info">
+          <div class="user-search-name">${escapeHTML(u.name || '(No name)')}</div>
+          <div class="user-search-email">${escapeHTML(u.email || u.uid)}</div>
+        </div>
+      </div>`;
+  }).join('');
+  dropdown.style.display = 'block';
+
+  // Click handlers attached here (not via inline onclick="...") because
+  // JSON.stringify(u.name) produces double-quoted strings, and embedding
+  // those inside an onclick="..." attribute (also double-quoted) breaks
+  // the HTML parser the moment a name/email contains a space or any value —
+  // the attribute silently truncates at the first internal quote, so the
+  // click handler never actually ran.
+  dropdown.querySelectorAll('.user-search-option').forEach(el => {
+    el.addEventListener('click', () => {
+      const uid = el.getAttribute('data-uid');
+      const u = users.find(x => x.uid === uid);
+      if (u) selectUser(u.uid, u.name, u.email);
+    });
+  });
+}
+
+window.selectUser = function(uid, name, email) {
+  // Fill hidden input (used by sendInboxMessage)
+  document.getElementById('inbox-uid-input').value = uid;
+
+  // Hide search + dropdown, show chip
+  document.getElementById('inbox-user-search').style.display = 'none';
+  document.getElementById('user-search-dropdown').style.display = 'none';
+
+  const initials = name
+    ? name.trim().split(' ').map(p => p[0]).slice(0, 2).join('').toUpperCase()
+    : (email[0] || '?').toUpperCase();
+
+  document.getElementById('user-chip-avatar').textContent = initials;
+  document.getElementById('user-chip-name').textContent   = name  || '(No name)';
+  document.getElementById('user-chip-email').textContent  = email || '';
+  document.getElementById('user-chip-uid-display').textContent = uid;
+  document.getElementById('user-selected-chip').style.display  = 'flex';
+};
+
+window.clearUserSelection = function() {
+  document.getElementById('inbox-uid-input').value = '';
+  document.getElementById('inbox-user-search').value = '';
+  document.getElementById('inbox-user-search').style.display = '';
+  document.getElementById('user-selected-chip').style.display = 'none';
+  document.getElementById('user-search-dropdown').style.display = 'none';
+  // Reset UID toggle state
+  const uidVal = document.getElementById('user-chip-uid-display');
+  const uidBtn = document.querySelector('.user-chip-uid-toggle');
+  if (uidVal) { uidVal.classList.remove('visible'); }
+  if (uidBtn) { uidBtn.textContent = 'Show Firebase UID'; }
+};
+
+window.toggleChipUID = function(btn) {
+  const val = document.getElementById('user-chip-uid-display');
+  const showing = val.classList.toggle('visible');
+  btn.textContent = showing ? 'Hide Firebase UID' : 'Show Firebase UID';
+};
+
+// Close dropdown when clicking outside
+document.addEventListener('click', e => {
+  const wrap = document.querySelector('.user-search-wrap');
+  if (wrap && !wrap.contains(e.target)) {
+    const dd = document.getElementById('user-search-dropdown');
+    if (dd) dd.style.display = 'none';
+  }
+});
+
+// ── Recipient type toggle ──────────────────────────────────────────────────
+window.setRecipientType = function(type) {
+  inboxRecipientType = type;
+  document.getElementById('recip-btn-all').classList.toggle('active',   type === 'all');
+  document.getElementById('recip-btn-uid').classList.toggle('active',   type === 'uid');
+  document.getElementById('recip-btn-event').classList.toggle('active', type === 'event');
+  document.getElementById('uid-input-wrap').style.display   = type === 'uid'   ? 'block' : 'none';
+  document.getElementById('event-input-wrap').style.display = type === 'event' ? 'block' : 'none';
+
+  // Reset user search state whenever toggling to uid mode
+  if (type === 'uid') { clearUserSelection(); loadUserSearchCache(); }
+
+  // Populate event dropdown on first open
+  if (type === 'event' && inboxEventsList.length === 0) {
+    populateInboxEventDropdown();
+  }
+};
+
+// ── Populate event dropdown from Firestore ─────────────────────────────────
+async function populateInboxEventDropdown() {
+  const sel = document.getElementById('inbox-event-select');
+  sel.innerHTML = '<option value="">Loading events…</option>';
+  try {
+    const snap = await getDocs(collection(db, 'events'));
+    inboxEventsList = [];
+    snap.forEach(d => inboxEventsList.push({ id: d.id, ...d.data() }));
+    inboxEventsList.sort((a, b) => (a.title || '').localeCompare(b.title || ''));
+
+    sel.innerHTML = '<option value="">— Select an event —</option>' +
+      inboxEventsList.map(ev =>
+        `<option value="${ev.id}">${escapeHTML(ev.title || ev.id)}</option>`
+      ).join('');
+
+    sel.onchange = () => previewEventRegistrantCount(sel.value);
+  } catch (err) {
+    sel.innerHTML = '<option value="">Failed to load events</option>';
+    console.error('Event dropdown load error:', err);
+  }
+}
+
+// ── Show how many registrants will receive the message ─────────────────────
+async function previewEventRegistrantCount(eventId) {
+  const countEl = document.getElementById('inbox-event-registrant-count');
+  if (!eventId) { countEl.textContent = ''; return; }
+  try {
+    const snap = await getDocs(query(collection(db, 'checkins'), where('eventId', '==', eventId)));
+    const n = snap.size;
+    countEl.innerHTML = `<i class="fas fa-users"></i> ${n} registrant${n !== 1 ? 's' : ''} will receive this message`;
+  } catch (err) {
+    countEl.textContent = 'Could not count registrants';
+  }
+}
+
+// ── Send message ───────────────────────────────────────────────────────────
+window.sendInboxMessage = async function(e) {
+  e.preventDefault();
+
+  const subject  = document.getElementById('inbox-subject-input').value.trim();
+  const body     = document.getElementById('inbox-body-input').value.trim();
+  const priority = document.getElementById('inbox-priority-input').value;
+  const uid      = document.getElementById('inbox-uid-input').value.trim();
+  const eventId  = document.getElementById('inbox-event-select')?.value || '';
+
+  if (!subject || !body) return alert('Subject and body are required.');
+  if (inboxRecipientType === 'uid'   && !uid)     return alert('Please enter a recipient UID.');
+  if (inboxRecipientType === 'event' && !eventId) return alert('Please select an event.');
+
+  try {
+    if (inboxRecipientType === 'event') {
+      // Look up all registrants for this event and send one message per UID
+      const snap = await getDocs(query(collection(db, 'checkins'), where('eventId', '==', eventId)));
+      if (snap.empty) { showToast('No registrants found for that event.'); return; }
+
+      const eventTitle = inboxEventsList.find(ev => ev.id === eventId)?.title || eventId;
+      const writes = [];
+      snap.forEach(d => {
+        const registrantUid = d.data().userId || d.data().uid;
+        if (!registrantUid) return;
+        writes.push(addDoc(collection(db, 'inbox'), {
+          subject,
+          body,
+          priority,
+          recipientType: 'uid',
+          recipientUid: registrantUid,
+          eventId,
+          sentAt: serverTimestamp(),
+          read: false,
+          sentByAdmin: true,
+        }));
+      });
+      await Promise.all(writes);
+      showToast(`Message sent to ${writes.length} registrant${writes.length !== 1 ? 's' : ''}.`);
+
+    } else {
+      // Single message — all users or one specific UID
+      await addDoc(collection(db, 'inbox'), {
+        subject,
+        body,
+        priority,
+        recipientType: inboxRecipientType,
+        recipientUid: inboxRecipientType === 'uid' ? uid : null,
+        sentAt: serverTimestamp(),
+        read: false,
+        sentByAdmin: true,
+      });
+      showToast('Message sent to inbox successfully.');
+    }
+
+    // Reset form
+    document.getElementById('inbox-subject-input').value  = '';
+    document.getElementById('inbox-body-input').value     = '';
+    clearUserSelection();
+    document.getElementById('inbox-priority-input').value = 'normal';
+    if (document.getElementById('inbox-event-select')) document.getElementById('inbox-event-select').value = '';
+    if (document.getElementById('inbox-event-registrant-count')) document.getElementById('inbox-event-registrant-count').textContent = '';
+    setRecipientType('all');
+    loadInboxMessages();
+
+  } catch (err) {
+    console.error('Failed to send inbox message:', err);
+    alert('Failed to send: ' + (err.message || 'Unknown error'));
+  }
+};
+
+// ── Load sent messages ─────────────────────────────────────────────────────
+async function loadInboxMessages() {
+  const listEl = document.getElementById('inbox-message-list');
+  if (!listEl) return;
+  try {
+    const snap = await getDocs(query(collection(db, 'inbox'), orderBy('sentAt', 'desc')));
+    allInboxMessages = [];
+    snap.forEach(d => allInboxMessages.push({ id: d.id, ...d.data() }));
+    renderInboxMessages(allInboxMessages);
+  } catch (err) {
+    console.error('Failed to load inbox messages:', err);
+    listEl.innerHTML = '<div class="list-loading">Failed to load messages.</div>';
+  }
+}
+
+// ── Render sent messages list ──────────────────────────────────────────────
+function renderInboxMessages(messages) {
+  const listEl = document.getElementById('inbox-message-list');
+  if (!messages.length) {
+    listEl.innerHTML = '<div class="list-loading">No messages sent yet.</div>';
+    return;
+  }
+
+  const priorityClass = { normal: 'priority-normal', important: 'priority-important', urgent: 'priority-urgent' };
+
+  listEl.innerHTML = messages.map(msg => {
+    const sentDate  = msg.sentAt?.toDate ? msg.sentAt.toDate().toLocaleDateString() : 'Pending…';
+    let recipient;
+    if (msg.recipientType === 'uid' && msg.eventId) {
+      const evTitle = inboxEventsList.find(ev => ev.id === msg.eventId)?.title || msg.eventId;
+      recipient = `Registrants: ${escapeHTML(evTitle)}`;
+    } else if (msg.recipientType === 'uid') {
+      recipient = `UID: ${msg.recipientUid}`;
+    } else {
+      recipient = 'All Users';
+    }
+    const pClass = priorityClass[msg.priority] || 'priority-normal';
+    return `
+      <div class="inbox-message-item">
+        <div class="inbox-msg-subject" title="${escapeHTML(msg.subject)}">${escapeHTML(msg.subject)}</div>
+        <div class="inbox-msg-meta">
+          <span class="inbox-priority-badge ${pClass}">${escapeHTML(msg.priority || 'normal')}</span>
+          &nbsp;→ ${recipient} · ${sentDate}
+        </div>
+        <div class="inbox-msg-actions">
+          <button class="btn btn-danger" style="padding:3px 8px; font-size:0.72rem; border-radius:6px;" onclick="deleteInboxMessage('${msg.id}')">
+            <i class="fas fa-trash"></i> Delete
+          </button>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+// ── Search filter (renamed param to avoid shadowing Firestore query) ────────
+window.filterInboxMessages = function(searchTerm) {
+  const term = searchTerm.toLowerCase();
+  renderInboxMessages(allInboxMessages.filter(m =>
+    m.subject?.toLowerCase().includes(term) ||
+    m.body?.toLowerCase().includes(term) ||
+    (m.recipientUid || '').toLowerCase().includes(term)
+  ));
+};
+
+window.deleteInboxMessage = async function(id) {
+  if (!confirm('Delete this inbox message permanently?')) return;
+  try {
+    await deleteDoc(doc(db, 'inbox', id));
+    showToast('Message deleted.');
+    loadInboxMessages();
+  } catch (err) {
+    alert('Failed to delete: ' + err.message);
+  }
+};
+
+// ─── END INBOX MESSAGING ─────────────────────────────────────────────────────
+
+// ─── ARCHIVE ─────────────────────────────────────────────────────────────────
+
+const ARC_CAT_COLORS = {
+  political:'#2563eb', environmental:'#10b981', youth:'#f59e0b',
+  innovation:'#ec4899', education:'#b325eb', religious:'#d97706', volunteer:'#64748b'
+};
+const ARC_WAVE_CAT_LABELS = {
+  civic:'Civic Engagement', environment:'Environment', youth:'Youth',
+  innovation:'Innovation', community:'Community', education:'Education'
+};
+
+let arcLoaded      = false;
+let arcAllEvents   = [], arcAllBanners = [], arcAllInbox = [], arcAllWave = [];
+let arcEventsMap   = {};
+let arcEvCat       = 'all', arcBnStatus = 'all', arcIbPriority = 'all', arcWpCat = 'all';
+let arcEvSort      = { k:'title', d:1 };
+let arcBnSort      = { k:'createdAt', d:-1 };
+let arcIbSort      = { k:'sentAt', d:-1 };
+let arcWpSort      = { k:'date', d:-1 };
+
+// ── Toggle ────────────────────────────────────────────────────────────────
+window.toggleArchive = async function() {
+  const bar   = document.getElementById('archive-toggle-bar');
+  const panel = document.getElementById('archive-panel');
+  const open  = panel.classList.toggle('open');
+  bar.classList.toggle('open', open);
+  if (open && !arcLoaded) {
+    arcLoaded = true;
+    await arcLoadAll();
+  }
+};
+
+async function arcLoadAll() {
+  await Promise.all([arcLoadEvents(), arcLoadBanners(), arcLoadInbox(), arcLoadWave()]);
+}
+
+// ── Helpers ───────────────────────────────────────────────────────────────
+function arcEsc(v) {
+  return String(v||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+function arcFmtDate(val) {
+  if (!val) return '—';
+  const d = val.toDate ? val.toDate() : new Date(val);
+  return isNaN(d.getTime()) ? String(val) : d.toLocaleDateString();
+}
+function arcFmtDateTime(val) {
+  if (!val) return '—';
+  const d = val.toDate ? val.toDate() : new Date(val);
+  return isNaN(d.getTime()) ? String(val) : d.toLocaleString();
+}
+function arcStripHTML(html) { return (html||'').replace(/<[^>]+>/g,' ').replace(/\s+/g,' ').trim(); }
+
+// ── Drawer ────────────────────────────────────────────────────────────────
+window.arcCloseDrawer = function(e) { if (e.target === document.getElementById('arc-drawer-overlay')) arcCloseDrawerDirect(); };
+window.arcCloseDrawerDirect = function() { document.getElementById('arc-drawer-overlay').classList.remove('show'); };
+function arcOpenDrawer(title, html) {
+  document.getElementById('arc-drawer-title').textContent = title;
+  document.getElementById('arc-drawer-body').innerHTML = html;
+  document.getElementById('arc-drawer-overlay').classList.add('show');
+}
+function arcField(label, value, isHtml = false) {
+  if (value === null || value === undefined || value === '') return '';
+  return `<div class="arc-field"><div class="arc-field-label">${label}</div><div class="arc-field-value">${isHtml ? value : arcEsc(String(value))}</div></div>`;
+}
+
+// ══════════════════════════════════════════════════════════════════════════
+//  EVENTS
+// ══════════════════════════════════════════════════════════════════════════
+async function arcLoadEvents() {
+  try {
+    const snap = await getDocs(collection(db, 'events'));
+    arcAllEvents = [];
+    snap.forEach(d => { arcAllEvents.push({id:d.id,...d.data()}); arcEventsMap[d.id] = d.data().title||d.id; });
+    document.getElementById('arc-stat-events').textContent = arcAllEvents.length;
+    arcRenderEvents();
+  } catch(e) {
+    document.getElementById('arc-events-body').innerHTML = `<tr><td colspan="6" class="arc-empty"><i class="fas fa-exclamation-triangle"></i> Failed to load events.</td></tr>`;
+  }
+}
+
+window.arcSetEvCat = function(el, cat) {
+  el.closest('.arc-toolbar').querySelectorAll('.arc-chip').forEach(c=>c.classList.remove('active'));
+  el.classList.add('active'); arcEvCat = cat; arcRenderEvents();
+};
+window.arcFilterEvents = function() { arcRenderEvents(); };
+window.arcSortEvents = function(k) {
+  arcEvSort = arcEvSort.k===k ? {k, d:arcEvSort.d*-1} : {k, d:1};
+  arcRenderEvents();
+};
+
+function arcRenderEvents() {
+  const term = (document.getElementById('arc-ev-search').value||'').toLowerCase();
+  let rows = arcAllEvents.filter(e => {
+    const mc = arcEvCat==='all' || e.category===arcEvCat;
+    const mt = !term || (e.title||'').toLowerCase().includes(term) || (e.category||'').toLowerCase().includes(term) || (e.location||'').toLowerCase().includes(term);
+    return mc && mt;
+  });
+  rows.sort((a,b) => {
+    const av=(a[arcEvSort.k]||'').toString().toLowerCase(), bv=(b[arcEvSort.k]||'').toString().toLowerCase();
+    return av<bv?-arcEvSort.d:av>bv?arcEvSort.d:0;
+  });
+  document.getElementById('arc-count-events').textContent = `${rows.length} record${rows.length!==1?'s':''}`;
+  if (!rows.length) { document.getElementById('arc-events-body').innerHTML=`<tr><td colspan="6"><div class="arc-empty"><i class="fas fa-calendar-xmark"></i> No events match.</div></td></tr>`; return; }
+  document.getElementById('arc-events-body').innerHTML = rows.map(e => {
+    const color = ARC_CAT_COLORS[e.category]||'#2563eb';
+    let qr = '<span class="arc-badge arc-badge-stopped">Off</span>';
+    if (e.qrGenerated) {
+      const exp = e.qrExpiresAt ? new Date(e.qrExpiresAt.toDate?e.qrExpiresAt.toDate():e.qrExpiresAt) : null;
+      qr = (exp&&exp<new Date()) ? '<span class="arc-badge arc-badge-expired">Expired</span>' : '<span class="arc-badge arc-badge-active">Active</span>';
+    }
+    return `<tr>
+      <td class="arc-td-title" title="${arcEsc(e.title)}">${arcEsc(e.title||e.id)}</td>
+      <td class="arc-td-meta"><span class="arc-cat-dot" style="background:${color};"></span>${arcEsc(e.category||'—')}</td>
+      <td class="arc-td-meta">${arcEsc(e.date||'—')}</td>
+      <td class="arc-td-meta" style="max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${arcEsc(e.location||'—')}</td>
+      <td>${qr}</td>
+      <td><button class="btn btn-secondary" style="padding:3px 8px;font-size:0.72rem;border-radius:7px;" onclick="arcViewEvent('${e.id}')"><i class="fas fa-eye"></i></button></td>
+    </tr>`;
+  }).join('');
+}
+
+window.arcViewEvent = function(id) {
+  const e = arcAllEvents.find(x=>x.id===id); if(!e) return;
+  const html = `<div class="arc-grid">
+    ${arcField('Category', e.category)} ${arcField('Date', e.date)}
+    ${arcField('Time', e.time)} ${arcField('Location', e.location)}
+    ${arcField('Address', e.address)} ${arcField('Capacity', e.capacity)}
+    ${arcField('Volunteer Hours', e.volunteerHours)} ${arcField('Contact', e.contact)}
+    ${arcField('Tags', Array.isArray(e.tags)?e.tags.join(', '):e.tags)} ${arcField('Created', arcFmtDateTime(e.createdAt))}
+  </div>
+  ${arcField('Description', e.description)}
+  ${e.details ? arcField('Full Details', e.details, true) : ''}
+  ${e.registrationLink ? arcField('Registration Link', `<a href="${arcEsc(e.registrationLink)}" target="_blank">${arcEsc(e.registrationLink)}</a>`, true) : ''}
+  ${e.website ? arcField('Website', `<a href="${arcEsc(e.website)}" target="_blank">${arcEsc(e.website)}</a>`, true) : ''}
+  ${arcField('Parking', e.parking)} ${arcField('Accessibility', e.accessibility)}`;
+  arcOpenDrawer(e.title||e.id, html);
+};
+
+// ══════════════════════════════════════════════════════════════════════════
+//  NOTIFICATION BANNERS
+// ══════════════════════════════════════════════════════════════════════════
+async function arcLoadBanners() {
+  try {
+    const q = query(collection(db,'announcements'), orderBy('createdAt','desc'));
+    const snap = await getDocs(q);
+    arcAllBanners = [];
+    snap.forEach(d => { const data=d.data(); if(data.type!=='wavePost') arcAllBanners.push({id:d.id,...data}); });
+    document.getElementById('arc-stat-banners').textContent = arcAllBanners.length;
+    arcRenderBanners();
+  } catch(e) {
+    document.getElementById('arc-banners-body').innerHTML = `<tr><td colspan="6" class="arc-empty"><i class="fas fa-exclamation-triangle"></i> Failed to load banners.</td></tr>`;
+  }
+}
+
+function arcGetBnStatus(b) {
+  if (!b.isActive) return 'stopped';
+  if (b.expiresAt) { const d=new Date(b.expiresAt.toDate?b.expiresAt.toDate():b.expiresAt); if(d<new Date()) return 'expired'; }
+  return 'active';
+}
+
+window.arcSetBnStatus = function(el, s) {
+  el.closest('.arc-toolbar').querySelectorAll('.arc-chip').forEach(c=>c.classList.remove('active'));
+  el.classList.add('active'); arcBnStatus=s; arcRenderBanners();
+};
+window.arcFilterBanners = function() { arcRenderBanners(); };
+window.arcSortBanners = function(k) {
+  arcBnSort = arcBnSort.k===k ? {k, d:arcBnSort.d*-1} : {k, d:-1};
+  arcRenderBanners();
+};
+
+function arcRenderBanners() {
+  const term = (document.getElementById('arc-bn-search').value||'').toLowerCase();
+  let rows = arcAllBanners.filter(b => {
+    const st = arcGetBnStatus(b);
+    const ms = arcBnStatus==='all' || st===arcBnStatus;
+    const mt = !term || (b.text||'').toLowerCase().includes(term) || (b.link||'').toLowerCase().includes(term);
+    return ms && mt;
+  });
+  rows.sort((a,b) => {
+    const gv = x => arcBnSort.k==='createdAt' ? (x.createdAt?.toDate?x.createdAt.toDate().getTime():0) : (x[arcBnSort.k]||'').toString().toLowerCase();
+    const av=gv(a), bv=gv(b); return av<bv?-arcBnSort.d:av>bv?arcBnSort.d:0;
+  });
+  document.getElementById('arc-count-banners').textContent = `${rows.length} record${rows.length!==1?'s':''}`;
+  if (!rows.length) { document.getElementById('arc-banners-body').innerHTML=`<tr><td colspan="6"><div class="arc-empty"><i class="fas fa-bullhorn"></i> No banners match.</div></td></tr>`; return; }
+  document.getElementById('arc-banners-body').innerHTML = rows.map(b => {
+    const st=arcGetBnStatus(b);
+    const bc=st==='active'?'arc-badge-active':st==='expired'?'arc-badge-expired':'arc-badge-stopped';
+    return `<tr>
+      <td style="font-size:1.1rem;text-align:center;">${arcEsc(b.emoji||'📢')}</td>
+      <td class="arc-td-title" style="max-width:200px;" title="${arcEsc(b.text)}">${arcEsc(b.text||'—')}</td>
+      <td class="arc-td-meta">${arcFmtDate(b.createdAt)}</td>
+      <td class="arc-td-meta">${arcFmtDate(b.expiresAt)||'—'}</td>
+      <td><span class="arc-badge ${bc}">${st}</span></td>
+      <td><button class="btn btn-secondary" style="padding:3px 8px;font-size:0.72rem;border-radius:7px;" onclick="arcViewBanner('${b.id}')"><i class="fas fa-eye"></i></button></td>
+    </tr>`;
+  }).join('');
+}
+
+window.arcViewBanner = function(id) {
+  const b = arcAllBanners.find(x=>x.id===id); if(!b) return;
+  const st=arcGetBnStatus(b); const bc=st==='active'?'arc-badge-active':st==='expired'?'arc-badge-expired':'arc-badge-stopped';
+  arcOpenDrawer('Notification Banner', `
+    <div style="font-size:2rem;margin-bottom:0.75rem;">${arcEsc(b.emoji||'📢')}</div>
+    ${arcField('Message', b.text)}
+    <div class="arc-grid">
+      ${arcField('Status', `<span class="arc-badge ${bc}">${st}</span>`, true)}
+      ${arcField('Active', b.isActive?'Yes':'No')}
+      ${arcField('Published', arcFmtDateTime(b.createdAt))}
+      ${arcField('Expires', arcFmtDateTime(b.expiresAt))}
+    </div>
+    ${b.link ? arcField('Action Link', `<a href="${arcEsc(b.link)}" target="_blank">${arcEsc(b.link)}</a>`, true) : ''}`);
+};
+
+// ══════════════════════════════════════════════════════════════════════════
+//  INBOX MESSAGES
+// ══════════════════════════════════════════════════════════════════════════
+async function arcLoadInbox() {
+  try {
+    const q = query(collection(db,'inbox'), orderBy('sentAt','desc'));
+    const snap = await getDocs(q);
+    arcAllInbox = [];
+    snap.forEach(d => arcAllInbox.push({id:d.id,...d.data()}));
+    document.getElementById('arc-stat-inbox').textContent = arcAllInbox.length;
+    arcRenderInbox();
+  } catch(e) {
+    document.getElementById('arc-inbox-body').innerHTML = `<tr><td colspan="6" class="arc-empty"><i class="fas fa-exclamation-triangle"></i> Failed to load messages.</td></tr>`;
+  }
+}
+
+window.arcSetIbPriority = function(el, p) {
+  el.closest('.arc-toolbar').querySelectorAll('.arc-chip').forEach(c=>c.classList.remove('active'));
+  el.classList.add('active'); arcIbPriority=p; arcRenderInbox();
+};
+window.arcFilterInbox = function() { arcRenderInbox(); };
+window.arcSortInbox = function(k) {
+  arcIbSort = arcIbSort.k===k ? {k, d:arcIbSort.d*-1} : {k, d:-1};
+  arcRenderInbox();
+};
+
+function arcRenderInbox() {
+  const term = (document.getElementById('arc-ib-search').value||'').toLowerCase();
+  let rows = arcAllInbox.filter(m => {
+    const mp = arcIbPriority==='all' || m.priority===arcIbPriority;
+    const mt = !term || (m.subject||'').toLowerCase().includes(term) || (m.body||'').toLowerCase().includes(term) || (m.recipientUid||'').toLowerCase().includes(term);
+    return mp && mt;
+  });
+  rows.sort((a,b) => {
+    const gv = x => arcIbSort.k==='sentAt' ? (x.sentAt?.toDate?x.sentAt.toDate().getTime():0) : (x[arcIbSort.k]||'').toString().toLowerCase();
+    const av=gv(a), bv=gv(b); return av<bv?-arcIbSort.d:av>bv?arcIbSort.d:0;
+  });
+  document.getElementById('arc-count-inbox').textContent = `${rows.length} record${rows.length!==1?'s':''}`;
+  if (!rows.length) { document.getElementById('arc-inbox-body').innerHTML=`<tr><td colspan="6"><div class="arc-empty"><i class="fas fa-inbox"></i> No messages match.</div></td></tr>`; return; }
+  document.getElementById('arc-inbox-body').innerHTML = rows.map(m => {
+    const pc = m.priority==='urgent'?'arc-badge-urgent':m.priority==='important'?'arc-badge-important':'arc-badge-normal';
+    let recip;
+    if (m.recipientType==='uid' && m.eventId) recip = `Registrants: ${arcEsc(arcEventsMap[m.eventId]||m.eventId)}`;
+    else if (m.recipientType==='uid') recip = `<span style="font-family:monospace;font-size:0.73rem;" title="${arcEsc(m.recipientUid)}">${arcEsc((m.recipientUid||'').slice(0,14)+((m.recipientUid||'').length>14?'…':''))}</span>`;
+    else recip = '<span style="color:#2563eb;font-weight:700;">All Users</span>';
+    const readBadge = m.read ? '<span class="arc-badge arc-badge-active" style="font-size:0.6rem;">Read</span>' : '<span class="arc-badge arc-badge-stopped" style="font-size:0.6rem;">Unread</span>';
+    return `<tr>
+      <td class="arc-td-title" style="max-width:180px;" title="${arcEsc(m.subject)}">${arcEsc(m.subject||'(no subject)')}</td>
+      <td><span class="arc-badge ${pc}">${arcEsc(m.priority||'normal')}</span></td>
+      <td class="arc-td-meta">${recip}</td>
+      <td class="arc-td-meta">${arcFmtDate(m.sentAt)}</td>
+      <td>${readBadge}</td>
+      <td><button class="btn btn-secondary" style="padding:3px 8px;font-size:0.72rem;border-radius:7px;" onclick="arcViewInboxMsg('${m.id}')"><i class="fas fa-eye"></i></button></td>
+    </tr>`;
+  }).join('');
+}
+
+window.arcViewInboxMsg = function(id) {
+  const m = arcAllInbox.find(x=>x.id===id); if(!m) return;
+  const pc = m.priority==='urgent'?'arc-badge-urgent':m.priority==='important'?'arc-badge-important':'arc-badge-normal';
+  let recipLabel;
+  if (m.recipientType==='uid' && m.eventId) recipLabel = `Event Registrants — ${arcEventsMap[m.eventId]||m.eventId}`;
+  else if (m.recipientType==='uid') recipLabel = `Specific User: ${m.recipientUid||'—'}`;
+  else recipLabel = 'All Users';
+  arcOpenDrawer(m.subject||'(no subject)', `
+    <div class="arc-grid">
+      ${arcField('Priority', `<span class="arc-badge ${pc}">${m.priority||'normal'}</span>`, true)}
+      ${arcField('Sent', arcFmtDateTime(m.sentAt))}
+      ${arcField('Recipient', recipLabel)}
+      ${arcField('Read', m.read?'Yes':'No')}
+    </div>
+    ${arcField('Subject', m.subject)}
+    ${m.body ? `<div class="arc-field"><div class="arc-field-label">Message Body</div><div class="arc-field-value" style="background:#f8fafc;border-radius:10px;padding:0.9rem;line-height:1.65;max-height:240px;overflow-y:auto;">${m.body}</div></div>` : ''}`);
+};
+
+// ══════════════════════════════════════════════════════════════════════════
+//  WAVE BLOG POSTS
+// ══════════════════════════════════════════════════════════════════════════
+async function arcLoadWave() {
+  try {
+    const q = query(collection(db,'announcements'), orderBy('createdAt','desc'));
+    const snap = await getDocs(q);
+    arcAllWave = [];
+    snap.forEach(d => { const data=d.data(); if(data.type==='wavePost') arcAllWave.push({id:d.id,...data}); });
+    document.getElementById('arc-stat-wave').textContent = arcAllWave.length;
+    arcRenderWave();
+  } catch(e) {
+    document.getElementById('arc-wave-body').innerHTML = `<tr><td colspan="7" class="arc-empty"><i class="fas fa-exclamation-triangle"></i> Failed to load Wave posts.</td></tr>`;
+  }
+}
+
+window.arcSetWpCat = function(el, cat) {
+  el.closest('.arc-toolbar').querySelectorAll('.arc-chip').forEach(c=>c.classList.remove('active'));
+  el.classList.add('active'); arcWpCat=cat; arcRenderWave();
+};
+window.arcFilterWave = function() { arcRenderWave(); };
+window.arcSortWave = function(k) {
+  arcWpSort = arcWpSort.k===k ? {k, d:arcWpSort.d*-1} : {k, d:-1};
+  arcRenderWave();
+};
+
+function arcRenderWave() {
+  const term = (document.getElementById('arc-wp-search').value||'').toLowerCase();
+  let rows = arcAllWave.filter(p => {
+    const mc = arcWpCat==='all' || p.category===arcWpCat;
+    const mt = !term || (p.title||'').toLowerCase().includes(term) || (p.category||'').toLowerCase().includes(term) || (p.excerpt||'').toLowerCase().includes(term);
+    return mc && mt;
+  });
+  rows.sort((a,b) => {
+    const av=(a[arcWpSort.k]||'').toString().toLowerCase(), bv=(b[arcWpSort.k]||'').toString().toLowerCase();
+    return av<bv?-arcWpSort.d:av>bv?arcWpSort.d:0;
+  });
+  document.getElementById('arc-count-wave').textContent = `${rows.length} record${rows.length!==1?'s':''}`;
+  if (!rows.length) { document.getElementById('arc-wave-body').innerHTML=`<tr><td colspan="7"><div class="arc-empty"><i class="fas fa-water"></i> No Wave posts match.</div></td></tr>`; return; }
+  document.getElementById('arc-wave-body').innerHTML = rows.map(p => {
+    const catLabel = ARC_WAVE_CAT_LABELS[p.category]||p.category||'—';
+    const excerpt = (p.excerpt||arcStripHTML(p.body)||'').slice(0,70)+((p.excerpt||'').length>70?'…':'');
+    return `<tr>
+      <td style="font-size:1.1rem;text-align:center;">${arcEsc(p.emoji||'🌊')}</td>
+      <td class="arc-td-title" style="max-width:180px;" title="${arcEsc(p.title)}">${arcEsc(p.title||'—')}</td>
+      <td><span class="arc-badge arc-badge-cat">${arcEsc(catLabel)}</span></td>
+      <td class="arc-td-body" title="${arcEsc(p.excerpt||'')}">${arcEsc(excerpt||'—')}</td>
+      <td class="arc-td-meta">${arcEsc(p.date||arcFmtDate(p.createdAt))}</td>
+      <td class="arc-td-meta">${arcEsc(p.readTime||'—')}</td>
+      <td><button class="btn btn-secondary" style="padding:3px 8px;font-size:0.72rem;border-radius:7px;" onclick="arcViewWavePost('${p.id}')"><i class="fas fa-eye"></i></button></td>
+    </tr>`;
+  }).join('');
+}
+
+window.arcViewWavePost = function(id) {
+  const p = arcAllWave.find(x=>x.id===id); if(!p) return;
+  const catLabel = ARC_WAVE_CAT_LABELS[p.category]||p.category||'—';
+  arcOpenDrawer(p.title||'Wave Post', `
+    <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:1rem;">
+      <div style="width:44px;height:44px;border-radius:13px;background:${arcEsc(p.gradient||'linear-gradient(135deg,#2563eb,#06b6d4)')};display:flex;align-items:center;justify-content:center;font-size:1.3rem;flex-shrink:0;">${arcEsc(p.emoji||'🌊')}</div>
+      <div><div style="font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#94a3b8;">${arcEsc(catLabel)}</div>
+      <div style="font-size:0.82rem;color:#64748b;">${arcEsc(p.date||'')}${p.readTime?' · '+arcEsc(p.readTime):''}</div></div>
+    </div>
+    ${arcField('Excerpt', p.excerpt)}
+    ${p.body ? `<div class="arc-field"><div class="arc-field-label">Post Body</div><div class="arc-field-value" style="background:#f8fafc;border-radius:10px;padding:0.9rem;line-height:1.7;max-height:240px;overflow-y:auto;">${p.body}</div></div>` : ''}
+    <div class="arc-grid" style="margin-top:0.5rem;">
+      ${arcField('Published', p.isPublished?'Yes':'No')}
+      ${arcField('Created', arcFmtDateTime(p.createdAt))}
+      ${arcField('Updated', arcFmtDateTime(p.updatedAt))}
+    </div>`);
+};
+
+// ─── END ARCHIVE ──────────────────────────────────────────────────────────────
+
 // CORE UTILITIES
 window.downloadQR = function() {
   if (!selectedEvent) return;
@@ -953,6 +2625,8 @@ onAuthStateChanged(auth, async user => {
   await loadEvents();
   await loadAnnouncements();
   await loadWavePosts();
+  await loadInboxMessages();
+  await loadMgmtEvents();
 });
 </script>
 <script src="dark-mode.js"></script>

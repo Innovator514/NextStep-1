@@ -1,8 +1,9 @@
 // events.js - Updated to use centralized data and support popups
 // Load events-data.js and event-popup.js BEFORE this file
 
-// Current filter
+// Current filter state
 let currentFilter = 'all';
+let activeQuickFilters = new Set(); // 'volunteer' | 'virtual'
 
 // Load user progress from localStorage
 function loadUserProgress() {
@@ -31,15 +32,65 @@ function saveUserProgress(userProgress) {
     localStorage.setItem('userProgress', JSON.stringify(userProgress));
 }
 
+// Toggle a quick filter (volunteer hours / virtual)
+function toggleQuickFilter(key) {
+    const btn = document.getElementById('qf-' + key);
+    if (activeQuickFilters.has(key)) {
+        activeQuickFilters.delete(key);
+        btn && btn.classList.remove('active');
+    } else {
+        activeQuickFilters.add(key);
+        btn && btn.classList.add('active');
+    }
+    applyFilters();
+}
+
+// Master render — respects category, quick filters, and sort
+function applyFilters() {
+    renderEvents(currentFilter);
+}
+
 // Render Events
 function renderEvents(filter = 'all') {
     const eventsGrid = document.getElementById('events-grid');
-    
-    const filteredEvents = filter === 'all' 
-        ? window.eventsData 
-        : window.eventsData.filter(event => event.category === filter);
-    
-    eventsGrid.innerHTML = filteredEvents.map(event => {
+
+    let filtered = filter === 'all'
+        ? [...(window.eventsData || [])]
+        : (window.eventsData || []).filter(e => e.category === filter);
+
+    // Quick filters
+    if (activeQuickFilters.has('volunteer')) {
+        filtered = filtered.filter(e => e.volunteerHours && Number(e.volunteerHours) > 0);
+    }
+    if (activeQuickFilters.has('virtual')) {
+        filtered = filtered.filter(e => {
+            const loc = (e.location || '').toLowerCase();
+            return loc.includes('virtual') || loc.includes('online') || loc.includes('zoom') || loc.includes('webinar');
+        });
+    }
+
+    // Sort
+    const sortVal = document.getElementById('sort-select')?.value || 'date-asc';
+    filtered.sort((a, b) => {
+        if (sortVal === 'alpha-asc') return (a.title || '').localeCompare(b.title || '');
+        if (sortVal === 'alpha-desc') return (b.title || '').localeCompare(a.title || '');
+        const da = parseEventDate(a.date), db = parseEventDate(b.date);
+        const ta = da ? da.getTime() : 0, tb = db ? db.getTime() : 0;
+        return sortVal === 'date-desc' ? tb - ta : ta - tb;
+    });
+
+    // Update result count badge
+    const countEl = document.getElementById('filter-result-count');
+    if (countEl) {
+        const total = (window.eventsData || []).length;
+        if (filtered.length === total) {
+            countEl.innerHTML = `<strong>${total}</strong> events`;
+        } else {
+            countEl.innerHTML = `<strong>${filtered.length}</strong> of ${total} events`;
+        }
+    }
+
+    eventsGrid.innerHTML = filtered.map(event => {
         return `
         <div class="event-card" data-category="${event.category}" style="cursor: pointer;" onclick="openEventPopup('${event.id}')">
             <div class="event-header ${event.category}">
@@ -48,12 +99,15 @@ function renderEvents(filter = 'all') {
                 <div class="event-date">${event.date}</div>
             </div>
             <div class="event-body">
-                <div class="event-time">
+                ${event.time ? `<div class="event-time">
                     <span><strong><i class="fa-regular fa-calendar"></i> Time:</strong> ${event.time}</span>
-                </div>
-                <div class="event-location">
+                </div>` : ''}
+                ${event.location ? `<div class="event-location">
                     <span><strong><i class="fa-solid fa-location-arrow"></i> Location:</strong> ${event.location}</span>
-                </div>
+                </div>` : ''}
+                ${event.volunteerHours ? `<div class="event-time">
+                    <span><strong><i class="fa-solid fa-clock"></i> Volunteer Hours:</strong> ${event.volunteerHours} hr${event.volunteerHours != 1 ? 's' : ''}</span>
+                </div>` : ''}
                 <div class="event-description">${event.description}</div>
                 <button 
                     class="view-details-btn"
@@ -81,7 +135,7 @@ function renderEvents(filter = 'all') {
     `}).join('');
 }
 
-// Filter Logic
+// Filter Logic — category pills
 const filterButtons = document.querySelectorAll('.filter-btn');
 
 filterButtons.forEach(button => {
@@ -90,7 +144,7 @@ filterButtons.forEach(button => {
         button.classList.add('active');
         const category = button.getAttribute('data-category');
         currentFilter = category;
-        renderEvents(category);
+        applyFilters();
     });
 });
 
@@ -127,6 +181,8 @@ async function loadFirestoreEvents() {
 
         snapshot.forEach(doc => {
             const data = doc.data();
+            // Skip archived events — they should not appear on the public page
+            if (data.archived === true) return;
             const alreadyExists = window.eventsData.some(e => e.id === doc.id);
             if (!alreadyExists) {
                 firestoreEvents.push({ ...data, id: doc.id });

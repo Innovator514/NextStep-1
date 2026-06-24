@@ -35,7 +35,7 @@
       .leaderboard-main {
         min-height: 100vh;
         padding: 100px 20px 60px;
-        background: linear-gradient(160deg, #f0f4ff 0%, #e8eeff 50%, #f5f0ff 100%);
+        background: var(--bg-primary);
       }
 
       .leaderboard-inner {
@@ -52,7 +52,7 @@
       .lb-header h1 {
         font-size: clamp(2rem, 5vw, 3rem);
         font-weight: 800;
-        color: rgb(1, 9, 67);
+        color: var(--text-primary);
         margin: 0 0 0.5rem;
         letter-spacing: -0.5px;
       }
@@ -110,7 +110,7 @@
 
       .lb-tab:hover {
         background: #f1f5f9;
-        color: rgb(1, 9, 67);
+        color: var(--text-primary);
       }
 
       .lb-tab.active {
@@ -225,7 +225,7 @@
       .podium-name {
         font-size: 14px;
         font-weight: 700;
-        color: rgb(1, 9, 67);
+        color: var(--text-primary);
         margin-bottom: 4px;
         overflow: hidden;
         text-overflow: ellipsis;
@@ -617,11 +617,18 @@
       const mergedProgress = mergeProgress(remoteProgress, localProgress);
       const displayName = user.displayName || user.email?.split('@')[0] || 'Civic Champion';
 
+      // Compute and persist combinedScore so Firestore can sort/filter by it
+      const eventsCount = toNumber(mergedProgress.eventsAttended);
+      const badgesCount = toNumber(mergedProgress.badgesEarned);
+      const volunteerHours = toNumber(mergedProgress.volunteeredHours);
+      const combinedScore = (eventsCount * 10) + (badgesCount * 25) + (volunteerHours * 5);
+
       await setDoc(progressRef, {
         ...mergedProgress,
         displayName,
         photoURL: user.photoURL || remoteProgress.photoURL || null,
         userId: user.uid,
+        combinedScore,
         updatedAt: serverTimestamp()
       }, { merge: true });
 
@@ -663,21 +670,23 @@
 function renderLeaderboard() {
       const podiumContainer = document.getElementById('lb-podium');
       const listContainer = document.getElementById('lb-list');
+
+      // Filter out users with zero score for the active tab
+      const activeData = userLeaderboardData
+        .filter(u => u.scores[currentTab] > 0)
+        .sort((a, b) => b.scores[currentTab] - a.scores[currentTab]);
       
-      if (userLeaderboardData.length === 0) {
+      if (activeData.length === 0) {
         podiumContainer.innerHTML = '<div class="lb-empty"><i class="fas fa-users-slash"></i><br>No community champions discovered yet.</div>';
         listContainer.innerHTML = '';
         return;
       }
 
-      // Dynamic sorting pass
-      userLeaderboardData.sort((a, b) => b.scores[currentTab] - a.scores[currentTab]);
-
       podiumContainer.innerHTML = '';
       listContainer.innerHTML = '';
 
-      let top3 = userLeaderboardData.slice(0, 3);
-      let rest = userLeaderboardData.slice(3);
+      let top3 = activeData.slice(0, 3);
+      let rest = activeData.slice(3);
 
       // Render Top 3 Podium Cards with Staggered 3D CSS Grid Ordering
       top3.forEach((user, index) => {
@@ -771,13 +780,20 @@ function renderLeaderboard() {
       listContainer.innerHTML = '';
 
       try {
-        // 🌟 CAP READ QUERIES AT THE TOP 50 PROFILES FROM USERPROGRESS
-        const q = query(collection(db, 'userProgress'), limit(50));
+        // Fetch all userProgress docs (up to 200), then sort + filter client-side.
+        // This avoids needing a Firestore composite index and works even before
+        // combinedScore has been backfilled on existing documents.
+        const q = query(collection(db, 'userProgress'), limit(200));
         const querySnapshot = await getDocs(q);
 
         userLeaderboardData = [];
         querySnapshot.forEach((docSnap) => {
-          userLeaderboardData.push(buildLeaderboardEntry(docSnap.id, docSnap.data()));
+          const entry = buildLeaderboardEntry(docSnap.id, docSnap.data());
+          // Only include users who have any activity at all
+          if (entry.scores.combined > 0 || entry.scores.events > 0 ||
+              entry.scores.badges > 0 || entry.scores.hours > 0) {
+            userLeaderboardData.push(entry);
+          }
         });
 
         renderLeaderboard();

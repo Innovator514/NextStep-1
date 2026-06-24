@@ -1,5 +1,7 @@
 import { initializeApp, getApps } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
 import { getAuth, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+import { syncMemberRecord } from './member-sync.js';
+import { initNotifications } from './notifications.js';
 
 // Firebase config
 const firebaseConfig = {
@@ -198,6 +200,18 @@ function createLoginOverlay() {
 // Check authentication and update navigation
 function checkAuth() {
   onAuthStateChanged(auth, (user) => {
+    if (user) {
+      // Keep the members/{uid} directory doc fresh — runs on every page,
+      // for every signed-in visit, regardless of nav DOM state below.
+      syncMemberRecord(user);
+
+      // Start the site-wide unread-inbox listener so the red badge on the
+      // nav profile button / dropdown stays accurate on every page, not
+      // just profile.html. (Safe to also be started again by profile.js —
+      // initNotifications() tears down any previous listener first.)
+      initNotifications(user.uid);
+    }
+
     const loginLink = document.querySelector('.login');
     
     if (user && loginLink) {

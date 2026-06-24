@@ -2,41 +2,18 @@
    🏆 NEXTSTEP REVOLUTIONARY NEXUS-THEMED LEADERBOARD ENGINE
    ========================================================================== */
 
-/* --- CORE GRAPHICS TOKENS --- */
+/* --- PODIUM-SPECIFIC TOKENS (glow/shadow only — base tokens live in dark-mode.css) --- */
 :root {
-  --bg-primary: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 50%, #cbd5e1 100%);
-  --bg-secondary: rgba(255, 255, 255, 0.85);
-  --bg-tertiary: #f1f5f9;
-  --text-primary: #0f172a;
-  --text-secondary: #475569;
-  --text-muted: #64748b;
-  
-  --accent-primary: #2563eb;
-  --accent-secondary: #3b82f6;
-  --border-color: rgba(226, 232, 240, 0.8);
-  
-  /* High-fidelity Neon Glow Effects */
   --gold-glow: 0 20px 50px -10px rgba(245, 158, 11, 0.35), 0 0 30px rgba(251, 191, 36, 0.15);
   --silver-glow: 0 16px 40px -10px rgba(100, 116, 139, 0.2), 0 0 20px rgba(148, 163, 184, 0.1);
   --bronze-glow: 0 16px 40px -10px rgba(180, 83, 9, 0.2), 0 0 20px rgba(217, 119, 6, 0.1);
-  --card-shadow: 0 20px 40px -15px rgba(15, 23, 42, 0.06), 0 1px 3px rgba(0, 0, 0, 0.02);
 }
 
+/* Dark mode glow overrides — colors inherit from dark-mode.css variables */
 [data-theme="dark"] {
-  --bg-primary: linear-gradient(145deg, #020617 0%, #0b1329 60%, #020617 100%);
-  --bg-secondary: rgba(15, 23, 42, 0.65);
-  --bg-tertiary: #020617;
-  --text-primary: #f8fafc;
-  --text-secondary: #94a3b8;
-  --text-muted: #64748b;
-  --accent-primary: #3b82f6;
-  --accent-secondary: #60a5fa;
-  --border-color: rgba(30, 41, 59, 0.7);
-  
   --gold-glow: 0 25px 60px -12px rgba(245, 158, 11, 0.25), 0 0 40px rgba(251, 191, 36, 0.2);
-  --silver-glow: 0 20px 45px -12px rgba(30, 41, 59, 0.6);
+  --silver-glow: 0 20px 45px -12px rgba(30, 58, 95, 0.6);
   --bronze-glow: 0 20px 45px -12px rgba(120, 53, 4, 0.3);
-  --card-shadow: 0 30px 60px -20px rgba(0, 0, 0, 0.7);
 }
 
 /* --- THE STAGGERED 3D ELEVATION PODIUM VIEW --- */
@@ -186,7 +163,7 @@
   line-height: 1;
 }
 .rank-1 .podium-score { font-size: 34px; color: #fbbf24; text-shadow: 0 0 20px rgba(251, 191, 36, 0.2); }
-[data-theme="light"] .rank-1 .podium-score { color: #d97706; }
+:root:not([data-theme="dark"]) .rank-1 .podium-score { color: #d97706; }
 
 .podium-score-label {
   font-size: 10px;
@@ -358,4 +335,148 @@ div#lb-list.lb-list .lb-row.is-me .lb-row-name::after {
   
   div#lb-list.lb-list .lb-row { padding: 12px 16px !important; }
   div#lb-list.lb-list .lb-row-score { font-size: 17px !important; }
+}
+/* ==========================================================================
+   🌙 PODIUM DARK MODE — aligned to dark-mode.css palette
+   ========================================================================== */
+
+/* Page shell */
+[data-theme="dark"] .leaderboard-main {
+  background: linear-gradient(135deg, #0a1628 0%, #0f2744 100%) !important;
+}
+
+/* Header text */
+[data-theme="dark"] .lb-header h1 {
+  color: var(--text-primary) !important;
+}
+
+[data-theme="dark"] .lb-header p {
+  color: var(--text-secondary) !important;
+}
+
+/* Tab bar */
+[data-theme="dark"] .lb-tabs {
+  background: var(--bg-secondary) !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4) !important;
+}
+
+[data-theme="dark"] .lb-tab {
+  color: var(--text-secondary) !important;
+}
+
+[data-theme="dark"] .lb-tab:hover {
+  background: var(--hover-bg) !important;
+  color: var(--accent-secondary) !important;
+}
+
+[data-theme="dark"] .lb-tab.active {
+  background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary)) !important;
+  color: white !important;
+}
+
+/* Podium cards */
+[data-theme="dark"] .podium-card {
+  background: var(--bg-secondary) !important;
+  border-color: var(--border-color) !important;
+  box-shadow: var(--card-shadow) !important;
+}
+
+[data-theme="dark"] .podium-card.rank-1 {
+  background: linear-gradient(180deg, var(--bg-secondary) 0%, rgba(251, 191, 36, 0.06) 100%) !important;
+  border-color: #fbbf24 !important;
+  box-shadow: var(--gold-glow) !important;
+}
+
+[data-theme="dark"] .podium-card.rank-2 {
+  border-color: #334e68 !important;
+  box-shadow: var(--silver-glow) !important;
+}
+
+[data-theme="dark"] .podium-card.rank-3 {
+  border-color: #78350f !important;
+  box-shadow: var(--bronze-glow) !important;
+}
+
+/* Podium avatar */
+[data-theme="dark"] .podium-avatar {
+  background: var(--bg-tertiary) !important;
+  color: var(--text-primary) !important;
+  border-color: var(--border-color) !important;
+}
+
+[data-theme="dark"] .rank-1 .podium-avatar { border-color: #fbbf24 !important; }
+[data-theme="dark"] .rank-2 .podium-avatar { border-color: #334e68 !important; }
+[data-theme="dark"] .rank-3 .podium-avatar { border-color: #92400e !important; }
+
+/* Podium text */
+[data-theme="dark"] .podium-name {
+  color: var(--text-primary) !important;
+}
+
+[data-theme="dark"] .podium-score {
+  color: var(--accent-secondary) !important;
+}
+
+[data-theme="dark"] .podium-score-label {
+  color: var(--text-muted) !important;
+}
+
+/* Rank badge border matches card background */
+[data-theme="dark"] .podium-rank-badge {
+  border-color: var(--bg-secondary) !important;
+}
+
+/* List rows */
+[data-theme="dark"] div#lb-list.lb-list .lb-row {
+  background: var(--bg-secondary) !important;
+  border-color: var(--border-color) !important;
+  box-shadow: var(--card-shadow) !important;
+}
+
+[data-theme="dark"] div#lb-list.lb-list .lb-row:hover {
+  border-color: var(--accent-primary) !important;
+  box-shadow: 0 10px 25px -5px rgba(59, 130, 246, 0.15) !important;
+}
+
+[data-theme="dark"] div#lb-list.lb-list .lb-row-rank {
+  color: var(--text-secondary) !important;
+}
+
+[data-theme="dark"] div#lb-list.lb-list .lb-row-avatar {
+  background: var(--bg-tertiary) !important;
+  color: var(--text-primary) !important;
+  border-color: var(--border-color) !important;
+}
+
+[data-theme="dark"] div#lb-list.lb-list .lb-row-name {
+  color: var(--text-primary) !important;
+}
+
+[data-theme="dark"] div#lb-list.lb-list .lb-row-sub {
+  color: var(--text-muted) !important;
+}
+
+[data-theme="dark"] div#lb-list.lb-list .lb-row-score {
+  color: var(--accent-secondary) !important;
+}
+
+[data-theme="dark"] div#lb-list.lb-list .lb-row-score-label {
+  color: var(--text-muted) !important;
+}
+
+/* "You" highlight row */
+[data-theme="dark"] div#lb-list.lb-list .lb-row.is-me {
+  background: linear-gradient(135deg, rgba(59,130,246,0.1), rgba(96,165,250,0.04)) !important;
+  border-color: var(--accent-primary) !important;
+}
+
+/* Loading / empty states */
+[data-theme="dark"] .lb-loading,
+[data-theme="dark"] .lb-empty {
+  color: var(--text-muted) !important;
+}
+
+/* Footer */
+[data-theme="dark"] .lb-footer {
+  color: var(--text-muted) !important;
 }

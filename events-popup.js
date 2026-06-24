@@ -319,88 +319,108 @@
         document.head.appendChild(style);
     }
 
-    // Create popup HTML
-    function createPopupHTML(event) {
-        const capacityPercent = Math.round((event.registered / event.capacity) * 100);
-        
+    // Create popup HTML — all optional fields are guarded so a missing field
+    // never crashes the render or produces a broken popup.
+    function createPopupHTML(ev) {
+        // Capacity bar (only shown when both values exist and are numeric)
+        const hasCapacity = ev.capacity && ev.registered != null;
+        const capacityPercent = hasCapacity
+            ? Math.min(100, Math.round((ev.registered / ev.capacity) * 100))
+            : 0;
+
+        // Full description falls back to short description
+        const description = ev.fullDescription || ev.description || 'No description available.';
+
+        // Tags — handle missing, empty, or non-array gracefully
+        const tags = Array.isArray(ev.tags) && ev.tags.length
+            ? ev.tags.map(tag => `<span class="event-popup-tag">${tag}</span>`).join('')
+            : '';
+
+        // Optional sections — only rendered when the field has a value
+        const optionalSection = (label, icon, value) => value
+            ? `<div class="event-popup-section">
+                   <div class="event-popup-label">${label}</div>
+                   <div class="event-popup-value"><i class="${icon}"></i> ${value}</div>
+               </div>`
+            : '';
+
+        const contactSection = (ev.contact || ev.phone)
+            ? `<div class="event-popup-section">
+                   <div class="event-popup-label">Contact Information</div>
+                   <div class="event-popup-value">
+                       ${ev.contact ? `<i class="fa-solid fa-envelope"></i> <a href="mailto:${ev.contact}" style="color:#2563eb;text-decoration:none;">${ev.contact}</a><br>` : ''}
+                       ${ev.phone   ? `<i class="fa-solid fa-phone-volume"></i> ${ev.phone}` : ''}
+                   </div>
+               </div>`
+            : '';
+
+        const capacitySection = hasCapacity
+            ? `<div class="event-popup-section event-popup-capacity">
+                   <div class="event-popup-label">Registration Status</div>
+                   <div class="capacity-bar">
+                       <div class="capacity-fill" style="width:${capacityPercent}%"></div>
+                   </div>
+                   <div class="capacity-text">${ev.registered} of ${ev.capacity} spots filled (${capacityPercent}%)</div>
+               </div>`
+            : '';
+
         return `
-            <div class="event-popup-overlay" onclick="if(event.target === this) closeEventPopup()">
+            <div class="event-popup-overlay" onclick="if(event.target===this)closeEventPopup()">
                 <div class="event-popup">
-                    <div class="event-popup-header ${event.category}">
+                    <div class="event-popup-header ${ev.category || ''}">
                         <button class="event-popup-close" onclick="closeEventPopup()" aria-label="Close">×</button>
-                        <div class="event-popup-category category-${event.category}">${event.category}</div>
-                        <h2 class="event-popup-title">${event.title}</h2>
-                        <div class="event-popup-organizer">Organized by ${event.organizer}</div>
+                        <div class="event-popup-category category-${ev.category || ''}">${ev.category || ''}</div>
+                        <h2 class="event-popup-title">${ev.title || 'Event Details'}</h2>
+                        ${ev.organizer ? `<div class="event-popup-organizer">Organized by ${ev.organizer}</div>` : ''}
                     </div>
 
                     <div class="event-popup-body">
-                        <!-- Date/Time/Location Grid -->
-                    <div class="event-popup-info-grid">
-                        <div class="event-popup-info-card">
-                            <div class="event-popup-label"><i class="fa-regular fa-calendar"></i> Date & Time</div>
-                            <div class="event-popup-value">${event.date}<br>${event.time}</div>
+                        <div class="event-popup-info-grid">
+                            <div class="event-popup-info-card">
+                                <div class="event-popup-label"><i class="fa-regular fa-calendar"></i> Date &amp; Time</div>
+                                <div class="event-popup-value">
+                                    ${ev.date || 'TBD'}
+                                    ${ev.time ? `<br>${ev.time}` : ''}
+                                    ${ev.volunteerHours ? `<br><small style="color:#64748b;"><i class="fa-solid fa-clock"></i> ${ev.volunteerHours} volunteer hr${ev.volunteerHours != 1 ? 's' : ''}</small>` : ''}
+                                </div>
+                            </div>
+                            <div class="event-popup-info-card">
+                                <div class="event-popup-label"><i class="fa-solid fa-location-arrow"></i> Location</div>
+                                <div class="event-popup-value">
+                                    ${ev.location || 'TBD'}
+                                    ${ev.address ? `<br><small style="color:#64748b;">${ev.address}</small>` : ''}
+                                </div>
+                            </div>
                         </div>
-                        <div class="event-popup-info-card">
-                            <div class="event-popup-label"><i class="fa-solid fa-location-arrow"></i> Location</div>
-                            <div class="event-popup-value">${event.location}<br><small style="color: #64748b;">${event.address}</small></div>
+
+                        <div class="event-popup-section">
+                            <div class="event-popup-label">About This Event</div>
+                            <div class="event-popup-value">${description}</div>
                         </div>
-                    </div>
 
-                    <div class="event-popup-section">
-                        <div class="event-popup-label">About This Event</div>
-                        <div class="event-popup-value">${event.fullDescription}</div>
-                    </div>
+                        ${tags ? `<div class="event-popup-section">
+                            <div class="event-popup-label">Topics</div>
+                            <div class="event-popup-tags">${tags}</div>
+                        </div>` : ''}
 
-                    <div class="event-popup-section">
-                        <div class="event-popup-label">Topics</div>
-                        <div class="event-popup-tags">
-                            ${event.tags.map(tag => `<span class="event-popup-tag">${tag}</span>`).join('')}
+                        ${optionalSection('Requirements',  'fa-solid fa-clipboard-check', ev.requirements)}
+                        ${optionalSection('Accessibility', 'fa-brands fa-accessible-icon', ev.accessibility)}
+                        ${optionalSection('Parking',       'fa-solid fa-square-parking',   ev.parking)}
+                        ${capacitySection}
+                        ${contactSection}
+
+                        <div class="event-popup-actions">
+                            <button class="event-popup-btn btn-primary" onclick="registerForEvent('${ev.id}')">
+                                ✓ Register for Event
+                            </button>
+                            <button class="event-popup-btn btn-secondary" onclick="shareEvent('${ev.id}')">
+                                🔗 Share
+                            </button>
                         </div>
-                    </div>
-
-                    <div class="event-popup-section">
-                        <div class="event-popup-label">Requirements</div>
-                        <div class="event-popup-value"><i class="fa-solid fa-clipboard-check"></i> ${event.requirements}</div>
-                    </div>
-
-                    <div class="event-popup-section">
-                        <div class="event-popup-label">Accessibility</div>
-                        <div class="event-popup-value"><i class="fa-brands fa-accessible-icon"></i> ${event.accessibility}</div>
-                    </div>
-
-                    <div class="event-popup-section">
-                        <div class="event-popup-label">Parking</div>
-                        <div class="event-popup-value"><i class="fa-solid fa-square-parking"></i> ${event.parking}</div>
-                    </div>
-
-                    <div class="event-popup-section event-popup-capacity">
-                        <div class="event-popup-label">Registration Status</div>
-                        <div class="capacity-bar">
-                            <div class="capacity-fill" style="width: ${capacityPercent}%"></div>
-                        </div>
-                        <div class="capacity-text">${event.registered} of ${event.capacity} spots filled (${capacityPercent}%)</div>
-                    </div>
-
-                    <div class="event-popup-section">
-                        <div class="event-popup-label">Contact Information</div>
-                        <div class="event-popup-value">
-                            <i class="fa-solid fa-envelope"></i> <a href="mailto:${event.contact}" style="color: #2563eb; text-decoration: none;">${event.contact}</a><br>
-                            <i class="fa-solid fa-phone-volume"></i> ${event.phone}
-                        </div>
-                    </div>
-
-                    <div class="event-popup-actions">
-                        <button class="event-popup-btn btn-primary" onclick="registerForEvent('${event.id}')">
-                            ✓ Register for Event
-                        </button>
-                        <button class="event-popup-btn btn-secondary" onclick="shareEvent('${event.id}')">
-                            🔗 Share
-                        </button>
                     </div>
                 </div>
             </div>
-        </div>
-    `;
+        `;
 }
 
 

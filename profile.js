@@ -1,6 +1,8 @@
 // Profile page JavaScript - Fixed Photo Upload with Full Persistence
 
 import { getAuth, updateProfile, updatePassword, EmailAuthProvider, reauthenticateWithCredential } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+import { initNotifications, markAllRead, destroyNotifications } from './notifications.js';
+import { kitSubscribe, kitUnsubscribe } from './notifications-email.js';
 
 // Get Firebase auth instance
 const auth = window.firebaseAuth || getAuth();
@@ -148,6 +150,7 @@ function setupPhotoUpload() {
                             <img class="profile-photo" src="${photoURL}" alt="Profile Photo">
                             <label for="photo-input" class="photo-overlay"></label>
                             <input type="file" id="photo-input" accept="image/*">
+                            <div class="avatar-notif-dot" id="avatar-notif-dot" title="You have unread notifications"></div>
                         `;
                         setupPhotoUpload(); // Re-attach listener
                         console.log('Profile page photo updated');
@@ -202,6 +205,7 @@ function loadSavedPhoto(user) {
                     <img class="profile-photo" src="${photoURL}" alt="Profile Photo">
                     <label for="photo-input" class="photo-overlay"></label>
                     <input type="file" id="photo-input" accept="image/*">
+                    <div class="avatar-notif-dot" id="avatar-notif-dot" title="You have unread notifications"></div>
                 `;
                 setupPhotoUpload();
                 updateNavPhoto(photoURL);
@@ -325,6 +329,7 @@ function showMessage(text, type) {
 
 // Logout (uses Firebase signOut from auth-check.js)
 function logoutUser() {
+    destroyNotifications();
     if (window.logout) {
         window.logout(new Event('click'));
     }
@@ -391,9 +396,11 @@ function loadBadgeStatistics() {
         const statEvents = document.getElementById('stat-events');
         const statBadges = document.getElementById('stat-badges');
         const statHours  = document.getElementById('stat-hours');
+        const statStreak = document.getElementById('stat-streak');
         if (statEvents) statEvents.textContent = eventsAttended;
         if (statBadges) statBadges.textContent = earnedCount;
         if (statHours)  statHours.textContent  = hours + 'h';
+        if (statStreak) statStreak.textContent = (userProgress.currentStreak || 0) + 'd';
 
         // ── New progress bar ──
         const bar   = document.getElementById('badge-progress-bar');
@@ -519,6 +526,30 @@ function loadUserData() {
     }
 }
 
+// Keep a lightweight `members/{uid}` record in sync so the admin dashboard
+// can search/list users without relying on the (empty) `users` collection
+// or any Auth Admin SDK / Cloud Function access.
+async function syncMemberRecord(user) {
+    try {
+        const { getFirestore, doc, setDoc, serverTimestamp } =
+            await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
+        const db = getFirestore();
+        const name = user.displayName || (user.email ? user.email.split('@')[0] : '');
+        await setDoc(
+            doc(db, 'members', user.uid),
+            {
+                uid: user.uid,
+                name: name,
+                email: user.email || '',
+                lastSeenAt: serverTimestamp(),
+            },
+            { merge: true }
+        );
+    } catch (e) {
+        console.warn('Could not sync members record:', e);
+    }
+}
+
 // ===== TOAST NOTIFICATION =====
 function showProfileToast(message, type = 'success') {
     const existing = document.getElementById('profile-toast');
@@ -560,16 +591,36 @@ function showProfileToast(message, type = 'success') {
 function saveNotificationPreferences() {
     try {
         const emailNotif = document.getElementById('email-notif')?.checked ?? true;
+        const emailRegistration = document.getElementById('email-registration')?.checked ?? true;
         const eventReminders = document.getElementById('event-reminders')?.checked ?? true;
         const newsletter = document.getElementById('newsletter')?.checked ?? false;
         // Always save to localStorage as fast local cache
         localStorage.setItem('notif_email', emailNotif);
+        localStorage.setItem('notif_email_registration', emailRegistration);
         localStorage.setItem('notif_events', eventReminders);
         localStorage.setItem('notif_newsletter', newsletter);
         // Also sync to Firestore if logged in
-        syncNotifToFirestore({ emailNotif, eventReminders, newsletter });
+        syncNotifToFirestore({ emailNotif, emailRegistration, eventReminders, newsletter });
+        // Keep the Kit (ConvertKit) newsletter list in sync with the toggle
+        syncNewsletterWithKit(newsletter);
     } catch (e) {
         console.error('Error saving preferences:', e);
+    }
+}
+
+// Subscribe/unsubscribe the current user's email from the Kit newsletter list
+async function syncNewsletterWithKit(newsletterEnabled) {
+    try {
+        const user = auth.currentUser;
+        if (!user || !user.email) return;
+        const firstName = (user.displayName || '').split(' ')[0] || '';
+        if (newsletterEnabled) {
+            await kitSubscribe(user.email, firstName, { source: 'profile-settings' });
+        } else {
+            await kitUnsubscribe(user.email);
+        }
+    } catch (e) {
+        console.warn('Kit newsletter sync error:', e);
     }
 }
 
@@ -602,13 +653,16 @@ async function loadNotifFromFirestore() {
             const data = snap.data();
             // Update localStorage cache
             if (data.emailNotif !== undefined) localStorage.setItem('notif_email', data.emailNotif);
+            if (data.emailRegistration !== undefined) localStorage.setItem('notif_email_registration', data.emailRegistration);
             if (data.eventReminders !== undefined) localStorage.setItem('notif_events', data.eventReminders);
             if (data.newsletter !== undefined) localStorage.setItem('notif_newsletter', data.newsletter);
             // Update UI toggles
             const emailEl = document.getElementById('email-notif');
+            const emailRegEl = document.getElementById('email-registration');
             const eventsEl = document.getElementById('event-reminders');
             const newsletterEl = document.getElementById('newsletter');
             if (emailEl && data.emailNotif !== undefined) emailEl.checked = data.emailNotif;
+            if (emailRegEl && data.emailRegistration !== undefined) emailRegEl.checked = data.emailRegistration;
             if (eventsEl && data.eventReminders !== undefined) eventsEl.checked = data.eventReminders;
             if (newsletterEl && data.newsletter !== undefined) newsletterEl.checked = data.newsletter;
         }
@@ -692,6 +746,7 @@ function updatePushUI(permissionState) {
 function loadNotificationPreferences() {
     try {
         const emailNotif = localStorage.getItem('notif_email');
+        const emailRegistration = localStorage.getItem('notif_email_registration');
         const eventReminders = localStorage.getItem('notif_events');
         const newsletter = localStorage.getItem('notif_newsletter');
         const pushPref = localStorage.getItem('notif_push');
@@ -699,6 +754,10 @@ function loadNotificationPreferences() {
         if (emailNotif !== null) {
             const el = document.getElementById('email-notif');
             if (el) el.checked = emailNotif === 'true';
+        }
+        if (emailRegistration !== null) {
+            const el = document.getElementById('email-registration');
+            if (el) el.checked = emailRegistration === 'true';
         }
         if (eventReminders !== null) {
             const el = document.getElementById('event-reminders');
@@ -739,7 +798,7 @@ function loadNotificationPreferences() {
 
 // Setup notification toggles (auto-save on change, except push which needs explicit save)
 function setupNotificationToggles() {
-    ['email-notif', 'event-reminders', 'newsletter'].forEach(id => {
+    ['email-notif', 'email-registration', 'event-reminders', 'newsletter'].forEach(id => {
         const toggle = document.getElementById(id);
         if (toggle) toggle.addEventListener('change', saveNotificationPreferences);
     });
@@ -765,13 +824,17 @@ document.addEventListener('DOMContentLoaded', function() {
     
     auth.onAuthStateChanged((user) => {
         if (user) {
+            syncMemberRecord(user);
             loadUserData();
             loadBadgeStatistics();
             loadRecentActivity();
             loadNotificationPreferences();
             setupNotificationToggles();
             checkURLHash();
-            
+
+            // Start real-time in-app notifications (inbox, badges, avatar dot)
+            initNotifications(user.uid);
+
             console.log('Profile page initialized successfully');
         } else {
             window.location.href = 'login.html';
@@ -785,3 +848,373 @@ window.switchTab = switchTab;
 window.updateAccountName = updateAccountName;
 window.updateUserPassword = updateUserPassword;
 window.logoutUser = logoutUser;
+// ═══════════════════════════════════════════════════
+// ENHANCED PROFILE PAGE — Additional Functionality
+// ═══════════════════════════════════════════════════
+
+// ── Overview stat cards ──
+function updateOverviewStats() {
+    try {
+        const saved = localStorage.getItem('userProgress');
+        const p = saved ? JSON.parse(saved) : {};
+        const events = p.eventsAttended || 0;
+        const hours  = p.volunteeredHours || 0;
+        const streak = p.currentStreak || 0;
+
+        // Badge count
+        const badges = [1,5,10,25,1,10,50,1,3,5,3,1,3,5,1,1,3,5,25,10]; // required counts
+        const keys   = ['eventsAttended','eventsAttended','eventsAttended','eventsAttended',
+                        'volunteeredHours','volunteeredHours','volunteeredHours',
+                        'townHallSpeeches','environmentalEvents','youthEvents',
+                        'innovationSummits','earlyRegistrations','consecutiveMonths',
+                        'friendsInvited','isFoundingMember','eventsCreated',
+                        'electionsVoted','serviceProjects','networkConnections','sustainabilityInitiatives'];
+        let earned = 0;
+        badges.forEach((req, i) => {
+            const val = keys[i] === 'isFoundingMember' ? (p[keys[i]] ? 1 : 0) : (p[keys[i]] || 0);
+            if (val >= req) earned++;
+        });
+
+        // Update overview stat row
+        const n = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
+        n('ov-events-n',  events);
+        n('ov-streak-n',  streak ? streak + 'd' : '0d');
+        n('ov-badges-n',  earned);
+        n('ov-hours-n',   hours + 'h');
+
+        // Update sidebar streak
+        const statStreak = document.getElementById('stat-streak');
+        if (statStreak) statStreak.textContent = streak ? streak + 'd' : '0';
+
+        // Update activity tab summary
+        n('act-total-events',   events);
+        n('act-total-hours',    hours + 'h');
+        n('act-longest-streak', (p.longestStreak || streak) + 'd');
+        n('act-badges-earned',  earned);
+
+        // Render recent achievements
+        renderRecentAchievements(p, earned);
+
+    } catch (e) {
+        console.error('updateOverviewStats error:', e);
+    }
+}
+
+// ── Achievement chips ──
+const ACHIEVEMENT_DEFS = [
+    { key: 'eventsAttended', req: 1,  icon: 'fa-calendar-check', label: 'First Step' },
+    { key: 'eventsAttended', req: 5,  icon: 'fa-calendar-check', label: 'Regular' },
+    { key: 'eventsAttended', req: 10, icon: 'fa-calendar-check', label: 'Committed' },
+    { key: 'volunteeredHours', req: 1, icon: 'fa-hands-helping', label: 'Volunteer' },
+    { key: 'volunteeredHours', req: 10, icon: 'fa-hands-helping', label: 'Service Pro' },
+    { key: 'townHallSpeeches', req: 1, icon: 'fa-microphone', label: 'Spoke Up' },
+    { key: 'consecutiveMonths', req: 3, icon: 'fa-fire', label: '3-Month Streak' },
+    { key: 'isFoundingMember', req: 1, icon: 'fa-star', label: 'Founding Member' },
+];
+
+function renderRecentAchievements(progress, earnedCount) {
+    const container = document.getElementById('recent-achievements');
+    if (!container) return;
+
+    const earned = ACHIEVEMENT_DEFS.filter(a => {
+        const val = a.key === 'isFoundingMember' ? (progress[a.key] ? 1 : 0) : (progress[a.key] || 0);
+        return val >= a.req;
+    });
+
+    if (earned.length === 0) {
+        container.innerHTML = `<div class="ov-achievement-empty"><i class="fas fa-star"></i><span>Attend your first event to earn achievements!</span></div>`;
+        return;
+    }
+
+    // Show up to 6 most recent (last in list = most recently defined)
+    container.innerHTML = earned.slice(-6).reverse().map(a =>
+        `<div class="achievement-chip"><i class="fas ${a.icon}"></i>${a.label}</div>`
+    ).join('');
+}
+
+// ── Activity from Firestore ──
+async function loadActivityFromFirestore() {
+    const listEl = document.getElementById('activity-list');
+    if (!listEl) return;
+
+    try {
+        const auth = window.firebaseAuth;
+        if (!auth || !auth.currentUser) {
+            renderActivityFallback(listEl);
+            return;
+        }
+
+        const { getFirestore, collection, query, orderBy, limit, getDocs } =
+            await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
+        const db = getFirestore();
+        const uid = auth.currentUser.uid;
+
+        // Try to fetch from users/{uid}/attendance subcollection
+        const q = query(
+            collection(db, 'users', uid, 'attendance'),
+            orderBy('timestamp', 'desc'),
+            limit(50)
+        );
+        const snap = await getDocs(q);
+
+        let items = [];
+        snap.forEach(doc => {
+            const d = doc.data();
+            items.push({
+                id: doc.id,
+                title: d.eventTitle || d.title || 'Event',
+                date: d.date || d.eventDate || null,
+                timestamp: d.timestamp?.toDate?.() || new Date(d.date || Date.now()),
+                type: d.volunteeredHours > 0 ? 'volunteer' : 'attended',
+                hours: d.volunteeredHours || 0,
+                location: d.location || '',
+                category: d.category || '',
+            });
+        });
+
+        if (items.length === 0) {
+            // Fallback to localStorage
+            renderActivityFallback(listEl);
+            return;
+        }
+
+        window._allActivityItems = items;
+        renderActivityItems(items, listEl);
+        updateActivitySummaryFromItems(items);
+
+        // Also render preview on Overview tab
+        renderOverviewActivityPreview(items.slice(0, 3));
+
+    } catch (e) {
+        console.warn('Firestore activity load failed, using localStorage fallback:', e);
+        renderActivityFallback(listEl);
+    }
+}
+
+function renderActivityFallback(listEl) {
+    // Use existing localStorage approach
+    try {
+        const completedEventsIds = JSON.parse(localStorage.getItem('completedEvents') || '[]');
+        const eventsData = window.eventsData || [];
+        const items = eventsData
+            .filter(ev => completedEventsIds.includes(ev.id))
+            .sort((a, b) => new Date(b.date) - new Date(a.date))
+            .map(ev => ({
+                id: ev.id,
+                title: ev.title,
+                date: ev.date,
+                timestamp: new Date(ev.date),
+                type: (ev.badgeProgress?.volunteeredHours > 0) ? 'volunteer' : 'attended',
+                hours: ev.badgeProgress?.volunteeredHours || 0,
+                location: ev.location || '',
+                category: ev.category || '',
+            }));
+
+        window._allActivityItems = items;
+
+        if (items.length === 0) {
+            listEl.innerHTML = `
+                <div class="activity-empty">
+                    <i class="fas fa-seedling"></i>
+                    <p>No activity yet — start attending events!</p>
+                    <a href="events.html" class="settings-btn" style="text-decoration:none;display:inline-block;margin-top:1rem;">Browse Events →</a>
+                </div>`;
+        } else {
+            renderActivityItems(items, listEl);
+            updateActivitySummaryFromItems(items);
+            renderOverviewActivityPreview(items.slice(0, 3));
+        }
+    } catch (e) {
+        console.error('Activity fallback error:', e);
+        listEl.innerHTML = `<div class="activity-empty"><i class="fas fa-seedling"></i><p>No activity yet.</p></div>`;
+    }
+}
+
+function renderActivityItems(items, container) {
+    if (!container) return;
+    if (items.length === 0) {
+        container.innerHTML = `<div class="activity-empty"><i class="fas fa-seedling"></i><p>No activity matches this filter.</p></div>`;
+        return;
+    }
+    container.innerHTML = items.map(item => {
+        const dateStr = item.timestamp
+            ? item.timestamp.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })
+            : (item.date || '');
+        const icon = item.type === 'volunteer' ? 'fa-hands-helping' : 'fa-calendar-check';
+        const chipClass = item.type === 'volunteer' ? 'type-volunteer' : 'type-event';
+        const chipLabel = item.type === 'volunteer' ? `Volunteered · ${item.hours}h` : 'Attended';
+        const meta = [item.location, item.category].filter(Boolean).join(' · ');
+
+        return `<div class="activity-item" data-type="${item.type}">
+            <div class="activity-icon"><i class="fas ${icon}"></i></div>
+            <div class="activity-details">
+                <div class="activity-item-date">${dateStr}</div>
+                <div class="activity-title">${item.title}</div>
+                ${meta ? `<div class="activity-meta">${meta}</div>` : ''}
+                <span class="activity-type-chip ${chipClass}"><i class="fas ${icon}"></i>${chipLabel}</span>
+            </div>
+        </div>`;
+    }).join('');
+}
+
+function updateActivitySummaryFromItems(items) {
+    const events = items.filter(i => i.type !== 'badge').length;
+    const hours  = items.reduce((s, i) => s + (i.hours || 0), 0);
+    const n = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
+    n('act-total-events', events);
+    n('act-total-hours',  hours + 'h');
+}
+
+function renderOverviewActivityPreview(items) {
+    const container = document.getElementById('ov-recent-activity');
+    if (!container) return;
+    if (items.length === 0) {
+        container.innerHTML = `<div class="activity-empty"><i class="fas fa-seedling"></i><p>No activity yet.</p></div>`;
+        return;
+    }
+    renderActivityItems(items, container);
+}
+
+// ── Activity filter ──
+window.filterActivity = function(filter, btn) {
+    document.querySelectorAll('.activity-filter').forEach(b => b.classList.remove('active'));
+    if (btn) btn.classList.add('active');
+
+    const all = window._allActivityItems || [];
+    const filtered = filter === 'all' ? all : all.filter(i => i.type === filter);
+    renderActivityItems(filtered, document.getElementById('activity-list'));
+};
+
+// ── Theme preferences ──
+window.setTheme = function(theme) {
+    document.querySelectorAll('.theme-btn').forEach(b => b.classList.remove('active'));
+    const btn = document.getElementById('theme-' + theme);
+    if (btn) btn.classList.add('active');
+
+    localStorage.setItem('themePreference', theme);
+
+    if (theme === 'dark') {
+        document.documentElement.setAttribute('data-theme', 'dark');
+    } else if (theme === 'light') {
+        document.documentElement.removeAttribute('data-theme');
+    } else {
+        // system
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        if (prefersDark) document.documentElement.setAttribute('data-theme', 'dark');
+        else document.documentElement.removeAttribute('data-theme');
+    }
+    showProfileToast('Appearance updated', 'success');
+};
+
+function loadThemePreference() {
+    const saved = localStorage.getItem('themePreference') || 'system';
+    const btn = document.getElementById('theme-' + saved);
+    if (btn) btn.classList.add('active');
+}
+
+// ── Privacy settings ──
+window.savePrivacySettings = function() {
+    const prefs = {
+        leaderboard: document.getElementById('privacy-leaderboard')?.checked ?? true,
+        attendance:  document.getElementById('privacy-attendance')?.checked ?? true,
+        analytics:   document.getElementById('privacy-analytics')?.checked ?? true,
+    };
+    localStorage.setItem('privacySettings', JSON.stringify(prefs));
+    syncPrivacyToFirestore(prefs);
+    showProfileToast('Privacy settings saved', 'success');
+};
+
+async function syncPrivacyToFirestore(prefs) {
+    try {
+        const auth = window.firebaseAuth;
+        if (!auth?.currentUser) return;
+        const { getFirestore, doc, setDoc } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
+        const db = getFirestore();
+        await setDoc(doc(db, 'users', auth.currentUser.uid, 'settings', 'privacy'), prefs, { merge: true });
+    } catch (e) { console.warn('Privacy sync error:', e); }
+}
+
+function loadPrivacySettings() {
+    try {
+        const saved = JSON.parse(localStorage.getItem('privacySettings') || '{}');
+        const s = (id, val) => { const el = document.getElementById(id); if (el && val !== undefined) el.checked = val; };
+        s('privacy-leaderboard', saved.leaderboard ?? true);
+        s('privacy-attendance',  saved.attendance  ?? true);
+        s('privacy-analytics',   saved.analytics   ?? true);
+    } catch (e) {}
+}
+
+// ── Delete account modal ──
+window.confirmDeleteAccount = function() {
+    const modal = document.getElementById('delete-modal');
+    if (modal) { modal.style.display = 'flex'; }
+};
+
+window.closeDeleteModal = function() {
+    const modal = document.getElementById('delete-modal');
+    if (modal) { modal.style.display = 'none'; }
+    const input = document.getElementById('delete-confirm-input');
+    if (input) input.value = '';
+};
+
+window.executeDeleteAccount = async function() {
+    const input = document.getElementById('delete-confirm-input');
+    if (!input || input.value.trim() !== 'DELETE') {
+        showProfileToast('Type DELETE exactly to confirm', 'error');
+        return;
+    }
+    try {
+        const user = auth.currentUser;
+        if (!user) return;
+        // Delete Firestore data
+        const { getFirestore, doc, deleteDoc } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
+        const db = getFirestore();
+        await deleteDoc(doc(db, 'users', user.uid));
+        // Delete auth user
+        await user.delete();
+        localStorage.clear();
+        window.location.href = 'index.html';
+    } catch (e) {
+        if (e.code === 'auth/requires-recent-login') {
+            showProfileToast('Please log out and back in before deleting your account', 'error');
+        } else {
+            showProfileToast('Error: ' + e.message, 'error');
+        }
+    }
+};
+
+// ── Notification inbox ──
+// The inbox itself (rendering, real-time updates, read/unread, expandable
+// detail drawer, badge counts) is fully handled by notifications.js, which is
+// started via initNotifications(uid) in the auth.onAuthStateChanged handler
+// above. "Mark all read" below delegates to that same module.
+window.markAllNotificationsRead = function () {
+    markAllRead().then(() => {
+        showProfileToast('All notifications marked as read', 'success');
+    });
+};
+
+// ── Hook into existing DOMContentLoaded ──
+document.addEventListener('DOMContentLoaded', function() {
+    // These run after auth is confirmed (auth.onAuthStateChanged triggers loadUserData etc.)
+    // We extend by observing auth state ourselves for the new features
+    const authObj = window.firebaseAuth || auth;
+    if (authObj && authObj.onAuthStateChanged) {
+        authObj.onAuthStateChanged((user) => {
+            if (user) {
+                updateOverviewStats();
+                loadActivityFromFirestore();
+                loadThemePreference();
+                loadPrivacySettings();
+            }
+        });
+    } else {
+        // Fallback: run after short delay
+        setTimeout(() => {
+            updateOverviewStats();
+            loadActivityFromFirestore();
+            loadThemePreference();
+            loadPrivacySettings();
+        }, 800);
+    }
+});

@@ -116,182 +116,334 @@
        Balances readability and importance */
 }
 
-/* Filter Section Container */
+/* ════════════════════════════════════════════════
+   FILTER SECTION
+════════════════════════════════════════════════ */
 .filter-section {
-    /* Wrapper for category filter buttons */
-    
     max-width: 1200px;
-    /* Maximum width constraint
-       1200px matches main content grid
-       Keeps filters aligned with event cards */
-    
-    margin: 0 auto 3rem;
-    /* Shorthand margin: top right/left bottom
-       0: no top margin (header provides spacing)
-       auto: centers container horizontally
-       3rem: large space below filters before event cards */
-    
+    margin: 0 auto 2.5rem;
     padding: 0 2rem;
-    /* Horizontal padding: 0 top/bottom, 2rem left/right
-       Prevents filters from touching screen edges
-       Matches grid padding for alignment */
 }
 
-/* Filter Buttons Container */
-.filter-buttons-horizontal {
-    /* Flexbox container for filter buttons */
-    
-    display: flex;
-    /* Flexbox layout - enables flexible button arrangement
-       Buttons flow horizontally by default
-       Allows wrapping and centering */
-    
-    flex-wrap: wrap;
-    /* Allows buttons to wrap to new lines
-       If container too narrow, buttons move to next row
-       Prevents horizontal scrolling on small screens */
-    
-    gap: 1rem;
-    /* Space between buttons (all directions)
-       1rem = 16px spacing
-       Modern CSS property (simpler than margins)
-       Creates even spacing without complex calculations */
-    
-    justify-content: center;
-    /* Centers buttons horizontally in container
-       Buttons group in center rather than left-align
-       Creates balanced, professional appearance */
-    
-    padding: 1.5rem;
-    /* Even padding all around button group
-       1.5rem = 24px breathing room
-       Makes filter section feel spacious */
-    
+/* ── Main card ── */
+.filter-panel {
     background: white;
-    /* Clean white background
-       Contrasts with page gradient
-       Makes button area stand out as interactive section */
-    
-    border-radius: 15px;
-    /* Rounded corners (15px radius)
-       Modern, friendly appearance
-       Matches event card styling */
-    
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-    /* Subtle shadow for depth
-       0: no horizontal offset (centered)
-       4px: shadow 4px below element (elevation)
-       20px: blur radius (soft, diffused shadow)
-       rgba(0, 0, 0, 0.08): black at 8% opacity (very subtle)
-       Creates subtle "floating" effect */
+    border-radius: 22px;
+    box-shadow:
+        0 1px 3px rgba(0,0,0,0.04),
+        0 8px 32px rgba(37,99,235,0.07);
+    overflow: hidden;
+    border: 1px solid rgba(226,232,240,0.8);
 }
 
-/* Individual Filter Button */
-.filter-btn {
-    /* Styling for each category filter button */
-    
-    padding: 0.75rem 1.5rem;
-    /* Button padding: vertical horizontal
-       0.75rem (12px) top/bottom: comfortable height
-       1.5rem (24px) left/right: wider for better clickability
-       Creates well-proportioned, easy-to-click buttons */
-    
-    background: #f1f5f9;
-    /* Light gray background (default/inactive state)
-       Hex color: slightly blue-tinted gray
-       Neutral appearance for unselected filters */
-    
-    border: 2px solid transparent;
-    /* Transparent border reserves space
-       2px: medium border width
-       transparent: invisible but takes up space
-       Prevents layout shift when active border appears */
-    
-    border-radius: 25px;
-    /* Fully rounded ends (pill shape)
-       25px creates smooth, capsule appearance
-       Modern, friendly button style */
-    
+/* ── Header bar ── */
+.fp-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 1.4rem;
+    background: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%);
+    gap: 1rem;
+}
+
+.fp-header-left {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+}
+
+.fp-icon {
+    color: rgba(255,255,255,0.85);
     font-size: 0.95rem;
-    /* Slightly smaller than base text (15.2px)
-       Comfortable reading size for buttons
-       Not too small, not overwhelming */
-    
-    font-weight: 600;
-    /* Semibold text (between normal and bold)
-       Makes button text stand out
-       Improves scannability of filter options */
-    
-    color: #475569;
-    /* Dark gray text color
-       Good contrast on light background
-       Readable but not harsh black */
-    
-    cursor: pointer;
-    /* Changes cursor to pointing hand on hover
-       Indicates element is clickable
-       Standard UI pattern for interactive elements */
-    
-    transition: all 0.3s ease;
-    /* Smooth transitions for ALL properties
-       0.3s: third of a second (noticeable but not slow)
-       ease: acceleration curve (slow-fast-slow)
-       Applies to background, color, transform, etc. */
-    
-    font-family: 'Open Sans', sans-serif;
-    /* Ensures consistent font with site
-       'Open Sans': Google Font (must have spaces in quotes)
-       sans-serif: fallback if Google Font fails */
 }
 
-/* Filter Button Hover State */
-.filter-btn:hover {
-    /* Styles when user hovers over button */
-    
-    background: #e0e7ff;
-    /* Light blue background on hover
-       Provides visual feedback
-       Indicates interactivity before clicking */
-    
-    color: #2563eb;
-    /* Changes text to blue
-       Matches brand colors
-       Reinforces hover state with color change */
-    
-    transform: translateY(-2px);
-    /* Moves button up 2 pixels
-       Negative Y value = upward movement
-       Creates subtle "lift" effect
-       Makes button feel responsive and tactile */
-}
-
-/* Active/Selected Filter Button */
-.filter-btn.active {
-    /* Styles for currently selected category filter */
-    
-    background: linear-gradient(135deg, #2563eb, #3b82f6);
-    /* Blue gradient background
-       135deg: diagonal angle
-       Matches site's primary brand colors
-       Makes active state unmistakable */
-    
+.fp-title {
+    font-size: 0.9rem;
+    font-weight: 800;
     color: white;
-    /* White text for contrast on blue background
-       Ensures readability
-       Standard pattern for selected/primary buttons */
-    
-    border-color: #2563eb;
-    /* Blue border (now visible)
-       Matches gradient start color
-       Adds definition to active button */
-    
-    box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
-    /* Blue shadow for "glow" effect
-       0: centered horizontally
-       4px: shadow below button
-       15px: soft blur
-       rgba(37, 99, 235, 0.3): blue at 30% opacity
-       Creates impression of illuminated/selected state */
+    letter-spacing: 0.3px;
+    font-family: 'Open Sans', sans-serif;
+}
+
+.fp-header-right {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+}
+
+/* Result count — in header */
+.filter-result-count {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: rgba(255,255,255,0.7);
+    white-space: nowrap;
+    font-family: 'Open Sans', sans-serif;
+}
+
+.filter-result-count strong {
+    color: white;
+    font-weight: 800;
+    font-size: 0.82rem;
+}
+
+/* ── View toggle (icon-only) ── */
+.view-toggle-group {
+    display: flex;
+    background: rgba(255,255,255,0.18);
+    border-radius: 14px;
+    padding: 5px;
+    gap: 4px;
+    flex-shrink: 0;
+}
+
+.view-toggle-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 72px;
+    height: 44px;
+    border: none;
+    border-radius: 10px;
+    color: rgba(255,255,255,0.65);
+    background: transparent;
+    cursor: pointer;
+    transition: all 0.16s ease;
+    flex-shrink: 0;
+}
+
+.view-toggle-btn svg {
+    width: 22px;
+    height: 22px;
+}
+
+.view-toggle-btn:hover {
+    color: white;
+    background: rgba(255,255,255,0.15);
+}
+
+.view-toggle-btn.active {
+    background: white;
+    color: #2563eb;
+    box-shadow: 0 1px 6px rgba(0,0,0,0.15);
+}
+
+/* ── Category section ── */
+.fp-section {
+    padding: 1.1rem 1.4rem 1rem;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.fp-label {
+    font-size: 0.67rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.9px;
+    color: #94a3b8;
+    margin: 0 0 0.6rem;
+    font-family: 'Open Sans', sans-serif;
+}
+
+.filter-buttons-horizontal {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+}
+
+/* Category pills */
+.filter-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.8rem 1.5rem;
+    background: #f8fafc;
+    border: 1.5px solid #e8edf3;
+    border-radius: 50px;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #64748b;
+    cursor: pointer;
+    transition: all 0.16s ease;
+    font-family: 'Open Sans', sans-serif;
+    white-space: nowrap;
+    line-height: 1;
+}
+
+.filter-btn i {
+    font-size: 1em;
+    opacity: 0.75;
+}
+
+.filter-btn:hover {
+    background: #eef2ff;
+    color: #3b82f6;
+    border-color: #c7d7fd;
+}
+
+.filter-btn.active {
+    background: linear-gradient(135deg, #2563eb, #3b82f6);
+    color: white;
+    border-color: transparent;
+    box-shadow: 0 2px 10px rgba(37,99,235,0.25);
+}
+
+.filter-btn.active i { opacity: 1; }
+
+/* ── Bottom bar: sort + quick filters ── */
+.fp-bottom {
+    display: flex;
+    align-items: flex-start;
+    gap: 2rem;
+    padding: 1rem 1.4rem;
+    background: #fafbff;
+    flex-wrap: wrap;
+}
+
+.fp-bottom-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+}
+
+/* Sort dropdown */
+.sort-select {
+    padding: 0.62rem 2.5rem 0.62rem 1rem;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 10px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #334155;
+    background: white url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%2394a3b8'/%3E%3C/svg%3E") no-repeat right 0.8rem center;
+    -webkit-appearance: none;
+    appearance: none;
+    cursor: pointer;
+    font-family: 'Open Sans', sans-serif;
+    transition: border-color 0.16s, box-shadow 0.16s;
+    min-width: 170px;
+}
+
+.sort-select:hover { border-color: #93c5fd; }
+
+.sort-select:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59,130,246,0.12);
+}
+
+/* Quick filter chips */
+.quick-filters {
+    display: flex;
+    gap: 0.4rem;
+    flex-wrap: wrap;
+}
+
+.quick-filter-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.6rem 1.2rem;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 50px;
+    background: white;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #64748b;
+    cursor: pointer;
+    font-family: 'Open Sans', sans-serif;
+    transition: all 0.16s ease;
+    white-space: nowrap;
+    line-height: 1;
+}
+
+.quick-filter-btn i { font-size: 0.9em; }
+
+.quick-filter-btn:hover {
+    border-color: #93c5fd;
+    color: #2563eb;
+    background: #eff6ff;
+}
+
+.quick-filter-btn.active {
+    background: linear-gradient(135deg, #2563eb, #3b82f6);
+    border-color: transparent;
+    color: white;
+    box-shadow: 0 2px 8px rgba(37,99,235,0.28);
+}
+
+/* ── Dark mode ── */
+[data-theme="dark"] .filter-panel {
+    background: var(--bg-secondary, #1e293b);
+    border-color: var(--border-color, #334155);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+}
+[data-theme="dark"] .fp-header {
+    background: linear-gradient(135deg, #1d4ed8, #2563eb);
+}
+[data-theme="dark"] .fp-section {
+    border-bottom-color: var(--border-color, #334155);
+}
+[data-theme="dark"] .fp-bottom {
+    background: var(--bg-primary, #0f172a);
+}
+[data-theme="dark"] .filter-btn {
+    background: var(--bg-primary, #0f172a);
+    border-color: var(--border-color, #334155);
+    color: #006aff;
+}
+[data-theme="dark"] .filter-btn:hover {
+    background: rgba(59,130,246,0.1);
+    color: #60a5fa;
+    border-color: #3b82f6;
+}
+[data-theme="dark"] .filter-btn.active {
+    background: linear-gradient(135deg, #1d4ed8, #2563eb);
+    color: white;
+}
+[data-theme="dark"] .sort-select {
+    background-color: var(--bg-secondary, #1e293b);
+    border-color: var(--border-color, #334155);
+    color: var(--text-primary, #e2e8f0);
+}
+[data-theme="dark"] .quick-filter-btn {
+    background: var(--bg-secondary, #1e293b);
+    border-color: var(--border-color, #334155);
+    color: #94a3b8;
+}
+[data-theme="dark"] .quick-filter-btn:hover {
+    background: rgba(59,130,246,0.1);
+    border-color: #3b82f6;
+    color: #60a5fa;
+}
+[data-theme="dark"] .quick-filter-btn.active {
+    background: linear-gradient(135deg, #1d4ed8, #2563eb);
+    border-color: transparent;
+    color: white;
+}
+
+/* ── Mobile ── */
+@media (max-width: 768px) {
+    .filter-section { padding: 0 1rem; }
+
+    .fp-header { padding: 0.85rem 1.1rem; }
+    .fp-title { font-size: 0.82rem; }
+
+    .fp-section { padding: 0.9rem 1.1rem 0.85rem; }
+
+    .filter-btn {
+        font-size: 0.78rem;
+        padding: 0.34rem 0.75rem;
+    }
+
+    .fp-bottom {
+        padding: 0.85rem 1.1rem;
+        gap: 1rem;
+        flex-direction: column;
+    }
+
+    .sort-select { min-width: 0; width: 100%; font-size: 0.8rem; }
+
+    .quick-filter-btn { font-size: 0.76rem; padding: 0.36rem 0.7rem; }
+
+    .filter-result-count { display: none; }
 }
 
 /* Events Grid Layout */
@@ -825,90 +977,11 @@
 
     .events-grid {
         grid-template-columns: 1fr;
-        /* CRITICAL: Single column on mobile
-           Overrides auto-fill minmax formula
-           1fr: one column taking full width
-           Prevents squished cards on narrow screens */
-        
         padding: 0 1rem 3rem;
-        /* Reduced padding on mobile
-           0: no top padding
-           1rem: narrower side padding (was 2rem)
-           3rem: reduced bottom padding (was 4rem)
-           Maximizes usable screen space */
-    }
-
-    .filter-buttons-horizontal {
-        gap: 0.5rem;
-        /* Reduced gap between filter buttons
-           0.5rem = 8px (was 1rem = 16px)
-           Allows more buttons per row on narrow screens
-           Prevents excessive wrapping */
-    }
-
-    .filter-btn {
-        padding: 0.6rem 1rem;
-        /* Smaller button padding on mobile
-           0.6rem vertical (was 0.75rem)
-           1rem horizontal (was 1.5rem)
-           Maintains tap target size while saving space */
-        
-        font-size: 0.85rem;
-        /* Smaller button text on mobile (was 0.95rem)
-           0.85rem = 13.6px
-           Still readable but more compact
-           Allows longer category names to fit */
     }
 }
 
 /* End of events.css */
-
-/* ═══════════════════════════════════════════════════
-   FILTER BAR — wraps filter buttons + view toggles
-═══════════════════════════════════════════════════ */
-.filter-bar {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 1rem;
-    flex-wrap: wrap;
-}
-
-/* View Toggle Button Group */
-.view-toggle-group {
-    display: flex;
-    background: #f1f5f9;
-    border-radius: 10px;
-    padding: 4px;
-    gap: 2px;
-    flex-shrink: 0;
-}
-
-.view-toggle-btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 38px;
-    height: 38px;
-    border: none;
-    border-radius: 8px;
-    background: transparent;
-    color: #64748b;
-    cursor: pointer;
-    transition: all 0.2s ease;
-}
-
-.view-toggle-btn:hover {
-    background: white;
-    color: #2563eb;
-    box-shadow: 0 2px 8px rgba(37,99,235,0.12);
-}
-
-.view-toggle-btn.active {
-    background: white;
-    color: #2563eb;
-    box-shadow: 0 2px 10px rgba(37,99,235,0.18);
-}
 
 /* ═══════════════════════════════════════════════════
    CALENDAR VIEW
@@ -1127,11 +1200,13 @@
 [data-theme="dark"] .cal-cell { background: var(--bg-secondary, #1e293b); }
 [data-theme="dark"] .cal-cell:hover { background: var(--hover-bg, #1e3a8a33); }
 [data-theme="dark"] .cal-cell.empty { background: var(--bg-primary, #0f172a); }
+[data-theme="dark"] .cal-cell.selected { background: #1a316b !important; outline: 2px solid #2563eb; outline-offset: -2px; }
 [data-theme="dark"] .cal-event-list { border-color: var(--border-color, #334155); }
 [data-theme="dark"] .cal-event-item { background: var(--bg-primary, #0f172a); }
 [data-theme="dark"] .cal-event-title,
 [data-theme="dark"] .cal-list-heading { color: #e2e8f0; }
 [data-theme="dark"] .cal-day-num { color: #e2e8f0; }
+
 
 /* ── Mobile ── */
 @media (max-width: 640px) {
@@ -1143,4 +1218,46 @@
     .cal-month-label { font-size: 1rem; }
     .filter-bar { flex-direction: column; align-items: stretch; }
     .view-toggle-group { align-self: flex-end; }
+}
+/* ── Dark mode: filter panel ── */
+[data-theme="dark"] .filter-panel {
+    background: var(--bg-secondary, #1e293b);
+    box-shadow: 0 4px 24px rgba(0,0,0,0.3);
+}
+[data-theme="dark"] .fp-divider {
+    background: linear-gradient(to right, transparent, var(--border-color, #334155) 15%, var(--border-color, #334155) 85%, transparent);
+}
+[data-theme="dark"] .fp-toolbar { background: var(--bg-primary, #0f172a); }
+[data-theme="dark"] .fp-row-label { color: #475569; }
+[data-theme="dark"] .filter-btn { background: #1e293b; color: #94a3b8; }
+[data-theme="dark"] .filter-btn:hover { background: #1e3a8a33; color: #60a5fa; border-color: #1d4ed8; }
+[data-theme="dark"] .filter-btn.active { background: linear-gradient(135deg, #1d4ed8, #2563eb); color: white; }
+[data-theme="dark"] .sort-select {
+    background-color: var(--bg-secondary, #1e293b);
+    border-color: var(--border-color, #334155);
+    color: var(--text-primary, #e2e8f0);
+}
+[data-theme="dark"] .sort-select:hover { border-color: #3b82f6; }
+[data-theme="dark"] .quick-filter-btn { background: var(--bg-secondary, #1e293b); border-color: var(--border-color, #334155); color: #94a3b8; }
+[data-theme="dark"] .quick-filter-btn:hover { background: #1e3a8a33; border-color: #3b82f6; color: #60a5fa; }
+[data-theme="dark"] .quick-filter-btn.active { background: linear-gradient(135deg, #1d4ed8, #2563eb); border-color: transparent; color: white; }
+[data-theme="dark"] .filter-result-count { color: #60a5fa; }
+[data-theme="dark"] .filter-result-count strong { color: #bed6f4; }
+[data-theme="dark"] .view-toggle-group { background: var(--bg-primary, #0f172a); }
+[data-theme="dark"] .view-toggle-btn { color: #475569; }
+[data-theme="dark"] .view-toggle-btn:hover { color: #94a3b8; }
+[data-theme="dark"] .view-toggle-btn.active { background: var(--bg-secondary, #1e293b); color: #60a5fa; }
+
+/* ── Mobile ── */
+@media (max-width: 700px) {
+    .filter-section { padding: 0 1rem; }
+    .fp-row { padding: 1rem; gap: 0.5rem; }
+    .fp-categories { padding: 1rem; }
+    .fp-toolbar { padding: 0.75rem 1rem; }
+    .fp-spacer { display: none; }
+    .filter-result-count { order: 99; width: 100%; text-align: center; padding-top: 0.25rem; }
+    .view-toggle-group { margin-left: auto; }
+    .fp-group { flex-wrap: wrap; }
+    .sort-select { font-size: 0.8rem; }
+    .quick-filter-btn { font-size: 0.76rem; padding: 0.32rem 0.65rem; }
 }

@@ -75,7 +75,7 @@
 /* Individual Information Card */
 /* White card with shadow and hover effects */
 .info-card {
-    background: white;
+    background: var(--bg-secondary);
     padding: 2rem;
     border-radius: 15px; /* Rounded corners */
     box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08); /* Soft shadow */
@@ -228,7 +228,7 @@
 /* Main Form Container Card */
 /* White card containing the entire multi-step form */
 .form-card {
-    background: white;
+    background: var(--bg-secondary);
     padding: 3rem;
     border-radius: 15px;
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08); /* Prominent shadow */
@@ -236,7 +236,7 @@
 
 /* Form Card Heading */
 .form-card h2 {
-    color: #1e40af; /* Dark blue */
+    color: var(--accent-primary);
     font-size: 2rem;
     margin-bottom: 2rem;
     font-weight: 700;
@@ -266,7 +266,7 @@
 .form-group label {
     display: block; /* Take full width */
     margin-bottom: 0.5rem;
-    color: #334155; /* Dark gray */
+    color: var(--text-primary);
     font-weight: 600;
     font-size: 0.95rem;
 }
@@ -305,8 +305,8 @@
 .message-assist {
     margin-top: 0.75rem;
     padding: 0.85rem 0.95rem;
-    background: #f8fafc;
-    border: 1px solid #dbeafe;
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-color);
     border-radius: 10px;
     color: #475569;
     display: flex;
@@ -318,14 +318,14 @@
 }
 
 .message-assist strong {
-    color: #1e40af;
+    color: var(--accent-primary);
 }
 
 .message-fill-button {
     flex: 0 0 auto;
     border: 1px solid #bfdbfe;
-    background: white;
-    color: #2563eb;
+    background: var(--bg-secondary);
+    color: var(--accent-primary);
     border-radius: 8px;
     padding: 0.55rem 0.75rem;
     font-weight: 700;
@@ -505,8 +505,8 @@
 }
 
 .support-card {
-    background: white;
-    border: 1px solid #e2e8f0;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
     border-radius: 12px;
     padding: 1.4rem;
     box-shadow: 0 8px 26px rgba(15, 23, 42, 0.07);
@@ -573,10 +573,10 @@
 
 .process-step {
     position: relative;
-    background: white;
+    background: var(--bg-secondary);
     border-radius: 12px;
     padding: 1.35rem;
-    border: 1px solid #e2e8f0;
+    border: 1px solid var(--border-color);
 }
 
 .process-number {
@@ -722,7 +722,7 @@
 /* Individual FAQ Item */
 /* Expandable accordion item */
 .faq-item {
-    background: white;
+    background: var(--bg-secondary);
     border-radius: 12px;
     overflow: hidden; /* Hide content overflow for smooth expand */
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06); /* Subtle shadow */
@@ -913,4 +913,147 @@
         width: 100%;
         justify-content: center;
     }
+}
+
+/* ==========================================================================
+   🌙 CONTACT PAGE — DARK MODE
+   ========================================================================== */
+
+/* ── Page shell ── */
+[data-theme="dark"] .contact-subpage-main,
+[data-theme="dark"] .contact-main {
+  background: linear-gradient(135deg, #0a1628 0%, #0f2744 100%) !important;
+}
+
+[data-theme="dark"] .cp-hero p {
+  color: var(--text-secondary) !important;
+}
+
+/* ── Form card ── */
+[data-theme="dark"] .form-card {
+  background: var(--bg-secondary) !important;
+  box-shadow: var(--card-shadow) !important;
+  border: 1px solid var(--border-color);
+}
+
+[data-theme="dark"] .form-card h2 {
+  color: var(--accent-secondary) !important;
+}
+
+/* ── Form labels ── */
+[data-theme="dark"] .form-group label {
+  color: var(--text-primary) !important;
+}
+
+/* ── Inputs, textarea, select ── */
+[data-theme="dark"] .form-group input,
+[data-theme="dark"] .form-group textarea,
+[data-theme="dark"] .form-group select {
+  background: var(--input-bg) !important;
+  color: var(--text-primary) !important;
+  border-color: var(--border-color) !important;
+}
+
+[data-theme="dark"] .form-group input::placeholder,
+[data-theme="dark"] .form-group textarea::placeholder {
+  color: var(--text-muted) !important;
+}
+
+[data-theme="dark"] .form-group input:focus,
+[data-theme="dark"] .form-group textarea:focus,
+[data-theme="dark"] .form-group select:focus {
+  border-color: var(--accent-primary) !important;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2) !important;
+}
+
+/* ── Message assist bar (the "starter" widget) ── */
+[data-theme="dark"] .message-assist {
+  background: var(--bg-tertiary) !important;
+  border-color: var(--border-color) !important;
+  color: var(--text-secondary) !important;
+}
+
+[data-theme="dark"] .message-assist strong {
+  color: var(--accent-secondary) !important;
+}
+
+[data-theme="dark"] #message-prompt {
+  color: var(--text-secondary) !important;
+}
+
+/* ── "Add a starter" button ── */
+[data-theme="dark"] .message-fill-button {
+  background: var(--bg-secondary) !important;
+  border-color: var(--border-color) !important;
+  color: var(--accent-secondary) !important;
+}
+
+[data-theme="dark"] .message-fill-button:hover {
+  background: var(--hover-bg) !important;
+  border-color: var(--accent-primary) !important;
+  color: #93c5fd !important;
+}
+
+/* ── Word / character counter ── */
+[data-theme="dark"] .message-meter {
+  color: var(--text-muted) !important;
+}
+
+[data-theme="dark"] .message-meter.needs-more {
+  color: #fbbf24 !important;
+}
+
+[data-theme="dark"] .message-meter.ready {
+  color: #34d399 !important;
+}
+
+/* ── Sidebar info cards ── */
+[data-theme="dark"] .info-card {
+  background: var(--bg-secondary) !important;
+  box-shadow: var(--card-shadow) !important;
+  border: 1px solid var(--border-color);
+}
+
+[data-theme="dark"] .info-card h3 {
+  color: var(--accent-secondary) !important;
+}
+
+[data-theme="dark"] .info-card p {
+  color: var(--text-secondary) !important;
+}
+
+[data-theme="dark"] .info-card a {
+  color: var(--accent-secondary) !important;
+}
+
+[data-theme="dark"] .info-card a:hover {
+  color: #93c5fd !important;
+}
+
+/* ── Availability status pill ── */
+[data-theme="dark"] .availability-status {
+  background: var(--bg-tertiary) !important;
+  color: var(--text-secondary) !important;
+}
+
+/* ── FAQ items ── */
+[data-theme="dark"] .faq-item {
+  background: var(--bg-secondary) !important;
+  border: 1px solid var(--border-color);
+}
+
+[data-theme="dark"] .faq-question {
+  color: var(--text-primary) !important;
+}
+
+[data-theme="dark"] .faq-question:hover {
+  color: var(--accent-secondary) !important;
+}
+
+[data-theme="dark"] .faq-answer p {
+  color: var(--text-secondary) !important;
+}
+
+[data-theme="dark"] .faq-header p {
+  color: var(--text-secondary) !important;
 }

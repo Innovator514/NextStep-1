@@ -230,33 +230,45 @@ nav li a:hover {
 /* ── Dropdown Panel ── */
 .nav-dropdown {
     position: absolute;
-    top: calc(100% + 10px);
+    top: 100%;                  /* flush to the parent — bridge covers the gap */
     left: 50%;
-    transform: translateX(-50%) translateY(-6px);
-    min-width: 230px;
+    transform: translateX(-50%) translateY(0);
+    min-width: 260px;
     background: white;
     border-radius: 14px;
     box-shadow: 0 12px 40px rgba(37,99,235,0.15), 0 2px 8px rgba(0,0,0,0.08);
     border: 1px solid rgba(37,99,235,0.1);
-    padding: 0.5rem;
+    padding: 0.75rem 0.4rem 0.4rem; /* top padding = bridge zone for the arrow */
     opacity: 0;
     visibility: hidden;
     pointer-events: none;
-    transition: opacity 0.22s ease, transform 0.22s ease, visibility 0.22s;
+    transition: opacity 0.18s ease, transform 0.18s ease, visibility 0.18s;
     z-index: 9999;
 }
 
-/* Small arrow pointing up */
+/* Invisible hover bridge: fills the gap between the trigger link and dropdown panel */
 .nav-dropdown::before {
     content: '';
     position: absolute;
-    top: -7px;
+    top: -14px;
+    left: 0;
+    right: 0;
+    height: 14px;
+    background: transparent;
+}
+
+/* Visible arrow */
+.nav-dropdown::after {
+    content: '';
+    position: absolute;
+    top: 5px;
     left: 50%;
     transform: translateX(-50%);
     border-left: 7px solid transparent;
     border-right: 7px solid transparent;
     border-bottom: 7px solid white;
     filter: drop-shadow(0 -2px 2px rgba(37,99,235,0.08));
+    pointer-events: none;
 }
 
 /* Open state */
@@ -272,16 +284,19 @@ nav li a:hover {
 .nav-dropdown-item {
     display: flex;
     align-items: center;
-    gap: 0.7rem;
-    padding: 0.65rem 0.9rem;
-    border-radius: 9px;
+    gap: 0.85rem;
+    padding: 0.85rem 1rem;      /* was 0.65rem 0.9rem — bigger tap target */
+    border-radius: 10px;
     text-decoration: none;
     color: #334155;
     font-family: 'Open Sans', sans-serif;
-    font-size: 0.88rem;
+    font-size: 0.93rem;         /* slightly larger text */
     font-weight: 600;
     transition: background 0.18s ease, color 0.18s ease, transform 0.18s ease;
     white-space: nowrap;
+    min-height: 48px;           /* iOS/Android recommended minimum tap target */
+    -webkit-tap-highlight-color: transparent;
+    cursor: pointer;
 }
 
 .nav-dropdown-item:hover {
@@ -292,15 +307,15 @@ nav li a:hover {
 
 /* Icon circle */
 .nav-dropdown-item .dd-icon {
-    width: 30px;
-    height: 30px;
-    border-radius: 8px;
+    width: 36px;                /* was 30px */
+    height: 36px;
+    border-radius: 9px;
     background: #eff6ff;
     color: #2563eb;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 0.78rem;
+    font-size: 0.88rem;         /* slightly larger icon */
     flex-shrink: 0;
     transition: background 0.18s ease;
 }
@@ -323,7 +338,7 @@ nav li a:hover {
     border-color: var(--border-color, #334155);
     box-shadow: 0 12px 40px rgba(0,0,0,0.4);
 }
-[data-theme="dark"] .nav-dropdown::before {
+[data-theme="dark"] .nav-dropdown::after {
     border-bottom-color: var(--bg-secondary, #1e293b);
 }
 [data-theme="dark"] .nav-dropdown-item {
@@ -580,22 +595,63 @@ footer {
   position: relative;
 }
 
+/* Red notification dot on the profile button */
+.profile-btn-notif-badge {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 4px;
+  border-radius: 9px;
+  background: #ef4444;
+  color: white;
+  font-size: 0.68rem;
+  font-weight: 800;
+  font-family: 'Open Sans', sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid white;
+  line-height: 1;
+  pointer-events: none;
+  box-shadow: 0 2px 6px rgba(239,68,68,0.5);
+  animation: notif-pop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+  z-index: 10;
+}
+
+.profile-btn-notif-badge.hidden {
+  display: none;
+}
+
+@keyframes notif-pop {
+  from { transform: scale(0); opacity: 0; }
+  to   { transform: scale(1); opacity: 1; }
+}
+
+/* Wrapper needs position:relative so the badge is anchored to the button */
+.profile-dropdown {
+  position: relative;
+}
+
 .profile-btn {
   background: linear-gradient(135deg, #2563eb, #3b82f6);
   color: white;
   border: none;
-  padding: 0 18px;
-  height: 38px;
+  padding: 0 20px 0 8px;      /* tight left so avatar sits at edge, generous right */
+  height: 44px;               /* was 38px — easier to click */
+  min-width: 120px;           /* never collapses to just-the-avatar width */
   border-radius: 25px;
   cursor: pointer;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
   font-weight: 600;
   font-size: 0.9rem;
   transition: all 0.3s;
   font-family: 'Open Sans', sans-serif;
   box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .profile-btn:hover {
@@ -694,12 +750,15 @@ footer {
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 12px 20px;
+  padding: 14px 20px;         /* was 12px — bigger tap target */
   color: #334155;
   text-decoration: none;
   font-weight: 600;
   transition: all 0.2s;
   font-size: 14px;
+  min-height: 48px;           /* iOS/Android minimum */
+  -webkit-tap-highlight-color: transparent;
+  cursor: pointer;
 }
 
 .profile-menu-item:hover {
