@@ -2,7 +2,7 @@
   "name": "nextstep-functions",
   "description": "Cloud Functions for NextStep notifications (in-app + email + Kit)",
   "engines": {
-    "node": "18"
+    "node": "24.x"
   },
   "main": "src/index.js",
   "scripts": {
