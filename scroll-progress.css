@@ -8,7 +8,13 @@
   width: 0%;
   height: 4px; /* Slightly thicker so it's clearly visible */
   background: linear-gradient(90deg, #2563eb, #3b82f6, #60a5fa);
-  z-index: 1001; /* Higher than your sticky navbar (navbar is 999/1000) */
+  /* Must stay BELOW the navbar's own z-index (1000 in style.css). The
+     navbar creates its own stacking context, so anything inside it
+     (e.g. the Contact Us dropdown, z-index 9999) only ever competes
+     within that context — it can't escape being covered if this bar's
+     z-index is higher than the navbar's. Keeping this lower than 1000
+     lets the navbar (and its dropdown) always render above the bar. */
+  z-index: 900;
   transition: width 0.05s linear; /* Snappier response time while scrolling */
   border-radius: 0 2px 2px 0;
   pointer-events: none; /* Prevents the bar from stealing clicks at the very top of your navbar */

@@ -27,6 +27,7 @@
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
+
     .qr-page {
       min-height: 100vh;
       background: linear-gradient(160deg, #f0f4ff 0%, #e8eeff 100%);
@@ -446,30 +447,474 @@
     [data-theme="dark"] .arc-drawer-close { background: #1e3a5f; color: #94a3b8; }
     [data-theme="dark"] .arc-field-value { color: #cbd5e1; }
     [data-theme="dark"] .arc-badge-stopped { background: #1e3a5f; color: #94a3b8; }
+
+    /* ── NEW: Homepage Management ── */
+    .homepage-mgmt-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+    }
+    @media (max-width: 850px) {
+      .homepage-mgmt-grid { grid-template-columns: 1fr; }
+    }
+    .mgmt-item-list {
+      max-height: 300px;
+      overflow-y: auto;
+      margin-top: 0.5rem;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 0.5rem;
+    }
+    .mgmt-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.5rem 0.75rem;
+      border-bottom: 1px solid #e2e8f0;
+    }
+    .mgmt-item:last-child { border-bottom: none; }
+    .mgmt-item .item-info { flex: 1; }
+    .mgmt-item .item-info .item-title { font-weight: 600; }
+    .mgmt-item .item-info .item-sub { font-size: 0.75rem; color: #94a3b8; }
+    .mgmt-item .item-actions { display: flex; gap: 0.3rem; }
+    .mgmt-form-row { display: flex; gap: 0.5rem; margin-top: 0.5rem; flex-wrap: wrap; }
+    .mgmt-form-row .form-input { flex: 1; min-width: 120px; }
+    .mgmt-form-row .btn { flex-shrink: 0; }
+
+    [data-theme="dark"] .mgmt-item-list { border-color: #1e3a5f; }
+    [data-theme="dark"] .mgmt-item { border-color: #1e3a5f; }
+
+    /* ── Preview cards ── */
+    .mgmt-preview {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      margin-top: 0.5rem;
+      padding: 0.5rem;
+      background: var(--bg-primary, #f8fafc);
+      border-radius: 8px;
+      min-height: 50px;
+      border: 1px dashed var(--border-color, #e2e8f0);
+    }
+    .mgmt-preview-item {
+      background: var(--bg-secondary, white);
+      padding: 0.25rem 0.6rem;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      border: 1px solid var(--border-color, #e2e8f0);
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+    .mgmt-preview-item .preview-img {
+      width: 24px;
+      height: 24px;
+      border-radius: 4px;
+      object-fit: cover;
+      background: #e8eeff;
+    }
+    .mgmt-preview-item .preview-label {
+      font-weight: 600;
+    }
+    .mgmt-preview-item .preview-number {
+      font-weight: 800;
+      color: #2563eb;
+    }
+
+    /* ── Quick presets ── */
+    .preset-btns {
+      display: flex;
+      gap: 0.3rem;
+      flex-wrap: wrap;
+      margin-top: 0.3rem;
+    }
+    .preset-btn {
+      padding: 0.2rem 0.6rem;
+      font-size: 0.7rem;
+      border-radius: 12px;
+      border: 1px solid var(--border-color, #e2e8f0);
+      background: var(--bg-primary, #f8fafc);
+      cursor: pointer;
+      color: var(--text-secondary, #64748b);
+      font-family: inherit;
+      transition: all 0.15s;
+    }
+    .preset-btn:hover {
+      border-color: #2563eb;
+      color: #2563eb;
+      background: #eff6ff;
+    }
+
+    /* ── Error message ── */
+    .mgmt-error {
+      color: #dc2626;
+      font-size: 0.8rem;
+      margin-top: 0.25rem;
+      padding: 0.25rem 0.5rem;
+      background: #fee2e2;
+      border-radius: 6px;
+      display: none;
+    }
+    .mgmt-error.show { display: block; }
+    .mgmt-success {
+      color: #15803d;
+      font-size: 0.8rem;
+      margin-top: 0.25rem;
+      padding: 0.25rem 0.5rem;
+      background: #dcfce7;
+      border-radius: 6px;
+      display: none;
+    }
+    .mgmt-success.show { display: block; }
+
+    /* ── Gallery tab switcher ── */
+    .gallery-tab-btn {
+      padding: 0.25rem 0.7rem;
+      font-size: 0.75rem;
+      border-radius: 20px;
+      border: 1px solid var(--border-color, #e2e8f0);
+      background: var(--bg-primary, #f8fafc);
+      cursor: pointer;
+      color: var(--text-secondary, #64748b);
+      font-family: inherit;
+      transition: all 0.15s;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+    .gallery-tab-btn.active {
+      background: #eff6ff;
+      color: #2563eb;
+      border-color: #bfdbfe;
+      font-weight: 600;
+    }
+    .gallery-tab-btn:hover:not(.active) {
+      border-color: #2563eb;
+      color: #2563eb;
+    }
+    .existing-img-thumb {
+      aspect-ratio: 1;
+      border-radius: 6px;
+      object-fit: cover;
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: border-color 0.15s, transform 0.15s;
+      width: 100%;
+    }
+    .existing-img-thumb:hover { transform: scale(1.05); border-color: #93c5fd; }
+    .existing-img-thumb.selected { border-color: #2563eb; }
+
+    /* ── Dropzone ── */
+    #gallery-dropzone {
+      border: 2px dashed #bfdbfe;
+      border-radius: 12px;
+      padding: 1.5rem 1rem;
+      text-align: center;
+      cursor: pointer;
+      transition: background 0.15s, border-color 0.15s;
+      background: var(--bg-primary, #f8fafc);
+    }
+    #gallery-dropzone:hover, #gallery-dropzone.drag-over {
+      background: #eff6ff;
+      border-color: #2563eb;
+    }
+    #gallery-dropzone.drag-over { background: #dbeafe; }
+
+    /* ── Past Events Gallery: filter pills ── */
+    .filter-pill {
+      padding: 0.35rem 0.875rem; border-radius: 20px; border: 2px solid #e2e8f0;
+      background: white; font-family: 'Open Sans', sans-serif; font-size: 0.76rem;
+      font-weight: 700; color: #64748b; cursor: pointer; transition: all 0.15s;
+      display: flex; align-items: center; gap: 0.35rem;
+    }
+    .filter-pill:hover { border-color: #2563eb; color: #2563eb; }
+    .filter-pill.active { background: rgb(1,9,67); border-color: rgb(1,9,67); color: white; }
+    [data-theme="dark"] .filter-pill { background: #0f2744; border-color: #1e3a5f; color: #94a3b8; }
+    [data-theme="dark"] .filter-pill.active { background: #3b82f6; border-color: #3b82f6; color: white; }
+
+    /* ── Past Events Gallery cards ── */
+    .pg-card {
+      background: white;
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow: 0 4px 20px rgba(37,99,235,0.07);
+      border: 2px solid #e2e8f0;
+      transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+      display: flex;
+      flex-direction: column;
+    }
+    .pg-card:hover { transform: translateY(-3px); box-shadow: 0 10px 32px rgba(37,99,235,0.13); }
+    .pg-card.is-archived { border-color: #f59e0b; box-shadow: 0 4px 20px rgba(245,158,11,0.15); }
+    .pg-photo {
+      position: relative;
+      height: 175px;
+      overflow: hidden;
+      flex-shrink: 0;
+      background: #f1f5f9;
+    }
+    .pg-photo img {
+      width: 100%; height: 100%; object-fit: cover; display: block;
+      transition: transform 0.4s;
+    }
+    .pg-card:hover .pg-photo img { transform: scale(1.04); }
+    .pg-photo-placeholder {
+      width: 100%; height: 100%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 2.8rem; color: rgba(255,255,255,0.55);
+    }
+    .pg-cat-badge {
+      position: absolute; top: 0.6rem; left: 0.6rem;
+      font-size: 0.6rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;
+      color: white; padding: 3px 9px; border-radius: 20px;
+      backdrop-filter: blur(4px);
+    }
+    .pg-archived-ribbon {
+      position: absolute; top: 0.6rem; right: 0.6rem;
+      background: rgba(245,158,11,0.92); backdrop-filter: blur(4px);
+      color: white; font-size: 0.6rem; font-weight: 800; text-transform: uppercase;
+      letter-spacing: 0.8px; padding: 3px 9px; border-radius: 20px;
+      display: flex; align-items: center; gap: 0.3rem;
+    }
+    /* ── Past Events image picker (3-tab) ── */
+    .pg-img-picker {
+      border-top: 1px solid #f1f5f9;
+      padding: 0.6rem 0.75rem 0.1rem;
+    }
+    .pg-img-picker-tabs {
+      display: flex; gap: 0.25rem; margin-bottom: 0.5rem;
+      overflow-x: auto; flex-wrap: nowrap;
+    }
+    .pg-img-tab {
+      flex: 0 0 auto; padding: 0.28rem 0.45rem;
+      font-size: 0.67rem; font-weight: 700; border-radius: 8px;
+      border: 1.5px solid #e2e8f0; background: #f8fafc;
+      cursor: pointer; color: #64748b; font-family: 'Open Sans', sans-serif;
+      display: flex; align-items: center; justify-content: center; gap: 0.25rem;
+      transition: all 0.15s; white-space: nowrap;
+    }
+    .pg-img-tab.active { background: #eff6ff; color: #2563eb; border-color: #bfdbfe; }
+    .pg-img-tab:hover:not(.active) { border-color: #94a3b8; color: #475569; }
+    .pg-img-panel { display: none; }
+    .pg-img-panel.active { display: block; }
+
+    /* URL panel */
+    .pg-img-url-row { display: flex; gap: 0.35rem; align-items: center; }
+    .pg-img-url-row input {
+      flex: 1; padding: 0.32rem 0.55rem; border: 1.5px solid #e2e8f0; border-radius: 8px;
+      font-family: 'Open Sans', sans-serif; font-size: 0.75rem; color: rgb(1,9,67); outline: none;
+      transition: border-color 0.15s;
+    }
+    .pg-img-url-row input:focus { border-color: #2563eb; }
+    .pg-img-url-row button {
+      flex-shrink: 0; padding: 0.32rem 0.55rem; background: #eff6ff; border: 1.5px solid #bfdbfe;
+      border-radius: 8px; cursor: pointer; font-size: 0.68rem; font-weight: 700; color: #2563eb;
+      font-family: 'Open Sans', sans-serif; transition: background 0.15s;
+    }
+    .pg-img-url-row button:hover { background: #dbeafe; }
+
+    /* Upload dropzone (compact) */
+    .pg-dropzone {
+      border: 2px dashed #bfdbfe; border-radius: 9px; padding: 0.75rem 0.5rem;
+      text-align: center; cursor: pointer; background: #f8fafc;
+      transition: background 0.15s, border-color 0.15s; font-size: 0.75rem;
+    }
+    .pg-dropzone:hover, .pg-dropzone.drag-over { background: #eff6ff; border-color: #2563eb; }
+    .pg-dropzone input[type="file"] { display: none; }
+    .pg-dropzone-selected {
+      display: flex; align-items: center; gap: 0.5rem; margin-top: 0.4rem;
+    }
+    .pg-dropzone-selected img { width: 40px; height: 40px; object-fit: cover; border-radius: 6px; border: 1px solid #e2e8f0; }
+    .pg-upload-progress { margin-top: 0.4rem; }
+    .pg-progress-track { background: #e2e8f0; border-radius: 99px; height: 5px; }
+    .pg-progress-bar { background: linear-gradient(90deg,#2563eb,#3b82f6); height: 5px; border-radius: 99px; width: 0%; transition: width 0.2s; }
+
+    /* Drive panel */
+    .pg-drive-hint {
+      font-size: 0.68rem; color: #1d4ed8; background: #eff6ff; border: 1px solid #bfdbfe;
+      border-radius: 7px; padding: 0.35rem 0.55rem; margin-bottom: 0.4rem;
+    }
+    .pg-drive-row { display: flex; gap: 0.35rem; align-items: center; }
+    .pg-drive-row input {
+      flex: 1; padding: 0.32rem 0.55rem; border: 1.5px solid #e2e8f0; border-radius: 8px;
+      font-family: 'Open Sans', sans-serif; font-size: 0.72rem; color: rgb(1,9,67); outline: none;
+      transition: border-color 0.15s;
+    }
+    .pg-drive-row input:focus { border-color: #2563eb; }
+    .pg-drive-row button {
+      flex-shrink: 0; padding: 0.32rem 0.55rem; background: #eff6ff; border: 1.5px solid #bfdbfe;
+      border-radius: 8px; cursor: pointer; font-size: 0.68rem; font-weight: 700; color: #2563eb;
+      font-family: 'Open Sans', sans-serif; transition: background 0.15s;
+    }
+    .pg-drive-row button:hover { background: #dbeafe; }
+    [data-theme="dark"] .pg-drive-row input { background: #0a1628; color: #f1f5f9; border-color: #1e3a5f; }
+    [data-theme="dark"] .pg-drive-row button { background: #1e3a5f; border-color: #2563eb; color: #60a5fa; }
+    .pg-drive-preview { display: none; align-items: center; gap: 0.5rem; margin-top: 0.35rem; }
+    .pg-drive-preview img { height: 40px; border-radius: 6px; object-fit: cover; border: 1px solid #e2e8f0; }
+
+    /* Site library panel */
+    .pg-site-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(52px, 1fr));
+      gap: 4px; max-height: 130px; overflow-y: auto;
+      border: 1px solid #e2e8f0; border-radius: 8px; padding: 4px;
+    }
+    .pg-site-thumb {
+      aspect-ratio: 1; border-radius: 5px; object-fit: cover; cursor: pointer; width: 100%;
+      border: 2px solid transparent; transition: border-color 0.15s, transform 0.15s;
+    }
+    .pg-site-thumb:hover { transform: scale(1.06); border-color: #93c5fd; }
+    .pg-site-thumb.selected { border-color: #2563eb; }
+    .pg-site-selected-label {
+      font-size: 0.68rem; background: #eff6ff; color: #1d4ed8;
+      padding: 0.25rem 0.5rem; border-radius: 6px; margin-top: 0.35rem;
+    }
+
+    /* Apply button */
+    .pg-img-apply-btn {
+      width: 100%; margin-top: 0.5rem; padding: 0.38rem 0.5rem;
+      background: linear-gradient(135deg,#2563eb,#3b82f6); color: white; border: none;
+      border-radius: 9px; font-family: 'Open Sans', sans-serif; font-size: 0.74rem; font-weight: 700;
+      cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.35rem;
+      transition: opacity 0.15s;
+    }
+    .pg-img-apply-btn:hover { opacity: 0.88; }
+    .pg-img-apply-btn:disabled { opacity: 0.45; cursor: default; }
+    .pg-img-err { font-size: 0.68rem; color: #dc2626; margin-top: 0.25rem; display: none; }
+
+    [data-theme="dark"] .pg-img-tab { background: #0a1628; border-color: #1e3a5f; color: #94a3b8; }
+    [data-theme="dark"] .pg-img-tab.active { background: #1e3a5f; color: #60a5fa; border-color: #3b82f6; }
+    [data-theme="dark"] .pg-img-url-row input, [data-theme="dark"] .pg-drive-row input { background: #0a1628; color: #f1f5f9; border-color: #1e3a5f; }
+    [data-theme="dark"] .pg-dropzone { background: #0a1628; border-color: #1e3a5f; }
+    [data-theme="dark"] .pg-dropzone:hover { background: #1e3a5f; border-color: #3b82f6; }
+    [data-theme="dark"] .pg-site-grid { border-color: #1e3a5f; }
+    .pg-body { padding: 0.75rem 0.875rem; flex: 1; display: flex; flex-direction: column; gap: 0.35rem; }
+    .pg-title { font-size: 0.92rem; font-weight: 800; color: rgb(1,9,67); line-height: 1.3; }
+    .pg-meta { font-size: 0.75rem; color: #94a3b8; font-weight: 600; display: flex; align-items: center; gap: 0.35rem; }
+    .pg-meta i { color: #2563eb; font-size: 0.7rem; }
+    /* attendance inline row */
+    .pg-att-row {
+      display: flex; align-items: center; gap: 0.4rem; margin-top: 0.15rem;
+    }
+    .pg-att-row label { font-size: 0.7rem; font-weight: 700; color: #64748b; white-space: nowrap; }
+    .pg-att-row input {
+      width: 64px; padding: 0.28rem 0.45rem; border: 1.5px solid #e2e8f0; border-radius: 7px;
+      font-family: 'Open Sans', sans-serif; font-size: 0.75rem; color: rgb(1,9,67); outline: none;
+      transition: border-color 0.15s;
+    }
+    .pg-att-row input:focus { border-color: #10b981; }
+    .pg-footer {
+      padding: 0.6rem 0.875rem 0.875rem;
+      display: flex; gap: 0.4rem;
+      border-top: 1px solid #f1f5f9;
+    }
+    .pg-toggle-btn {
+      flex: 1; padding: 0.55rem 0.5rem; border-radius: 10px; border: none; cursor: pointer;
+      font-family: 'Open Sans', sans-serif; font-size: 0.78rem; font-weight: 700;
+      display: flex; align-items: center; justify-content: center; gap: 0.4rem;
+      transition: all 0.18s;
+    }
+    .pg-toggle-btn.add    { background: linear-gradient(135deg,#f59e0b,#f97316); color: white; box-shadow: 0 3px 10px rgba(245,158,11,0.35); }
+    .pg-toggle-btn.add:hover    { transform: translateY(-1px); box-shadow: 0 5px 16px rgba(245,158,11,0.45); }
+    .pg-toggle-btn.remove { background: #f1f5f9; color: #475569; }
+    .pg-toggle-btn.remove:hover { background: #fee2e2; color: #dc2626; }
+    .pg-save-btn {
+      padding: 0.55rem 0.7rem; border-radius: 10px; border: none; cursor: pointer;
+      font-family: 'Open Sans', sans-serif; font-size: 0.78rem; font-weight: 700;
+      background: #dcfce7; color: #15803d; display: flex; align-items: center; gap: 0.35rem;
+      transition: background 0.15s;
+    }
+    .pg-save-btn:hover { background: #bbf7d0; }
+    .pg-extra-block { margin-top: 0.5rem; }
+    .pg-extra-label { font-size: 0.72rem; font-weight: 700; color: #64748b; display: flex; align-items: center; gap: 0.35rem; margin-bottom: 0.3rem; }
+    .pg-extra-label i { color: #2563eb; font-size: 0.7rem; width: 13px; text-align: center; }
+    .pg-extra-hint { font-size: 0.66rem; color: #94a3b8; font-weight: 500; margin-left: auto; }
+    .pg-extra-block textarea {
+      width: 100%; padding: 0.5rem 0.65rem; border: 1.5px solid #e2e8f0; border-radius: 9px;
+      font-family: 'Open Sans', sans-serif; font-size: 0.78rem; color: rgb(1,9,67); outline: none;
+      resize: vertical; min-height: 58px; transition: border-color 0.15s; line-height: 1.5;
+    }
+    .pg-extra-block textarea:focus { border-color: #2563eb; }
+    [data-theme="dark"] .pg-extra-label { color: #94a3b8; }
+    [data-theme="dark"] .pg-extra-hint { color: #64748b; }
+    [data-theme="dark"] .pg-extra-block textarea { background: #0a1628; color: #f1f5f9; border-color: #1e3a5f; }
+
+    /* Cover photo caption */
+    .pg-cover-cap-row { margin-top: 0.5rem; padding: 0 0.75rem 0.6rem; }
+    .pg-cover-cap-row label { font-size: 0.66rem; font-weight: 700; color: #94a3b8; display: flex; align-items: center; gap: 0.3rem; margin-bottom: 0.25rem; }
+    .pg-cover-cap-row input {
+      width: 100%; padding: 0.32rem 0.55rem; border: 1.5px solid #e2e8f0; border-radius: 8px;
+      font-family: 'Open Sans', sans-serif; font-size: 0.74rem; color: rgb(1,9,67); outline: none;
+      transition: border-color 0.15s;
+    }
+    .pg-cover-cap-row input:focus { border-color: #2563eb; }
+    [data-theme="dark"] .pg-cover-cap-row label { color: #64748b; }
+    [data-theme="dark"] .pg-cover-cap-row input { background: #0a1628; color: #f1f5f9; border-color: #1e3a5f; }
+
+    /* Additional-photos gallery: list of added photos, each with its own caption */
+    .pg-gallery-list { display: flex; flex-direction: column; gap: 0.4rem; margin-bottom: 0.5rem; }
+    .pg-gallery-empty { font-size: 0.72rem; color: #94a3b8; padding: 0.3rem 0.1rem; }
+    .pg-gallery-item {
+      display: flex; align-items: center; gap: 0.5rem;
+      border: 1px solid #e2e8f0; border-radius: 9px; padding: 0.35rem 0.5rem; background: #f8fafc;
+    }
+    .pg-gallery-thumb { width: 42px; height: 42px; border-radius: 7px; object-fit: cover; flex-shrink: 0; border: 1px solid #e2e8f0; background: #e2e8f0; }
+    .pg-gallery-caption {
+      flex: 1; min-width: 0; padding: 0.32rem 0.5rem; border: 1.5px solid #e2e8f0; border-radius: 7px;
+      font-family: 'Open Sans', sans-serif; font-size: 0.74rem; color: rgb(1,9,67); outline: none;
+      transition: border-color 0.15s;
+    }
+    .pg-gallery-caption:focus { border-color: #2563eb; }
+    .pg-gallery-remove {
+      flex-shrink: 0; width: 24px; height: 24px; border-radius: 50%; border: none;
+      background: #fee2e2; color: #dc2626; cursor: pointer; font-size: 0.7rem;
+      display: flex; align-items: center; justify-content: center; transition: background 0.15s;
+    }
+    .pg-gallery-remove:hover { background: #fecaca; }
+    .pg-gallery-add { border: 1.5px dashed #e2e8f0; border-radius: 10px; padding: 0.55rem; }
+    .pg-gallery-add .pg-img-picker-tabs { margin-bottom: 0.4rem; }
+    .pg-gallery-add .pg-img-tab { font-size: 0.66rem; padding: 0.26rem 0.25rem; }
+    [data-theme="dark"] .pg-gallery-item { background: #0a1628; border-color: #1e3a5f; }
+    [data-theme="dark"] .pg-gallery-caption { background: #0a1628; color: #f1f5f9; border-color: #1e3a5f; }
+    [data-theme="dark"] .pg-gallery-add { border-color: #1e3a5f; }
+    [data-theme="dark"] .pg-card { background: #0f2744; border-color: #1e3a5f; }
+    [data-theme="dark"] .pg-card.is-archived { border-color: #d97706; }
+    [data-theme="dark"] .pg-title { color: #f1f5f9; }
+    [data-theme="dark"] .pg-photo { background: #0a1628; }
+    [data-theme="dark"] .pg-footer { border-color: #1e3a5f; }
+    [data-theme="dark"] .pg-toggle-btn.remove { background: #1e3a5f; color: #94a3b8; }
+    [data-theme="dark"] .pg-att-row input { background: #0a1628; color: #f1f5f9; border-color: #1e3a5f; }
+
   </style>
 </head>
 <body>
 
-<nav>
-  <div class="navbar">
-    <div class="navdiv">
-      <div class="logo">
-        <a href="index.html">
-          <img src="images/logo.png" alt="NextStep Logo" class="logo-image">
-        </a>
+  <nav>
+    <div class="navbar">
+      <div class="navdiv">
+        <div class="logo">
+          <a href="index.html">
+            <img src="images/logo.png" alt="NextStep Logo" class="logo-image">
+          </a>
+        </div>
+        <nav class="nav-links">
+          <ul>
+            <li class="navbar-item"><a href="index.html">Home</a></li>
+            <li class="navbar-item"><a href="map.html">Map</a></li>
+            <li class="navbar-item"><a href="events.html">Events</a></li>
+            <li class="navbar-item"><a href="badges.html">Badges</a></li>
+            <li class="navbar-item" id="admin-nav-link" style="display: none;"><a href="admin-dashboard.html" class="active">Admin Dashboard</a></li>
+            <li class="navbar-item"><a href="chatbot.html">Compass</a></li>
+            <li class="navbar-item"><a href="contact.html">Contact Us</a></li>
+            <li class="navbar-item"><a href="the-podium.html">The Podium</a></li>
+          </ul>
+        </nav>
+
+        <div class="nav-right">
+          <li class="navbar-item"><a href="login.html" class="login" id="nav-login">Login</a></li>
+          <li class="navbar-item"><a href="signup.html" class="signup" id="nav-signup">Sign Up</a></li>
+        </div>
       </div>
-      <nav class="nav-links">
-        <ul>
-          <li class="navbar-item"><a href="index.html">Home</a></li>
-          <li class="navbar-item"><a href="map.html">Map</a></li>
-          <li class="navbar-item"><a href="events.html">Events</a></li>
-          <li class="navbar-item"><a href="badges.html">Badges</a></li>
-          <li class="navbar-item" id="admin-nav-link" style="display: none;"><a href="admin-dashboard.html" class="active">Admin Dashboard</a></li>
-          <li class="navbar-item"><a href="chatbot.html">Compass</a></li>
-          <li class="navbar-item"><a href="contact.html">Contact Us</a></li>
-          <li class="navbar-item"><a href="the-podium.html">The Podium</a></li>
-        </ul>
-      </nav>
+    </div>
+  </nav>
 
       <div class="nav-right">
         <li class="navbar-item"><a href="login.html" class="login" id="nav-login">Login</a></li>
@@ -695,6 +1140,240 @@
             <div class="event-list" id="archived-mgmt-list" style="margin-top:0.5rem;">
               <div class="list-loading" style="font-size:0.82rem;color:#94a3b8;">Click above to load archived events.</div>
             </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ─── PAST EVENTS GALLERY ─── -->
+      <div class="dashboard-section-title"><i class="fas fa-box-archive"></i> Past Events Gallery</div>
+
+      <div class="qr-card" style="margin-bottom:1.5rem;">
+        <h2><i class="fas fa-photo-film"></i> Select Events We Hosted</h2>
+        <p style="font-size:0.85rem;color:#64748b;margin-bottom:1.25rem;">
+          Toggle any event below to add or remove it from the <strong>Past Events</strong> public gallery. You can attach a photo and attendance numbers before archiving.
+        </p>
+
+        <!-- Toolbar -->
+        <div style="display:flex;gap:0.75rem;align-items:center;flex-wrap:wrap;margin-bottom:1rem;">
+          <div style="flex:1;min-width:200px;position:relative;">
+            <i class="fas fa-search" style="position:absolute;left:0.75rem;top:50%;transform:translateY(-50%);color:#94a3b8;font-size:0.8rem;pointer-events:none;"></i>
+            <input class="list-search" id="past-gallery-search" placeholder="Search events…" style="padding-left:2.1rem;margin-bottom:0;" oninput="filterPastGallery(this.value)">
+          </div>
+          <div style="display:flex;gap:0.4rem;flex-wrap:wrap;" id="past-gallery-filter-pills">
+            <button class="filter-pill active" data-pgcat="all" onclick="setPastGalleryCat('all',this)">All</button>
+          </div>
+          <div style="display:flex;gap:0.5rem;align-items:center;flex-shrink:0;">
+            <span id="past-gallery-count" style="font-size:0.78rem;color:#94a3b8;font-weight:600;"></span>
+            <label style="display:flex;align-items:center;gap:0.4rem;font-size:0.8rem;font-weight:700;color:#64748b;cursor:pointer;">
+              <input type="checkbox" id="past-gallery-show-archived" onchange="filterPastGallery(document.getElementById('past-gallery-search').value)" style="cursor:pointer;">
+              Show archived
+            </label>
+          </div>
+        </div>
+
+        <div id="past-gallery-msg" style="display:none;border-radius:10px;padding:0.6rem 0.875rem;font-size:0.82rem;font-weight:600;margin-bottom:0.75rem;"></div>
+
+        <!-- Photo grid — cards flow one after another -->
+        <div id="past-gallery-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1.25rem;">
+          <div class="list-loading" style="grid-column:1/-1;"><i class="fas fa-spinner fa-spin"></i> Loading events…</div>
+        </div>
+      </div>
+
+      <!-- ─── HOMEPAGE MANAGEMENT (Enhanced) ─── -->
+      <div class="dashboard-section-title"><i class="fas fa-home"></i> Homepage Management</div>
+      
+      <div class="homepage-mgmt-grid">
+
+        <!-- Gallery Management -->
+        <div class="qr-card" style="grid-column:1/-1;">
+          <h2><i class="fas fa-images"></i> Community Gallery</h2>
+          <p style="font-size:0.85rem; color:#64748b; margin-bottom:0.75rem;">Photos shown on the homepage. Drag rows to reorder them.</p>
+
+          <div id="gallery-error" class="mgmt-error"></div>
+          <div id="gallery-success" class="mgmt-success"></div>
+
+          <!-- List + preview side-by-side -->
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;align-items:start;">
+            <div>
+              <div style="font-size:0.7rem;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:0.35rem;">
+                <i class="fas fa-grip-lines" style="margin-right:4px;"></i>Drag to reorder
+              </div>
+              <div id="gallery-list" class="mgmt-item-list" style="max-height:260px;overflow-y:auto;">
+                <div class="list-loading"><i class="fas fa-spinner fa-spin"></i> Loading…</div>
+              </div>
+            </div>
+            <div>
+              <div style="font-size:0.7rem;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:0.35rem;">
+                <i class="fas fa-eye" style="margin-right:4px;"></i>Homepage preview
+              </div>
+              <div id="gallery-grid-preview" style="height:260px;display:grid;grid-template-columns:repeat(4,1fr);gap:4px;border-radius:10px;overflow:hidden;border:1px solid var(--border-color,#e2e8f0);background:var(--bg-secondary,#f8fafc);">
+                <div style="grid-column:1/-1;display:flex;align-items:center;justify-content:center;padding:1rem;"><i class="fas fa-images" style="color:#cbd5e1;font-size:1.2rem;"></i></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Add image section -->
+          <div style="margin-top:1rem;border-top:1px solid var(--border-color,#e2e8f0);padding-top:0.85rem;">
+            <div style="font-size:0.75rem;font-weight:700;color:#64748b;margin-bottom:0.6rem;text-transform:uppercase;letter-spacing:0.4px;">➕ Add a Photo</div>
+
+            <div style="display:flex;gap:0.4rem;margin-bottom:0.75rem;flex-wrap:nowrap;overflow-x:auto;padding-bottom:2px;">
+              <button class="gallery-tab-btn active" onclick="switchGalleryTab('upload')" id="tab-upload" style="white-space:nowrap;"><i class="fas fa-image"></i> Photo</button>
+              <button class="gallery-tab-btn" onclick="switchGalleryTab('video')" id="tab-video" style="white-space:nowrap;"><i class="fas fa-film"></i> Video(s)</button>
+              <button class="gallery-tab-btn" onclick="switchGalleryTab('drive')" id="tab-drive" style="white-space:nowrap;"><i class="fab fa-google-drive"></i> Drive</button>
+              <button class="gallery-tab-btn" onclick="switchGalleryTab('existing')" id="tab-existing" style="white-space:nowrap;"><i class="fas fa-th"></i> Library</button>
+            </div>
+
+            <!-- UPLOAD TAB -->
+            <div id="gallery-tab-upload">
+              <div id="gallery-dropzone" onclick="document.getElementById('gallery-file-input').click()"
+                   ondragover="event.preventDefault();this.classList.add('drag-over')"
+                   ondragleave="this.classList.remove('drag-over')"
+                   ondrop="handleGalleryDrop(event)">
+                <input type="file" id="gallery-file-input" accept="image/*" style="display:none" onchange="handleGalleryFile(this.files[0])">
+                <div id="gallery-dropzone-content">
+                  <i class="fas fa-cloud-upload-alt" style="font-size:2rem;color:#93c5fd;margin-bottom:0.5rem;display:block;"></i>
+                  <div style="font-weight:600;color:var(--text-primary,#1e293b);">Click to choose a photo</div>
+                  <div style="font-size:0.75rem;color:#94a3b8;margin-top:0.2rem;">or drag and drop here &middot; JPG, PNG, WebP up to 10 MB</div>
+                </div>
+                <div id="gallery-file-selected" style="display:none;align-items:center;gap:0.75rem;">
+                  <img id="gallery-file-preview" src="" alt="" style="height:70px;width:70px;object-fit:cover;border-radius:8px;border:1px solid #e2e8f0;flex-shrink:0;">
+                  <div>
+                    <div id="gallery-file-name" style="font-weight:600;font-size:0.85rem;color:var(--text-primary,#1e293b);"></div>
+                    <div id="gallery-file-size" style="font-size:0.75rem;color:#94a3b8;"></div>
+                    <button onclick="event.stopPropagation();clearGalleryFile()" style="font-size:0.7rem;color:#dc2626;background:none;border:none;cursor:pointer;padding:0;margin-top:0.2rem;">&#x2715; Remove</button>
+                  </div>
+                </div>
+              </div>
+              <div id="gallery-upload-progress" style="display:none;margin-top:0.5rem;">
+                <div style="display:flex;justify-content:space-between;font-size:0.75rem;color:#64748b;margin-bottom:3px;">
+                  <span>Uploading…</span><span id="gallery-progress-pct">0%</span>
+                </div>
+                <div style="background:#e2e8f0;border-radius:99px;height:6px;">
+                  <div id="gallery-progress-bar" style="background:linear-gradient(90deg,#2563eb,#3b82f6);height:6px;border-radius:99px;width:0%;transition:width 0.2s;"></div>
+                </div>
+              </div>
+              <div class="mgmt-form-row" style="margin-top:0.6rem;">
+                <input type="text" id="gallery-upload-title" class="form-input" placeholder="Photo title (e.g. Beach Cleanup)" style="flex:1;">
+                <input type="text" id="gallery-upload-desc"  class="form-input" placeholder="Caption — optional" style="flex:1;">
+              </div>
+              <button class="btn btn-primary" style="margin-top:0.5rem;width:100%;" onclick="uploadGalleryPhoto()">
+                <i class="fas fa-upload"></i> Upload &amp; Add to Gallery
+              </button>
+              <div style="margin-top:0.75rem;">
+                <div style="font-size:0.7rem;color:#94a3b8;margin-bottom:0.3rem;">Or quickly add a site photo:</div>
+                <div class="preset-btns">
+                  <button class="preset-btn" onclick="addGalleryPreset('Town Hall Meeting','images/bocaTownHall.jpg','')">&#x1F3DB; Town Hall</button>
+                  <button class="preset-btn" onclick="addGalleryPreset('Beach Cleanup','images/bocaBeach.jpg','')">&#x1F3D6; Beach</button>
+                  <button class="preset-btn" onclick="addGalleryPreset('Youth Workshop','images/bocaLibrary.jpg','')">&#x1F4DA; Youth</button>
+                  <button class="preset-btn" onclick="addGalleryPreset('Community Garden','images/bocaNeighborhood.jpg','')">&#x1F33F; Garden</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- VIDEO UPLOAD TAB -->
+            <div id="gallery-tab-video" style="display:none;">
+              <div id="gallery-video-dropzone"
+                   onclick="document.getElementById('gallery-video-file-input').click()"
+                   ondragover="event.preventDefault();this.classList.add('drag-over')"
+                   ondragleave="this.classList.remove('drag-over')"
+                   ondrop="handleGalleryVideoDrop(event)"
+                   style="border:2px dashed #bfdbfe;border-radius:12px;padding:1.5rem 1rem;text-align:center;cursor:pointer;background:#f8fafc;transition:background 0.15s,border-color 0.15s;">
+                <input type="file" id="gallery-video-file-input" accept="video/*" multiple style="display:none" onchange="handleGalleryVideoFiles(this.files)">
+                <i class="fas fa-cloud-upload-alt" style="font-size:2rem;color:#93c5fd;margin-bottom:0.5rem;display:block;"></i>
+                <div style="font-weight:600;color:var(--text-primary,#1e293b);">Click to choose video(s)</div>
+              <div style="font-size:0.72rem;color:#94a3b8;margin-top:0.2rem;">or drag and drop here &middot; MP4, MOV, WebM</div>
+              </div>
+              <div id="gallery-video-queue" style="display:flex;flex-direction:column;gap:0.5rem;margin-top:0.75rem;"></div>
+              <div id="gallery-video-overall-progress" style="display:none;margin-top:0.5rem;">
+                <div style="display:flex;justify-content:space-between;font-size:0.75rem;color:#64748b;margin-bottom:3px;">
+                  <span id="gallery-video-overall-label">Uploading…</span><span id="gallery-video-overall-pct">0%</span>
+                </div>
+                <div style="background:#e2e8f0;border-radius:99px;height:6px;">
+                  <div id="gallery-video-overall-bar" style="background:linear-gradient(90deg,#7c3aed,#a78bfa);height:6px;border-radius:99px;width:0%;transition:width 0.2s;"></div>
+                </div>
+              </div>
+              <div id="gallery-video-error" class="mgmt-error" style="margin-top:0.5rem;"></div>
+              <div id="gallery-video-success" class="mgmt-success" style="margin-top:0.5rem;"></div>
+              <button class="btn btn-primary" style="margin-top:0.75rem;width:100%;background:linear-gradient(135deg,#7c3aed,#a78bfa);" onclick="uploadGalleryVideos()">
+                <i class="fas fa-film"></i> Upload &amp; Add Video(s) to Gallery
+              </button>
+              <p style="font-size:0.72rem;color:#94a3b8;margin-top:0.5rem;"><i class="fas fa-info-circle"></i> Videos are uploaded to Firebase Storage — any file size works. For YouTube/Vimeo, use the <strong>Link</strong> tab instead.</p>
+            </div>
+
+            <!-- GOOGLE DRIVE TAB -->
+            <div id="gallery-tab-drive" style="display:none;">
+              <div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;padding:0.6rem 0.75rem;margin-bottom:0.6rem;font-size:0.8rem;color:#1d4ed8;">
+                <strong>How to share from Drive:</strong> Open the image in Google Drive &rarr; right-click &rarr; <em>Share</em> &rarr; set to &ldquo;Anyone with the link&rdquo; &rarr; <em>Copy link</em>. Paste it below.
+              </div>
+              <div class="mgmt-form-row">
+                <input type="text" id="gallery-drive-url" class="form-input" placeholder="https://drive.google.com/file/d/…/view" style="flex:2;" oninput="parseDriveUrl()">
+                <input type="text" id="gallery-drive-title" class="form-input" placeholder="Title" style="flex:1;">
+                <input type="text" id="gallery-drive-desc"  class="form-input" placeholder="Caption (optional)" style="flex:1;">
+              </div>
+              <div id="gallery-drive-preview" style="margin-top:0.5rem;display:none;align-items:center;gap:0.75rem;">
+                <img id="gallery-drive-preview-img" src="" alt="preview" style="height:80px;border-radius:8px;object-fit:cover;border:1px solid #e2e8f0;">
+                <div>
+                  <span style="font-size:0.75rem;color:#15803d;font-weight:600;"><i class="fas fa-check-circle"></i> Link looks good!</span>
+                  <div id="gallery-drive-converted" style="font-size:0.68rem;color:#94a3b8;word-break:break-all;max-width:200px;margin-top:2px;"></div>
+                </div>
+              </div>
+              <div id="gallery-drive-error" style="font-size:0.75rem;color:#dc2626;margin-top:0.3rem;display:none;"></div>
+              <button class="btn btn-primary" style="margin-top:0.5rem;width:100%;" onclick="addGalleryDrive()">
+                <i class="fab fa-google-drive"></i> Add from Google Drive
+              </button>
+            </div>
+
+            <!-- SITE LIBRARY TAB -->
+            <div id="gallery-tab-existing" style="display:none;">
+              <p style="font-size:0.8rem;color:#64748b;margin-bottom:0.5rem;">Click any photo already on your site to select it.</p>
+              <div id="existing-images-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(68px,1fr));gap:6px;max-height:180px;overflow-y:auto;border:1px solid var(--border-color,#e2e8f0);border-radius:8px;padding:6px;">
+                <div style="color:#94a3b8;font-size:0.75rem;padding:0.5rem;grid-column:1/-1;text-align:center;"><i class="fas fa-spinner fa-spin"></i> Loading…</div>
+              </div>
+              <div id="existing-selected-info" style="margin-top:0.6rem;display:none;">
+                <div style="font-size:0.75rem;background:#eff6ff;color:#1d4ed8;padding:0.35rem 0.6rem;border-radius:6px;margin-bottom:0.4rem;" id="existing-selected-label"></div>
+                <div class="mgmt-form-row">
+                  <input type="text" id="existing-title" class="form-input" placeholder="Title for this photo" style="flex:1;">
+                  <input type="text" id="existing-desc"  class="form-input" placeholder="Caption (optional)" style="flex:1;">
+                  <button class="btn btn-primary" onclick="addGalleryExisting()"><i class="fas fa-plus"></i> Add</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Stats Management -->
+        <div class="qr-card">
+          <h2><i class="fas fa-chart-simple"></i> Homepage Stats</h2>
+          <p style="font-size:0.85rem; color:#64748b; margin-bottom:0.5rem;">Manage the numbers shown in the "Your Impact" section.</p>
+          
+          <!-- Error/Success messages -->
+          <div id="stats-error" class="mgmt-error"></div>
+          <div id="stats-success" class="mgmt-success"></div>
+
+          <!-- Quick presets -->
+          <div class="preset-btns">
+            <button class="preset-btn" onclick="addStatPreset('Community Members', 1247)">+ Members</button>
+            <button class="preset-btn" onclick="addStatPreset('Events Hosted', 156)">+ Events</button>
+            <button class="preset-btn" onclick="addStatPreset('Volunteer Hours', 2843)">+ Hours</button>
+            <button class="preset-btn" onclick="addStatPreset('Badges Earned', 89)">+ Badges</button>
+          </div>
+
+          <div id="stats-list" class="mgmt-item-list">
+            <div class="list-loading"><i class="fas fa-spinner fa-spin"></i> Loading stats...</div>
+          </div>
+
+          <!-- Stats preview -->
+          <div style="margin-top:0.5rem;">
+            <div style="font-size:0.7rem;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:0.5px;">Preview</div>
+            <div class="mgmt-preview" id="stats-preview">
+              <span style="color:#94a3b8;font-size:0.75rem;">No stats yet</span>
+            </div>
+          </div>
+
+          <div class="mgmt-form-row">
+            <input type="text" id="stats-label" class="form-input" placeholder="Label (e.g. Members)" style="flex:1;">
+            <input type="number" id="stats-number" class="form-input" placeholder="Number" style="flex:0.8;">
+            <button class="btn btn-primary" onclick="addStat()"><i class="fas fa-plus"></i> Add</button>
           </div>
         </div>
       </div>
@@ -1070,7 +1749,33 @@
 <script type="module">
 import { initializeApp, getApps } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
 import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
-import { getFirestore, collection, getDocs, getDoc, doc, updateDoc, addDoc, deleteDoc, query, where, orderBy, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+import { getFirestore, collection, getDocs, getDoc, doc, updateDoc, addDoc, deleteDoc, query, where, orderBy, serverTimestamp, setDoc, writeBatch } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+// ── Cloudinary config ──────────────────────────────────────────────────────
+// Free plan: https://cloudinary.com — no credit card needed (25 GB storage).
+// 1. Sign up, go to Dashboard, copy your Cloud Name.
+// 2. Settings → Upload → Add upload preset → set to "Unsigned" → save.
+// 3. Paste both values below.
+const CLOUDINARY_CLOUD_NAME    = 'dhycdahd6';    // e.g. 'dxyz1abc2'
+const CLOUDINARY_UPLOAD_PRESET = 'nextstep_uploads'; // e.g. 'nextstep_uploads'
+
+async function cloudinaryUpload(file, onProgress) {
+  const url = `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/auto/upload`;
+  const fd  = new FormData();
+  fd.append('file', file);
+  fd.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
+  return new Promise((resolve, reject) => {
+    const xhr = new XMLHttpRequest();
+    xhr.open('POST', url);
+    if (onProgress) xhr.upload.onprogress = e => { if (e.lengthComputable) onProgress(e.loaded / e.total); };
+    xhr.onload = () => {
+      if (xhr.status === 200) { resolve(JSON.parse(xhr.responseText).secure_url); }
+      else { try { reject(new Error(JSON.parse(xhr.responseText).error?.message || `HTTP ${xhr.status}`)); } catch { reject(new Error(`HTTP ${xhr.status}`)); } }
+    };
+    xhr.onerror = () => reject(new Error('Network error during upload.'));
+    xhr.send(fd);
+  });
+}
+// ───────────────────────────────────────────────────────────────────────────
 
 const firebaseConfig = {
   apiKey: "AIzaSyArZYz6UMheUgBVrNeWvxWml-0zDTbNur0",
@@ -1753,6 +2458,7 @@ window.submitEventForm = async function(e) {
     resetEventForm();
     loadMgmtEvents();
     loadEvents(); // refresh the QR event picker list too
+    loadPastGallery(); // keep the Past Events Gallery tab in sync
   } catch (err) {
     console.error('submitEventForm error:', err);
     alert('Failed to save event: ' + (err.message || 'Unknown error'));
@@ -1771,6 +2477,7 @@ window.archiveMgmtEvent = async function(id) {
     if (editingEventId === id) resetEventForm();
     loadMgmtEvents();
     loadEvents();
+    loadPastGallery(); // keep the Past Events Gallery tab in sync
   } catch (err) {
     alert('Failed to archive event: ' + err.message);
   }
@@ -1787,6 +2494,7 @@ window.restoreMgmtEvent = async function(id) {
     showToast('Event restored and published.');
     loadMgmtEvents();
     loadEvents();
+    loadPastGallery(); // keep the Past Events Gallery tab in sync
   } catch (err) {
     alert('Failed to restore event: ' + err.message);
   }
@@ -1801,12 +2509,602 @@ window.deleteMgmtEvent = async function(id) {
     if (editingEventId === id) resetEventForm();
     loadMgmtEvents();
     loadEvents();
+    loadPastGallery(); // remove it from the Past Events Gallery tab too, even if it was archived
   } catch (err) {
     alert('Failed to delete event: ' + err.message);
   }
 };
 
 // ─── END EVENT MANAGEMENT ─────────────────────────────────────────────────────
+
+// ─── PAST EVENTS GALLERY ─────────────────────────────────────────────────────
+
+const PG_CAT_COLORS = {
+  political:'#2563eb', environmental:'#10b981', youth:'#f59e0b',
+  innovation:'#ec4899', education:'#8b5cf6', religious:'#d97706', volunteer:'#10b981',
+};
+const PG_CAT_GRADIENTS = {
+  political:'linear-gradient(135deg,#2563eb,#3b82f6)',
+  environmental:'linear-gradient(135deg,#10b981,#34d399)',
+  youth:'linear-gradient(135deg,#f59e0b,#fbbf24)',
+  innovation:'linear-gradient(135deg,#ec4899,#f472b6)',
+  education:'linear-gradient(135deg,#8b5cf6,#a78bfa)',
+  religious:'linear-gradient(135deg,#d97706,#fbbf24)',
+  volunteer:'linear-gradient(135deg,#10b981,#059669)',
+};
+const PG_CAT_ICONS = {
+  political:'fa-landmark', environmental:'fa-leaf', youth:'fa-star',
+  innovation:'fa-lightbulb', education:'fa-graduation-cap',
+  religious:'fa-place-of-worship', volunteer:'fa-hand-holding-heart',
+};
+
+let pgAllEvents = [];
+let pgActiveCat = 'all';
+
+async function loadPastGallery() {
+  const grid = document.getElementById('past-gallery-grid');
+  if (!grid) return;
+  try {
+    const snap = await getDocs(collection(db, 'events'));
+    pgAllEvents = [];
+    snap.forEach(d => pgAllEvents.push({ id: d.id, ...d.data() }));
+    pgAllEvents.sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+    buildPastGalleryFilters();
+    renderPastGallery();
+  } catch (err) {
+    grid.innerHTML = '<div class="list-loading">Failed to load events.</div>';
+    console.error('loadPastGallery:', err);
+  }
+}
+
+function buildPastGalleryFilters() {
+  const wrap = document.getElementById('past-gallery-filter-pills');
+  if (!wrap) return;
+  const cats = [...new Set(pgAllEvents.map(e => e.category).filter(Boolean))].sort();
+  // Keep the "All" pill, rebuild the rest
+  wrap.innerHTML = `<button class="filter-pill active" data-pgcat="all" onclick="setPastGalleryCat('all',this)">All</button>`;
+  cats.forEach(cat => {
+    const b = document.createElement('button');
+    b.className = 'filter-pill';
+    b.dataset.pgcat = cat;
+    b.onclick = () => setPastGalleryCat(cat, b);
+    b.innerHTML = `<span class="pill-dot" style="background:${PG_CAT_COLORS[cat]||'#2563eb'};opacity:1;"></span>${cat.charAt(0).toUpperCase()+cat.slice(1)}`;
+    wrap.appendChild(b);
+  });
+}
+
+window.setPastGalleryCat = function(cat, el) {
+  pgActiveCat = cat;
+  document.querySelectorAll('[data-pgcat]').forEach(p => p.classList.remove('active'));
+  el.classList.add('active');
+  renderPastGallery();
+};
+
+window.filterPastGallery = function(term) {
+  renderPastGallery(term);
+};
+
+function renderPastGallery(searchTerm) {
+  const grid = document.getElementById('past-gallery-grid');
+  if (!grid) return;
+  const showArchived = document.getElementById('past-gallery-show-archived')?.checked;
+  const term = (searchTerm || document.getElementById('past-gallery-search')?.value || '').toLowerCase();
+
+  let events = pgAllEvents.filter(e => {
+    const catMatch = pgActiveCat === 'all' || e.category === pgActiveCat;
+    const archMatch = showArchived ? true : !e.archived;
+    const termMatch = !term
+      || (e.title||'').toLowerCase().includes(term)
+      || (e.location||'').toLowerCase().includes(term)
+      || (e.category||'').toLowerCase().includes(term);
+    return catMatch && archMatch && termMatch;
+  });
+
+  const countEl = document.getElementById('past-gallery-count');
+  if (countEl) countEl.textContent = `${events.length} event${events.length !== 1 ? 's' : ''}`;
+
+  if (!events.length) {
+    grid.innerHTML = `<div class="list-loading" style="grid-column:1/-1;"><i class="fas fa-calendar-xmark"></i><br>No events match.</div>`;
+    return;
+  }
+
+  grid.innerHTML = events.map(ev => pgCardHTML(ev)).join('');
+}
+
+function pgCardHTML(ev) {
+  const color    = PG_CAT_COLORS[ev.category]    || '#2563eb';
+  const gradient = PG_CAT_GRADIENTS[ev.category] || 'linear-gradient(135deg,#2563eb,#3b82f6)';
+  const icon     = PG_CAT_ICONS[ev.category]     || 'fa-calendar-check';
+  const cap = s => s ? s.charAt(0).toUpperCase()+s.slice(1) : '';
+  const esc = s => String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const archived = !!ev.archived;
+
+  // Each additional photo carries its own {url, caption}; legacy plain-string
+  // arrays are upgraded automatically.
+  pgGalleryState[ev.id] = pgGalleryNormalize(ev.images);
+
+  const toggleBtn = archived
+    ? `<button class="pg-toggle-btn remove" onclick="pgToggleArchive('${esc(ev.id)}',false)"><i class="fas fa-minus-circle"></i> Remove from Gallery</button>`
+    : `<button class="pg-toggle-btn add" onclick="pgToggleArchive('${esc(ev.id)}',true)"><i class="fas fa-box-archive"></i> Add to Past Events</button>`;
+
+  const attended = (parseInt(ev.registered)||0) + (parseInt(ev.checkedIn)||0);
+
+  return `
+  <div class="pg-card${archived ? ' is-archived' : ''}" id="pgcard-${esc(ev.id)}">
+    <div class="pg-body">
+      <div class="pg-title" style="display:flex;align-items:center;gap:0.45rem;flex-wrap:wrap;">${esc(ev.title||'Untitled Event')}${archived ? `<span style="font-size:0.6rem;font-weight:800;text-transform:uppercase;letter-spacing:0.8px;background:rgba(245,158,11,0.15);color:#b45309;padding:2px 7px;border-radius:20px;flex-shrink:0;"><i class="fas fa-box-archive" style="margin-right:2px;"></i>In Gallery</span>` : ''}</div>
+      <div style="margin-bottom:0.2rem;"><span style="font-size:0.6rem;font-weight:800;text-transform:uppercase;letter-spacing:0.8px;color:white;background:${color};padding:2px 8px;border-radius:20px;">${cap(ev.category||'Event')}</span></div>
+      ${ev.date ? `<div class="pg-meta"><i class="fas fa-calendar-alt"></i>${esc(ev.date)}${ev.time?' · '+esc(ev.time):''}</div>` : ''}
+      ${ev.location ? `<div class="pg-meta"><i class="fas fa-location-dot"></i>${esc(ev.location)}</div>` : ''}
+
+      <!-- Attendance fields -->
+      <div class="pg-att-row">
+        <label><i class="fas fa-user-check" style="color:#10b981;margin-right:2px;"></i> Registered</label>
+        <input type="number" min="0" id="pgreg-${esc(ev.id)}" placeholder="0" value="${ev.registered != null ? ev.registered : ''}">
+        <label style="margin-left:0.3rem;"><i class="fas fa-users" style="color:#2563eb;margin-right:2px;"></i> Checked in</label>
+        <input type="number" min="0" id="pgchk-${esc(ev.id)}" placeholder="0" value="${ev.checkedIn != null ? ev.checkedIn : ''}">
+      </div>
+
+      <!-- Legacy cover photo — shown if the event has an imageUrl field from before the gallery system -->
+      ${ev.imageUrl ? `
+      <div class="pg-extra-block" id="pgcoverblock-${esc(ev.id)}" style="background:#fff8f0;border:1.5px solid #fed7aa;border-radius:10px;padding:0.6rem 0.75rem;">
+        <div class="pg-extra-label" style="color:#c2410c;"><i class="fas fa-image"></i> Legacy cover photo <span class="pg-extra-hint" style="color:#ea580c;">added before the gallery system — delete if no longer needed</span></div>
+        <div style="display:flex;align-items:center;gap:0.6rem;margin-top:0.35rem;">
+          <img src="${esc(ev.imageUrl)}" alt="" style="width:54px;height:54px;object-fit:cover;border-radius:8px;border:1px solid #fed7aa;flex-shrink:0;" onerror="this.style.visibility='hidden'">
+          <div style="flex:1;min-width:0;font-size:0.74rem;color:#7c3f1e;word-break:break-all;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="${esc(ev.imageUrl)}">${esc(ev.imageUrl)}</div>
+          <button onclick="pgRemoveCoverPhoto('${esc(ev.id)}')" style="flex-shrink:0;padding:0.3rem 0.65rem;background:#fee2e2;color:#dc2626;border:none;border-radius:8px;font-family:inherit;font-size:0.72rem;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:0.3rem;transition:background 0.15s;" onmouseover="this.style.background='#fca5a5'" onmouseout="this.style.background='#fee2e2'">
+            <i class="fas fa-trash-can"></i> Delete
+          </button>
+        </div>
+      </div>` : ''}
+
+      <!-- Additional photos: add via URL, upload, or Drive — each photo gets its own caption -->
+      <div class="pg-extra-block">
+        <div class="pg-extra-label"><i class="fas fa-images"></i> More photos <span class="pg-extra-hint">caption shows on hover</span></div>
+        <div class="pg-gallery-list" id="pggallery-${esc(ev.id)}">${pgGalleryListHTML(ev.id)}</div>
+        <div class="pg-gallery-add">
+          <div class="pg-img-picker-tabs">
+            <button class="pg-img-tab active" onclick="pgGallerySwitchTab('${esc(ev.id)}','url',this)"><i class="fas fa-link"></i> URL</button>
+            <button class="pg-img-tab" onclick="pgGallerySwitchTab('${esc(ev.id)}','upload',this)"><i class="fas fa-image"></i> Photo</button>
+            <button class="pg-img-tab" onclick="pgGallerySwitchTab('${esc(ev.id)}','drive',this)"><i class="fab fa-google-drive"></i> Drive</button>
+            <button class="pg-img-tab" onclick="pgGallerySwitchTab('${esc(ev.id)}','video',this)"><i class="fas fa-film"></i> Vid URL</button>
+            <button class="pg-img-tab" onclick="pgGallerySwitchTab('${esc(ev.id)}','videoup',this)"><i class="fas fa-upload"></i> Upload Vid</button>
+          </div>
+          <div id="pggaltab-url-${esc(ev.id)}" class="pg-img-panel active">
+            <div class="pg-img-url-row">
+              <input type="url" id="pggalurl-${esc(ev.id)}" placeholder="Photo URL" onkeydown="if(event.key==='Enter'){event.preventDefault();pgGalleryAddUrl('${esc(ev.id)}');}">
+              <button onclick="pgGalleryAddUrl('${esc(ev.id)}')"><i class="fas fa-plus"></i> Add</button>
+            </div>
+          </div>
+          <div id="pggaltab-upload-${esc(ev.id)}" class="pg-img-panel">
+            <div class="pg-dropzone" onclick="document.getElementById('pggalfile-${esc(ev.id)}').click()"
+                 ondragover="event.preventDefault();this.classList.add('drag-over')"
+                 ondragleave="this.classList.remove('drag-over')"
+                 ondrop="pgGalleryHandleDrop('${esc(ev.id)}',event)">
+              <input type="file" id="pggalfile-${esc(ev.id)}" accept="image/*" multiple onchange="pgGalleryAddFiles('${esc(ev.id)}',this.files)">
+              <i class="fas fa-cloud-upload-alt" style="color:#93c5fd;font-size:1.3rem;display:block;margin-bottom:3px;"></i>
+              <span style="font-weight:600;color:#475569;font-size:0.75rem;">Click or drag photos here — select multiple</span>
+            </div>
+          </div>
+          <div id="pggaltab-drive-${esc(ev.id)}" class="pg-img-panel">
+            <div class="pg-drive-hint"><strong>Google Drive:</strong> Share → Anyone with the link → Copy link</div>
+            <div class="pg-drive-row">
+              <input type="text" id="pggaldrive-${esc(ev.id)}" placeholder="https://drive.google.com/file/d/…/view" onkeydown="if(event.key==='Enter'){event.preventDefault();pgGalleryAddDrive('${esc(ev.id)}');}">
+              <button onclick="pgGalleryAddDrive('${esc(ev.id)}')"><i class="fas fa-plus"></i> Add</button>
+            </div>
+          </div>
+          <div id="pggaltab-video-${esc(ev.id)}" class="pg-img-panel">
+            <div class="pg-drive-hint"><strong>Video URL:</strong> Paste a YouTube, Vimeo, or Google Drive video link. Drive links are auto-converted. Very large Drive files may not stream; YouTube/Vimeo are most reliable.</div>
+            <div class="pg-img-url-row">
+              <input type="url" id="pggalvideo-${esc(ev.id)}" placeholder="YouTube, Vimeo, or drive.google.com/file/d/…" onkeydown="if(event.key==='Enter'){event.preventDefault();pgGalleryAddVideo('${esc(ev.id)}');}">
+              <button onclick="pgGalleryAddVideo('${esc(ev.id)}')"><i class="fas fa-plus"></i> Add</button>
+            </div>
+          </div>
+          <div id="pggaltab-videoup-${esc(ev.id)}" class="pg-img-panel">
+            <div class="pg-dropzone" onclick="document.getElementById('pggalvideofile-${esc(ev.id)}').click()"
+                 ondragover="event.preventDefault();this.classList.add('drag-over')"
+                 ondragleave="this.classList.remove('drag-over')"
+                 ondrop="pgGalleryHandleVideoDrop('${esc(ev.id)}',event)"
+                 style="background:#f5f3ff;border-color:#c4b5fd;">
+              <input type="file" id="pggalvideofile-${esc(ev.id)}" accept="video/*" multiple onchange="pgGalleryAddVideoFiles('${esc(ev.id)}',this.files)">
+              <i class="fas fa-film" style="color:#7c3aed;font-size:1.3rem;display:block;margin-bottom:3px;"></i>
+              <span style="font-weight:600;color:#475569;font-size:0.75rem;">Click or drag video files here — select multiple</span>
+              <div style="font-size:0.65rem;color:#94a3b8;margin-top:2px;">MP4, MOV, WebM — uploaded to Firebase Storage</div>
+            </div>
+            <div id="pggalvideoqueue-${esc(ev.id)}" style="display:flex;flex-direction:column;gap:0.35rem;margin-top:0.4rem;"></div>
+            <div id="pggalvideoprogress-${esc(ev.id)}" style="display:none;margin-top:0.35rem;">
+              <div class="pg-progress-track"><div class="pg-progress-bar" id="pggalvideobar-${esc(ev.id)}" style="background:linear-gradient(90deg,#7c3aed,#a78bfa);"></div></div>
+              <div style="font-size:0.65rem;color:#94a3b8;margin-top:2px;" id="pggalvideolbl-${esc(ev.id)}">Processing…</div>
+            </div>
+            <button onclick="pgGalleryCommitVideoFiles('${esc(ev.id)}')"
+                    style="width:100%;margin-top:0.4rem;padding:0.35rem;background:linear-gradient(135deg,#7c3aed,#a78bfa);color:white;border:none;border-radius:8px;font-family:inherit;font-size:0.74rem;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:0.35rem;">
+              <i class="fas fa-plus"></i> Add Video(s) to Event
+            </button>
+          </div>
+          <div id="pggal-err-${esc(ev.id)}" class="pg-img-err"></div>
+        </div>
+      </div>
+
+      <!-- Full story / recap -->
+      <div class="pg-extra-block">
+        <div class="pg-extra-label"><i class="fas fa-align-left"></i> Full event story</div>
+        <textarea id="pgrecap-${esc(ev.id)}" placeholder="Write the full recap that shows on the public Past Events page — what happened, who showed up, what it accomplished…" style="min-height:90px;">${esc(ev.recap||'')}</textarea>
+      </div>
+
+      <!-- Links -->
+      <div class="pg-extra-block">
+        <div class="pg-extra-label"><i class="fas fa-link"></i> Links <span class="pg-extra-hint">Label | URL, one per line</span></div>
+        <textarea id="pglinks-${esc(ev.id)}" placeholder="Event recap article | https://...&#10;Photo album | https://...">${esc((ev.links||[]).map(l=>`${l.label||'Link'} | ${l.url||''}`).join('\n'))}</textarea>
+      </div>
+    </div>
+
+    <div class="pg-footer">
+      ${toggleBtn}
+      <button class="pg-save-btn" title="Save photo & attendance" onclick="pgSaveDetails('${esc(ev.id)}')">
+        <i class="fas fa-floppy-disk"></i> Save
+      </button>
+    </div>
+  </div>`;
+}
+
+function pgParseLinks(text) {
+  return String(text||'').split('\n').map(s=>s.trim()).filter(Boolean).map(line => {
+    const parts = line.split('|').map(p=>p.trim());
+    if (parts.length >= 2 && parts[1]) return { label: parts[0] || 'Learn more', url: parts[1] };
+    return { label: 'Learn more', url: parts[0] };
+  }).filter(l => l.url);
+}
+
+window.pgSaveDetails = async function(id) {
+  const registered = document.getElementById('pgreg-' + id)?.value;
+  const checkedIn  = document.getElementById('pgchk-' + id)?.value;
+  const images = (pgGalleryState[id] || []).filter(it => it.url);
+  const recap  = (document.getElementById('pgrecap-' + id)?.value || '').trim();
+  const links  = pgParseLinks(document.getElementById('pglinks-' + id)?.value);
+
+  const patch = { images, links };
+  if (registered !== '') patch.registered = Number(registered); else patch.registered = null;
+  if (checkedIn  !== '') patch.checkedIn  = Number(checkedIn);  else patch.checkedIn  = null;
+  if (recap      !== '') patch.recap      = recap;      else patch.recap      = null;
+
+  // Strip nulls
+  Object.keys(patch).forEach(k => { if (patch[k] === null) delete patch[k]; });
+
+  try {
+    await updateDoc(doc(db, 'events', id), patch);
+    // Update local cache
+    const idx = pgAllEvents.findIndex(e => e.id === id);
+    if (idx > -1) pgAllEvents[idx] = { ...pgAllEvents[idx], ...patch };
+    showPastGalleryMsg('Details saved!', 'success');
+  } catch (err) {
+    showPastGalleryMsg('Failed to save: ' + err.message, 'error');
+  }
+};
+
+window.pgRemoveCoverPhoto = async function(id) {
+  if (!confirm('Delete this legacy cover photo from the event? This cannot be undone.')) return;
+  try {
+    await updateDoc(doc(db, 'events', id), { imageUrl: null, imageCaption: null });
+    // Update local cache
+    const idx = pgAllEvents.findIndex(e => e.id === id);
+    if (idx > -1) { pgAllEvents[idx].imageUrl = null; pgAllEvents[idx].imageCaption = null; }
+    // Hide the block immediately without a full re-render
+    const block = document.getElementById('pgcoverblock-' + id);
+    if (block) block.remove();
+    showPastGalleryMsg('Legacy cover photo removed.', 'success');
+  } catch (err) {
+    showPastGalleryMsg('Failed to remove: ' + err.message, 'error');
+  }
+};
+
+window.pgToggleArchive = async function(id, archive) {
+  const ev = pgAllEvents.find(e => e.id === id);
+  const action = archive ? 'Add' : 'Remove';
+  const label  = ev?.title || id;
+  if (!confirm(`${action} "${label}" ${archive ? 'to the Past Events gallery' : 'from the Past Events gallery'}?`)) return;
+
+  const patch = archive
+    ? { archived: true,  archivedAt: new Date().toISOString() }
+    : { archived: false, archivedAt: null };
+
+  // Also save any unsaved photos/attendance/story details at the same time
+  const registered = document.getElementById('pgreg-' + id)?.value;
+  const checkedIn  = document.getElementById('pgchk-' + id)?.value;
+  const recap      = (document.getElementById('pgrecap-' + id)?.value || '').trim();
+  patch.images = (pgGalleryState[id] || []).filter(it => it.url);
+  patch.links  = pgParseLinks(document.getElementById('pglinks-' + id)?.value);
+  if (registered !== '') patch.registered = Number(registered);
+  if (checkedIn  !== '') patch.checkedIn  = Number(checkedIn);
+  if (recap      !== '') patch.recap      = recap;
+
+  try {
+    await updateDoc(doc(db, 'events', id), patch);
+    // Update local cache
+    const idx = pgAllEvents.findIndex(e => e.id === id);
+    if (idx > -1) pgAllEvents[idx] = { ...pgAllEvents[idx], ...patch };
+    showPastGalleryMsg(
+      archive ? `"${label}" added to the Past Events gallery!` : `"${label}" removed from the gallery.`,
+      archive ? 'success' : 'info'
+    );
+    renderPastGallery();
+  } catch (err) {
+    showPastGalleryMsg('Failed: ' + err.message, 'error');
+  }
+};
+
+function showPastGalleryMsg(msg, type) {
+  const el = document.getElementById('past-gallery-msg');
+  if (!el) return;
+  const styles = {
+    success: 'background:#dcfce7;color:#15803d;',
+    error:   'background:#fee2e2;color:#991b1b;',
+    info:    'background:#f1f5f9;color:#475569;',
+  };
+  el.setAttribute('style', (styles[type]||styles.info) + 'display:block;border-radius:10px;padding:0.6rem 0.875rem;font-size:0.82rem;font-weight:600;margin-bottom:0.75rem;');
+  el.textContent = msg;
+  clearTimeout(el._t);
+  el._t = setTimeout(() => { el.style.display = 'none'; }, 4000);
+}
+
+// ── Additional-photos gallery: multi-method add (URL / Upload / Drive), per-photo captions ──
+
+function pgDriveFileId(raw) {
+  const m = raw.match(/\/d\/([a-zA-Z0-9_-]{10,})/) || raw.match(/[?&]id=([a-zA-Z0-9_-]{10,})/);
+  return m ? m[1] : null;
+}
+function pgDriveVideoUrl(fileId) {
+  return `https://drive.google.com/uc?export=download&id=${fileId}`;
+}
+
+const pgGalleryState = {}; // { [id]: [{url, caption}, ...] }
+
+function pgGalleryNormalize(images) {
+  return (Array.isArray(images) ? images : []).map(item => {
+    if (typeof item === 'string') return { url: item, caption: '', type: 'image' };
+    if (item && item.url) return { url: item.url, caption: item.caption || '', type: item.type || 'image' };
+    return null;
+  }).filter(Boolean).filter(it => it.url);
+}
+
+function pgGalleryEsc(s) { return String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+function pgGalleryListHTML(id) {
+  const items = pgGalleryState[id] || [];
+  if (!items.length) return `<div class="pg-gallery-empty">No additional photos or videos yet — add some below.</div>`;
+  return items.map((it, i) => {
+    const isVideo = it.type === 'video';
+    const thumbEl = isVideo
+      ? `<div class="pg-gallery-thumb" style="background:#0f172a;display:flex;align-items:center;justify-content:center;flex-shrink:0;border-radius:7px;border:1px solid #e2e8f0;"><i class="fas fa-play-circle" style="color:#e2e8f0;font-size:1.4rem;"></i></div>`
+      : `<img class="pg-gallery-thumb" src="${pgGalleryEsc(it.url)}" alt="" onerror="this.style.visibility='hidden'">`;
+    return `
+    <div class="pg-gallery-item">
+      ${thumbEl}
+      <input type="text" class="pg-gallery-caption" placeholder="${isVideo ? 'Video caption (optional)' : 'Caption shown when hovered (optional)'}"
+             value="${pgGalleryEsc(it.caption)}" oninput="pgGalleryUpdateCaption('${id}',${i},this.value)">
+      ${isVideo ? `<span style="font-size:0.6rem;font-weight:700;color:#7c3aed;background:#f5f3ff;padding:2px 6px;border-radius:6px;flex-shrink:0;white-space:nowrap;"><i class="fas fa-video"></i> Video</span>` : ''}
+      <button class="pg-gallery-remove" title="Remove" onclick="pgGalleryRemove('${id}',${i})"><i class="fas fa-times"></i></button>
+    </div>`;
+  }).join('');
+}
+
+window.pgGalleryRerender = function(id) {
+  const list = document.getElementById('pggallery-' + id);
+  if (list) list.innerHTML = pgGalleryListHTML(id);
+};
+
+window.pgGallerySwitchTab = function(id, tab, btn) {
+  const card = document.getElementById('pgcard-' + id);
+  if (!card) return;
+  const addBox = btn.closest('.pg-gallery-add');
+  addBox.querySelectorAll('.pg-img-tab').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  addBox.querySelectorAll('.pg-img-panel').forEach(p => p.classList.remove('active'));
+  const panel = document.getElementById(`pggaltab-${tab}-${id}`);
+  if (panel) panel.classList.add('active');
+};
+
+function pgGalleryShowErr(id, msg) {
+  const el = document.getElementById('pggal-err-' + id);
+  if (el) { el.textContent = msg; el.style.display = ''; }
+}
+function pgGalleryHideErr(id) {
+  const el = document.getElementById('pggal-err-' + id);
+  if (el) el.style.display = 'none';
+}
+
+window.pgGalleryAddUrl = function(id) {
+  const inp = document.getElementById('pggalurl-' + id);
+  const url = (inp?.value || '').trim();
+  if (!url) { pgGalleryShowErr(id, 'Paste a photo URL first.'); return; }
+  pgGalleryState[id] = pgGalleryState[id] || [];
+  pgGalleryState[id].push({ url, caption: '', type: 'image' });
+  if (inp) inp.value = '';
+  pgGalleryHideErr(id);
+  pgGalleryRerender(id);
+};
+
+window.pgGalleryAddVideo = function(id) {
+  const inp = document.getElementById('pggalvideo-' + id);
+  const raw = (inp?.value || '').trim();
+  if (!raw) { pgGalleryShowErr(id, 'Paste a YouTube, Vimeo, or Google Drive video link first.'); return; }
+  const isYT    = /youtu(be\.com|\.be)/i.test(raw);
+  const isVimeo = /vimeo\.com/i.test(raw);
+  const isDrive = /drive\.google\.com/i.test(raw);
+  if (!isYT && !isVimeo && !isDrive) { pgGalleryShowErr(id, 'Supported: YouTube, Vimeo, or Google Drive video links.'); return; }
+  // Drive share links (.../file/d/ID/view) only ever show Drive's own player with a
+  // play button and never autoplay. Convert to Drive's direct-download link instead —
+  // same idea as the auto-converted thumbnail link used for Drive photos — so it plays
+  // in a real <video> tag and autoplays on the public page.
+  let url = raw;
+  if (isDrive) {
+    const fileId = pgDriveFileId(raw);
+    if (!fileId) { pgGalleryShowErr(id, "Couldn't read that Drive link — check sharing settings."); return; }
+    url = pgDriveVideoUrl(fileId);
+  }
+  pgGalleryState[id] = pgGalleryState[id] || [];
+  pgGalleryState[id].push({ url, caption: '', type: 'video' });
+  if (inp) inp.value = '';
+  pgGalleryHideErr(id);
+  pgGalleryRerender(id);
+};
+
+window.pgGalleryAddDrive = function(id) {
+  const raw = (document.getElementById('pggaldrive-' + id)?.value || '').trim();
+  if (!raw) { pgGalleryShowErr(id, 'Paste a Google Drive link first.'); return; }
+  const fileId = pgDriveFileId(raw);
+  if (!fileId) { pgGalleryShowErr(id, "Couldn't read that link — check sharing settings."); return; }
+  // Heuristic: Drive video links often contain "view" and no image extension
+  const looksLikeVideo = /\.(mp4|mov|avi|mkv|webm)/i.test(raw) ||
+    raw.includes('resourcekey') ||
+    (!raw.match(/\.(jpg|jpeg|png|gif|webp|svg)/i) && raw.includes('/file/d/'));
+  pgGalleryState[id] = pgGalleryState[id] || [];
+  if (looksLikeVideo) {
+    // Direct-download link instead of the raw share link, so it plays in a real
+    // <video> tag and autoplays — same treatment as the Drive photo link below.
+    pgGalleryState[id].push({ url: pgDriveVideoUrl(fileId), caption: '', type: 'video' });
+  } else {
+    const directUrl = `https://drive.google.com/thumbnail?id=${fileId}&sz=w1000`;
+    pgGalleryState[id].push({ url: directUrl, caption: '', type: 'image' });
+  }
+  const inp = document.getElementById('pggaldrive-' + id);
+  if (inp) inp.value = '';
+  pgGalleryHideErr(id);
+  pgGalleryRerender(id);
+};
+
+window.pgGalleryHandleDrop = function(id, event) {
+  event.preventDefault();
+  event.currentTarget.classList.remove('drag-over');
+  const files = Array.from(event.dataTransfer.files).filter(f => f.type.startsWith('image/'));
+  if (files.length) pgGalleryAddFiles(id, files);
+};
+
+// Process one or many files, adding each to the gallery via Cloudinary
+window.pgGalleryAddFiles = async function(id, fileList) {
+  const files = Array.from(fileList).filter(f => f && f.type.startsWith('image/'));
+  if (!files.length) return;
+  pgGalleryHideErr(id);
+
+  for (const file of files) {
+    try {
+      pgGalleryShowErr(id, `Uploading "${file.name}"…`);
+      const photoUrl = await cloudinaryUpload(file);
+      pgGalleryState[id] = pgGalleryState[id] || [];
+      pgGalleryState[id].push({ url: photoUrl, caption: '', type: 'image' });
+      pgGalleryHideErr(id);
+    } catch (err) {
+      pgGalleryShowErr(id, `Upload failed for "${file.name}": ${err.message}`);
+    }
+  }
+
+  const fileInp = document.getElementById('pggalfile-' + id);
+  if (fileInp) fileInp.value = '';
+  pgGalleryRerender(id);
+};
+
+// Keep single-file version as alias for any legacy callers
+window.pgGalleryAddFile = async function(id, file) {
+  if (file) pgGalleryAddFiles(id, [file]);
+};
+
+// ── Per-event video file upload ──────────────────────────────────────────────
+// Staging state: { [id]: File[] }
+window.pgVideoQueue = {};
+
+window.pgGalleryHandleVideoDrop = function(id, event) {
+  event.preventDefault();
+  event.currentTarget.classList.remove('drag-over');
+  const files = Array.from(event.dataTransfer.files).filter(f => f.type.startsWith('video/'));
+  if (files.length) window.pgGalleryStageVideoFiles(id, files);
+  else pgGalleryShowErr(id, 'Only video files (MP4, MOV, WebM, etc.) accepted.');
+};
+
+window.pgGalleryAddVideoFiles = function(id, fileList) {
+  const files = Array.from(fileList).filter(f => f.type.startsWith('video/'));
+  if (files.length) window.pgGalleryStageVideoFiles(id, files);
+  const inp = document.getElementById('pggalvideofile-' + id);
+  if (inp) inp.value = '';
+};
+
+window.pgGalleryStageVideoFiles = function(id, files) {
+  window.pgVideoQueue[id] = window.pgVideoQueue[id] || [];
+  files.forEach(f => window.pgVideoQueue[id].push(f));
+  window.pgGalleryRenderVideoQueue(id);
+}
+
+window.pgGalleryRenderVideoQueue = function(id) {
+  const queueEl = document.getElementById('pggalvideoqueue-' + id);
+  if (!queueEl) return;
+  const queue = window.pgVideoQueue[id] || [];
+  if (!queue.length) { queueEl.innerHTML = ''; return; }
+  queueEl.innerHTML = queue.map((f, i) => `
+    <div style="display:flex;align-items:center;gap:0.4rem;padding:0.35rem 0.5rem;border:1px solid #e2e8f0;border-radius:8px;background:#faf5ff;font-size:0.72rem;">
+      <i class="fas fa-film" style="color:#7c3aed;flex-shrink:0;"></i>
+      <span style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#1e293b;">${pgGalleryEsc(f.name)}</span>
+      <span style="color:#94a3b8;flex-shrink:0;">${(f.size/1024/1024).toFixed(1)} MB</span>
+      <button onclick="pgGalleryRemoveVideoFromQueue('${pgGalleryEsc(id)}',${i})"
+        style="flex-shrink:0;width:20px;height:20px;border-radius:50%;border:none;background:#fee2e2;color:#dc2626;cursor:pointer;font-size:0.62rem;display:flex;align-items:center;justify-content:center;">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+  `).join('');
+}
+
+window.pgGalleryRemoveVideoFromQueue = function(id, i) {
+  if (window.pgVideoQueue[id]) { window.pgVideoQueue[id].splice(i, 1); window.pgGalleryRenderVideoQueue(id); }
+};
+
+window.pgGalleryCommitVideoFiles = async function(id) {
+  const queue = window.pgVideoQueue[id] || [];
+  if (!queue.length) { pgGalleryShowErr(id, 'No video files staged — choose files first.'); return; }
+  pgGalleryHideErr(id);
+
+  const progressEl  = document.getElementById('pggalvideoprogress-' + id);
+  const barEl       = document.getElementById('pggalvideobar-' + id);
+  const lblEl       = document.getElementById('pggalvideolbl-' + id);
+  if (progressEl) progressEl.style.display = '';
+
+  for (let i = 0; i < queue.length; i++) {
+    const file = queue[i];
+    if (lblEl) lblEl.textContent = `Uploading "${file.name}" (${(file.size/1024/1024).toFixed(1)} MB)…`;
+    if (barEl)  barEl.style.width = `${Math.round((i / queue.length) * 5)}%`;
+
+    try {
+      const videoUrl = await cloudinaryUpload(file, pct => {
+        const overall = Math.round(((i + pct) / queue.length) * 100);
+        if (barEl) barEl.style.width = `${overall}%`;
+        if (lblEl) lblEl.textContent = `Uploading "${file.name}" — ${Math.round(pct * 100)}%`;
+      });
+
+      pgGalleryState[id] = pgGalleryState[id] || [];
+      pgGalleryState[id].push({ url: videoUrl, caption: '', type: 'video' });
+    } catch (err) {
+      if (progressEl) progressEl.style.display = 'none';
+      pgGalleryShowErr(id, `Upload failed for "${file.name}": ${err.message}`);
+      return;
+    }
+  }
+
+  if (barEl)  barEl.style.width = '100%';
+  if (lblEl)  lblEl.textContent = 'Done!';
+  setTimeout(() => { if (progressEl) progressEl.style.display = 'none'; }, 900);
+
+  window.pgVideoQueue[id] = [];
+  window.pgGalleryRenderVideoQueue(id);
+  pgGalleryRerender(id);
+};
+
+window.pgGalleryUpdateCaption = function(id, idx, value) {
+  if (pgGalleryState[id] && pgGalleryState[id][idx]) pgGalleryState[id][idx].caption = value;
+};
+
+window.pgGalleryRemove = function(id, idx) {
+  if (pgGalleryState[id]) pgGalleryState[id].splice(idx, 1);
+  pgGalleryRerender(id);
+};
+
+// ─────────────────────────────────────────────────────────────────────────────
+
 
 // ─── INBOX MESSAGING ────────────────────────────────────────────────────────
 
@@ -2531,6 +3829,511 @@ window.arcViewWavePost = function(id) {
 
 // ─── END ARCHIVE ──────────────────────────────────────────────────────────────
 
+// ─── HOMEPAGE MANAGEMENT: GALLERY & STATS ───────────────────────────────────
+let galleryItems = [];
+let statsItems = [];
+
+function showMgmtError(id, msg) {
+  const el = document.getElementById(id);
+  if (el) { el.textContent = msg; el.classList.add('show'); }
+}
+
+function hideMgmtError(id) {
+  const el = document.getElementById(id);
+  if (el) { el.classList.remove('show'); }
+}
+
+function showMgmtSuccess(id, msg) {
+  const el = document.getElementById(id);
+  if (el) { el.textContent = msg; el.classList.add('show'); setTimeout(() => el.classList.remove('show'), 4000); }
+}
+
+// ── Gallery ──
+let dragSrcIdx = null;
+
+async function loadGallery() {
+  const listEl = document.getElementById('gallery-list');
+  if (!listEl) return;
+  try {
+    const snap = await getDocs(collection(db, 'gallery'));
+    galleryItems = [];
+    snap.forEach(d => galleryItems.push({ id: d.id, ...d.data() }));
+    // Sort by 'order' field if present, then createdAt
+    galleryItems.sort((a,b) => (a.order ?? 9999) - (b.order ?? 9999));
+    renderGallery();
+    updateGalleryGridPreview();
+  } catch (e) {
+    console.error('Gallery load error:', e);
+    listEl.innerHTML = `<div style="padding:1rem;color:#dc2626;text-align:center;font-size:0.85rem;">
+      <i class="fas fa-exclamation-triangle"></i> Failed to load gallery.<br>
+      <span style="font-size:0.75rem;color:#94a3b8;">${e.message || 'Check Firestore rules'}</span>
+    </div>`;
+  }
+}
+
+function renderGallery() {
+  const listEl = document.getElementById('gallery-list');
+  if (!galleryItems.length) {
+    listEl.innerHTML = '<div style="padding:1rem;color:#94a3b8;text-align:center;">No photos yet — add one below.</div>';
+    return;
+  }
+  listEl.innerHTML = galleryItems.map((item, i) => `
+    <div class="mgmt-item gallery-drag-item" draggable="true"
+         data-idx="${i}"
+         ondragstart="galDragStart(event,${i})"
+         ondragover="galDragOver(event,${i})"
+         ondrop="galDrop(event,${i})"
+         ondragend="galDragEnd()"
+         style="cursor:grab;">
+      <i class="fas fa-grip-vertical" style="color:#cbd5e1;margin-right:0.5rem;font-size:0.85rem;flex-shrink:0;"></i>
+      <div style="width:38px;height:38px;border-radius:6px;overflow:hidden;flex-shrink:0;background:#e8eeff;margin-right:0.6rem;">
+        ${item.mediaType === 'video' || (item.imageUrl && item.imageUrl.startsWith('data:video'))
+          ? `<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#f5f3ff;"><i class="fas fa-film" style="color:#7c3aed;font-size:0.95rem;"></i></div>`
+          : item.imageUrl
+          ? `<img src="${item.imageUrl}" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.display='none'">`
+          : '<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;"><i class="fas fa-image" style="color:#cbd5e1;font-size:0.9rem;"></i></div>'}
+      </div>
+      <div class="item-info">
+        <div class="item-title">${escapeHTML(item.title || 'Untitled')}</div>
+        <div class="item-sub">${item.description ? escapeHTML(item.description) : '<span style="color:#cbd5e1;">No caption</span>'}</div>
+      </div>
+      <div class="item-actions">
+        <button class="btn btn-danger" style="padding:2px 8px;font-size:0.7rem;" title="Delete" onclick="deleteGalleryItem('${item.id}')"><i class="fas fa-trash"></i></button>
+      </div>
+    </div>
+  `).join('');
+}
+
+// ── Drag-to-reorder ──
+window.galDragStart = function(e, idx) {
+  dragSrcIdx = idx;
+  e.dataTransfer.effectAllowed = 'move';
+  setTimeout(() => e.target.style.opacity = '0.4', 0);
+};
+window.galDragOver = function(e, idx) {
+  e.preventDefault();
+  e.dataTransfer.dropEffect = 'move';
+  document.querySelectorAll('.gallery-drag-item').forEach((el,i) => {
+    el.style.borderTop = i === idx && idx !== dragSrcIdx ? '2px solid #2563eb' : '';
+  });
+};
+window.galDrop = function(e, targetIdx) {
+  e.preventDefault();
+  if (dragSrcIdx === null || dragSrcIdx === targetIdx) return;
+  const moved = galleryItems.splice(dragSrcIdx, 1)[0];
+  galleryItems.splice(targetIdx, 0, moved);
+  saveGalleryOrder();
+};
+window.galDragEnd = function() {
+  document.querySelectorAll('.gallery-drag-item').forEach(el => {
+    el.style.opacity = '';
+    el.style.borderTop = '';
+  });
+  dragSrcIdx = null;
+};
+
+async function saveGalleryOrder() {
+  renderGallery();
+  updateGalleryGridPreview();
+  try {
+    const batch = writeBatch(db);
+    galleryItems.forEach((item, i) => {
+      batch.update(doc(db, 'gallery', item.id), { order: i });
+    });
+    await batch.commit();
+    showMgmtSuccess('gallery-success', 'Order saved!');
+  } catch (e) {
+    showMgmtError('gallery-error', 'Could not save order: ' + e.message);
+  }
+}
+
+function updateGalleryGridPreview() {
+  const preview = document.getElementById('gallery-grid-preview');
+  if (!preview) return;
+
+  if (!galleryItems.length) {
+    preview.style.cssText = 'height:260px;border-radius:10px;overflow:hidden;border:1px solid var(--border-color,#e2e8f0);background:var(--bg-secondary,#f8fafc);display:flex;align-items:center;justify-content:center;';
+    preview.innerHTML = '<i class="fas fa-images" style="color:#cbd5e1;font-size:1.2rem;"></i>';
+    return;
+  }
+
+  function cellImg(item) {
+    return item.imageUrl
+      ? `<img src="${item.imageUrl}" style="width:100%;height:100%;object-fit:cover;display:block;" onerror="this.parentElement.style.background='linear-gradient(135deg,#dbeafe,#bfdbfe)'">`
+      : `<div style="width:100%;height:100%;background:linear-gradient(135deg,#dbeafe,#bfdbfe);"></div>`;
+  }
+
+  // Each layout: [gridTemplateColumns, gridTemplateRows, count, spans[]]
+  // spans[i] = extra inline grid styles for that cell (row/col span)
+  const LAYOUTS = {
+    1:  ['1fr',                   '1fr',           1,  ['']],
+    2:  ['1fr 1fr',               '1fr',           2,  ['','']],
+    3:  ['1fr 1fr',               '1fr 1fr',       3,  ['grid-row:span 2;','','']],
+    4:  ['1fr 1fr',               '1fr 1fr',       4,  ['','','','']],
+    5:  ['2fr 1fr 1fr',           '1fr 1fr',       5,  ['grid-row:span 2;','','','','']],
+    // 6: tall left | 3 right top | wide bottom-right
+    6:  ['repeat(4,1fr)',         '1fr 1fr',       6,  ['grid-row:span 2;','','','','','grid-column:span 2;']],
+    // 7: tall left | 2 right top | 3 bottom row
+    7:  ['repeat(4,1fr)',         '1fr 1fr',       7,  ['grid-row:span 2;','','','','','','']],
+    // 8: 2-tall left block | 3×2 right grid
+    8:  ['1fr 1fr 1fr',           '1fr 1fr 1fr',   8,  ['grid-row:span 2;','grid-row:span 2;','','','','','','']],
+    // 9: 3×3 uniform
+    9:  ['repeat(3,1fr)',         '1fr 1fr 1fr',   9,  ['','','','','','','','','']],
+    // 10: wide hero top-left | 4 right col | 2 bottom
+    10: ['2fr 1fr 1fr',           '1fr 1fr 1fr',   10, ['grid-row:span 2;','','','','','','','','','']],
+    // 11: 4 cols, tall first col, wide item in middle
+    11: ['repeat(4,1fr)',         '1fr 1fr 1fr',   11, ['grid-row:span 2;','','','','grid-column:span 2;','','','','','','']],
+    // 12: 4×3 uniform
+    12: ['repeat(4,1fr)',         '1fr 1fr 1fr',   12, Array(12).fill('')],
+    // 13: 4 cols, tall left, wide mid accent
+    13: ['repeat(4,1fr)',         '1fr 1fr 1fr 1fr', 13, ['grid-row:span 2;','','','','','grid-column:span 2;','','','','','','','']],
+    // 14: tall left | wide top-right accent | fill rest
+    14: ['repeat(4,1fr)',         '1fr 1fr 1fr 1fr', 14, ['grid-row:span 2;','grid-column:span 2;','','','','','','','','','','','','']],
+    // 15: 5×3 uniform
+    15: ['repeat(5,1fr)',         '1fr 1fr 1fr',   15, Array(15).fill('')],
+    // 16: 4×4 uniform
+    16: ['repeat(4,1fr)',         '1fr 1fr 1fr 1fr', 16, Array(16).fill('')],
+    // 17: tall left | wide accent | fill
+    17: ['repeat(5,1fr)',         '1fr 1fr 1fr 1fr', 17, ['grid-row:span 2;','grid-column:span 2;',...Array(15).fill('')]],
+    // 18: 3 tall left strip | 5×3 right
+    18: ['1fr 1fr 1fr 1fr 1fr',  '1fr 1fr 1fr',   18, ['grid-row:span 3;',...Array(17).fill('')]],
+    // 19: wide hero top | fill rest in 4 cols
+    19: ['repeat(4,1fr)',         '1fr 1fr 1fr 1fr 1fr', 19, ['grid-column:span 2;grid-row:span 2;',...Array(18).fill('')]],
+    // 20: 5×4 uniform
+    20: ['repeat(5,1fr)',         '1fr 1fr 1fr 1fr', 20, Array(20).fill('')],
+  };
+
+  const n = Math.min(galleryItems.length, 20);
+  const [cols, rows, count, spans] = LAYOUTS[n];
+  const items = galleryItems.slice(0, count);
+
+  preview.style.cssText = `height:260px;display:grid;grid-template-columns:${cols};grid-template-rows:${rows};gap:3px;border-radius:10px;overflow:hidden;border:1px solid var(--border-color,#e2e8f0);background:var(--bg-secondary,#f8fafc);`;
+  preview.innerHTML = items.map((item, i) => `
+    <div style="${spans[i] || ''}overflow:hidden;background:#e8eeff;position:relative;min-width:0;min-height:0;">
+      ${cellImg(item)}
+    </div>
+  `).join('');
+}
+
+// ── Tab switcher ──
+window.switchGalleryTab = function(tab) {
+  ['upload','video','drive','existing'].forEach(t => {
+    document.getElementById(`gallery-tab-${t}`).style.display = t === tab ? '' : 'none';
+    document.getElementById(`tab-${t}`).classList.toggle('active', t === tab);
+  });
+  if (tab === 'existing') scanExistingImages();
+};
+
+// ── Upload tab ──
+let galleryFileToUpload = null;
+
+window.handleGalleryDrop = function(e) {
+  e.preventDefault();
+  document.getElementById('gallery-dropzone').classList.remove('drag-over');
+  const file = e.dataTransfer.files[0];
+  if (file && file.type.startsWith('image/')) handleGalleryFile(file);
+};
+
+window.handleGalleryFile = function(file) {
+  if (!file) return;
+  if (file.size > 10 * 1024 * 1024) { showMgmtError('gallery-error', 'File is too large. Max size is 10 MB.'); return; }
+  galleryFileToUpload = file;
+  const reader = new FileReader();
+  reader.onload = e => {
+    document.getElementById('gallery-file-preview').src = e.target.result;
+    document.getElementById('gallery-file-name').textContent = file.name;
+    document.getElementById('gallery-file-size').textContent = (file.size / 1024).toFixed(0) + ' KB';
+    document.getElementById('gallery-dropzone-content').style.display = 'none';
+    document.getElementById('gallery-file-selected').style.display = 'flex';
+  };
+  reader.readAsDataURL(file);
+};
+
+window.clearGalleryFile = function() {
+  galleryFileToUpload = null;
+  document.getElementById('gallery-file-input').value = '';
+  document.getElementById('gallery-dropzone-content').style.display = '';
+  document.getElementById('gallery-file-selected').style.display = 'none';
+};
+
+// ── Video upload tab (Homepage Gallery) ──────────────────────────────────────
+window.galleryVideosToUpload = []; // [{file, title, desc}]
+
+window.handleGalleryVideoDrop = function(e) {
+  e.preventDefault();
+  document.getElementById('gallery-video-dropzone').classList.remove('drag-over');
+  const files = Array.from(e.dataTransfer.files).filter(f => f.type.startsWith('video/'));
+  if (files.length) addGalleryVideoFiles(files);
+  else showMgmtError('gallery-video-error', 'Only video files (MP4, MOV, WebM, etc.) are accepted.');
+};
+
+window.handleGalleryVideoFiles = function(fileList) {
+  addGalleryVideoFiles(Array.from(fileList).filter(f => f.type.startsWith('video/')));
+  document.getElementById('gallery-video-file-input').value = '';
+};
+
+function addGalleryVideoFiles(files) {
+  files.forEach(file => {
+    const entry = { file, title: '', desc: '' };
+    window.galleryVideosToUpload.push(entry);
+  });
+  renderGalleryVideoQueue();
+}
+
+function renderGalleryVideoQueue() {
+  const queueEl = document.getElementById('gallery-video-queue');
+  if (!window.galleryVideosToUpload.length) { queueEl.innerHTML = ''; return; }
+  queueEl.innerHTML = window.galleryVideosToUpload.map((entry, i) => `
+    <div style="display:flex;align-items:center;gap:0.6rem;padding:0.6rem 0.75rem;border:1.5px solid #e2e8f0;border-radius:10px;background:#f8fafc;">
+      <i class="fas fa-film" style="color:#7c3aed;font-size:1.1rem;flex-shrink:0;"></i>
+      <div style="flex:1;min-width:0;">
+        <div style="font-size:0.78rem;font-weight:600;color:#1e293b;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${escapeHTML(entry.file.name)}</div>
+        <div style="font-size:0.7rem;color:#94a3b8;">${(entry.file.size/1024/1024).toFixed(1)} MB</div>
+        <div style="display:flex;gap:0.4rem;margin-top:0.35rem;flex-wrap:wrap;">
+          <input type="text" placeholder="Title (required)" value="${escapeHTML(entry.title)}"
+            oninput="window.galleryVideosToUpload[${i}].title=this.value"
+            style="flex:1;min-width:100px;padding:0.28rem 0.5rem;border:1.5px solid #e2e8f0;border-radius:7px;font-family:inherit;font-size:0.75rem;color:rgb(1,9,67);outline:none;">
+          <input type="text" placeholder="Caption (optional)" value="${escapeHTML(entry.desc)}"
+            oninput="window.galleryVideosToUpload[${i}].desc=this.value"
+            style="flex:1;min-width:100px;padding:0.28rem 0.5rem;border:1.5px solid #e2e8f0;border-radius:7px;font-family:inherit;font-size:0.75rem;color:rgb(1,9,67);outline:none;">
+        </div>
+      </div>
+      <button onclick="removeGalleryVideoEntry(${i})" style="flex-shrink:0;width:26px;height:26px;border-radius:50%;border:none;background:#fee2e2;color:#dc2626;cursor:pointer;font-size:0.75rem;display:flex;align-items:center;justify-content:center;">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+  `).join('');
+}
+
+window.removeGalleryVideoEntry = function(i) {
+  window.galleryVideosToUpload.splice(i, 1);
+  renderGalleryVideoQueue();
+};
+
+window.uploadGalleryVideos = async function() {
+  hideMgmtError('gallery-video-error');
+  hideMgmtError('gallery-video-success');
+
+  if (!window.galleryVideosToUpload.length) {
+    showMgmtError('gallery-video-error', 'Please add at least one video file.');
+    return;
+  }
+  const missing = window.galleryVideosToUpload.filter(e => !e.title.trim());
+  if (missing.length) {
+    showMgmtError('gallery-video-error', `Please add a title for ${missing.length === 1 ? 'the video' : 'each video'} before uploading.`);
+    return;
+  }
+
+  const progressWrap = document.getElementById('gallery-video-overall-progress');
+  const progressBar  = document.getElementById('gallery-video-overall-bar');
+  const progressPct  = document.getElementById('gallery-video-overall-pct');
+  const progressLbl  = document.getElementById('gallery-video-overall-label');
+  if (progressWrap) progressWrap.style.display = '';
+
+  const total = window.galleryVideosToUpload.length;
+  let done = 0;
+
+  const toProcess = [...window.galleryVideosToUpload];
+  for (const entry of toProcess) {
+    if (progressLbl) progressLbl.textContent = `Uploading "${entry.file.name}" (${(entry.file.size/1024/1024).toFixed(1)} MB)…`;
+    if (progressBar) progressBar.style.width = `${Math.round((done / total) * 5)}%`;
+    if (progressPct) progressPct.textContent  = `${Math.round((done / total) * 5)}%`;
+
+    try {
+      const videoUrl = await cloudinaryUpload(entry.file, pct => {
+        const overall = Math.round(((done + pct) / total) * 100);
+        if (progressBar) progressBar.style.width = `${overall}%`;
+        if (progressPct) progressPct.textContent = `${overall}%`;
+        if (progressLbl) progressLbl.textContent = `Uploading "${entry.file.name}" — ${Math.round(pct * 100)}%`;
+      });
+
+      await addDoc(collection(db, 'gallery'), {
+        imageUrl: videoUrl,
+        mediaType: 'video',
+        title: entry.title.trim(),
+        description: entry.desc.trim(),
+        order: galleryItems.length + done,
+        createdAt: serverTimestamp()
+      });
+      done++;
+    } catch (err) {
+      console.error('Video upload error:', err);
+      if (progressWrap) progressWrap.style.display = 'none';
+      showMgmtError('gallery-video-error', `Upload failed for "${entry.file.name}": ${err.message}`);
+      return;
+    }
+  }
+
+  if (progressBar) progressBar.style.width = '100%';
+  if (progressPct) progressPct.textContent = '100%';
+  if (progressLbl) progressLbl.textContent = 'Done!';
+  setTimeout(() => { if (progressWrap) progressWrap.style.display = 'none'; }, 1200);
+
+  window.galleryVideosToUpload = [];
+  renderGalleryVideoQueue();
+  await loadGallery();
+  showMgmtSuccess('gallery-video-success', `✅ ${done} video${done > 1 ? 's' : ''} uploaded and added to gallery!`);
+};
+
+window.uploadGalleryPhoto = async function() {
+  const title = document.getElementById('gallery-upload-title').value.trim();
+  const desc  = document.getElementById('gallery-upload-desc').value.trim();
+  if (!title) { showMgmtError('gallery-error', 'Please add a title for this photo.'); return; }
+  if (!galleryFileToUpload) { showMgmtError('gallery-error', 'Please choose a photo to upload, or use a site photo shortcut below.'); return; }
+
+  hideMgmtError('gallery-error');
+  const progressWrap = document.getElementById('gallery-upload-progress');
+  const progressBar  = document.getElementById('gallery-progress-bar');
+  const progressPct  = document.getElementById('gallery-progress-pct');
+  progressWrap.style.display = '';
+  progressBar.style.width = '5%';
+  progressPct.textContent = 'Uploading…';
+
+  try {
+    const imageUrl = await cloudinaryUpload(galleryFileToUpload, pct => {
+      progressBar.style.width = `${Math.round(pct * 90)}%`;
+      progressPct.textContent = `${Math.round(pct * 90)}%`;
+    });
+
+    progressBar.style.width = '95%';
+    progressPct.textContent = 'Saving…';
+
+    await addDoc(collection(db, 'gallery'), {
+      imageUrl, title, description: desc,
+      order: galleryItems.length,
+      createdAt: serverTimestamp()
+    });
+
+    progressWrap.style.display = 'none';
+    clearGalleryFile();
+    document.getElementById('gallery-upload-title').value = '';
+    document.getElementById('gallery-upload-desc').value  = '';
+    await loadGallery();
+    showMgmtSuccess('gallery-success', '✅ Photo uploaded and added to gallery!');
+  } catch (e) {
+    progressWrap.style.display = 'none';
+    console.error('Upload error:', e);
+    showMgmtError('gallery-error', `Upload failed: ${e.message}`);
+  }
+};
+
+window.addGalleryPreset = async function(title, imageUrl, description) {
+  hideMgmtError('gallery-error');
+  try {
+    await addDoc(collection(db, 'gallery'), { imageUrl, title, description: description || '', order: galleryItems.length, createdAt: serverTimestamp() });
+    await loadGallery();
+    showMgmtSuccess('gallery-success', `Added "${title}" to gallery!`);
+  } catch (e) {
+    showMgmtError('gallery-error', `Failed: ${e.message}`);
+  }
+};
+
+window.deleteGalleryItem = async function(id) {
+  if (!confirm('Remove this photo from the gallery?')) return;
+  try {
+    await deleteDoc(doc(db, 'gallery', id));
+    await loadGallery();
+    showMgmtSuccess('gallery-success', 'Photo removed.');
+  } catch (e) {
+    showMgmtError('gallery-error', `Failed to delete: ${e.message}`);
+  }
+};
+
+// ── Google Drive tab ──
+window.parseDriveUrl = function() {
+  const raw = document.getElementById('gallery-drive-url').value.trim();
+  const errEl = document.getElementById('gallery-drive-error');
+  const previewWrap = document.getElementById('gallery-drive-preview');
+  const previewImg  = document.getElementById('gallery-drive-preview-img');
+  const convertedEl = document.getElementById('gallery-drive-converted');
+  errEl.style.display = 'none';
+  previewWrap.style.display = 'none';
+  const match = raw.match(/\/d\/([a-zA-Z0-9_-]{10,})/);
+  if (!match) {
+    if (raw.length > 10) { errEl.textContent = "Couldn\'t find a file ID. Make sure you paste the full shareable link."; errEl.style.display = ''; }
+    return;
+  }
+  const directUrl = `https://drive.google.com/thumbnail?id=${match[1]}&sz=w1000`;
+  convertedEl.textContent = directUrl;
+  previewImg.src = directUrl;
+  previewImg.onload  = () => previewWrap.style.display = 'flex';
+  previewImg.onerror = () => { errEl.textContent = "Image couldn\'t load. Check that sharing is set to \"Anyone with the link\"."; errEl.style.display = ''; };
+};
+
+window.addGalleryDrive = async function() {
+  const raw   = document.getElementById('gallery-drive-url').value.trim();
+  const title = document.getElementById('gallery-drive-title').value.trim();
+  const desc  = document.getElementById('gallery-drive-desc').value.trim();
+  const match = raw.match(/\/d\/([a-zA-Z0-9_-]{10,})/);
+  if (!match) { showMgmtError('gallery-error', 'Invalid Drive link — paste the full shareable URL.'); return; }
+  if (!title)  { showMgmtError('gallery-error', 'Please enter a title.'); return; }
+  const imageUrl = `https://drive.google.com/thumbnail?id=${match[1]}&sz=w1000`;
+  hideMgmtError('gallery-error');
+  try {
+    await addDoc(collection(db, 'gallery'), { imageUrl, title, description: desc, order: galleryItems.length, createdAt: serverTimestamp() });
+    document.getElementById('gallery-drive-url').value   = '';
+    document.getElementById('gallery-drive-title').value = '';
+    document.getElementById('gallery-drive-desc').value  = '';
+    document.getElementById('gallery-drive-preview').style.display = 'none';
+    await loadGallery();
+    showMgmtSuccess('gallery-success', 'Drive photo added!');
+  } catch (e) {
+    showMgmtError('gallery-error', `Failed: ${e.message}`);
+  }
+};
+
+// ── Site Library tab ──
+let selectedExistingUrl = '';
+const SITE_IMAGES = [
+  'images/bocaTownHall.jpg','images/bocaCourthouse.jpg','images/bocaBeach.jpg',
+  'images/bocaHospital.jpg','images/bocaLibrary.jpg','images/bocaNeighborhood.jpg',
+  'images/logo.png',
+];
+
+function scanExistingImages() {
+  const grid = document.getElementById('existing-images-grid');
+  if (!grid) return;
+  const fromFirestore = galleryItems.map(i => i.imageUrl).filter(Boolean);
+  const all = [...new Set([...SITE_IMAGES, ...fromFirestore])];
+  grid.innerHTML = all.map(src => `
+    <img src="${src}" class="existing-img-thumb" title="${src}"
+         onclick="selectExistingImage('${src}', this)"
+         onerror="this.parentElement && this.parentElement.removeChild(this)">
+  `).join('');
+}
+
+window.selectExistingImage = function(url, el) {
+  selectedExistingUrl = url;
+  document.querySelectorAll('.existing-img-thumb').forEach(i => i.classList.remove('selected'));
+  el.classList.add('selected');
+  const info  = document.getElementById('existing-selected-info');
+  const label = document.getElementById('existing-selected-label');
+  info.style.display = '';
+  label.textContent  = '\u2713 Selected: ' + url.split('/').pop();
+};
+
+window.addGalleryExisting = async function() {
+  if (!selectedExistingUrl) { showMgmtError('gallery-error', 'Please select a photo first.'); return; }
+  const title = document.getElementById('existing-title').value.trim();
+  const desc  = document.getElementById('existing-desc').value.trim();
+  if (!title) { showMgmtError('gallery-error', 'Please enter a title.'); return; }
+  hideMgmtError('gallery-error');
+  try {
+    await addDoc(collection(db, 'gallery'), { imageUrl: selectedExistingUrl, title, description: desc, order: galleryItems.length, createdAt: serverTimestamp() });
+    document.getElementById('existing-title').value = '';
+    document.getElementById('existing-desc').value  = '';
+    document.getElementById('existing-selected-info').style.display = 'none';
+    selectedExistingUrl = '';
+    document.querySelectorAll('.existing-img-thumb').forEach(i => i.classList.remove('selected'));
+    await loadGallery();
+    showMgmtSuccess('gallery-success', 'Photo added from site library!');
+  } catch (e) {
+    showMgmtError('gallery-error', `Failed: ${e.message}`);
+  }
+};
+
+// ─── END HOMEPAGE MANAGEMENT ──────────────────────────────────────────────
+
 // CORE UTILITIES
 window.downloadQR = function() {
   if (!selectedEvent) return;
@@ -2571,28 +4374,21 @@ function showToast(msg) {
 }
 
 // SECURITY STATE VALIDATION FILTER
-// SECURITY STATE VALIDATION FILTER
 onAuthStateChanged(auth, async user => {
   const loginBtn = document.getElementById('nav-login');
   const signupBtn = document.getElementById('nav-signup');
 
   if (!user) { 
-    // If not logged in, reset navbar to default settings
     if (loginBtn) { loginBtn.textContent = 'Login'; loginBtn.href = 'login.html'; }
     if (signupBtn) signupBtn.style.display = 'block';
-    
     document.getElementById('access-denied-card').style.display = 'block'; 
     return; 
   }
 
-  // --- NEW NAVBAR STATE MANAGEMENT SECTION ---
   if (loginBtn) {
-    // Dynamically replace the login link text with a signed-in status badge
     loginBtn.innerHTML = `<i class="fas fa-user-shield"></i> Admin Log Out`;
     loginBtn.href = '#';
-    loginBtn.className = 'login profile-active'; // Optional: for styling
-    
-    // Make clicking it log the admin out safely
+    loginBtn.className = 'login profile-active';
     loginBtn.onclick = async function(e) {
       e.preventDefault();
       if (confirm("Are you sure you want to log out of the NextStep Panel?")) {
@@ -2601,12 +4397,9 @@ onAuthStateChanged(auth, async user => {
       }
     };
   }
-  
-  // Completely hide the Sign Up button since they are already authenticated
   if (signupBtn) {
     signupBtn.style.display = 'none';
   }
-  // -------------------------------------------
 
   let isAdmin = false;
   try {
@@ -2627,6 +4420,10 @@ onAuthStateChanged(auth, async user => {
   await loadWavePosts();
   await loadInboxMessages();
   await loadMgmtEvents();
+  await loadPastGallery();
+  // Load homepage management data
+  await loadGallery();
+  await loadStats();
 });
 </script>
 <script src="dark-mode.js"></script>

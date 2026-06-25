@@ -1,0 +1,1080 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Past Events – NextStep</title>
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="dark-mode.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="loading-screen.css">
+  <script src="loading-screen.js"></script>
+  <link rel="stylesheet" href="back-to-top.css">
+  <script src="back-to-top.js"></script>
+  <link rel="stylesheet" href="cookie-consent.css">
+  <script src="cookie-consent.js"></script>
+  <link rel="stylesheet" href="scroll-progress.css">
+  <script src="scroll-progress.js"></script>
+  <link rel="stylesheet" href="announcement-banner.css">
+  <script src="announcement-banner.js" defer></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    /* ── Page shell ── */
+    .past-page {
+      font-family: 'Open Sans', sans-serif;
+      background: #f5f7ff;
+      min-height: 100vh;
+      padding: 30px 0;
+    }
+
+    /* ── Hero ── */
+    .past-hero {
+      background: linear-gradient(135deg, #2563eb 0%, #3b82f6 60%, #2563eb 100%);
+      padding: 3.5rem 2rem 6rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .past-hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    }
+    .past-hero-inner { max-width: 700px; margin: 0 auto; position: relative; }
+    .past-eyebrow {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 2px;
+      color: #93c5fd; margin-bottom: 1rem;
+    }
+    .past-hero h1 {
+      font-size: 3rem; font-weight: 800; color: white; line-height: 1.1; margin-bottom: 1rem;
+      letter-spacing: -0.5px;
+    }
+    .past-hero p { color: rgba(255,255,255,0.72); font-size: 1rem; line-height: 1.7; max-width: 500px; margin: 0 auto; }
+    @media (max-width: 600px) { .past-hero h1 { font-size: 2rem; } }
+
+    /* ── Stats bar ── */
+    .past-stats-bar {
+      display: flex; justify-content: center;
+      max-width: 640px;
+      margin: -3.5rem auto 0;
+      background: white;
+      border-radius: 18px;
+      box-shadow: 0 8px 40px rgba(1,9,67,0.14);
+      overflow: hidden;
+      position: relative; z-index: 10;
+      flex-wrap: wrap;
+    }
+    .past-stat-block {
+      flex: 1; min-width: 130px; text-align: center;
+      padding: 1.5rem 1rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .past-stat-block:last-child { border-right: none; }
+    .past-stat-num {
+      font-size: 2.1rem; font-weight: 800; color: rgb(1,9,67);
+      display: block; line-height: 1;
+    }
+    .past-stat-label {
+      font-size: 0.68rem; font-weight: 700; color: #94a3b8;
+      text-transform: uppercase; letter-spacing: 0.5px; margin-top: 4px;
+    }
+    .past-stat-accent { width: 24px; height: 3px; border-radius: 2px; margin: 0 auto 0.5rem; }
+
+    /* ── Content area ── */
+    .past-content { max-width: 1200px; margin: 0 auto; padding: 3rem 1.5rem 0; }
+
+    /* ── Toolbar ── */
+    .view-toolbar {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 1rem; margin-bottom: 1rem; flex-wrap: wrap;
+    }
+    .past-controls { display: flex; gap: 0.6rem; align-items: center; flex-wrap: wrap; flex: 1; }
+    .past-search-wrap { flex: 1; min-width: 200px; position: relative; }
+    .past-search-wrap i { position: absolute; left: 0.875rem; top: 50%; transform: translateY(-50%); color: #94a3b8; font-size: 0.82rem; pointer-events: none; }
+    .past-search {
+      width: 100%; padding: 0.65rem 0.875rem 0.65rem 2.25rem;
+      border: 2px solid #e2e8f0; border-radius: 12px;
+      font-family: 'Open Sans', sans-serif; font-size: 0.875rem; color: rgb(1,9,67);
+      outline: none; background: white; transition: border-color 0.2s;
+    }
+    .past-search:focus { border-color: #2563eb; }
+    .past-sort {
+      padding: 0.65rem 0.875rem; border: 2px solid #e2e8f0; border-radius: 12px;
+      font-family: 'Open Sans', sans-serif; font-size: 0.875rem; color: rgb(1,9,67);
+      background: white; outline: none; cursor: pointer; transition: border-color 0.2s;
+    }
+    .past-sort:focus { border-color: #2563eb; }
+    .result-count { font-size: 0.8rem; color: #94a3b8; font-weight: 600; align-self: center; white-space: nowrap; }
+
+    /* ── Category filters ── */
+    .past-filters { display: flex; gap: 0.4rem; flex-wrap: wrap; margin-bottom: 2rem; }
+    .filter-pill {
+      padding: 0.35rem 0.875rem; border-radius: 20px; border: 2px solid #e2e8f0;
+      background: white; font-family: 'Open Sans', sans-serif; font-size: 0.76rem;
+      font-weight: 700; color: #64748b; cursor: pointer; transition: all 0.15s;
+      display: flex; align-items: center; gap: 0.35rem;
+    }
+    .filter-pill:hover { border-color: #2563eb; color: #2563eb; }
+    .filter-pill.active { background: rgb(1,9,67); border-color: rgb(1,9,67); color: white; }
+    .filter-pill .pill-dot { width: 7px; height: 7px; border-radius: 50%; background: currentColor; opacity: 0.7; }
+
+    /* ── Event rows ── */
+    .events-list { display: flex; flex-direction: column; gap: 1.5rem; margin-bottom: 2rem; }
+
+    .event-row {
+      background: white;
+      border-radius: 20px;
+      border: 1px solid #e8eef8;
+      box-shadow: 0 4px 20px rgba(1,9,67,0.07);
+      padding: 1.5rem 1.5rem 1.75rem;
+      transition: box-shadow 0.22s;
+    }
+    .event-row:hover { box-shadow: 0 12px 40px rgba(1,9,67,0.13); }
+
+    /* Row header */
+    .row-header {
+      display: flex; justify-content: space-between; align-items: flex-start;
+      gap: 1rem; flex-wrap: wrap; margin-bottom: 1.15rem;
+    }
+    .row-header-left { flex: 1; min-width: 220px; }
+    .row-badges { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.6rem; flex-wrap: wrap; }
+    .row-cat-badge {
+      font-size: 0.6rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;
+      color: white; padding: 3px 10px; border-radius: 20px;
+    }
+    .row-hosted-badge {
+      background: #f0fdf4; color: #15803d; font-size: 0.6rem; font-weight: 800;
+      text-transform: uppercase; letter-spacing: 0.8px; padding: 3px 10px; border-radius: 20px;
+      display: inline-flex; align-items: center; gap: 0.35rem;
+    }
+    .row-attend {
+      display: inline-flex; align-items: center; gap: 0.35rem;
+      font-size: 0.68rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px;
+      background: #eff6ff; color: #2563eb;
+      padding: 3px 10px; border-radius: 20px;
+    }
+    .row-title { font-size: 1.75rem; font-weight: 800; color: rgb(1,9,67); line-height: 1.3; margin-bottom: 0.55rem; }
+    .row-meta { display: flex; flex-wrap: wrap; gap: 1rem; }
+    .row-meta-item { display: flex; align-items: center; gap: 0.4rem; font-size: 0.82rem; color: #64748b; font-weight: 600; }
+    .row-meta-item i { font-size: 0.76rem; color: #94a3b8; }
+
+    /* Full-width description, sits below the header so it isn't squeezed by the links column */
+    .row-desc { font-size: 0.9rem; color: #475569; line-height: 1.7; margin-bottom: 1.1rem; white-space: pre-wrap; width: 100%; }
+
+    .row-header-right { display: flex; flex-direction: column; align-items: flex-end; gap: 0.5rem; }
+    .row-links { display: flex; flex-wrap: wrap; gap: 0.4rem; justify-content: flex-end; }
+    .row-link {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      padding: 0.4rem 0.875rem; border-radius: 10px;
+      background: #eff6ff; border: 1.5px solid #bfdbfe;
+      color: #2563eb; font-size: 0.76rem; font-weight: 700;
+      text-decoration: none; transition: all 0.15s;
+    }
+    .row-link:hover { background: rgb(1,9,67); color: white; border-color: rgb(1,9,67); }
+    .row-link i { font-size: 0.66rem; }
+
+    /* ── Collage grid ── */
+    .row-photos {
+      display: grid;
+      gap: 6px;
+      border-radius: 16px;
+      overflow: hidden;
+      width: 100%;
+    }
+
+    /* 1 item — full width, taller */
+    .row-photos[data-count="1"] {
+      grid-template-columns: 1fr;
+      grid-template-rows: 320px;
+    }
+    /* 2 items — side by side */
+    .row-photos[data-count="2"] {
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 260px;
+    }
+    /* 3 items — big hero left, two stacked right */
+    .row-photos[data-count="3"] {
+      grid-template-columns: 2fr 1fr;
+      grid-template-rows: 140px 140px;
+    }
+    .row-photos[data-count="3"] .row-photo:first-child,
+    .row-photos[data-count="3"] .row-video-item:first-child {
+      grid-row: 1 / 3;
+    }
+    /* 4 items — 2×2 */
+    .row-photos[data-count="4"] {
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 180px 180px;
+    }
+    /* 5+ items — big hero top-left, 4 in a 2×2 right/bottom */
+    .row-photos[data-count="5"] {
+      grid-template-columns: 2fr 1fr 1fr;
+      grid-template-rows: 170px 170px;
+    }
+    .row-photos[data-count="5"] .row-photo:first-child,
+    .row-photos[data-count="5"] .row-video-item:first-child {
+      grid-row: 1 / 3;
+    }
+    /* 6 items — 3×2 */
+    .row-photos[data-count="6"] {
+      grid-template-columns: 1fr 1fr 1fr;
+      grid-template-rows: 170px 170px;
+    }
+    /* 7 — hero + 5 in a 2-col grid */
+    .row-photos[data-count="7"] {
+      grid-template-columns: 2fr 1fr 1fr;
+      grid-template-rows: 160px 160px 160px;
+    }
+    .row-photos[data-count="7"] .row-photo:first-child,
+    .row-photos[data-count="7"] .row-video-item:first-child {
+      grid-row: 1 / 3;
+    }
+    /* 8+ — flowing 3-column grid, equal-height rows */
+    .row-photos[data-count="8"],
+    .row-photos[data-count="9"],
+    .row-photos[data-count="10"],
+    .row-photos[data-count="11"],
+    .row-photos[data-count="12"],
+    .row-photos[data-count="many"] {
+      grid-template-columns: repeat(3, 1fr);
+      grid-auto-rows: 275px;
+    }
+
+    .row-photo, .row-video-item {
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+      background: #e2e8f0;
+      min-height: 0; min-width: 0;
+    }
+    /* Photos: contain so nothing is ever cropped.
+       A blurred copy of the same image is used as the cell background
+       so portrait shots don't show white/black bars — see JS for the bg trick. */
+    .row-photo img {
+      width: 100%; height: 100%; object-fit: contain;
+      display: block; transition: transform 0.35s; position: relative; z-index: 1;
+    }
+    .row-photo:hover img { transform: scale(1.03); }
+    /* blurred background layer — set via JS as inline style on .row-photo */
+    .row-photo::before {
+      content: '';
+      position: absolute; inset: -10px;
+      background: inherit; background-size: cover; background-position: center;
+      filter: blur(18px) brightness(0.7);
+      transform: scale(1.1);
+      z-index: 0;
+    }
+
+    /* Videos: contain so no cropping, black bg fills gap */
+    .row-video-item { background: #0f172a; }
+    .row-video-item video,
+    .row-video-item iframe {
+      position: absolute; top: 0; left: 0;
+      width: 100%; height: 100%;
+      object-fit: contain;
+      display: block; border: none;
+      pointer-events: none;
+    }
+
+    .row-photo-placeholder {
+      width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;
+      font-size: 2.2rem; color: rgba(255,255,255,0.45);
+    }
+    .row-photo-overlay, .row-video-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(180deg, rgba(1,9,67,0.02) 35%, rgba(1,9,67,0.92) 100%);
+      display: flex; align-items: flex-end; padding: 0.85rem;
+      opacity: 0; transition: opacity 0.25s; z-index: 12;
+      pointer-events: none;
+    }
+    .row-photo:hover .row-photo-overlay, .row-video-item:hover .row-video-overlay { opacity: 1; }
+    .row-photo-overlay p, .row-video-overlay p {
+      color: white; font-size: 0.78rem; line-height: 1.5; font-weight: 600;
+      display: -webkit-box; -webkit-line-clamp: 5; -webkit-box-orient: vertical; overflow: hidden;
+    }
+
+
+    @media (max-width: 720px) {
+      .row-header { flex-direction: column; }
+      .row-header-right { align-items: flex-start; width: 100%; }
+      .row-links { justify-content: flex-start; }
+      /* collage grid rows shrink on mobile */
+      .row-photos[data-count="1"] { grid-template-rows: 220px; }
+      .row-photos[data-count="2"] { grid-template-rows: 170px; }
+      .row-photos[data-count="3"] { grid-template-rows: 110px 110px; }
+      .row-photos[data-count="4"] { grid-template-rows: 130px 130px; }
+      .row-photos[data-count="5"],
+      .row-photos[data-count="7"] { grid-template-rows: 120px 120px; grid-template-columns: 2fr 1fr 1fr; }
+      .row-photos[data-count="6"] { grid-template-rows: 120px 120px; }
+      .row-photos[data-count="8"],.row-photos[data-count="9"],.row-photos[data-count="10"],
+      .row-photos[data-count="11"],.row-photos[data-count="12"],.row-photos[data-count="many"] {
+        grid-template-columns: repeat(2, 1fr); grid-auto-rows: 130px;
+      }
+    }
+
+    /* ── Video tiles — lazy-loaded into the collage grid by observeVideos() ── */
+    /* Shield blocks all clicks/interaction and right-click context menu */
+    .row-video-shield {
+      position: absolute; inset: 0; z-index: 10;
+      cursor: default; background: transparent;
+      /* prevent context menu on long-press / right-click */
+      -webkit-user-select: none; user-select: none;
+    }
+    .past-state { text-align: center; padding: 5rem 2rem; color: #94a3b8; }
+    .past-state i { font-size: 2.5rem; margin-bottom: 1rem; display: block; }
+    .past-state p { font-size: 0.95rem; }
+
+    /* ── Load more ── */
+    .past-load-more { text-align: center; margin-top: 2rem; padding-bottom: 1rem; }
+    .btn-load-more {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      padding: 0.875rem 2.5rem;
+      background: white; border: 2px solid #e2e8f0; border-radius: 14px;
+      font-family: 'Open Sans', sans-serif; font-size: 0.9rem; font-weight: 700;
+      color: #475569; cursor: pointer; transition: all 0.2s;
+    }
+    .btn-load-more:hover { border-color: rgb(1,9,67); color: rgb(1,9,67); }
+
+    /* ── Dark mode ── */
+    [data-theme="dark"] .past-page { background: #0a1220; }
+    [data-theme="dark"] .past-hero { background: linear-gradient(135deg,#1e3a8a,#0f1f4a,#1e3a8a); }
+    [data-theme="dark"] .past-stats-bar { background: #0f2744; box-shadow: 0 8px 40px rgba(0,0,0,0.4); }
+    [data-theme="dark"] .past-stat-block { border-color: #1e3a5f; }
+    [data-theme="dark"] .past-stat-num { color: #f1f5f9; }
+    [data-theme="dark"] .past-search, [data-theme="dark"] .past-sort { background: #0f2744; color: #f1f5f9; border-color: #1e3a5f; }
+    [data-theme="dark"] .filter-pill { background: #0f2744; border-color: #1e3a5f; color: #94a3b8; }
+    [data-theme="dark"] .filter-pill.active { background: #3b82f6; border-color: #3b82f6; color: white; }
+    [data-theme="dark"] .event-row { background: #0f2744; border-color: #1e3a5f; box-shadow: 0 4px 20px rgba(0,0,0,0.3); }
+    [data-theme="dark"] .row-title { color: #f1f5f9; }
+    [data-theme="dark"] .row-desc { color: #cbd5e1; }
+    [data-theme="dark"] .row-meta-item { color: #94a3b8; }
+    [data-theme="dark"] .row-attend { background: #142d4d; color: #60a5fa; }
+    [data-theme="dark"] .row-hosted-badge { background: #0d2a1a; color: #4ade80; }
+    [data-theme="dark"] .row-link { background: #1e3a5f; border-color: #2563eb; color: #60a5fa; }
+    [data-theme="dark"] .row-link:hover { background: #2563eb; color: white; border-color: #2563eb; }
+    [data-theme="dark"] .row-photo { background: #1e3a5f; }
+    [data-theme="dark"] .btn-load-more { background: #0f2744; border-color: #1e3a5f; color: #94a3b8; }
+    [data-theme="dark"] .btn-load-more:hover { border-color: #3b82f6; color: #60a5fa; }
+    [data-theme="dark"] .past-eyebrow { color: #60a5fa; }
+  
+    /* ── Lightbox ── */
+    #media-lightbox {
+      position: fixed; inset: 0; z-index: 9999;
+      background: rgba(0,0,0,0.92);
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.25s;
+    }
+    #media-lightbox.open { opacity: 1; pointer-events: all; }
+
+    .lb-inner {
+      position: relative;
+      display: flex; flex-direction: column; align-items: center;
+      max-width: 92vw; max-height: 92vh;
+      gap: 0;
+    }
+
+    /* media area */
+    .lb-media {
+      position: relative;
+      max-width: 90vw; max-height: 80vh;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .lb-media img {
+      max-width: 90vw; max-height: 80vh;
+      width: auto; height: auto;
+      object-fit: contain;
+      border-radius: 12px;
+      display: block;
+      box-shadow: 0 24px 80px rgba(0,0,0,0.7);
+    }
+    .lb-media video,
+    .lb-media iframe {
+      max-width: 90vw; max-height: 80vh;
+      width: 80vw; height: 45vw; /* 16:9 default, overridden by JS for portrait */
+      border-radius: 12px;
+      display: block;
+      box-shadow: 0 24px 80px rgba(0,0,0,0.7);
+      border: none;
+    }
+
+    /* caption */
+    .lb-caption {
+      color: rgba(255,255,255,0.85);
+      font-size: 0.88rem; font-weight: 600; line-height: 1.5;
+      text-align: center; padding: 0.75rem 1rem 0;
+      max-width: 600px;
+    }
+    .lb-counter {
+      color: rgba(255,255,255,0.4);
+      font-size: 0.75rem; font-weight: 700; letter-spacing: 1px;
+      text-align: center; padding-top: 0.3rem;
+    }
+
+    /* nav arrows */
+    .lb-arrow {
+      position: fixed; top: 50%; transform: translateY(-50%);
+      width: 52px; height: 52px; border-radius: 50%;
+      background: rgba(255,255,255,0.1); border: 1.5px solid rgba(255,255,255,0.2);
+      color: white; font-size: 1.1rem;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; transition: background 0.2s, transform 0.2s;
+      z-index: 10001; backdrop-filter: blur(6px);
+      user-select: none;
+    }
+    .lb-arrow:hover { background: rgba(255,255,255,0.22); transform: translateY(-50%) scale(1.08); }
+    .lb-prev { left: clamp(8px, 2vw, 32px); }
+    .lb-next { right: clamp(8px, 2vw, 32px); }
+    .lb-arrow.hidden { opacity: 0; pointer-events: none; }
+
+    /* close btn */
+    .lb-close {
+      position: fixed; top: 18px; right: 22px;
+      width: 42px; height: 42px; border-radius: 50%;
+      background: rgba(255,255,255,0.1); border: 1.5px solid rgba(255,255,255,0.2);
+      color: white; font-size: 1rem;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; transition: background 0.2s;
+      z-index: 10001; backdrop-filter: blur(6px);
+    }
+    .lb-close:hover { background: rgba(255,255,255,0.25); }
+
+    @media (max-width: 600px) {
+      .lb-media video, .lb-media iframe { width: 95vw; height: 53.4vw; }
+      .lb-arrow { width: 40px; height: 40px; font-size: 0.9rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <div class="navbar">
+      <div class="navdiv">
+        <div class="logo">
+          <a href="index.html">
+            <img src="images/logo.png" alt="NextStep Logo" class="logo-image">
+          </a>
+        </div>
+        <nav class="nav-links">
+          <ul>
+            <li class="navbar-item"><a href="index.html">Home</a></li>
+            <li class="navbar-item"><a href="map.html">Map</a></li>
+            <li class="navbar-item"><a href="events.html" class="active">Events</a></li>
+            <li class="navbar-item"><a href="badges.html">Badges</a></li>
+            <li class="navbar-item" id="admin-nav-link" style="display: none;"><a href="admin-dashboard.html">Admin Dashboard</a></li>
+            <li class="navbar-item"><a href="chatbot.html">Compass</a></li>
+            <li class="navbar-item"><a href="contact.html">Contact Us</a></li>
+            <li class="navbar-item"><a href="the-podium.html">The Podium</a></li>
+          </ul>
+        </nav>
+
+        <div class="nav-right">
+          <li class="navbar-item"><a href="login.html" class="login" id="nav-login">Login</a></li>
+          <li class="navbar-item"><a href="signup.html" class="signup" id="nav-signup">Sign Up</a></li>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+      <div class="nav-right">
+        <li class="navbar-item"><a href="login.html" class="login" id="nav-login">Login</a></li>
+        <li class="navbar-item"><a href="signup.html" class="signup" id="nav-signup">Sign Up</a></li>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<main class="past-page">
+
+  <!-- Hero -->
+  <div class="past-hero">
+    <div class="past-hero-inner">
+      <div class="past-eyebrow"><i class="fas fa-photo-film"></i> Event Archive</div>
+      <h1>Events We've Hosted</h1>
+      <p>Every community gathering, workshop, and civic event NextStep has brought to Boca Raton — with photos, recaps, and links.</p>
+    </div>
+  </div>
+
+  <!-- Stats bar (floats up over hero) -->
+  <div class="past-stats-bar" id="past-stats" style="display:none;">
+    <div class="past-stat-block">
+      <div class="past-stat-accent" style="background:#2563eb;"></div>
+      <span class="past-stat-num" id="stat-total">—</span>
+      <div class="past-stat-label">Events Hosted</div>
+    </div>
+    <div class="past-stat-block">
+      <div class="past-stat-accent" style="background:#10b981;"></div>
+      <span class="past-stat-num" id="stat-attendees">—</span>
+      <div class="past-stat-label">Total Attendees</div>
+    </div>
+    <div class="past-stat-block">
+      <div class="past-stat-accent" style="background:#8b5cf6;"></div>
+      <span class="past-stat-num" id="stat-categories">—</span>
+      <div class="past-stat-label">Categories</div>
+    </div>
+  </div>
+
+  <div class="past-content">
+    <div class="view-toolbar">
+      <div class="past-controls">
+        <div class="past-search-wrap">
+          <i class="fas fa-search"></i>
+          <input class="past-search" id="past-search" placeholder="Search events, locations…" oninput="filterAndRender()">
+        </div>
+        <select class="past-sort" id="past-sort" onchange="filterAndRender()">
+          <option value="newest">Newest first</option>
+          <option value="oldest">Oldest first</option>
+          <option value="title">A – Z</option>
+          <option value="attendees">Most attended</option>
+        </select>
+      </div>
+      <span class="result-count" id="result-count"></span>
+    </div>
+
+    <div class="past-filters" id="past-filters">
+      <button class="filter-pill active" data-cat="all" onclick="setCat('all',this)">All</button>
+    </div>
+
+    <div class="events-list" id="events-feed">
+      <div class="past-state"><i class="fas fa-spinner fa-spin"></i><p>Loading events…</p></div>
+    </div>
+
+    <div class="past-load-more" id="load-more-wrap" style="display:none;">
+      <button class="btn-load-more" onclick="loadMore()">
+        <i class="fas fa-chevron-down"></i> Show more events
+      </button>
+    </div>
+  </div>
+
+</main>
+
+<script src="dark-mode.js"></script>
+<script src="mobile-nav.js"></script>
+<script src="navbar.js"></script>
+<script type="module" src="auth-navbar.js"></script>
+<script type="module" src="auth-check.js"></script>
+
+<script type="module">
+import { initializeApp, getApps } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+import { getFirestore, collection, getDocs, query, where } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+
+const firebaseConfig = {
+  apiKey: "AIzaSyArZYz6UMheUgBVrNeWvxWml-0zDTbNur0",
+  authDomain: "nextstep-12b9a.firebaseapp.com",
+  projectId: "nextstep-12b9a",
+  storageBucket: "nextstep-12b9a.firebasestorage.app",
+  messagingSenderId: "630600034259",
+  appId: "1:630600034259:web:6b6284e147a6f79cda7126",
+  measurementId: "G-WH3JL7Y7BR"
+};
+
+const app = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
+const db  = getFirestore(app);
+
+const CAT_COLORS = {
+  political:     '#2563eb', environmental: '#10b981', youth: '#f59e0b',
+  innovation:    '#ec4899', education:     '#8b5cf6', religious: '#d97706', volunteer: '#10b981',
+};
+const CAT_ICONS = {
+  political: 'fa-landmark', environmental: 'fa-leaf', youth: 'fa-star',
+  innovation: 'fa-lightbulb', education: 'fa-graduation-cap', religious: 'fa-place-of-worship', volunteer: 'fa-hand-holding-heart',
+};
+const CAT_GRADIENTS = {
+  political: 'linear-gradient(135deg,#2563eb,#3b82f6)', environmental: 'linear-gradient(135deg,#10b981,#34d399)',
+  youth: 'linear-gradient(135deg,#f59e0b,#fbbf24)', innovation: 'linear-gradient(135deg,#ec4899,#f472b6)',
+  education: 'linear-gradient(135deg,#8b5cf6,#a78bfa)', religious: 'linear-gradient(135deg,#d97706,#fbbf24)',
+  volunteer: 'linear-gradient(135deg,#10b981,#059669)',
+};
+
+const PAGE_SIZE = 5;
+let allEvents = [], activeCat = 'all', pageCount = 1;
+
+window.setCat = setCat;
+window.filterAndRender = filterAndRender;
+window.loadMore = loadMore;
+window.observeVideos = observeVideos;
+
+(async function load() {
+  try {
+    let snap;
+    try {
+      // Try filtered query first (requires no special index)
+      const q = query(collection(db, 'events'), where('archived', '==', true));
+      snap = await getDocs(q);
+    } catch (queryErr) {
+      // Fallback: fetch all events and filter client-side
+      console.warn('Filtered query failed, falling back to full fetch:', queryErr);
+      snap = await getDocs(collection(db, 'events'));
+    }
+    allEvents = [];
+    snap.forEach(d => {
+      const data = d.data();
+      if (data.archived === true) allEvents.push({ id: d.id, ...data });
+    });
+    if (!allEvents.length) {
+      document.getElementById('events-feed').innerHTML = `<div class="past-state"><i class="fas fa-box-open"></i><p>No past events yet. Add events from the admin dashboard and mark them as archived to show them here.</p></div>`;
+      return;
+    }
+    buildFilters(); buildStats(); filterAndRender();
+  } catch (e) {
+    console.error('Failed to load past events:', e);
+    document.getElementById('events-feed').innerHTML = `<div class="past-state"><i class="fas fa-exclamation-triangle"></i><p>Could not load past events: ${e.message || e}</p></div>`;
+  }
+})();
+
+function buildStats() {
+  const total = allEvents.length;
+  const attendees = allEvents.reduce((s, e) => s + (parseInt(e.registered)||0) + (parseInt(e.checkedIn)||0), 0);
+  const cats = new Set(allEvents.map(e => e.category).filter(Boolean)).size;
+  document.getElementById('stat-total').textContent = total;
+  document.getElementById('stat-attendees').textContent = attendees > 0 ? attendees.toLocaleString() : '—';
+  document.getElementById('stat-categories').textContent = cats;
+  document.getElementById('past-stats').style.display = 'flex';
+}
+
+function buildFilters() {
+  const cats = [...new Set(allEvents.map(e => e.category).filter(Boolean))].sort();
+  const wrap = document.getElementById('past-filters');
+  cats.forEach(cat => {
+    const btn = document.createElement('button');
+    btn.className = 'filter-pill'; btn.dataset.cat = cat;
+    btn.onclick = () => setCat(cat, btn);
+    btn.innerHTML = `<span class="pill-dot" style="background:${CAT_COLORS[cat]||'#2563eb'};opacity:1;"></span>${cap(cat)}`;
+    wrap.appendChild(btn);
+  });
+}
+
+function setCat(cat, el) {
+  activeCat = cat; pageCount = 1;
+  document.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
+  el.classList.add('active'); filterAndRender();
+}
+
+function filterAndRender() { pageCount = 1; renderPage(); }
+function loadMore() { pageCount++; renderPage(); }
+
+function getFiltered() {
+  const term = (document.getElementById('past-search').value||'').toLowerCase();
+  const sort = document.getElementById('past-sort').value;
+  let filtered = allEvents.filter(e => {
+    const matchCat  = activeCat === 'all' || e.category === activeCat;
+    const matchTerm = !term || (e.title||'').toLowerCase().includes(term) ||
+      (e.description||'').toLowerCase().includes(term) || (e.location||'').toLowerCase().includes(term) || (e.category||'').toLowerCase().includes(term);
+    return matchCat && matchTerm;
+  });
+  filtered.sort((a, b) => {
+    if (sort === 'oldest')   return (a.date||'').localeCompare(b.date||'');
+    if (sort === 'title')    return (a.title||'').localeCompare(b.title||'');
+    if (sort === 'attendees') return (((parseInt(b.registered)||0)+(parseInt(b.checkedIn)||0)) - ((parseInt(a.registered)||0)+(parseInt(a.checkedIn)||0)));
+    return (b.date||'').localeCompare(a.date||'');
+  });
+  return filtered;
+}
+
+function renderPage() {
+  const filtered = getFiltered();
+  const visible  = filtered.slice(0, pageCount * PAGE_SIZE);
+  const hasMore  = filtered.length > visible.length;
+  const countEl  = document.getElementById('result-count');
+  countEl.textContent = filtered.length ? `${filtered.length} event${filtered.length !== 1 ? 's' : ''}` : '';
+  document.getElementById('load-more-wrap').style.display = hasMore ? 'block' : 'none';
+  const feed = document.getElementById('events-feed');
+  if (!filtered.length) {
+    feed.innerHTML = `<div class="past-state"><i class="fas fa-magnifying-glass"></i><p>No past events match your search.</p></div>`;
+    return;
+  }
+  feed.innerHTML = visible.map(e => rowHTML(e)).join('');
+  observeVideos();
+}
+
+function rowHTML(e) {
+  const color    = CAT_COLORS[e.category]    || '#2563eb';
+  const gradient = CAT_GRADIENTS[e.category] || 'linear-gradient(135deg,#2563eb,#3b82f6)';
+  const icon     = CAT_ICONS[e.category]     || 'fa-calendar-check';
+  const attended = (parseInt(e.registered)||0) + (parseInt(e.checkedIn)||0);
+
+  // The shared event recap/description (always-visible text block under the title)
+  const descText = esc(e.recap || e.description || '');
+  // Fallback caption for photos that don't have their own caption set
+  const fallbackCaption = descText || esc(e.title || '');
+
+  // Build a unified, deduped photo/video list.
+  const rawItems = [];
+  if (e.imageUrl) rawItems.push({ url: e.imageUrl, caption: e.imageCaption || '', type: 'image' });
+  (Array.isArray(e.images) ? e.images : []).forEach(item => {
+    if (typeof item === 'string') { if (item) rawItems.push({ url: item, caption: '', type: 'image' }); }
+    else if (item && item.url)    { rawItems.push({ url: item.url, caption: item.caption || '', type: item.type || 'image' }); }
+  });
+  const seenUrls = new Set();
+  const allItems = rawItems.filter(p => p.url && !seenUrls.has(p.url) && seenUrls.add(p.url));
+  function toEmbedUrl(url) {
+    // YouTube
+    let m = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
+    if (m) return { kind: 'iframe', src: `https://www.youtube.com/embed/${m[1]}?autoplay=1&mute=1&rel=0&playsinline=1&loop=1&playlist=${m[1]}` };
+    // Vimeo
+    m = url.match(/vimeo\.com\/(\d+)/);
+    if (m) return { kind: 'iframe', src: `https://player.vimeo.com/video/${m[1]}?autoplay=1&muted=1&loop=1&background=1` };
+    // Google Drive — stream it with a real <video> tag via Drive's direct-download link,
+    // so it actually autoplays (Drive's own /preview embed never does — no autoplay param
+    // exists for it). Keep that /preview embed only as an automatic fallback for the rare
+    // very-large file Drive won't stream directly.
+    m = url.match(/\/d\/([a-zA-Z0-9_-]{10,})/) || url.match(/[?&]id=([a-zA-Z0-9_-]{10,})/);
+    if (m) {
+      const fileId = m[1];
+      return {
+        kind: 'video',
+        src: `https://drive.google.com/uc?export=download&id=${fileId}`,
+        fallback: `https://drive.google.com/file/d/${fileId}/preview`
+      };
+    }
+    // Direct video file (uploaded/hosted .mp4, .webm, .mov, etc.) and anything else —
+    // always a real <video> tag, never a bare iframe, so the browser's own player
+    // controls/play-button never appear.
+    return { kind: 'video', src: url };
+  }
+
+  // Build collage grid — ALL items rendered (no cap).
+  // Videos only get data-kind/data-src — the actual element is injected lazily
+  // by observeVideos() once the tile scrolls into view.
+  // Full item list is stored as JSON on the grid so the lightbox can always
+  // navigate every photo/video, with correct per-item captions.
+  const gridCount = allItems.length;
+
+  let mediaTiles = '';
+  if (allItems.length) {
+    allItems.forEach((p, idx) => {
+      if (p.type === 'video') {
+        const embed = toEmbedUrl(p.url);
+        // Only show caption overlay if the photo has its own caption (not the event description)
+        const overlay = p.caption
+          ? `<div class="row-video-overlay"><p>${esc(p.caption)}</p></div>`
+          : '';
+        const fallbackAttr = embed.fallback ? ` data-fallback="${esc(embed.fallback)}"` : '';
+        mediaTiles += `<div class="row-video-item" data-kind="${esc(embed.kind)}" data-src="${esc(embed.src)}"${fallbackAttr}>
+          <div class="row-video-shield"></div>${overlay}
+        </div>`;
+      } else {
+        // Only show caption overlay text if the photo has its own caption
+        const captionHTML = p.caption ? esc(p.caption) : '';
+        mediaTiles += `<div class="row-photo">
+          <img src="${esc(p.url)}" alt="${esc(e.title||'Event photo')}" loading="lazy" onerror="this.outerHTML='<div class=&quot;row-photo-placeholder&quot;><i class=&quot;fas ${icon}&quot;></i></div>'">
+          ${captionHTML ? `<div class="row-photo-overlay"><p>${captionHTML}</p></div>` : ''}
+        </div>`;
+      }
+    });
+  } else {
+    mediaTiles = `<div class="row-photo" style="background:${gradient};">
+       <div class="row-photo-placeholder"><i class="fas ${icon}"></i></div>
+     </div>`;
+  }
+
+  // Store the full item list on the grid element so the lightbox can read
+  // all items (with correct captions) regardless of how many tiles are shown.
+  const itemsJson = JSON.stringify(allItems.map(p => ({
+    type: p.type,
+    src: p.type === 'video' ? toEmbedUrl(p.url).src : p.url,
+    embedKind: p.type === 'video' ? toEmbedUrl(p.url).kind : '',
+    fallback: p.type === 'video' ? (toEmbedUrl(p.url).fallback || '') : '',
+    caption: p.caption || ''
+  }))).replace(/"/g, '&quot;');
+
+  const displayCount = gridCount <= 7 ? String(gridCount || 1) : (gridCount <= 12 ? String(gridCount) : 'many');
+  const mediaHTML = `<div class="row-photos" data-count="${displayCount}" data-items="${itemsJson}">${mediaTiles}</div>`;
+
+  const metaParts = [];
+  if (e.date)     metaParts.push(`<div class="row-meta-item"><i class="fas fa-calendar-alt"></i>${esc(e.date)}${e.time?' · '+esc(e.time):''}</div>`);
+  if (e.location) metaParts.push(`<div class="row-meta-item"><i class="fas fa-location-dot"></i>${esc(e.location)}</div>`);
+
+  const links = Array.isArray(e.links) ? e.links.filter(l => l && l.url) : [];
+  const linksHTML = links.length
+    ? `<div class="row-links">${links.map(l => `<a class="row-link" href="${esc(l.url)}" target="_blank" rel="noopener"><i class="fas fa-arrow-up-right-from-square"></i>${esc(l.label||'Learn more')}</a>`).join('')}</div>`
+    : '';
+
+  return `<article class="event-row">
+    <div class="row-header">
+      <div class="row-header-left">
+        <div class="row-badges">
+          <span class="row-cat-badge" style="background:${color};">${cap(e.category||'Event')}</span>
+          <span class="row-hosted-badge"><i class="fas fa-circle-check"></i> Hosted</span>
+          ${attended > 0 ? `<span class="row-attend"><i class="fas fa-users"></i> ${attended.toLocaleString()} attendees</span>` : ''}
+        </div>
+        <h3 class="row-title">${esc(e.title||'Untitled Event')}</h3>
+        ${metaParts.length ? `<div class="row-meta">${metaParts.join('')}</div>` : ''}
+      </div>
+      <div class="row-header-right">
+        ${linksHTML}
+      </div>
+    </div>
+    <div class="row-desc">${descText || '<span style="color:#94a3b8;">Add a recap or description for this event from the admin dashboard.</span>'}</div>
+    ${mediaHTML}
+  </article>`;
+}
+
+function cap(s) { return s ? s.charAt(0).toUpperCase()+s.slice(1) : ''; }
+function esc(s) { return String(s||'').replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+// ── Scroll-triggered video loading ──
+// Video tiles render with only data-kind/data-src (no iframe/video element at all),
+// so nothing plays — and no native play-button/controls can show — until the tile
+// is actually scrolled into view. At that point we build the real element and drop
+// it in, which is also what kicks off autoplay.
+let videoObserver = null;
+function observeVideos() {
+  if (!videoObserver) {
+    videoObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        const el = entry.target;
+        videoObserver.unobserve(el); // one-shot: load & play once, then leave it running/looping
+        const kind = el.dataset.kind, src = el.dataset.src, fallback = el.dataset.fallback;
+        if (kind === 'iframe') {
+          const media = document.createElement('iframe');
+          media.src = src;
+          media.style.cssText = 'position:absolute;top:0;left:0;width:100%;height:100%;border:none;pointer-events:none;';
+          media.setAttribute('allow', 'autoplay; accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture');
+          // No allowFullscreen — keeps the fullscreen button from appearing in embedded players
+          el.insertBefore(media, el.firstChild);
+          // Ensure shield is on top so no clicks pass through to iframe
+          const shield = el.querySelector('.row-video-shield');
+          if (shield) el.appendChild(shield);
+          return;
+        }
+        const media = document.createElement('video');
+        media.setAttribute('muted', '');
+        media.setAttribute('playsinline', '');
+        media.setAttribute('autoplay', '');
+        media.removeAttribute('controls'); // explicit: never show controls
+        media.muted = true; media.loop = true; media.playsInline = true; media.autoplay = true;
+        media.controls = false;
+        // Block context menu (right-click "Save video as…", "Open in new tab", etc.)
+        media.addEventListener('contextmenu', e => e.preventDefault());
+        if (fallback) {
+          // Direct Drive stream didn't load — fall back to Drive's own preview embed,
+          // still without controls/interaction since the shield sits on top.
+          media.addEventListener('error', () => {
+            const iframe = document.createElement('iframe');
+            iframe.src = fallback;
+            iframe.style.cssText = 'position:absolute;top:-40px;left:0;width:100%;height:calc(100% + 40px);border:none;pointer-events:none;';
+            iframe.setAttribute('allow', 'autoplay; encrypted-media');
+            // No allowFullscreen
+            media.replaceWith(iframe);
+            // Re-append shield on top
+            const shield = el.querySelector('.row-video-shield');
+            if (shield) el.appendChild(shield);
+          }, { once: true });
+        }
+        media.src = src;
+        el.insertBefore(media, el.firstChild);
+        // Keep shield on top of video
+        const shield = el.querySelector('.row-video-shield');
+        if (shield) el.appendChild(shield);
+        media.play().catch(() => {}); // belt-and-suspenders alongside the autoplay attribute
+      });
+    }, { rootMargin: '150px 0px', threshold: 0.15 });
+  }
+  document.querySelectorAll('.row-video-item[data-src]').forEach(el => videoObserver.observe(el));
+}
+
+// Block context menu on the video container itself too
+document.addEventListener('contextmenu', e => {
+  if (e.target.closest('.row-video-item')) e.preventDefault();
+}, true);
+</script>
+
+<!-- ── Lightbox markup ── -->
+<div id="media-lightbox" role="dialog" aria-modal="true" aria-label="Media viewer">
+  <button class="lb-close" id="lb-close" aria-label="Close"><i class="fas fa-xmark"></i></button>
+  <button class="lb-arrow lb-prev" id="lb-prev" aria-label="Previous"><i class="fas fa-chevron-left"></i></button>
+  <button class="lb-arrow lb-next" id="lb-next" aria-label="Next"><i class="fas fa-chevron-right"></i></button>
+  <div class="lb-inner">
+    <div class="lb-media" id="lb-media"></div>
+    <div class="lb-caption" id="lb-caption"></div>
+    <div class="lb-counter" id="lb-counter"></div>
+  </div>
+</div>
+
+<script>
+// ── Blurred background for .row-photo tiles ──
+// Each photo tile gets a CSS background-image matching its <img> src
+// so the ::before blur layer fills any letterbox/pillarbox bars.
+function applyBlurBgs() {
+  document.querySelectorAll('.row-photo img').forEach(img => {
+    const tile = img.closest('.row-photo');
+    if (!tile) return;
+    const src = img.src || img.dataset.src;
+    if (src) tile.style.backgroundImage = `url('${src}')`;
+    img.addEventListener('load', () => {
+      tile.style.backgroundImage = `url('${img.src}')`;
+    }, { once: true });
+  });
+}
+// Run once now and again after each render cycle
+document.addEventListener('DOMContentLoaded', applyBlurBgs);
+// Hook into renderPage — patch it after module scripts run
+setTimeout(() => {
+  const origRender = window._origRenderPage;
+  if (origRender) window._patchedRender = origRender;
+}, 200);
+
+// Observe DOM mutations so new tiles get bg applied after dynamic render
+new MutationObserver(() => applyBlurBgs())
+  .observe(document.getElementById('events-feed') || document.body, { childList: true, subtree: true });
+
+// ── Lightbox ──
+let lbItems  = [];   // { type:'image'|'video', src, embedKind, fallback, caption }
+let lbIndex  = 0;
+
+const lbEl      = document.getElementById('media-lightbox');
+const lbMedia   = document.getElementById('lb-media');
+const lbCaption = document.getElementById('lb-caption');
+const lbCounter = document.getElementById('lb-counter');
+const lbPrev    = document.getElementById('lb-prev');
+const lbNext    = document.getElementById('lb-next');
+const lbClose   = document.getElementById('lb-close');
+
+function lbOpen(items, startIndex) {
+  lbItems = items;
+  lbIndex = startIndex;
+  lbRender();
+  lbEl.classList.add('open');
+  document.body.style.overflow = 'hidden';
+  lbEl.focus();
+}
+
+function lbClose_() {
+  lbEl.classList.remove('open');
+  document.body.style.overflow = '';
+  // stop any playing video/iframe
+  lbMedia.innerHTML = '';
+}
+
+function lbRender() {
+  const item = lbItems[lbIndex];
+  lbMedia.innerHTML = '';
+
+  if (item.type === 'image') {
+    const img = document.createElement('img');
+    img.src = item.src;
+    img.alt = item.caption || '';
+    lbMedia.appendChild(img);
+  } else {
+    // video
+    if (item.embedKind === 'iframe') {
+      const fr = document.createElement('iframe');
+      fr.src = item.src;
+      fr.setAttribute('allow', 'autoplay; accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture');
+      fr.allowFullscreen = true;
+      // portrait video? detect from src later; default 16:9 size set via CSS
+      lbMedia.appendChild(fr);
+    } else {
+      const vid = document.createElement('video');
+      vid.src = item.src;
+      vid.controls = true;
+      vid.autoplay = true;
+      vid.muted = false; // user-initiated — unmute
+      vid.playsInline = true;
+      vid.loop = true;
+      // Resize to natural aspect ratio once metadata loads
+      vid.addEventListener('loadedmetadata', () => {
+        if (vid.videoWidth && vid.videoHeight) {
+          const ratio = vid.videoWidth / vid.videoHeight;
+          const maxH  = window.innerHeight * 0.80;
+          const maxW  = window.innerWidth  * 0.90;
+          let w = maxW, h = maxW / ratio;
+          if (h > maxH) { h = maxH; w = maxH * ratio; }
+          vid.style.width  = w + 'px';
+          vid.style.height = h + 'px';
+        }
+      }, { once: true });
+      if (item.fallback) {
+        vid.addEventListener('error', () => {
+          const fr = document.createElement('iframe');
+          fr.src = item.fallback;
+          fr.setAttribute('allow', 'autoplay; encrypted-media');
+          fr.allowFullscreen = true;
+          vid.replaceWith(fr);
+        }, { once: true });
+      }
+      lbMedia.appendChild(vid);
+    }
+  }
+
+  lbCaption.textContent = item.caption || '';
+  lbCounter.textContent = lbItems.length > 1 ? `${lbIndex + 1} / ${lbItems.length}` : '';
+  lbPrev.classList.toggle('hidden', lbIndex === 0);
+  lbNext.classList.toggle('hidden', lbIndex === lbItems.length - 1);
+}
+
+lbClose.addEventListener('click', lbClose_);
+lbPrev.addEventListener('click', () => { if (lbIndex > 0) { lbIndex--; lbRender(); } });
+lbNext.addEventListener('click', () => { if (lbIndex < lbItems.length - 1) { lbIndex++; lbRender(); } });
+
+// click backdrop to close
+lbEl.addEventListener('click', e => { if (e.target === lbEl) lbClose_(); });
+
+// keyboard nav
+document.addEventListener('keydown', e => {
+  if (!lbEl.classList.contains('open')) return;
+  if (e.key === 'Escape')      lbClose_();
+  if (e.key === 'ArrowLeft'  && lbIndex > 0)                  { lbIndex--; lbRender(); }
+  if (e.key === 'ArrowRight' && lbIndex < lbItems.length - 1) { lbIndex++; lbRender(); }
+});
+
+// ── Wire up tiles to lightbox after each render ──
+function wireEventRow(row) {
+  const grid = row.querySelector('.row-photos[data-items]');
+  const tiles = [...row.querySelectorAll('.row-photo, .row-video-item')];
+  if (!tiles.length) return;
+
+  // Read the full item list from the grid's data-items attribute (set in rowHTML).
+  // This gives us ALL photos/videos with correct captions, not just the visible tiles.
+  let items = [];
+  if (grid && grid.dataset.items) {
+    try { items = JSON.parse(grid.dataset.items); } catch(e) {}
+  }
+  // Fallback: scrape from DOM tiles if data-items isn't available
+  if (!items.length) {
+    items = tiles.map(tile => {
+      if (tile.classList.contains('row-video-item')) {
+        return { type: 'video', src: tile.dataset.src || '', embedKind: tile.dataset.kind || 'video', fallback: tile.dataset.fallback || '', caption: tile.querySelector('.row-video-overlay p')?.textContent || '' };
+      } else {
+        const img = tile.querySelector('img');
+        return { type: 'image', src: img ? img.src : '', caption: tile.querySelector('.row-photo-overlay p')?.textContent || '' };
+      }
+    });
+  }
+
+  tiles.forEach((tile, idx) => {
+    // Remove old listener by cloning
+    const fresh = tile.cloneNode(true);
+    tile.parentNode.replaceChild(fresh, tile);
+    fresh.style.cursor = 'pointer';
+    // Each tile knows its own index in the full list — clicking opens at that position
+    fresh.addEventListener('click', () => lbOpen(items, idx));
+  });
+  // Re-register any video tiles with the IntersectionObserver after cloning
+  if (typeof observeVideos === 'function') observeVideos();
+}
+
+function wireAllRows() {
+  document.querySelectorAll('.event-row').forEach(row => {
+    if (!row.dataset.wired) {
+      row.dataset.wired = '1';
+      wireEventRow(row);
+    }
+  });
+}
+
+new MutationObserver(wireAllRows)
+  .observe(document.getElementById('events-feed') || document.body, { childList: true, subtree: true });
+wireAllRows();
+</script>
+
+</body>
+</html>

@@ -138,10 +138,263 @@
     });
   </script>
 
+  <!-- Additional styles for enhancements -->
+  <style>
+    /* ── Hero morph ── */
+    .hero h1.morphed .accent {
+      background: linear-gradient(135deg, #2563eb, #3b82f6);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero h1.morphed {
+      font-size: 3.8rem;
+    }
+    @media (max-width: 768px) {
+      .hero h1.morphed {
+        font-size: 2.6rem;
+      }
+    }
+
+    /* ── Upcoming events preview ── */
+    .events-preview {
+      padding: 4rem 0;
+      background: var(--bg-primary);
+    }
+    .events-preview-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 2rem;
+      margin-top: 2.5rem;
+    }
+    .event-preview-card {
+      background: var(--bg-secondary);
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid var(--border-color);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.04);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      text-decoration: none;
+      color: inherit;
+      display: block;
+    }
+    .event-preview-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 12px 40px rgba(37,99,235,0.08);
+    }
+    .event-preview-card .event-preview-header {
+      padding: 1.25rem 1.5rem;
+      color: white;
+      background: linear-gradient(135deg, #2563eb, #3b82f6);
+    }
+    .event-preview-card .event-preview-category {
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      opacity: 0.85;
+    }
+    .event-preview-card .event-preview-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-top: 0.25rem;
+    }
+    .event-preview-card .event-preview-body {
+      padding: 1.25rem 1.5rem;
+    }
+    .event-preview-card .event-preview-meta {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 0.5rem;
+    }
+    .event-preview-card .event-preview-meta i {
+      color: #2563eb;
+      width: 16px;
+    }
+    .event-preview-card .event-preview-desc {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      line-height: 1.5;
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .event-preview-card .event-preview-footer {
+      padding: 0.75rem 1.5rem 1.25rem;
+      border-top: 1px solid var(--border-color);
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+    }
+
+    /* ── Stats in Your Impact ── */
+    .impact-details {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+    .impact-item {
+      text-align: center;
+      padding: 1.5rem;
+      background: var(--bg-secondary);
+      border-radius: 12px;
+      border: 1px solid var(--border-color);
+    }
+    .impact-item .impact-number {
+      font-size: 2.4rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, #2563eb, #3b82f6);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1.1;
+    }
+    .impact-item .impact-label {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      font-weight: 600;
+    }
+    @media (max-width: 768px) {
+      .impact-details { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 480px) {
+      .impact-details { grid-template-columns: 1fr; }
+    }
+
+    /* ── Testimonials ── */
+    .testimonials-section {
+      padding: 5rem 0;
+      background: var(--bg-secondary);
+      border-top: 1px solid var(--border-color);
+      border-bottom: 1px solid var(--border-color);
+    }
+    .testimonial-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+      margin-top: 2.5rem;
+    }
+    .testimonial-card {
+      background: var(--bg-primary);
+      padding: 2rem;
+      border-radius: 16px;
+      border: 1px solid var(--border-color);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.04);
+      transition: transform 0.3s ease;
+    }
+    .testimonial-card:hover { transform: translateY(-4px); }
+    .testimonial-card .quote {
+      font-size: 1rem;
+      line-height: 1.7;
+      color: var(--text-primary);
+      font-style: italic;
+      margin-bottom: 1rem;
+    }
+    .testimonial-card .author {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .testimonial-card .avatar {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #2563eb, #3b82f6);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+    }
+    .testimonial-card .name {
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+    .testimonial-card .role {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+    }
+    @media (max-width: 768px) {
+      .testimonial-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 480px) {
+      .testimonial-grid { grid-template-columns: 1fr; }
+    }
+
+    /* ── Community Gallery ── */
+    .gallery-section {
+      padding: 5rem 0;
+      background: var(--bg-primary);
+    }
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+      margin-top: 2.5rem;
+    }
+    .gallery-item {
+      border-radius: 12px;
+      overflow: hidden;
+      aspect-ratio: 1;
+      background: linear-gradient(135deg, #e8eeff, #f5f0ff);
+      position: relative;
+      cursor: pointer;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      color: rgba(2, 6, 23, 0.06);
+    }
+    .gallery-item:hover {
+      transform: scale(1.03);
+      box-shadow: 0 8px 30px rgba(37,99,235,0.12);
+      z-index: 1;
+    }
+    .gallery-item .gallery-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.4), transparent);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      display: flex;
+      align-items: flex-end;
+      padding: 1rem;
+      color: white;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+    .gallery-item:hover .gallery-overlay {
+      opacity: 1;
+    }
+    @media (max-width: 900px) {
+      .gallery-grid { grid-template-columns: repeat(2, 1fr) !important; grid-template-rows: unset !important; }
+      .gallery-item { grid-row: unset !important; grid-column: unset !important; aspect-ratio: 1 !important; }
+    }
+    @media (max-width: 480px) {
+      .gallery-grid { grid-template-columns: 1fr 1fr !important; gap: 0.75rem; }
+    }
+
+    /* ── Extra responsiveness ── */
+    @media (max-width: 768px) {
+      .events-preview-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+    @media (max-width: 480px) {
+      .events-preview-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
 </head>
 
 <body class="homepage">
-  <!--Navigation Menu-->
   <nav>
     <div class="navbar">
       <div class="navdiv">
@@ -170,6 +423,14 @@
       </div>
     </div>
   </nav>
+
+      <div class="nav-right">
+        <li class="navbar-item"><a href="login.html" class="login" id="nav-login">Login</a></li>
+        <li class="navbar-item"><a href="signup.html" class="signup" id="nav-signup">Sign Up</a></li>
+      </div>
+    </div>
+  </div>
+</nav>
   
 
   <main>
@@ -281,17 +542,105 @@
       </div>
     </section>
 
+    <!-- Your Impact (with stats added back) -->
     <section class="point" data-aos="fade-up">
       <div class="point-content">
         <h2>Your Impact</h2>
         <p> Save events, track what you've attended, and watch your civic impact grow over time.
           Earn badges for consistent engagement and share your progress with friends.
         </p>
+
+        <!-- Stats Grid — populated dynamically from Firestore -->
+        <div class="impact-details" id="impactDetails">
+          <div class="impact-item">
+            <div class="impact-number" data-count="1247">0</div>
+            <div class="impact-label">Community Members</div>
+          </div>
+          <div class="impact-item">
+            <div class="impact-number" data-count="156">0</div>
+            <div class="impact-label">Events Hosted</div>
+          </div>
+          <div class="impact-item">
+            <div class="impact-number" data-count="2843">0</div>
+            <div class="impact-label">Volunteer Hours</div>
+          </div>
+          <div class="impact-item">
+            <div class="impact-number" data-count="89">0</div>
+            <div class="impact-label">Badges Earned</div>
+          </div>
+        </div>
       </div>
     </section>
 
-    <!-- Call to action-->
+    <!-- Testimonials Section -->
+    <section class="testimonials-section" data-aos="fade-up">
+      <div class="point-content">
+        <h2 style="text-align:center; font-size:2.8rem; font-weight:800; margin-bottom:0.5rem;">What Our Community Says</h2>
+        <p style="text-align:center; color:var(--text-secondary); max-width:600px; margin:0 auto 0.5rem;">Real stories from people making a difference in Boca Raton.</p>
+        <div class="testimonial-grid">
+          <div class="testimonial-card">
+            <div class="quote">“NextStep made it so easy to find volunteer opportunities that actually fit my schedule. I've met incredible people and made a real difference in my neighborhood.”</div>
+            <div class="author">
+              <div class="avatar">JD</div>
+              <div>
+                <div class="name">Jessica Davis</div>
+                <div class="role">Volunteer</div>
+              </div>
+            </div>
+          </div>
+          <div class="testimonial-card">
+            <div class="quote">“I never knew how much was happening in my own city until I started using NextStep. The map is incredible — I've attended events I would have missed otherwise.”</div>
+            <div class="author">
+              <div class="avatar">MR</div>
+              <div>
+                <div class="name">Marcus Reyes</div>
+                <div class="role">Community Advocate</div>
+              </div>
+            </div>
+          </div>
+          <div class="testimonial-card">
+            <div class="quote">“The badge system kept me motivated to stay engaged. Tracking my progress and seeing my name on The Podium gave me a real sense of pride in my community.”</div>
+            <div class="author">
+              <div class="avatar">SL</div>
+              <div>
+                <div class="name">Sophia Liu</div>
+                <div class="role">Student Leader</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
 
+    <!-- Upcoming Events Preview -->
+    <section class="events-preview" data-aos="fade-up">
+      <div class="point-content">
+        <h2 style="text-align:center; font-size:2.8rem; font-weight:800; margin-bottom:0.5rem;">What's Happening</h2>
+        <p style="text-align:center; color:var(--text-secondary); max-width:600px; margin:0 auto 1rem;">Upcoming civic events in Boca Raton – find your next opportunity.</p>
+        <div class="events-preview-grid" id="eventsPreviewGrid">
+          <!-- Will be populated by JavaScript -->
+          <div style="grid-column:1/-1; text-align:center; padding:2rem; color:var(--text-secondary);">
+            <i class="fas fa-spinner fa-spin"></i> Loading events…
+          </div>
+        </div>
+        <div style="text-align:center; margin-top:2rem;">
+          <a href="events.html" class="cta" style="background: linear-gradient(135deg, #2563eb, #3b82f6); border-radius:50px; padding:0.8rem 2.5rem;">View All Events →</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Community Gallery Section -->
+    <section class="gallery-section" data-aos="fade-up">
+      <div class="point-content">
+        <h2 style="text-align:center; font-size:2.8rem; font-weight:800; margin-bottom:0.5rem;">Community Gallery</h2>
+        <p style="text-align:center; color:var(--text-secondary); max-width:600px; margin:0 auto 0.5rem;">Moments that define our community.</p>
+        <div class="gallery-grid" id="galleryGrid">
+          <!-- Populated dynamically from Firestore; falls back to defaults if empty -->
+        </div>
+      </div>
+    </section>
+
+    <!-- Call to action (original)-->
     <section class="footer-cta" data-aos="fade-up">
       <p class="cta-text">
         Ready to get involved?
@@ -300,6 +649,7 @@
         Let's Go
       </a>
     </section>
+
   </main>
 
   <footer>
@@ -375,6 +725,296 @@
   <script src="navbar.js"></script>
   <script src="admin.js"></script>
   <script type="module" src="auth-navbar.js"></script>
+
+  <!-- Enhanced script: hero morph + events preview + counter -->
+  <script>
+    (function() {
+      // ── HERO MORPH ──
+      const heroTitle = document.getElementById('heroTitle');
+      const originalHTML = heroTitle.innerHTML; // "Take the <span class="accent">NextStep</span>"
+      const morphedHTML = 'Your <span class="accent">NextStep</span>';
+
+      // Detect when hero title is hidden (opacity 0) then morph
+      let lastOpacity = 1;
+      window.addEventListener('scroll', function() {
+        const opacity = parseFloat(heroTitle.style.opacity);
+        if (opacity === 0 && lastOpacity !== 0) {
+          if (!heroTitle.classList.contains('morphed')) {
+            heroTitle.classList.add('morphed');
+            heroTitle.innerHTML = morphedHTML;
+          }
+        } else if (opacity > 0 && lastOpacity === 0) {
+          if (heroTitle.classList.contains('morphed')) {
+            heroTitle.classList.remove('morphed');
+            heroTitle.innerHTML = originalHTML;
+          }
+        }
+        lastOpacity = opacity;
+      }, { passive: true });
+
+      // ── LOAD EVENTS PREVIEW ──
+      (async function loadEvents() {
+        const container = document.getElementById('eventsPreviewGrid');
+        if (!container) return;
+
+        try {
+          const { initializeApp, getApps } = await import(
+            'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js'
+          );
+          const { getFirestore, collection, getDocs, query, orderBy, limit } = await import(
+            'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js'
+          );
+
+          const firebaseConfig = {
+            apiKey: "AIzaSyArZYz6UMheUgBVrNeWvxWml-0zDTbNur0",
+            authDomain: "nextstep-12b9a.firebaseapp.com",
+            projectId: "nextstep-12b9a",
+            storageBucket: "nextstep-12b9a.firebasestorage.app",
+            messagingSenderId: "630600034259",
+            appId: "1:630600034259:web:6b6284e147a6f79cda7126",
+            measurementId: "G-WH3JL7Y7BR"
+          };
+
+          const app = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
+          const db = getFirestore(app);
+
+          const q = query(collection(db, 'events'), orderBy('date', 'asc'), limit(6));
+          const snap = await getDocs(q);
+
+          let events = [];
+          snap.forEach(doc => {
+            const data = doc.data();
+            if (data.archived === true) return;
+            events.push({ id: doc.id, ...data });
+          });
+
+          if (events.length === 0) {
+            container.innerHTML = `
+              <div style="grid-column:1/-1; text-align:center; padding:2rem; color:var(--text-secondary);">
+                <i class="fas fa-calendar-xmark"></i> No upcoming events right now. Check back soon!
+              </div>`;
+            return;
+          }
+
+          const catColors = {
+            political: '#2563eb',
+            youth: '#f59e0b',
+            innovation: '#ec4899',
+            environmental: '#10b981',
+            education: '#8b5cf6',
+            religious: '#d97706',
+            volunteer: '#10b981'
+          };
+
+          container.innerHTML = events.map(ev => {
+            const color = catColors[ev.category] || '#2563eb';
+            const dateStr = ev.date || 'TBD';
+            const timeStr = ev.time || '';
+            const locationStr = ev.location || 'Boca Raton, FL';
+            const desc = ev.description || '';
+
+            return `
+              <a href="events.html#event-${ev.id}" class="event-preview-card">
+                <div class="event-preview-header" style="background:${color};">
+                  <div class="event-preview-category">${ev.category || 'Event'}</div>
+                  <div class="event-preview-title">${ev.title || 'Untitled'}</div>
+                </div>
+                <div class="event-preview-body">
+                  <div class="event-preview-meta"><i class="fas fa-calendar-alt"></i> ${dateStr} ${timeStr ? '· '+timeStr : ''}</div>
+                  <div class="event-preview-meta"><i class="fas fa-location-dot"></i> ${locationStr}</div>
+                  <div class="event-preview-desc">${desc}</div>
+                </div>
+                <div class="event-preview-footer">
+                  <span><i class="fas fa-user"></i> ${ev.registered || 0} registered</span>
+                  <span><i class="fas fa-arrow-right"></i> Details</span>
+                </div>
+              </a>
+            `;
+          }).join('');
+
+        } catch (err) {
+          console.warn('Events preview load failed:', err);
+          container.innerHTML = `
+            <div style="grid-column:1/-1; text-align:center; padding:2rem; color:var(--text-secondary);">
+              <i class="fas fa-exclamation-triangle"></i> Could not load events. Please visit the <a href="events.html" style="color:#2563eb;">Events page</a>.
+            </div>`;
+        }
+      })();
+
+      // ── COUNTER ANIMATION ──
+      // Called once with a NodeList; can be re-triggered after Firestore replaces the DOM
+      function runCounters(counterEls) {
+        counterEls.forEach(el => {
+          const target = parseInt(el.getAttribute('data-count'), 10);
+          if (isNaN(target)) return;
+          let current = 0;
+          const increment = Math.ceil(target / 50);
+          const timer = setInterval(() => {
+            current += increment;
+            if (current >= target) { current = target; clearInterval(timer); }
+            el.textContent = current.toLocaleString();
+          }, 30);
+        });
+      }
+
+      (function animateCounters() {
+        let animated = false;
+        function startCounters() {
+          if (animated) return;
+          const counters = document.querySelectorAll('.impact-number[data-count]');
+          if (!counters.length) return;
+          const rect = counters[0].getBoundingClientRect();
+          if (rect.top > window.innerHeight) return;
+          animated = true;
+          runCounters(counters);
+        }
+        window.addEventListener('scroll', startCounters, { passive: true });
+        setTimeout(startCounters, 400);
+      })();
+
+      // ── LOAD GALLERY FROM FIRESTORE ──
+      (async function loadGallery() {
+        const grid = document.getElementById('galleryGrid');
+        if (!grid) return;
+
+        const FALLBACK = [
+          { imageUrl: '', icon: 'fa-landmark', bg: 'linear-gradient(135deg,#dbeafe,#bfdbfe)', title: 'Town Hall Meeting' },
+          { imageUrl: '', icon: 'fa-leaf',     bg: 'linear-gradient(135deg,#d1fae5,#a7f3d0)', title: 'Beach Cleanup' },
+          { imageUrl: '', icon: 'fa-star',     bg: 'linear-gradient(135deg,#fef3c7,#fde68a)', title: 'Youth Workshop' },
+          { imageUrl: '', icon: 'fa-seedling', bg: 'linear-gradient(135deg,#e0e7ff,#c7d2fe)', title: 'Community Garden' },
+          { imageUrl: '', icon: 'fa-users',    bg: 'linear-gradient(135deg,#fce7f3,#fbcfe8)', title: 'Leadership Panel' },
+          { imageUrl: '', icon: 'fa-calendar-check', bg: 'linear-gradient(135deg,#fef2f2,#fecaca)', title: 'Neighborhood Celebration' },
+        ];
+
+        const LAYOUTS = {
+          1:  ['1fr',                       '1fr',                   1,  ['']],
+          2:  ['1fr 1fr',                   '1fr',                   2,  ['','']],
+          3:  ['1fr 1fr',                   '1fr 1fr',               3,  ['grid-row:span 2;','','']],
+          4:  ['1fr 1fr',                   '1fr 1fr',               4,  ['','','','']],
+          5:  ['2fr 1fr 1fr',               '1fr 1fr',               5,  ['grid-row:span 2;','','','','']],
+          6:  ['repeat(4,1fr)',             '1fr 1fr',               6,  ['grid-row:span 2;','','','','','grid-column:span 2;']],
+          7:  ['repeat(4,1fr)',             '1fr 1fr',               7,  ['grid-row:span 2;','','','','','','']],
+          8:  ['1fr 1fr 1fr',               '1fr 1fr 1fr',           8,  ['grid-row:span 2;','grid-row:span 2;','','','','','','']],
+          9:  ['repeat(3,1fr)',             '1fr 1fr 1fr',           9,  ['','','','','','','','','']],
+          10: ['2fr 1fr 1fr',               '1fr 1fr 1fr',           10, ['grid-row:span 2;','','','','','','','','','']],
+          11: ['repeat(4,1fr)',             '1fr 1fr 1fr',           11, ['grid-row:span 2;','','','','grid-column:span 2;','','','','','','']],
+          12: ['repeat(4,1fr)',             '1fr 1fr 1fr',           12, Array(12).fill('')],
+          13: ['repeat(4,1fr)',             '1fr 1fr 1fr 1fr',       13, ['grid-row:span 2;','','','','','grid-column:span 2;','','','','','','','']],
+          14: ['repeat(4,1fr)',             '1fr 1fr 1fr 1fr',       14, ['grid-row:span 2;','grid-column:span 2;','','','','','','','','','','','','']],
+          15: ['repeat(5,1fr)',             '1fr 1fr 1fr',           15, Array(15).fill('')],
+          16: ['repeat(4,1fr)',             '1fr 1fr 1fr 1fr',       16, Array(16).fill('')],
+          17: ['repeat(5,1fr)',             '1fr 1fr 1fr 1fr',       17, ['grid-row:span 2;','grid-column:span 2;',...Array(15).fill('')]],
+          18: ['1fr 1fr 1fr 1fr 1fr',       '1fr 1fr 1fr',           18, ['grid-row:span 3;',...Array(17).fill('')]],
+          19: ['repeat(4,1fr)',             '1fr 1fr 1fr 1fr 1fr',   19, ['grid-column:span 2;grid-row:span 2;',...Array(18).fill('')]],
+          20: ['repeat(5,1fr)',             '1fr 1fr 1fr 1fr',       20, Array(20).fill('')],
+        };
+
+        function renderGallery(items) {
+          if (!items.length) items = FALLBACK;
+          const n = Math.min(items.length, 20);
+          const [cols, rows, count, spans] = LAYOUTS[n];
+          const subset = items.slice(0, count);
+
+          grid.style.gridTemplateColumns = cols;
+          grid.style.gridTemplateRows = rows;
+
+          grid.innerHTML = subset.map((item, i) => {
+            const spanStyle = spans[i] || '';
+            const needsAutoAspect = spanStyle.includes('span');
+            const aspectStyle = needsAutoAspect ? 'aspect-ratio:auto;' : '';
+            if (item.imageUrl) {
+              return `
+                <div class="gallery-item" style="${spanStyle}${aspectStyle}background:#e8eeff;position:relative;">
+                  <img src="${item.imageUrl}" alt="${item.title || ''}"
+                       style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;display:block;"
+                       onerror="this.style.display='none'">
+                  <div class="gallery-overlay">${item.title || ''}</div>
+                </div>`;
+            } else {
+              return `
+                <div class="gallery-item" style="${spanStyle}${aspectStyle}background:${item.bg || 'linear-gradient(135deg,#dbeafe,#bfdbfe)'};">
+                  ${item.icon ? `<i class="fas ${item.icon}"></i>` : ''}
+                  <div class="gallery-overlay">${item.title || ''}</div>
+                </div>`;
+            }
+          }).join('');
+        }
+
+        // Render fallback immediately so the section isn't blank
+        renderGallery(FALLBACK);
+
+        try {
+          const { initializeApp, getApps } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js');
+          const { getFirestore, collection, getDocs } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
+
+          const firebaseConfig = {
+            apiKey: "AIzaSyArZYz6UMheUgBVrNeWvxWml-0zDTbNur0",
+            authDomain: "nextstep-12b9a.firebaseapp.com",
+            projectId: "nextstep-12b9a",
+            storageBucket: "nextstep-12b9a.firebasestorage.app",
+            messagingSenderId: "630600034259",
+            appId: "1:630600034259:web:6b6284e147a6f79cda7126"
+          };
+
+          const app = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
+          const db = getFirestore(app);
+
+          const snap = await getDocs(collection(db, 'gallery'));
+          const items = [];
+          snap.forEach(d => items.push({ id: d.id, ...d.data() }));
+
+          if (items.length) renderGallery(items);
+          // If empty, fallback stays
+        } catch (err) {
+          console.warn('Gallery load failed, using fallback:', err);
+        }
+      })();
+
+      // ── LOAD STATS FROM FIRESTORE ──
+      (async function loadStats() {
+        const container = document.getElementById('impactDetails');
+        if (!container) return;
+
+        try {
+          const { initializeApp, getApps } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js');
+          const { getFirestore, collection, getDocs } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
+
+          const firebaseConfig = {
+            apiKey: "AIzaSyArZYz6UMheUgBVrNeWvxWml-0zDTbNur0",
+            authDomain: "nextstep-12b9a.firebaseapp.com",
+            projectId: "nextstep-12b9a",
+            storageBucket: "nextstep-12b9a.firebasestorage.app",
+            messagingSenderId: "630600034259",
+            appId: "1:630600034259:web:6b6284e147a6f79cda7126"
+          };
+
+          const app = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
+          const db = getFirestore(app);
+
+          const snap = await getDocs(collection(db, 'stats'));
+          const items = [];
+          snap.forEach(d => items.push({ id: d.id, ...d.data() }));
+
+          if (!items.length) return; // keep hardcoded fallback
+
+          container.innerHTML = items.map(item => `
+            <div class="impact-item">
+              <div class="impact-number" data-count="${item.number || 0}">0</div>
+              <div class="impact-label">${item.label || ''}</div>
+            </div>
+          `).join('');
+
+          // Re-run counter animation on the freshly injected elements
+          runCounters(container.querySelectorAll('.impact-number[data-count]'));
+
+        } catch (err) {
+          console.warn('Stats load failed, using fallback:', err);
+        }
+      })();
+
+    })();
+  </script>
+
 </body>
 
 
