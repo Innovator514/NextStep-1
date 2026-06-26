@@ -1373,6 +1373,7 @@
           <div class="mgmt-form-row">
             <input type="text" id="stats-label" class="form-input" placeholder="Label (e.g. Members)" style="flex:1;">
             <input type="number" id="stats-number" class="form-input" placeholder="Number" style="flex:0.8;">
+            <button type="button" id="stats-plus-toggle" onclick="toggleStatPlus()" title='Show as "40+" on the homepage' style="padding:0.55rem 0.75rem;border-radius:10px;border:2px solid #e2e8f0;background:#f8fafc;font-family:'Open Sans',sans-serif;font-size:0.85rem;font-weight:700;color:#94a3b8;cursor:pointer;transition:all 0.2s;white-space:nowrap;">+</button>
             <button class="btn btn-primary" onclick="addStat()"><i class="fas fa-plus"></i> Add</button>
           </div>
         </div>
@@ -4331,6 +4332,235 @@ window.addGalleryExisting = async function() {
     showMgmtError('gallery-error', `Failed: ${e.message}`);
   }
 };
+
+// ── Stats Management ──────────────────────────────────────────────────────
+async function loadStats() {
+  const listEl = document.getElementById('stats-list');
+  if (!listEl) return;
+  try {
+    const snap = await getDocs(collection(db, 'stats'));
+    statsItems = [];
+    snap.forEach(d => statsItems.push({ id: d.id, ...d.data() }));
+    statsItems.sort((a, b) => (a.order ?? 9999) - (b.order ?? 9999));
+    renderStats();
+  } catch (e) {
+    console.error('Stats load error:', e);
+    listEl.innerHTML = `<div style="padding:1rem;color:#dc2626;text-align:center;font-size:0.85rem;">
+      <i class="fas fa-exclamation-triangle"></i> Failed to load stats.<br>
+      <span style="font-size:0.75rem;color:#94a3b8;">${e.message || 'Check Firestore rules'}</span>
+    </div>`;
+  }
+}
+
+function renderStats() {
+  const listEl = document.getElementById('stats-list');
+  const previewEl = document.getElementById('stats-preview');
+  if (!listEl) return;
+
+  if (!statsItems.length) {
+    listEl.innerHTML = '<div style="padding:1rem;color:#94a3b8;text-align:center;">No stats yet — add one below.</div>';
+    if (previewEl) previewEl.innerHTML = '<span style="color:#94a3b8;font-size:0.75rem;">No stats yet</span>';
+    return;
+  }
+
+  listEl.innerHTML = statsItems.map((item, i) => {
+    const display = escapeHTML(String(item.number ?? 0)) + (item.suffix || '');
+    return `
+    <div class="mgmt-item stat-drag-item" id="stat-row-${item.id}" draggable="true"
+         data-idx="${i}"
+         ondragstart="statDragStart(event,${i})"
+         ondragover="statDragOver(event,${i})"
+         ondrop="statDrop(event,${i})"
+         ondragend="statDragEnd()"
+         style="cursor:grab;">
+      <i class="fas fa-grip-vertical" style="color:#cbd5e1;margin-right:0.5rem;font-size:0.85rem;flex-shrink:0;"></i>
+      <div class="item-info">
+        <div class="item-title">${display}</div>
+        <div class="item-sub">${escapeHTML(item.label || 'Unlabelled')}</div>
+      </div>
+      <div class="item-actions">
+        <button class="btn btn-warning" style="padding:2px 8px;font-size:0.7rem;" title="Edit" onclick="openStatEdit('${item.id}')">
+          <i class="fas fa-pencil"></i>
+        </button>
+        <button class="btn btn-danger" style="padding:2px 8px;font-size:0.7rem;" title="Delete" onclick="deleteStat('${item.id}')">
+          <i class="fas fa-trash"></i>
+        </button>
+      </div>
+    </div>
+    <div class="stat-edit-row" id="stat-edit-${item.id}" style="display:none; padding:0.5rem 0.75rem 0.75rem; border:2px solid #fde68a; border-top:none; border-radius:0 0 10px 10px; background:#fffbeb; gap:0.5rem; flex-wrap:wrap; align-items:center;">
+      <input type="text" id="stat-edit-label-${item.id}" class="form-input" value="${escapeHTML(item.label || '')}" placeholder="Label" style="flex:1;min-width:100px;">
+      <input type="number" id="stat-edit-number-${item.id}" class="form-input" value="${item.number ?? 0}" placeholder="Number" style="flex:0.6;min-width:70px;">
+      <button type="button" id="stat-edit-plus-${item.id}" onclick="toggleStatEditPlus('${item.id}')" title='Show as "40+" on the homepage' style="padding:0.45rem 0.65rem;border-radius:10px;border:2px solid ${item.suffix === '+' ? '#2563eb' : '#e2e8f0'};background:${item.suffix === '+' ? '#eff6ff' : '#f8fafc'};font-family:'Open Sans',sans-serif;font-size:0.85rem;font-weight:700;color:${item.suffix === '+' ? '#2563eb' : '#94a3b8'};cursor:pointer;transition:all 0.2s;white-space:nowrap;">+</button>
+      <button class="btn btn-success" style="padding:0.4rem 0.75rem;font-size:0.8rem;" onclick="saveStat('${item.id}')"><i class="fas fa-check"></i> Save</button>
+      <button class="btn btn-secondary" style="padding:0.4rem 0.75rem;font-size:0.8rem;" onclick="closeStatEdit('${item.id}')"><i class="fas fa-times"></i></button>
+    </div>
+  `}).join('');
+
+  if (previewEl) {
+    previewEl.innerHTML = statsItems.map(item => `
+      <div class="mgmt-preview-item">
+        <span class="preview-number">${escapeHTML(String(item.number ?? 0))}${item.suffix || ''}</span>
+        <span class="preview-label">${escapeHTML(item.label || '')}</span>
+      </div>
+    `).join('');
+  }
+}
+
+window.toggleStatPlus = function() {
+  const btn = document.getElementById('stats-plus-toggle');
+  if (!btn) return;
+  const active = btn.dataset.active === '1';
+  btn.dataset.active = active ? '0' : '1';
+  btn.style.borderColor  = active ? '#e2e8f0' : '#2563eb';
+  btn.style.background   = active ? '#f8fafc'  : '#eff6ff';
+  btn.style.color        = active ? '#94a3b8'  : '#2563eb';
+};
+
+window.toggleStatEditPlus = function(id) {
+  const btn = document.getElementById(`stat-edit-plus-${id}`);
+  if (!btn) return;
+  const active = btn.dataset.active === '1';
+  btn.dataset.active = active ? '0' : '1';
+  btn.style.borderColor  = active ? '#e2e8f0' : '#2563eb';
+  btn.style.background   = active ? '#f8fafc'  : '#eff6ff';
+  btn.style.color        = active ? '#94a3b8'  : '#2563eb';
+};
+
+window.openStatEdit = function(id) {
+  // Close any other open edit rows first
+  document.querySelectorAll('.stat-edit-row').forEach(el => el.style.display = 'none');
+  document.querySelectorAll('.mgmt-item[id^="stat-row-"]').forEach(el => el.style.borderRadius = '');
+  const editRow = document.getElementById(`stat-edit-${id}`);
+  const mainRow = document.getElementById(`stat-row-${id}`);
+  if (!editRow) return;
+  editRow.style.display = 'flex';
+  if (mainRow) mainRow.style.borderRadius = '10px 10px 0 0';
+  // Seed plus-button state from stored suffix
+  const item = statsItems.find(s => s.id === id);
+  const plusBtn = document.getElementById(`stat-edit-plus-${id}`);
+  if (plusBtn && item) {
+    const hasSuffix = item.suffix === '+';
+    plusBtn.dataset.active = hasSuffix ? '1' : '0';
+    plusBtn.style.borderColor = hasSuffix ? '#2563eb' : '#e2e8f0';
+    plusBtn.style.background  = hasSuffix ? '#eff6ff'  : '#f8fafc';
+    plusBtn.style.color       = hasSuffix ? '#2563eb'  : '#94a3b8';
+  }
+  document.getElementById(`stat-edit-label-${id}`).focus();
+};
+
+window.closeStatEdit = function(id) {
+  const editRow = document.getElementById(`stat-edit-${id}`);
+  const mainRow = document.getElementById(`stat-row-${id}`);
+  if (editRow) editRow.style.display = 'none';
+  if (mainRow) mainRow.style.borderRadius = '';
+};
+
+window.saveStat = async function(id) {
+  const label  = document.getElementById(`stat-edit-label-${id}`).value.trim();
+  const number = parseInt(document.getElementById(`stat-edit-number-${id}`).value, 10);
+  const plusBtn = document.getElementById(`stat-edit-plus-${id}`);
+  const suffix  = plusBtn && plusBtn.dataset.active === '1' ? '+' : '';
+  if (!label)        { showMgmtError('stats-error', 'Label cannot be empty.');       return; }
+  if (isNaN(number)) { showMgmtError('stats-error', 'Please enter a valid number.'); return; }
+  hideMgmtError('stats-error');
+  try {
+    await updateDoc(doc(db, 'stats', id), { label, number, suffix });
+    await loadStats();
+    showMgmtSuccess('stats-success', 'Stat updated!');
+  } catch (e) {
+    showMgmtError('stats-error', `Failed to save: ${e.message}`);
+  }
+};
+
+window.addStat = async function() {
+  const labelEl  = document.getElementById('stats-label');
+  const numberEl = document.getElementById('stats-number');
+  const plusBtn  = document.getElementById('stats-plus-toggle');
+  const label  = labelEl.value.trim();
+  const number = parseInt(numberEl.value, 10);
+  const suffix = plusBtn && plusBtn.dataset.active === '1' ? '+' : '';
+
+  if (!label)        { showMgmtError('stats-error', 'Please enter a label.');        return; }
+  if (isNaN(number)) { showMgmtError('stats-error', 'Please enter a valid number.'); return; }
+  hideMgmtError('stats-error');
+
+  try {
+    await addDoc(collection(db, 'stats'), { label, number, suffix, order: statsItems.length, createdAt: serverTimestamp() });
+    labelEl.value  = '';
+    numberEl.value = '';
+    if (plusBtn) { plusBtn.dataset.active = '0'; plusBtn.style.borderColor = '#e2e8f0'; plusBtn.style.background = '#f8fafc'; plusBtn.style.color = '#94a3b8'; }
+    await loadStats();
+    showMgmtSuccess('stats-success', 'Stat added!');
+  } catch (e) {
+    showMgmtError('stats-error', `Failed: ${e.message}`);
+  }
+};
+
+window.addStatPreset = async function(label, number) {
+  hideMgmtError('stats-error');
+  try {
+    await addDoc(collection(db, 'stats'), { label, number, order: statsItems.length, createdAt: serverTimestamp() });
+    await loadStats();
+    showMgmtSuccess('stats-success', `"${label}" added!`);
+  } catch (e) {
+    showMgmtError('stats-error', `Failed: ${e.message}`);
+  }
+};
+
+window.deleteStat = async function(id) {
+  if (!confirm('Delete this stat?')) return;
+  try {
+    await deleteDoc(doc(db, 'stats', id));
+    await loadStats();
+    showMgmtSuccess('stats-success', 'Stat deleted.');
+  } catch (e) {
+    showMgmtError('stats-error', `Failed to delete: ${e.message}`);
+  }
+};
+
+// ── Stat drag-to-reorder ──
+let statDragSrcIdx = null;
+
+window.statDragStart = function(e, idx) {
+  statDragSrcIdx = idx;
+  e.dataTransfer.effectAllowed = 'move';
+  setTimeout(() => e.target.style.opacity = '0.4', 0);
+};
+window.statDragOver = function(e, idx) {
+  e.preventDefault();
+  e.dataTransfer.dropEffect = 'move';
+  document.querySelectorAll('.stat-drag-item').forEach((el, i) => {
+    el.style.borderTop = i === idx && idx !== statDragSrcIdx ? '2px solid #2563eb' : '';
+  });
+};
+window.statDrop = function(e, targetIdx) {
+  e.preventDefault();
+  if (statDragSrcIdx === null || statDragSrcIdx === targetIdx) return;
+  const moved = statsItems.splice(statDragSrcIdx, 1)[0];
+  statsItems.splice(targetIdx, 0, moved);
+  saveStatsOrder();
+};
+window.statDragEnd = function() {
+  document.querySelectorAll('.stat-drag-item').forEach(el => {
+    el.style.opacity = '';
+    el.style.borderTop = '';
+  });
+  statDragSrcIdx = null;
+};
+
+async function saveStatsOrder() {
+  renderStats();
+  try {
+    const batch = writeBatch(db);
+    statsItems.forEach((item, i) => {
+      batch.update(doc(db, 'stats', item.id), { order: i });
+    });
+    await batch.commit();
+    showMgmtSuccess('stats-success', 'Order saved!');
+  } catch (e) {
+    showMgmtError('stats-error', 'Could not save order: ' + e.message);
+  }
+}
 
 // ─── END HOMEPAGE MANAGEMENT ──────────────────────────────────────────────
 

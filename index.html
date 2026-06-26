@@ -660,11 +660,10 @@
           <h3>NEXTSTEP</h3>
           <p>Empowering communities through civic engagement. Discover local events, connect with your neighbors, and
             make a real difference in Boca Raton.</p>
-            <div class="social-links">
-                <a href="#" class="social-link" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
-                  <a href="#" class="social-link" aria-label="X (Twitter)"><i class="fab fa-x-twitter"></i></a>
-                  <a href="#" class="social-link" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-                  <a href="https://www.youtube.com/@NextStep-Civic" target="_blank" class="social-link" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+              <div class="social-links">
+                  <a href="https://www.tiktok.com/@nextstep.__?lang=en" target="_blank" class="social-link" aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
+                    <a href="https://www.instagram.com/nextstep.civic/" target="_blank" class="social-link" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                    <a href="https://www.youtube.com/@NextStep-Civic" target="_blank" class="social-link" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
             </div>
         </div>
 
@@ -684,11 +683,11 @@
         <div class="footer-section">
           <h4>Resources</h4>
           <ul class="footer-links">
-            <li><a href="#">About Us</a></li>
-            <li><a href="#">Blog</a></li>
-            <li><a href="#">FAQs</a></li>
-            <li><a href="#">Volunteer</a></li>
-            <li><a href="#">Partners</a></li>
+            <li><a href="contact-about.html">About Us</a></li>
+            <li><a href="contact-blog.html">Blog</a></li>
+            <li><a href="contact-faq.html">FAQs</a></li>
+            <li><a href="contact.html">Volunteer</a></li>
+            <li><a href="contact.html">Partners</a></li>
           </ul>
         </div>
 
@@ -846,12 +845,13 @@
       function runCounters(counterEls) {
         counterEls.forEach(el => {
           const target = parseInt(el.getAttribute('data-count'), 10);
+          const suffix = el.getAttribute('data-suffix') || '';
           if (isNaN(target)) return;
           let current = 0;
           const increment = Math.ceil(target / 50);
           const timer = setInterval(() => {
             current += increment;
-            if (current >= target) { current = target; clearInterval(timer); }
+            if (current >= target) { current = target; clearInterval(timer); el.textContent = current.toLocaleString() + suffix; return; }
             el.textContent = current.toLocaleString();
           }, 30);
         });
@@ -999,7 +999,7 @@
 
           container.innerHTML = items.map(item => `
             <div class="impact-item">
-              <div class="impact-number" data-count="${item.number || 0}">0</div>
+              <div class="impact-number" data-count="${item.number || 0}" data-suffix="${item.suffix || ''}">0</div>
               <div class="impact-label">${item.label || ''}</div>
             </div>
           `).join('');

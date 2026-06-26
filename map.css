@@ -34,96 +34,138 @@
     color: #2563eb;
 }
 
-/* Filter buttons container */
-.filter-buttons {
-    background: rgba(208, 208, 208, 0.356);
-    backdrop-filter: blur(10px);
-    padding: 16px;
-    border-radius: 12px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+/* ── Shared panel base ── */
+.map-filter-panel,
+.map-sort-panel {
+    background: rgba(255, 255, 255, 0.97);
+    backdrop-filter: blur(12px);
+    padding: 14px 16px;
+    border-radius: 14px !important;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.13);
     display: flex;
     flex-direction: column;
-    gap: 10px;
-    min-width: 180px;
+    gap: 6px;
     font-family: 'Open Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    border: 1px solid rgba(37, 99, 235, 0.1);
+    border: 1px solid rgba(37, 99, 235, 0.1) !important;
+    min-width: 190px;
 }
 
-/* Filter header */
-.filter-buttons::before {
-    content: "Filter Events";
+[data-theme="dark"] .map-filter-panel,
+[data-theme="dark"] .map-sort-panel {
+    background: rgba(15, 23, 42, 0.97);
+    border-color: rgba(99, 102, 241, 0.2) !important;
+}
+
+/* Panel title */
+.mfp-title {
     font-weight: 700;
-    font-size: 15px;
+    font-size: 13px;
     color: #1e40af;
     padding-bottom: 8px;
     border-bottom: 2px solid #e0e7ff;
-    margin-bottom: 4px;
+    margin-bottom: 2px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    letter-spacing: 0.3px;
+}
+[data-theme="dark"] .mfp-title {
+    color: #93c5fd;
+    border-bottom-color: #1e3a5f;
 }
 
-/* Label styling */
-.filter-buttons label {
+/* Category checkboxes */
+.map-filter-panel label {
     display: flex;
     align-items: center;
     gap: 10px;
     cursor: pointer;
-    font-size: 14px;
+    font-size: 13.5px;
     font-weight: 500;
     color: #334155;
-    padding: 8px 10px;
+    padding: 6px 8px;
     border-radius: 8px;
-    border-left: 3px solid transparent; /* Reserve space for hover effect */
-    transition: all 0.2s ease;
+    border-left: 3px solid transparent;
+    transition: all 0.18s ease;
     user-select: none;
 }
+[data-theme="dark"] .map-filter-panel label { color: #cbd5e1; }
 
-/* Checkbox styling */
-.filter-buttons input[type="checkbox"] {
-    width: 18px;
-    height: 18px;
+.map-filter-panel input[type="checkbox"] {
+    width: 16px; height: 16px;
     accent-color: #2563eb;
     cursor: pointer;
-    transition: transform 0.2s ease;
 }
-
-/* Hover effects */
-.filter-buttons label:hover {
-    background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
-    transform: translateX(4px);
+.map-filter-panel label:hover {
+    background: linear-gradient(135deg, #eff6ff, #dbeafe);
+    transform: translateX(3px);
     color: #1e40af;
 }
+[data-theme="dark"] .map-filter-panel label:hover {
+    background: rgba(37, 99, 235, 0.12);
+    color: #93c5fd;
+}
+.filter-political:hover  { border-left-color: #3b82f6; }
+.filter-youth:hover      { border-left-color: #f59e0b; }
+.filter-innovation:hover { border-left-color: #ca3d2a; }
+.filter-environmental:hover { border-left-color: #10b981; }
+.filter-education:hover  { border-left-color: #b325eb; }
+.filter-religious:hover  { border-left-color: #d97706; }
 
-.filter-buttons input[type="checkbox"]:hover {
-    transform: scale(1.1);
+/* ── Sort panel ── */
+.msp-group {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    margin-top: 4px;
+}
+.msp-label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    color: #94a3b8;
+    margin: 0;
 }
 
-/* Active/checked state */
-.filter-buttons input[type="checkbox"]:checked {
+.msp-quick-filters {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+.msp-qf-btn {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 7px 11px;
+    border-radius: 8px;
+    border: 1.5px solid #e2e8f0;
+    background: #f8fafc;
+    color: #475569;
+    font-size: 13px;
+    font-family: inherit;
     font-weight: 600;
+    cursor: pointer;
+    transition: all 0.18s ease;
+    text-align: left;
+    width: 100%;
 }
-
-/* Category-specific border colors on hover */
-.filter-political:hover {
-    border-left-color: #3b82f6;
+.msp-qf-btn:hover {
+    background: #eff6ff;
+    border-color: #93c5fd;
+    color: #1d4ed8;
 }
-
-.filter-youth:hover {
-    border-left-color: #f59e0b;
+.msp-qf-btn.active {
+    background: linear-gradient(135deg, #2563eb, #3b82f6);
+    border-color: transparent;
+    color: white;
+    box-shadow: 0 2px 8px rgba(37, 99, 235, 0.35);
 }
-
-.filter-innovation:hover {
-    border-left-color: #ca3d2a;
+[data-theme="dark"] .msp-qf-btn {
+    background: #0f172a; color: #94a3b8; border-color: #1e3a5f;
 }
-
-.filter-environmental:hover {
-    border-left-color: #10b981;
-}
-
-.filter-education:hover {
-    border-left-color: #b325eb;
-}
-
-.filter-religious:hover {
-    border-left-color: #d97706;
+[data-theme="dark"] .msp-qf-btn:hover {
+    background: rgba(37, 99, 235, 0.15); color: #93c5fd; border-color: #2563eb;
 }
 
 /* Zoom control styling */
@@ -155,14 +197,10 @@
         height: calc(100vh - 60px);
     }
     
-    .filter-buttons {
-        min-width: 140px;
-        padding: 12px;
-        font-size: 13px;
+    .map-filter-panel,
+    .map-sort-panel {
+        min-width: 150px;
+        padding: 10px 12px;
     }
-    
-    .filter-buttons label {
-        padding: 6px 8px;
-        font-size: 13px;
-    }
+    .map-sort-panel { min-width: 160px; }
 }

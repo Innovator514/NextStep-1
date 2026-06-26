@@ -52,7 +52,7 @@ var innovation = L.layerGroup();
 var environmental = L.layerGroup();
 var education = L.layerGroup();
 var religious = L.layerGroup();
-var volunteer = L.layerGroup();
+
 
 // Define custom icons with shadows for each category
 const customIcons = {
@@ -120,7 +120,7 @@ const categoryMap = {
     environmental: environmental,
     education: education,
     religious: religious,
-    volunteer: volunteer
+
 };
 
 // Category-specific gradients
@@ -131,7 +131,7 @@ const categoryGradients = {
     environmental: 'linear-gradient(135deg, #34d399, #10b981)',
     education: 'linear-gradient(135deg, #ba3eeb, #b325eb)',
     religious: 'linear-gradient(135deg, #f59e0b, #d97706)',
-    volunteer: 'linear-gradient(135deg, #34d399, #059669)'
+
 };
 
 // Category-specific icon colors
@@ -142,12 +142,13 @@ const categoryIconColors = {
     environmental: '#10b981',
     education: '#b325eb',
     religious: '#d97706',
-    volunteer: '#059669'
+
 };
 
 // Add a single event marker to the map
 function addMarker(event) {
-    // Skip if no valid coordinates
+    // Skip archived events and those with no valid coordinates
+    if (event.archived === true) return;
     if (event.lat == null || event.lng == null || isNaN(event.lat) || isNaN(event.lng)) return;
 
     // Use default icon if category icon doesn't exist
@@ -236,6 +237,7 @@ async function loadFirestoreEventsForMap() {
         innovation.clearLayers();
         environmental.clearLayers();
         education.clearLayers();
+        religious.clearLayers();
 
         // Re-add hardcoded events from events-data.js first
         window.eventsData.forEach(event => addMarker(event));
@@ -243,6 +245,7 @@ async function loadFirestoreEventsForMap() {
         // Now add ALL Firestore events, overwriting duplicates
         snapshot.forEach(doc => {
             const data = doc.data();
+            if (data.archived === true) return; // skip archived
             const newEvent = { 
                 ...data, 
                 id: doc.id,
@@ -296,68 +299,103 @@ environmental.addTo(map);
 education.addTo(map);
 religious.addTo(map);
 
-// Filter control
+// ── Map quick-filter state ──
+const mapActiveQuickFilters = new Set(); // 'volunteer' | 'virtual'
+
+// Re-render all markers based on active category checkboxes + quick filters
+function updateLayers() {
+    const cats = ['political', 'youth', 'innovation', 'environmental', 'education', 'religious'];
+
+    // Clear all category layers
+    cats.forEach(cat => {
+        const lg = categoryMap[cat];
+        if (lg) { lg.clearLayers(); map.removeLayer(lg); }
+    });
+
+    // Filter eventsData by quick filters
+    let filtered = [...(window.eventsData || [])];
+    if (mapActiveQuickFilters.has('volunteer')) {
+        filtered = filtered.filter(e => e.volunteerHours && Number(e.volunteerHours) > 0);
+    }
+    if (mapActiveQuickFilters.has('virtual')) {
+        filtered = filtered.filter(e => {
+            const loc = (e.location || '').toLowerCase();
+            return loc.includes('virtual') || loc.includes('online') || loc.includes('zoom') || loc.includes('webinar');
+        });
+    }
+
+    // Re-add markers for matching events
+    filtered.forEach(event => addMarker(event));
+
+    // Re-add layers that are checked
+    cats.forEach(cat => {
+        const cb = document.getElementById(cat + 'Checkbox');
+        if (cb && cb.checked) map.addLayer(categoryMap[cat]);
+    });
+}
+
+function toggleMapQuickFilter(key) {
+    if (mapActiveQuickFilters.has(key)) {
+        mapActiveQuickFilters.delete(key);
+    } else {
+        mapActiveQuickFilters.add(key);
+    }
+    // Update button active state
+    const btn = document.getElementById('mqf-' + key);
+    if (btn) btn.classList.toggle('active', mapActiveQuickFilters.has(key));
+    updateLayers();
+}
+
+// ── Category filter panel (left) ──
 var filterControl = L.control({ position: 'topleft' });
 
 filterControl.onAdd = function(map) {
-    var div = L.DomUtil.create('div', 'filter-buttons leaflet-bar');
+    var div = L.DomUtil.create('div', 'map-filter-panel leaflet-bar');
     div.innerHTML = `
+        <div class="mfp-title"><i class="fas fa-layer-group"></i> Categories</div>
         <label class="filter-political"><input type="checkbox" id="politicalCheckbox" checked> Political</label>
         <label class="filter-youth"><input type="checkbox" id="youthCheckbox" checked> Youth</label>
         <label class="filter-innovation"><input type="checkbox" id="innovationCheckbox" checked> Innovation</label>
         <label class="filter-environmental"><input type="checkbox" id="environmentalCheckbox" checked> Environmental</label>
         <label class="filter-education"><input type="checkbox" id="educationCheckbox" checked> Education</label>
         <label class="filter-religious"><input type="checkbox" id="religiousCheckbox" checked> Religious</label>
-        <label class="filter-volunteer"><input type="checkbox" id="volunteerCheckbox" checked> Volunteer</label>
     `;
     L.DomEvent.disableClickPropagation(div);
     return div;
 };
-
 filterControl.addTo(map);
 
-// Filter logic
-function updateLayers() {
-    if (document.getElementById('politicalCheckbox').checked) {
-        map.addLayer(political);
-    } else {
-        map.removeLayer(political);
-    }
-    if (document.getElementById('youthCheckbox').checked) {
-        map.addLayer(youth);
-    } else {
-        map.removeLayer(youth);
-    }
-    if (document.getElementById('innovationCheckbox').checked) {
-        map.addLayer(innovation);
-    } else {
-        map.removeLayer(innovation);
-    }
-    if (document.getElementById('environmentalCheckbox').checked) {
-        map.addLayer(environmental);
-    } else {
-        map.removeLayer(environmental);
-    }
-    if (document.getElementById('educationCheckbox').checked) {
-        map.addLayer(education);
-    } else {
-        map.removeLayer(education);
-    }
-    if (document.getElementById('religiousCheckbox').checked) {
-    map.addLayer(religious);
-    } else {
-    map.removeLayer(religious);
-    }
-    if (document.getElementById('volunteerCheckbox').checked) {
-    map.addLayer(volunteer);
-    } else {
-    map.removeLayer(volunteer);
-    }
-}
+// ── Sort + Quick-filter panel (topright) ──
+var sortControl = L.control({ position: 'topright' });
 
-// Add event listeners for checkboxes
-['political', 'youth', 'innovation', 'environmental', 'education', 'religious', 'volunteer'].forEach(id => {
-    document.getElementById(id + 'Checkbox').addEventListener('change', updateLayers);
+sortControl.onAdd = function(map) {
+    var div = L.DomUtil.create('div', 'map-sort-panel leaflet-bar');
+    div.innerHTML = `
+        <div class="mfp-title"><i class="fas fa-sliders-h"></i> Filter Events</div>
+        <div class="msp-group">
+            <p class="msp-label">Quick filters</p>
+            <div class="msp-quick-filters">
+                <button class="msp-qf-btn" id="mqf-volunteer" onclick="toggleMapQuickFilter('volunteer')">
+                    <i class="fas fa-hand-holding-heart"></i> Volunteer Hours
+                </button>
+                <button class="msp-qf-btn" id="mqf-virtual" onclick="toggleMapQuickFilter('virtual')">
+                    <i class="fas fa-video"></i> Virtual
+                </button>
+            </div>
+        </div>
+    `;
+    L.DomEvent.disableClickPropagation(div);
+    return div;
+};
+sortControl.addTo(map);
+
+// Add event listeners for category checkboxes
+['political', 'youth', 'innovation', 'environmental', 'education', 'religious'].forEach(id => {
+    // Checkboxes are added to DOM by filterControl.onAdd — wait a tick
+    setTimeout(() => {
+        const cb = document.getElementById(id + 'Checkbox');
+        if (cb) cb.addEventListener('change', updateLayers);
+    }, 0);
 });
 
 // Zoom control
@@ -368,13 +406,7 @@ loadFirestoreEventsForMap();
 
 // Refresh all map markers (called by admin after add/edit/delete)
 window.refreshMapMarkers = function() {
-    political.clearLayers();
-    youth.clearLayers();
-    innovation.clearLayers();
-    environmental.clearLayers();
-    education.clearLayers();
-    religious.clearLayers();
-    window.eventsData.forEach(event => addMarker(event));
+    updateLayers();
 };
 
 // Force Leaflet to recalculate map size
