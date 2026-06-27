@@ -646,6 +646,128 @@ h1 {
     .streak-right-col { min-width: unset; }
     .streak-best-wrap { justify-content: center; }
 }
+
+/* ═══════════════════════════════════════════════════
+   iOS / MOBILE SAFARI FIXES
+═══════════════════════════════════════════════════ */
+
+/* Remove tap flash on interactive elements */
+.badge-card,
+.filter-btn,
+.stat-box,
+.streak-checkin-btn,
+.streak-dot {
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* Prevent double-tap zoom on buttons */
+.filter-btn,
+.streak-checkin-btn {
+    touch-action: manipulation;
+}
+
+/* iOS Safari: prevent select/input zoom — font must be >= 16px on focus */
+input, select, textarea {
+    font-size: 1rem;
+}
+
+/* Prevent body bounce/scroll while a modal is open (if any) */
+body.popup-open {
+    position: fixed;
+    width: 100%;
+    overflow: hidden;
+}
+
+/* Safe area insets for notched / Dynamic Island iPhones */
+@supports (padding-bottom: env(safe-area-inset-bottom)) {
+    footer {
+        padding-bottom: env(safe-area-inset-bottom);
+    }
+    .badges-container {
+        padding-left: max(2rem, env(safe-area-inset-left));
+        padding-right: max(2rem, env(safe-area-inset-right));
+    }
+}
+
+/* Disable hover lift/scale effects on touch — cards stay elevated after tap on iOS */
+@media (hover: none) {
+    .badge-card:hover {
+        transform: none;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    }
+    .stat-box:hover {
+        transform: none;
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+    }
+    .filter-btn:hover {
+        transform: none;
+    }
+    .streak-checkin-btn:hover {
+        transform: none;
+        box-shadow: 0 4px 16px rgba(249, 115, 22, 0.35);
+    }
+}
+
+/* ── Mobile (≤ 768px) ── */
+@media (max-width: 768px) {
+
+    /* Filter pill row: horizontal swipe strip */
+    .filter-buttons-horizontal {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        justify-content: flex-start;
+        gap: 0.6rem;
+        padding: 1rem 1.25rem;
+        scrollbar-width: none;
+    }
+
+    .filter-buttons-horizontal::-webkit-scrollbar {
+        display: none;
+    }
+
+    /* Pills stay full-size, don't shrink */
+    .filter-btn {
+        flex-shrink: 0;
+        white-space: nowrap;
+        min-height: 44px;          /* Apple HIG minimum tap target */
+        padding: 0.7rem 1.25rem;
+        font-size: 0.9rem;
+    }
+
+    /* Stat boxes: smaller padding, still readable */
+    .stat-box {
+        padding: 1.5rem 2rem;
+    }
+
+    .stat-number {
+        font-size: 2.25rem;
+    }
+
+    /* Page title */
+    h1 {
+        font-size: 2rem;
+        margin-top: 7rem;
+    }
+
+    /* Badge grid: single column */
+    .badges-grid {
+        grid-template-columns: 1fr;
+        gap: 1.25rem;
+    }
+
+    /* Check-in button: easy thumb tap */
+    .streak-checkin-btn {
+        min-height: 48px;
+        font-size: 1rem;
+    }
+
+    /* Streak dot circles: slightly bigger for touch */
+    .streak-dot-circle {
+        width: 40px;
+        height: 40px;
+    }
+}
 /* ==========================================================================
    🌙 BADGES PAGE — DARK MODE
    All colours inherit from dark-mode.css CSS variables.

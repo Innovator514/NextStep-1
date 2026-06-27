@@ -13,6 +13,8 @@ html {
  overflow-y: scroll;
  scroll-behavior: smooth;
  height: 100%;
+ /* iOS: use dynamic viewport height so address bar doesn't overlap content */
+ height: -webkit-fill-available;
 }
 
 /* Body should NOT scroll - only html scrolls */
@@ -21,9 +23,12 @@ body {
  padding: 0;
  overflow: hidden;
  min-height: 100vh;
+ min-height: -webkit-fill-available; /* iOS: avoids address-bar overlap */
  display: flex;
  flex-direction: column;
  background: linear-gradient(135deg, #f8fafc 0%, #e0e7ff 100%);
+ -webkit-text-size-adjust: 100%; /* Prevent iOS font inflation on orientation change */
+ text-size-adjust: 100%;
 }
 
 /* Remove overflow from main containers */
@@ -126,6 +131,8 @@ section,
   transition: all 0.3s ease;
   white-space: nowrap;
   box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent; /* Remove grey tap flash on iOS */
+  touch-action: manipulation; /* Eliminate 300ms tap delay */
 }
 
 .nav-links a:hover {
@@ -165,6 +172,8 @@ section,
   background: white;
   transition: all 0.3s ease;
   box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
 }
 
 .signup {
@@ -180,6 +189,8 @@ section,
   background: linear-gradient(135deg, #2563eb, #3b82f6);
   transition: all 0.3s ease;
   box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
 }
 
 .login:hover, .signup:hover {
@@ -459,6 +470,9 @@ footer {
     opacity: 0.5;
     transition: all 0.3s ease;
     display: inline-block;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+    padding: 4px 0; /* extra vertical padding for easier iOS tapping */
 }
 
 .footer-links a:hover {
@@ -474,8 +488,8 @@ footer {
 }
 
 .social-link {
-    width: 40px;
-    height: 40px;
+    width: 44px;  /* increased from 40px to meet iOS minimum tap size */
+    height: 44px;
     border-radius: 50%;
     background: rgba(255, 255, 255, 0.1);
     display: flex;
@@ -485,6 +499,8 @@ footer {
     text-decoration: none;
     font-size: 1.2rem;
     transition: all 0.3s ease;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
 }
 
 .social-link:hover {
@@ -536,6 +552,9 @@ footer {
     background: rgba(255, 255, 255, 0.1);
     color: white;
     font-family: 'Open Sans', sans-serif;
+    font-size: 16px; /* Minimum 16px prevents iOS auto-zoom on input focus */
+    -webkit-appearance: none; /* Remove iOS default input styling */
+    appearance: none;
 }
 
 .newsletter-input::placeholder {
@@ -557,6 +576,11 @@ footer {
     font-weight: 700;
     cursor: pointer;
     transition: all 0.3s ease;
+    font-size: 16px; /* Match input to avoid zoom mismatch */
+    -webkit-appearance: none;
+    appearance: none;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
 }
 
 .newsletter-button:hover {
@@ -693,7 +717,8 @@ footer {
   transition: transform 0.3s;
 }
 
-.profile-btn:hover .dropdown-arrow {
+.profile-btn:hover .dropdown-arrow,
+.profile-dropdown.open .dropdown-arrow {
   transform: rotate(180deg);
 }
 
@@ -912,13 +937,19 @@ footer {
 .mobile-nav-list li a {
   display: block;
   text-align: center;
-  padding: 11px 16px;
+  padding: 13px 16px; /* slightly taller for easier iOS tapping */
   border-radius: 9px;
   font-weight: 600;
   font-size: 0.97rem;
   color: #334155;
   text-decoration: none;
   transition: background 0.18s, color 0.18s;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  min-height: 48px; /* iOS recommended minimum tap target */
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .mobile-nav-list li a:hover { background: #eff6ff; color: #2563eb; }
@@ -1027,5 +1058,77 @@ footer {
 
   .mobile-nav-right .profile-menu-item {
     padding: 13px 18px;
+  }
+}
+/* ═══════════════════════════════════════════════════════════
+   iOS / iPhone-specific fixes
+   Handles: safe area insets (notch, home indicator),
+   hover-state removal on touch devices, momentum scrolling,
+   and footer safe-area padding.
+═══════════════════════════════════════════════════════════ */
+
+/* Safe-area padding for footer on devices with a home indicator */
+@supports (padding-bottom: env(safe-area-inset-bottom)) {
+  footer {
+    padding-bottom: calc(2rem + env(safe-area-inset-bottom));
+  }
+
+  /* Ensure fixed navbar clears the notch on landscape */
+  .navbar {
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+  }
+}
+
+/* Momentum scrolling for any scrollable containers on iOS */
+.mobile-panel,
+.profile-menu {
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Remove hover effects on touch/pointer: coarse devices (iOS) so buttons
+   don't get stuck in hover state after tap */
+@media (hover: none) and (pointer: coarse) {
+  .nav-links a:hover,
+  nav li a:hover {
+    background: transparent;
+    color: #334155;
+    transform: none;
+  }
+
+  .login:hover,
+  .signup:hover {
+    background: initial !important;
+    color: initial !important;
+    transform: none !important;
+    box-shadow: initial !important;
+  }
+
+  .login:hover { background: white !important; color: #2563eb !important; }
+  .signup:hover { background: linear-gradient(135deg, #2563eb, #3b82f6) !important; color: white !important; }
+
+  .social-link:hover {
+    background: rgba(255, 255, 255, 0.1);
+    transform: none;
+  }
+
+  .footer-links a:hover {
+    opacity: 0.5;
+    transform: none;
+    color: white;
+  }
+
+  .newsletter-button:hover {
+    background: #2563eb;
+    transform: none;
+  }
+
+  .profile-btn:hover {
+    transform: none;
+    box-shadow: none;
+  }
+
+  .nav-dropdown-item:hover {
+    transform: none;
   }
 }

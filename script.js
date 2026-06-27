@@ -13,6 +13,41 @@ const heroMedia = document.querySelector('.hero-media');
 // CRITICAL: Check if heroImage is an iframe (video) or img (image)
 const isVideo = heroImage && heroImage.tagName === 'IFRAME';
 
+// ── Mobile detection ──
+// On narrow screens (phones) we skip the parallax entirely —
+// iOS scroll events fire differently and the animation feels broken.
+// 768px matches our CSS tablet breakpoint.
+const isMobile = () => window.innerWidth <= 768;
+
+// If we're on mobile, make sure the video section is sized correctly
+// and the hero text is always visible (no JS-driven opacity/transform).
+function applyMobileStaticLayout() {
+  if (!heroTitle || !heroTagline) return;
+  heroTitle.style.transform  = '';
+  heroTitle.style.opacity    = '1';
+  heroTitle.style.color      = '';
+  heroTitle.style.textShadow = '';
+  heroTitle.style.pointerEvents = '';
+  const accent = heroTitle.querySelector('.accent');
+  if (accent) { accent.style.color = ''; }
+
+  heroTagline.style.transform  = '';
+  heroTagline.style.opacity    = '1';
+  heroTagline.style.color      = '';
+  heroTagline.style.textShadow = '';
+
+  if (heroMedia) {
+    heroMedia.style.width        = '100%';
+    heroMedia.style.borderRadius = '0';
+  }
+  // Keep the iframe centered — DO NOT clear its transform.
+  // The CSS sets translate(-50%,-50%) scale(1.3) which must stay.
+  // We only clear it if heroImage is a plain <img>.
+  if (heroImage && !isVideo) {
+    heroImage.style.transform = '';
+  }
+}
+
 // Flag to prevent multiple animation frames from running simultaneously
 let ticking = false;
 
@@ -143,6 +178,7 @@ if (heroShouldBeGone) {
 window.addEventListener(
   "scroll",
   () => {
+    if (isMobile()) return; // skip parallax on phones
     if (!ticking) {
       requestAnimationFrame(smoothParallax);
       ticking = true;
@@ -153,14 +189,20 @@ window.addEventListener(
 
 // Window resize event listener - recalculates on window size change
 window.addEventListener("resize", () => {
-  requestAnimationFrame(smoothParallax);
+  if (isMobile()) {
+    applyMobileStaticLayout();
+  } else {
+    requestAnimationFrame(smoothParallax);
+  }
 }, { passive: true });
 
 // Initial call - run parallax function on page load
 if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', smoothParallax);
+  document.addEventListener('DOMContentLoaded', () => {
+    if (isMobile()) { applyMobileStaticLayout(); } else { smoothParallax(); }
+  });
 } else {
-  smoothParallax();
+  if (isMobile()) { applyMobileStaticLayout(); } else { smoothParallax(); }
 }
 
 // Mobile menu is handled by mobile-nav.js (shared across all pages)
@@ -445,7 +487,23 @@ function setupTypewriterObserver() {
   const firstPointSection = document.querySelector('.first-point');
   if (!firstPointSection) return;
 
+  // On mobile, the slide-in animation can feel janky and the CSS
+  // opacity:0 starting state sometimes never resolves if the Observer
+  // fires unreliably on iOS. Show the content immediately and only
+  // run the typewriter (not the slide animation) on mobile.
+  if (isMobile()) {
+    const paragraphSide = document.querySelector('.paragraph-side');
+    const engageSide    = document.querySelector('.engage-side');
+    const engageLabel   = document.querySelector('.engage-label');
+    if (paragraphSide) { paragraphSide.style.opacity = '1'; paragraphSide.style.transform = 'none'; }
+    if (engageSide)    { engageSide.style.opacity = '1';    engageSide.style.transform = 'none'; }
+    if (engageLabel)   { engageLabel.style.opacity = '1'; }
+  }
+
   let debounceTimer = null;
+
+  // Use a lower threshold on mobile so the observer fires more reliably
+  const threshold = isMobile() ? 0.1 : 0.25;
 
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
@@ -455,10 +513,19 @@ function setupTypewriterObserver() {
           startAnimation();
         } else if (!entry.isIntersecting && !animationStopped) {
           resetAnimation();
+          // On mobile, immediately re-show the content so it's not invisible
+          if (isMobile()) {
+            const paragraphSide = document.querySelector('.paragraph-side');
+            const engageSide    = document.querySelector('.engage-side');
+            const engageLabel   = document.querySelector('.engage-label');
+            if (paragraphSide) { paragraphSide.style.opacity = '1'; paragraphSide.style.transform = 'none'; }
+            if (engageSide)    { engageSide.style.opacity = '1';    engageSide.style.transform = 'none'; }
+            if (engageLabel)   { engageLabel.style.opacity = '1'; }
+          }
         }
       }, 80); // 80ms debounce prevents flicker on fast scroll
     });
-  }, { threshold: 0.25 });
+  }, { threshold });
 
   observer.observe(firstPointSection);
 }

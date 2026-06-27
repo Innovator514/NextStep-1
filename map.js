@@ -159,35 +159,35 @@ function addMarker(event) {
     const iconColor = categoryIconColors[event.category] || categoryIconColors['political'];
 
     const popupContent = `
-        <div style="min-width: 250px; font-family: 'Open Sans', sans-serif;">
+        <div style="font-family: 'Open Sans', sans-serif; width: 100%; box-sizing: border-box;">
             <div style="background: ${gradient}; color: white; padding: 12px; margin: -12px -12px 12px -12px; border-radius: 8px 8px 0 0;">
-                <span style="font-weight: bold; font-size: 18px; display: block; margin-bottom: 4px;">${event.title}</span>
+                <span style="font-weight: bold; font-size: 16px; display: block; margin-bottom: 4px; line-height: 1.3;">${event.title}</span>
                 <span style="font-size: 11px; text-transform: uppercase; background: rgba(255,255,255,0.2); padding: 3px 8px; border-radius: 10px; display: inline-block;">${event.category}</span>
             </div>
             <div style="padding: 0 4px;">
                 <div style="margin-bottom: 10px;">
-                    <div style="color: #64748b; font-size: 13px; margin-bottom: 4px;"><strong style="color: ${iconColor};"><i class="fa-regular fa-calendar"></i></strong> ${event.date} at ${event.time}</div>
-                    <div style="color: #64748b; font-size: 13px; margin-bottom: 4px;"><strong style="color: ${iconColor};"><i class="fa-solid fa-location-dot"></i></strong> ${event.location}</div>
-                    <div style="color: #64748b; font-size: 13px;"><strong style="color: ${iconColor};"><i class="fa-regular fa-user"></i></strong> ${event.registered || 0}/${event.capacity || 0} registered</div>
+                    <div style="color: #64748b; font-size: 13px; margin-bottom: 6px; line-height: 1.4;"><strong style="color: ${iconColor};"><i class="fa-regular fa-calendar"></i></strong> ${event.date} at ${event.time}</div>
+                    <div style="color: #64748b; font-size: 13px; margin-bottom: 6px; line-height: 1.4;"><strong style="color: ${iconColor};"><i class="fa-solid fa-location-dot"></i></strong> ${event.location}</div>
+                    <div style="color: #64748b; font-size: 13px; line-height: 1.4;"><strong style="color: ${iconColor};"><i class="fa-regular fa-user"></i></strong> ${event.registered || 0}/${event.capacity || 0} registered</div>
                 </div>
-                <p style="color: #475569; font-size: 14px; line-height: 1.5; margin: 12px 0;">${event.description}</p>
+                <p style="color: #475569; font-size: 13px; line-height: 1.5; margin: 10px 0;">${event.description}</p>
                 <button 
                     onclick="openEventPopup('${event.id}')"
                     style="
                         width: 100%;
-                        padding: 10px 16px;
+                        padding: 13px 16px;
                         background: ${gradient};
                         color: white;
                         border: none;
-                        border-radius: 8px;
+                        border-radius: 10px;
                         font-weight: 700;
                         font-size: 14px;
                         cursor: pointer;
-                        transition: all 0.3s ease;
                         font-family: 'Open Sans', sans-serif;
+                        touch-action: manipulation;
+                        -webkit-appearance: none;
+                        margin-top: 4px;
                     "
-                    onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 12px rgba(0,0,0,0.3)'"
-                    onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'"
                 >
                     View More Details
                 </button>
@@ -195,8 +195,9 @@ function addMarker(event) {
         </div>
     `;
 
+    const isMobileDevice = window.innerWidth <= 768;
     marker.bindPopup(popupContent, {
-        maxWidth: 300,
+        maxWidth: isMobileDevice ? Math.min(window.innerWidth - 48, 280) : 300,
         className: 'custom-popup category-' + event.category
     });
 

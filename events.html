@@ -71,9 +71,26 @@
 <link rel="stylesheet" href="announcement-banner.css" type="text/css"/>
 <script src="announcement-banner.js"></script>
     <title>Events – NextStep</title>
-
-  </head>
-  <body>
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebPage",
+      "@id": "https://nextstep-civic.org/events.html",
+      "url": "https://nextstep-civic.org/events.html",
+      "name": "Local Events & Workshops – NextStep",
+      "description": "Browse upcoming civic events, town halls, and volunteer workshops in Boca Raton.",
+      "isPartOf": { "@id": "https://nextstep-civic.org/#website" },
+      "breadcrumb": {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://nextstep-civic.org/" },
+          { "@type": "ListItem", "position": 2, "name": "Events", "item": "https://nextstep-civic.org/events.html" }
+        ]
+      }
+    }
+  </script>
+</head>
+<body>
   <nav>
     <div class="navbar">
       <div class="navdiv">
@@ -102,15 +119,6 @@
       </div>
     </div>
   </nav>
-  <nav class="contact-subnav" aria-label="Contact sections">
-    <span class="subnav-label"><i class="fas fa-map-signs"></i> Contact</span>
-    <div class="subnav-pills"><a class="subnav-pill active" href="contact.html"><i class="fas fa-paper-plane"></i> Message Us</a>
-      <a class="subnav-pill" href="contact-team.html"><i class="fas fa-users"></i> Meet the Team</a>
-      <a class="subnav-pill" href="contact-blog.html"><i class="fas fa-water"></i> Wave Blog</a>
-      <a class="subnav-pill" href="contact-faq.html"><i class="fas fa-question-circle"></i> FAQ</a>
-      </div>
-  </nav>
-
 
     <main class="events-main">
       <div class="events-header">
@@ -263,5 +271,6 @@
   <script type="module" src="admin.js"></script>
   <script type="module" src="auth-navbar.js"></script>
   <script src="navbar.js"></script>
+  <script src="dropdown-ios.js" defer></script>
 </body>
 </html>

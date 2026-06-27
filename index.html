@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="description" content="NextStep makes civic engagement simple and rewarding. Discover local events, workshops, and volunteer opportunities on an interactive map in Boca Raton." />
   <meta name="keywords" content="civic engagement, local events, volunteer, Boca Raton, community, NextStep, town hall, workshops" />
   <meta name="author" content="NextStep" />
@@ -140,6 +140,18 @@
 
   <!-- Additional styles for enhancements -->
   <style>
+    /* ── Critical mobile fix: ensure animated elements don't stay invisible ──
+       The .paragraph-side and .engage-side start at opacity:0 for desktop
+       slide-in animations, but on mobile JS may not fire reliably enough.
+       We make them immediately visible on narrow screens. */
+    @media (max-width: 768px) {
+      .paragraph-side,
+      .engage-side,
+      .engage-label {
+        opacity: 1 !important;
+        transform: none !important;
+      }
+    }
     /* ── Hero morph ── */
     .hero h1.morphed .accent {
       background: linear-gradient(135deg, #2563eb, #3b82f6);
@@ -392,6 +404,31 @@
       }
     }
   </style>
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "NextStep",
+  "url": "https://nextstep-civic.org"
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "NextStep",
+  "alternate name": "NextStep Civic", 
+  "url": "https://nextstep-civic.org",
+  "logo": "https://nextstep-civic.org/images/logo.png",
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "contactType": "customer support",
+    "url": "https://nextstep-civic.org/contact.html"
+  },
+  "sameAs": []
+}
+</script>
 </head>
 
 <body class="homepage">
@@ -423,11 +460,6 @@
       </div>
     </div>
   </nav>
-
-      <div class="nav-right">
-        <li class="navbar-item"><a href="login.html" class="login" id="nav-login">Login</a></li>
-        <li class="navbar-item"><a href="signup.html" class="signup" id="nav-signup">Sign Up</a></li>
-      </div>
     </div>
   </div>
 </nav>
@@ -450,7 +482,7 @@
         </div>
       </header>
       <!-- Hero image -->
-      <section class="image-reveal" id="revealSection"> <div class="hero-media"> <iframe id="heroImage" loading="eager" class="hero-image" src="https://www.youtube-nocookie.com/embed/9yu2IB9Vo5Y?si=75noNKITv_U2Ft0k&amp;controls=1&amp;start=10&amp;end=243&amp;autoplay=1&amp;mute=1&amp;playsinline=1&amp;loop=1&amp;playlist=9yu2IB9Vo5Y&amp;modestbranding=1&amp;showinfo=0&amp;rel=0" title="NextStep Hero Video" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen> </iframe> </div> </section>
+      <section class="image-reveal" id="revealSection"> <div class="hero-media"> <iframe id="heroImage" loading="eager" class="hero-image" src="https://www.youtube-nocookie.com/embed/9yu2IB9Vo5Y?si=75noNKITv_U2Ft0k&amp;controls=0&amp;start=10&amp;end=243&amp;autoplay=1&amp;mute=1&amp;playsinline=1&amp;loop=1&amp;playlist=9yu2IB9Vo5Y&amp;modestbranding=1&amp;showinfo=0&amp;rel=0" title="NextStep Hero Video" frameborder="0" webkit-playsinline="1" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen> </iframe> </div> </section>
 
 
     </section>
@@ -1014,7 +1046,7 @@
 
     })();
   </script>
-
+  <script src="dropdown-ios.js" defer></script>
 </body>
 
 

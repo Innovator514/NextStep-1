@@ -152,6 +152,10 @@
     textarea.form-input { resize: vertical; min-height: 120px; line-height: 1.55; }
     .wave-form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
     .wave-post-emoji { width: 38px; height: 38px; border-radius: 10px; background: #eff6ff; display:flex; align-items:center; justify-content:center; flex-shrink:0; font-size:1.05rem; }
+    .wave-post-cover { width: 38px; height: 38px; border-radius: 10px; object-fit: cover; flex-shrink: 0; border: 1px solid #e2e8f0; background: #eff6ff; }
+    .wave-cover-preview-wrap { display:flex; align-items:center; gap:0.75rem; margin-bottom:0.6rem; padding:0.5rem; background:#f8fafc; border:1.5px solid #e2e8f0; border-radius:10px; }
+    .wave-cover-preview-wrap img { width:72px; height:72px; object-fit:cover; border-radius:8px; border:1px solid #e2e8f0; flex-shrink:0; }
+    [data-theme="dark"] .wave-cover-preview-wrap { background:#0a1628; border-color:#1e3a5f; }
     .wave-post-actions { display:flex; align-items:center; gap:0.5rem; flex-shrink:0; }
     @media (max-width: 650px) { .wave-form-row { grid-template-columns: 1fr; } }
 
@@ -1538,19 +1542,73 @@
                 <input type="text" id="wave-date-input" required class="form-input" placeholder="Jun 12, 2026">
               </div>
             </div>
-            <div class="wave-form-row">
-              <div>
-                <label class="form-label" for="wave-read-time-input">Read Time</label>
-                <input type="text" id="wave-read-time-input" class="form-input" placeholder="4 min">
-              </div>
-              <div>
-                <label class="form-label" for="wave-emoji-input">Emoji Icon</label>
-                <input type="text" id="wave-emoji-input" class="form-input" placeholder="🌊">
-              </div>
-            </div>
             <div>
-              <label class="form-label" for="wave-gradient-input">Card Gradient CSS</label>
-              <input type="text" id="wave-gradient-input" class="form-input" placeholder="linear-gradient(135deg,#2563eb,#3b82f6)">
+              <label class="form-label" for="wave-read-time-input">Read Time</label>
+              <input type="text" id="wave-read-time-input" class="form-input" placeholder="4 min">
+            </div>
+
+            <div>
+              <label class="form-label">Cover Image</label>
+
+              <div class="wave-cover-preview-wrap" id="wave-cover-preview" style="display:none;">
+                <img id="wave-cover-preview-img" src="" alt="">
+                <div style="flex:1; min-width:0;">
+                  <div style="font-size:0.78rem; font-weight:700; color:#15803d;"><i class="fas fa-check-circle"></i> Cover image set</div>
+                  <div id="wave-cover-preview-src" style="font-size:0.68rem; color:#94a3b8; word-break:break-all; margin-top:2px;"></div>
+                </div>
+                <button type="button" onclick="waveCoverClear()" style="flex-shrink:0; padding:0.3rem 0.6rem; background:#fee2e2; color:#dc2626; border:none; border-radius:8px; font-size:0.72rem; font-weight:700; cursor:pointer;">
+                  <i class="fas fa-trash-can"></i> Remove
+                </button>
+              </div>
+
+              <div class="pg-img-picker" style="border-top:none; padding:0;">
+                <div class="pg-img-picker-tabs">
+                  <button type="button" class="pg-img-tab active" id="wave-cover-tabbtn-upload" onclick="waveCoverSwitchTab('upload')"><i class="fas fa-image"></i> Photo</button>
+                  <button type="button" class="pg-img-tab" id="wave-cover-tabbtn-drive" onclick="waveCoverSwitchTab('drive')"><i class="fab fa-google-drive"></i> Drive</button>
+                  <button type="button" class="pg-img-tab" id="wave-cover-tabbtn-url" onclick="waveCoverSwitchTab('url')"><i class="fas fa-link"></i> URL</button>
+                </div>
+
+                <!-- Upload from device -->
+                <div id="wave-cover-tab-upload" class="pg-img-panel active">
+                  <div class="pg-dropzone" id="wave-cover-dropzone"
+                       onclick="document.getElementById('wave-cover-file-input').click()"
+                       ondragover="event.preventDefault();this.classList.add('drag-over')"
+                       ondragleave="this.classList.remove('drag-over')"
+                       ondrop="waveCoverHandleDrop(event)">
+                    <input type="file" id="wave-cover-file-input" accept="image/*" onchange="waveCoverUploadFile(this.files[0])">
+                    <i class="fas fa-cloud-upload-alt" style="color:#93c5fd; font-size:1.3rem; display:block; margin-bottom:3px;"></i>
+                    <span style="font-weight:600; color:#475569; font-size:0.75rem;">Click or drag a photo here</span>
+                    <div style="font-size:0.65rem; color:#94a3b8; margin-top:2px;">JPG, PNG, WebP up to 10 MB</div>
+                  </div>
+                  <div id="wave-cover-upload-progress" class="pg-upload-progress" style="display:none;">
+                    <div class="pg-progress-track"><div class="pg-progress-bar" id="wave-cover-progress-bar"></div></div>
+                  </div>
+                </div>
+
+                <!-- Google Drive link -->
+                <div id="wave-cover-tab-drive" class="pg-img-panel">
+                  <div class="pg-drive-hint"><strong>Google Drive:</strong> Open the photo &rarr; Share &rarr; Anyone with the link &rarr; Copy link.</div>
+                  <div class="pg-drive-row">
+                    <input type="text" id="wave-cover-drive-input" placeholder="https://drive.google.com/file/d/…/view" oninput="waveCoverParseDrive()" onkeydown="if(event.key==='Enter'){event.preventDefault();waveCoverApplyDrive();}">
+                    <button type="button" onclick="waveCoverApplyDrive()"><i class="fas fa-plus"></i> Use</button>
+                  </div>
+                  <div class="pg-drive-preview" id="wave-cover-drive-preview">
+                    <img id="wave-cover-drive-preview-img" src="" alt="preview">
+                    <span style="font-size:0.7rem; color:#15803d; font-weight:600;"><i class="fas fa-check-circle"></i> Link looks good!</span>
+                  </div>
+                </div>
+
+                <!-- Direct URL -->
+                <div id="wave-cover-tab-url" class="pg-img-panel">
+                  <div class="pg-img-url-row">
+                    <input type="url" id="wave-cover-url-input" placeholder="https://example.com/photo.jpg" onkeydown="if(event.key==='Enter'){event.preventDefault();waveCoverApplyUrl();}">
+                    <button type="button" onclick="waveCoverApplyUrl()"><i class="fas fa-plus"></i> Use</button>
+                  </div>
+                </div>
+
+                <div class="pg-img-err" id="wave-cover-err"></div>
+              </div>
+              <input type="hidden" id="wave-cover-image-input" value="">
             </div>
             <div>
               <label class="form-label" for="wave-excerpt-input">Card Excerpt</label>
@@ -2039,6 +2097,103 @@ window.terminateAnnouncement = async function(id) {
   }
 };
 
+// --- WAVE POST COVER IMAGE PICKER (upload / Google Drive / direct URL) ---
+function waveCoverShowErr(msg) {
+  const el = document.getElementById('wave-cover-err');
+  if (!el) return;
+  el.textContent = msg || '';
+  el.style.display = msg ? '' : 'none';
+}
+
+function waveCoverSetImage(url) {
+  document.getElementById('wave-cover-image-input').value = url;
+  document.getElementById('wave-cover-preview-img').src = url;
+  document.getElementById('wave-cover-preview-src').textContent = url;
+  document.getElementById('wave-cover-preview').style.display = 'flex';
+  waveCoverShowErr('');
+}
+
+window.waveCoverClear = function() {
+  document.getElementById('wave-cover-image-input').value = '';
+  document.getElementById('wave-cover-preview').style.display = 'none';
+  document.getElementById('wave-cover-preview-img').src = '';
+  document.getElementById('wave-cover-file-input').value = '';
+  document.getElementById('wave-cover-drive-input').value = '';
+  document.getElementById('wave-cover-url-input').value = '';
+  document.getElementById('wave-cover-drive-preview').style.display = 'none';
+  waveCoverShowErr('');
+};
+
+window.waveCoverSwitchTab = function(tab) {
+  ['upload', 'drive', 'url'].forEach(t => {
+    document.getElementById(`wave-cover-tab-${t}`).classList.toggle('active', t === tab);
+    document.getElementById(`wave-cover-tabbtn-${t}`).classList.toggle('active', t === tab);
+  });
+  waveCoverShowErr('');
+};
+
+window.waveCoverHandleDrop = function(e) {
+  e.preventDefault();
+  document.getElementById('wave-cover-dropzone').classList.remove('drag-over');
+  const file = e.dataTransfer.files[0];
+  if (file && file.type.startsWith('image/')) waveCoverUploadFile(file);
+  else waveCoverShowErr('Please drop an image file.');
+};
+
+window.waveCoverUploadFile = async function(file) {
+  if (!file) return;
+  if (!file.type.startsWith('image/')) { waveCoverShowErr('Please choose an image file.'); return; }
+  if (file.size > 10 * 1024 * 1024) { waveCoverShowErr('File is too large. Max size is 10 MB.'); return; }
+  waveCoverShowErr('');
+
+  const progressWrap = document.getElementById('wave-cover-upload-progress');
+  const progressBar  = document.getElementById('wave-cover-progress-bar');
+  progressWrap.style.display = '';
+  progressBar.style.width = '5%';
+
+  try {
+    const url = await cloudinaryUpload(file, pct => { progressBar.style.width = `${Math.max(5, Math.round(pct * 100))}%`; });
+    progressWrap.style.display = 'none';
+    progressBar.style.width = '0%';
+    waveCoverSetImage(url);
+  } catch (err) {
+    progressWrap.style.display = 'none';
+    waveCoverShowErr(`Upload failed: ${err.message}`);
+  } finally {
+    document.getElementById('wave-cover-file-input').value = '';
+  }
+};
+
+window.waveCoverParseDrive = function() {
+  const raw = document.getElementById('wave-cover-drive-input').value.trim();
+  const previewWrap = document.getElementById('wave-cover-drive-preview');
+  const previewImg  = document.getElementById('wave-cover-drive-preview-img');
+  previewWrap.style.display = 'none';
+  waveCoverShowErr('');
+  const match = raw.match(/\/d\/([a-zA-Z0-9_-]{10,})/) || raw.match(/[?&]id=([a-zA-Z0-9_-]{10,})/);
+  if (!match) { if (raw.length > 10) waveCoverShowErr("Couldn't find a file ID — paste the full shareable link."); return; }
+  const directUrl = `https://drive.google.com/thumbnail?id=${match[1]}&sz=w1000`;
+  previewImg.src = directUrl;
+  previewImg.onload  = () => previewWrap.style.display = 'flex';
+  previewImg.onerror = () => waveCoverShowErr('Image couldn\'t load. Check that sharing is set to "Anyone with the link".');
+};
+
+window.waveCoverApplyDrive = function() {
+  const raw = document.getElementById('wave-cover-drive-input').value.trim();
+  const match = raw.match(/\/d\/([a-zA-Z0-9_-]{10,})/) || raw.match(/[?&]id=([a-zA-Z0-9_-]{10,})/);
+  if (!match) { waveCoverShowErr("Couldn't find a file ID — paste the full shareable Drive link."); return; }
+  waveCoverSetImage(`https://drive.google.com/thumbnail?id=${match[1]}&sz=w1000`);
+};
+
+window.waveCoverApplyUrl = function() {
+  const raw = document.getElementById('wave-cover-url-input').value.trim();
+  if (!raw) { waveCoverShowErr('Please paste an image URL.'); return; }
+  const testImg = new Image();
+  testImg.onload  = () => waveCoverSetImage(raw);
+  testImg.onerror = () => waveCoverShowErr("That URL doesn't look like a loadable image.");
+  testImg.src = raw;
+};
+
 // --- UPDATED WAVE BLOG POST MANAGEMENT WITH EDIT ENGINE ---
 let editingPostId = null; // Tracks if we are editing an existing post or creating a new one
 
@@ -2059,8 +2214,8 @@ window.editWavePost = async function(id) {
     document.getElementById('wave-title-input').value = data.title || '';
     document.getElementById('wave-date-input').value = data.date || '';
     document.getElementById('wave-read-time-input').value = data.readTime || '4 min';
-    document.getElementById('wave-emoji-input').value = data.emoji || '🌊';
-    document.getElementById('wave-gradient-input').value = data.gradient || '';
+    waveCoverClear();
+    if (data.imageUrl) waveCoverSetImage(data.imageUrl);
     document.getElementById('wave-excerpt-input').value = data.excerpt || '';
     
     // Convert paragraphs back into raw plain text for the textarea
@@ -2095,6 +2250,7 @@ function resetWaveForm() {
   editingPostId = null;
   document.getElementById('wave-post-form').reset();
   document.getElementById('wave-category-input').value = 'civic';
+  waveCoverClear();
   
   const submitBtn = document.querySelector('#wave-post-form button[type="submit"]');
   if (submitBtn) {
@@ -2110,8 +2266,8 @@ window.publishWavePost = async function(event) {
   const title = document.getElementById('wave-title-input').value.trim();
   const date = document.getElementById('wave-date-input').value.trim();
   const readTime = document.getElementById('wave-read-time-input').value.trim() || '4 min';
-  const emoji = document.getElementById('wave-emoji-input').value.trim() || '🌊';
-  const gradient = document.getElementById('wave-gradient-input').value.trim() || WAVE_CATEGORY_GRADIENTS[category] || WAVE_CATEGORY_GRADIENTS.civic;
+  const imageUrl = document.getElementById('wave-cover-image-input').value.trim();
+  const gradient = WAVE_CATEGORY_GRADIENTS[category] || WAVE_CATEGORY_GRADIENTS.civic;
   const excerpt = document.getElementById('wave-excerpt-input').value.trim();
   const rawBody = document.getElementById('wave-body-input').value.trim();
   
@@ -2123,6 +2279,10 @@ window.publishWavePost = async function(event) {
     alert('Please fill in the title, date, excerpt, and body.');
     return;
   }
+  if (!imageUrl) {
+    alert('Please add a cover image for this post — upload a photo, paste a Google Drive link, or paste an image URL.');
+    return;
+  }
 
   try {
     const postPayload = {
@@ -2132,7 +2292,7 @@ window.publishWavePost = async function(event) {
       categoryLabel: WAVE_CATEGORY_LABELS[category] || category,
       date,
       readTime,
-      emoji,
+      imageUrl,
       gradient,
       excerpt,
       body,
@@ -2186,7 +2346,9 @@ async function loadWavePosts() {
 
       item.innerHTML = `
         <div class="item-main-info" onclick="editWavePost('${id}')" style="cursor: pointer; flex-grow: 1;">
-          <div class="wave-post-emoji">${escapeHTML(data.emoji || '🌊')}</div>
+          ${data.imageUrl
+            ? `<img class="wave-post-cover" src="${escapeHTML(data.imageUrl)}" alt="" onerror="this.style.visibility='hidden'">`
+            : `<div class="wave-post-emoji"><i class="fas fa-image" style="color:#93c5fd;"></i></div>`}
           <div style="overflow:hidden;">
             <div class="wave-post-title" title="${escapeHTML(data.title)}">${escapeHTML(data.title)}</div>
             <div class="wave-post-meta">${escapeHTML(data.categoryLabel || WAVE_CATEGORY_LABELS[data.category] || data.category || 'Wave')} • ${escapeHTML(data.date || readableFirestoreDate(data.createdAt))}</div>
@@ -3799,7 +3961,7 @@ function arcRenderWave() {
     const catLabel = ARC_WAVE_CAT_LABELS[p.category]||p.category||'—';
     const excerpt = (p.excerpt||arcStripHTML(p.body)||'').slice(0,70)+((p.excerpt||'').length>70?'…':'');
     return `<tr>
-      <td style="font-size:1.1rem;text-align:center;">${arcEsc(p.emoji||'🌊')}</td>
+      <td style="text-align:center;">${p.imageUrl ? `<img src="${arcEsc(p.imageUrl)}" alt="" style="width:28px;height:28px;border-radius:6px;object-fit:cover;" onerror="this.style.visibility='hidden'">` : `<i class="fas fa-image" style="color:#cbd5e1;"></i>`}</td>
       <td class="arc-td-title" style="max-width:180px;" title="${arcEsc(p.title)}">${arcEsc(p.title||'—')}</td>
       <td><span class="arc-badge arc-badge-cat">${arcEsc(catLabel)}</span></td>
       <td class="arc-td-body" title="${arcEsc(p.excerpt||'')}">${arcEsc(excerpt||'—')}</td>
@@ -3815,7 +3977,9 @@ window.arcViewWavePost = function(id) {
   const catLabel = ARC_WAVE_CAT_LABELS[p.category]||p.category||'—';
   arcOpenDrawer(p.title||'Wave Post', `
     <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:1rem;">
-      <div style="width:44px;height:44px;border-radius:13px;background:${arcEsc(p.gradient||'linear-gradient(135deg,#2563eb,#06b6d4)')};display:flex;align-items:center;justify-content:center;font-size:1.3rem;flex-shrink:0;">${arcEsc(p.emoji||'🌊')}</div>
+      ${p.imageUrl
+        ? `<img src="${arcEsc(p.imageUrl)}" alt="" style="width:54px;height:54px;border-radius:13px;object-fit:cover;flex-shrink:0;border:1px solid #e2e8f0;" onerror="this.style.visibility='hidden'">`
+        : `<div style="width:54px;height:54px;border-radius:13px;background:${arcEsc(p.gradient||'linear-gradient(135deg,#2563eb,#06b6d4)')};display:flex;align-items:center;justify-content:center;flex-shrink:0;"><i class="fas fa-image" style="color:rgba(255,255,255,0.8);"></i></div>`}
       <div><div style="font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#94a3b8;">${arcEsc(catLabel)}</div>
       <div style="font-size:0.82rem;color:#64748b;">${arcEsc(p.date||'')}${p.readTime?' · '+arcEsc(p.readTime):''}</div></div>
     </div>
@@ -4661,6 +4825,6 @@ onAuthStateChanged(auth, async user => {
 <script src="navbar.js"></script>
 <script type="module" src="auth-navbar.js"></script>
 <script type="module" src="auth-check.js"></script>
-
+<script src="dropdown-ios.js" defer></script>
 </body>
 </html>

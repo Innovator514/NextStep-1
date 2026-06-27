@@ -56,17 +56,25 @@
     .subnav-pills { display: flex; gap: 0.4rem; flex-wrap: wrap; }
     .subnav-pill {
       display: inline-flex; align-items: center; gap: 0.4rem;
-      padding: 0.42rem 1rem; border: none; border-radius: 50px;
+      padding: 0.55rem 1.1rem; border: none; border-radius: 50px;
       background: #f1f5f9; color: #64748b;
       font-family: 'Open Sans', sans-serif;
       font-size: 0.82rem; font-weight: 700;
       cursor: pointer; text-decoration: none;
-      transition: all 0.2s ease; white-space: nowrap;
+      transition: background 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+      white-space: nowrap;
+      min-height: 44px;
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
     }
-    .subnav-pill:hover { background: #eff6ff; color: #2563eb; transform: translateY(-1px); }
+    .subnav-pill:hover { background: #eff6ff; color: #2563eb; }
     .subnav-pill.active {
       background: linear-gradient(135deg, #2563eb, #3b82f6);
       color: white; box-shadow: 0 4px 14px rgba(37,99,235,0.3);
+    }
+    .subnav-pill:focus-visible {
+      outline: 3px solid #2563eb;
+      outline-offset: 2px;
     }
     /* ── Page hero ── */
     .cp-hero {
@@ -246,12 +254,13 @@
       </div>
     </div>
   </nav>  <nav class="contact-subnav" aria-label="Contact sections">
-    <span class="subnav-label"><i class="fas fa-map-signs"></i> Contact</span>
-    <div class="subnav-pills"><a class="subnav-pill" href="contact.html"><i class="fas fa-paper-plane"></i> Message Us</a>
-      <a class="subnav-pill" href="contact-team.html"><i class="fas fa-users"></i> Meet the Team</a>
-      <a class="subnav-pill" href="contact-blog.html"><i class="fas fa-water"></i> Wave Blog</a>
-      <a class="subnav-pill active" href="contact-faq.html"><i class="fas fa-question-circle"></i> FAQ</a>
-      </div>
+    <span class="subnav-label" aria-hidden="true"><i class="fas fa-map-signs" aria-hidden="true"></i> Contact</span>
+    <div class="subnav-pills" role="list">
+      <a class="subnav-pill" href="contact.html" role="listitem"><i class="fas fa-paper-plane" aria-hidden="true"></i> Message Us</a>
+      <a class="subnav-pill" href="contact-team.html" role="listitem"><i class="fas fa-users" aria-hidden="true"></i> Meet the Team</a>
+      <a class="subnav-pill" href="contact-blog.html" role="listitem"><i class="fas fa-water" aria-hidden="true"></i> Wave Blog</a>
+      <a class="subnav-pill active" href="contact-faq.html" role="listitem" aria-current="page"><i class="fas fa-question-circle" aria-hidden="true"></i> FAQ</a>
+    </div>
   </nav>
   <main class="contact-subpage-main">
     <div class="cp-hero">
@@ -482,5 +491,6 @@ function filterFaqs(q) {
 }
 </script>
 <script type="module" src="auth-navbar.js"></script>
+<script src="dropdown-ios.js" defer></script>
 </body>
 </html>

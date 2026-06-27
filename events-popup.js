@@ -19,14 +19,19 @@
                 right: 0;
                 bottom: 0;
                 background: rgba(0, 0, 0, 0.7);
+                -webkit-backdrop-filter: blur(5px);
                 backdrop-filter: blur(5px);
                 z-index: 10000;
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                padding: 20px;
+                /* Safe area insets for notched iPhones */
+                padding: max(20px, env(safe-area-inset-top)) max(20px, env(safe-area-inset-right)) max(20px, env(safe-area-inset-bottom)) max(20px, env(safe-area-inset-left));
                 opacity: 0;
                 animation: fadeIn 0.3s ease forwards;
+                /* Prevent iOS rubber-band scroll on overlay */
+                overscroll-behavior: contain;
+                -webkit-overflow-scrolling: auto;
             }
 
             @keyframes fadeIn {
@@ -41,9 +46,27 @@
                 width: 100%;
                 max-height: 90vh;
                 overflow-y: auto;
+                /* Smooth momentum scrolling on iOS */
+                -webkit-overflow-scrolling: touch;
+                overscroll-behavior: contain;
                 box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
                 transform: scale(0.9);
                 animation: popIn 0.3s ease forwards;
+            }
+
+            /* iOS: full-screen sheet on small phones */
+            @media (max-width: 480px) {
+                .event-popup-overlay {
+                    align-items: flex-end;
+                    padding: 0;
+                }
+                .event-popup {
+                    border-radius: 20px 20px 0 0;
+                    max-height: 92vh;
+                    width: 100%;
+                    /* Bottom safe area so content clears home indicator */
+                    padding-bottom: env(safe-area-inset-bottom);
+                }
             }
 
             @keyframes popIn {
@@ -95,8 +118,8 @@
                 right: 20px; 
                 background: #f1f5f9; 
                 border: none; 
-                width: 40px; 
-                height: 40px; 
+                width: 44px; 
+                height: 44px; 
                 border-radius: 50%; 
                 cursor: pointer;
                 display: flex; 
@@ -104,7 +127,10 @@
                 justify-content: center; 
                 font-size: 24px; 
                 color: #64748b; 
-                transition: all 0.3s ease; 
+                transition: all 0.3s ease;
+                /* Prevent tap highlight on iOS */
+                -webkit-tap-highlight-color: transparent;
+                touch-action: manipulation;
             } 
             
             .event-popup-close:hover { background: #ef4444;
@@ -465,8 +491,11 @@
 
         console.log('Popup appended to body');
 
-        // Prevent body scroll
-        document.body.style.overflow = 'hidden';
+        // Prevent body scroll (iOS-safe: save position then fix body)
+        const scrollY = window.scrollY;
+        document.body.dataset.scrollY = scrollY;
+        document.body.style.top = `-${scrollY}px`;
+        document.body.classList.add('popup-open');
 
         // Add escape key listener
         const escapeHandler = function(e) {
@@ -489,11 +518,18 @@
             overlay.style.animation = 'fadeOut 0.3s ease forwards';
             setTimeout(() => {
                 container.remove();
-                document.body.style.overflow = '';
+        // Restore body scroll (iOS-safe: remove fixed positioning and restore position)
+        const scrollY = parseInt(document.body.dataset.scrollY || '0', 10);
+        document.body.classList.remove('popup-open');
+        document.body.style.top = '';
+        window.scrollTo(0, scrollY);
             }, 300);
         } else {
             container.remove();
-            document.body.style.overflow = '';
+            const scrollY2 = parseInt(document.body.dataset.scrollY || '0', 10);
+            document.body.classList.remove('popup-open');
+            document.body.style.top = '';
+            window.scrollTo(0, scrollY2);
         }
 
         // Remove escape key listener

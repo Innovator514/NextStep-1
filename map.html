@@ -2,7 +2,7 @@
 <html lang="en" class="h-full" dir="ltr">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="description" content="Explore an interactive map of civic events, town halls, volunteer opportunities, and community actions happening near you in Boca Raton." />
     <meta name="keywords" content="interactive map, civic events map, Boca Raton map, community events near me, NextStep" />
     <meta name="author" content="NextStep" />
@@ -76,6 +76,24 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
      integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
      crossorigin=""></script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebPage",
+        "@id": "https://nextstep-civic.org/map.html",
+        "url": "https://nextstep-civic.org/map.html",
+        "name": "Civic Event Map – NextStep",
+        "description": "Explore local civic events, workshops, and volunteer opportunities on an interactive map in Boca Raton.",
+        "isPartOf": { "@id": "https://nextstep-civic.org/#website" },
+        "breadcrumb": {
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://nextstep-civic.org/" },
+            { "@type": "ListItem", "position": 2, "name": "Map", "item": "https://nextstep-civic.org/map.html" }
+          ]
+        }
+      }
+    </script>
   </head>
   <body class="map-page">
   <!--Navigation Menu-->
@@ -107,35 +125,23 @@
       </div>
     </div>
   </nav>
-  <nav class="contact-subnav" aria-label="Contact sections">
-    <span class="subnav-label"><i class="fas fa-map-signs"></i> Contact</span>
-    <div class="subnav-pills"><a class="subnav-pill active" href="contact.html"><i class="fas fa-paper-plane"></i> Message Us</a>
-      <a class="subnav-pill" href="contact-team.html"><i class="fas fa-users"></i> Meet the Team</a>
-      <a class="subnav-pill" href="contact-blog.html"><i class="fas fa-water"></i> Wave Blog</a>
-      <a class="subnav-pill" href="contact-faq.html"><i class="fas fa-question-circle"></i> FAQ</a>
-      </div>
-  </nav>
   
   <div id="map"></div>
 
   <!-- Load centralized event data FIRST -->
   <script src="events-data.js"></script>
-
   <!-- Load popup component SECOND -->
   <script src="events-popup.js"></script>
-
   <!-- Load page-specific logic LAST -->
   <script src="events.js"></script>
   <script type="module" src="auth-check.js"></script>
   <script src="badges.js"></script>
   <script src="navbar.js"></script>
   <script src="map.js"></script>
-  <!-- Firebase Auth with Profile Dropdown -->
-  <script type="module" src="auth-check.js"></script>
   <script src="dark-mode.js"></script>
   <script src="mobile-nav.js"></script>
   <script type="module" src="admin.js"></script>
   <script type="module" src="auth-navbar.js"></script>
-
+  <script src="dropdown-ios.js" defer></script>
 </body>
 </html>

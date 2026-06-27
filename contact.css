@@ -1057,3 +1057,156 @@
 [data-theme="dark"] .faq-header p {
   color: var(--text-secondary) !important;
 }
+
+/* ═══════════════════════════════════════════════════
+   iOS / MOBILE SAFARI FIXES — contact pages
+═══════════════════════════════════════════════════ */
+
+/* Remove tap flash on interactive elements */
+.submit-button,
+.message-fill-button,
+.faq-question,
+.social-link-btn,
+.support-card,
+.info-card,
+.filter-btn {
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* Prevent double-tap zoom on buttons and links */
+.submit-button,
+.message-fill-button,
+.faq-question,
+.social-link-btn {
+    touch-action: manipulation;
+}
+
+/* iOS Safari: prevent auto-zoom on input focus (font-size must be >= 16px) */
+.form-group input,
+.form-group textarea,
+.form-group select {
+    font-size: 1rem; /* already set, but this locks it — never go below 16px */
+}
+
+/* Safe area insets for notched / Dynamic Island iPhones */
+@supports (padding-bottom: env(safe-area-inset-bottom)) {
+    .contact-main,
+    .contact-subpage-main {
+        padding-left: env(safe-area-inset-left);
+        padding-right: env(safe-area-inset-right);
+    }
+
+    footer {
+        padding-bottom: env(safe-area-inset-bottom);
+    }
+}
+
+/* Disable hover lift/scale on touch — prevents stuck elevated state after tap */
+@media (hover: none) {
+    .info-card:hover,
+    .support-card:hover {
+        transform: none;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+    }
+
+    .submit-button:hover:not(:disabled) {
+        transform: none;
+        box-shadow: none;
+    }
+
+    .social-link-btn:hover {
+        transform: none;
+    }
+
+    .message-fill-button:hover {
+        transform: none;
+    }
+}
+
+/* ── Mobile (≤ 768px) ── */
+@media (max-width: 768px) {
+
+    /* Minimum 44px tap targets on all interactive elements (Apple HIG) */
+    .submit-button {
+        min-height: 52px;
+        font-size: 1rem;
+    }
+
+    .message-fill-button {
+        min-height: 44px;
+        padding: 0.65rem 1rem;
+    }
+
+    /* FAQ questions: generous tap area */
+    .faq-question {
+        padding: 1.25rem 1.25rem;
+        min-height: 56px;
+        font-size: 1rem;
+    }
+
+    /* FAQ icon: easier to see and tap */
+    .faq-icon {
+        font-size: 1.6rem;
+        flex-shrink: 0;
+        margin-left: 0.75rem;
+    }
+
+    /* Social buttons: meet 44px minimum */
+    .social-link-btn {
+        width: 48px;
+        height: 48px;
+        font-size: 1.4rem;
+    }
+
+    /* Form: stack form-row to single column (already done, kept explicit) */
+    .form-row {
+        grid-template-columns: 1fr;
+        gap: 0;
+    }
+
+    /* Textarea: taller default on mobile for easier typing */
+    .form-group textarea {
+        min-height: 120px;
+    }
+
+    /* Contact header: readable on small screens */
+    .contact-header h1 {
+        font-size: 1.9rem;
+    }
+
+    /* Support card grid: 1 column on small phones */
+    .support-card-grid {
+        grid-template-columns: 1fr;
+    }
+
+    /* Detail band: 1 column */
+    .contact-detail-band {
+        grid-template-columns: 1fr;
+    }
+
+    /* Process grid: 1 column */
+    .process-grid {
+        grid-template-columns: 1fr;
+    }
+
+    /* Padding reductions for more breathing room */
+    .faq-section {
+        padding: 0 1rem 3rem;
+    }
+
+    .contact-process-section {
+        padding: 1.25rem;
+    }
+
+    /* Message assist: stack vertically so button is full-width */
+    .message-assist {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.6rem;
+    }
+
+    .message-fill-button {
+        width: 100%;
+        text-align: center;
+    }
+}

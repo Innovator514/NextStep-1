@@ -34,9 +34,24 @@
   <script src="https://js.puter.com/v2/"></script>
 
   <title>Compass | NextStep</title>
-
-  <style>
-  </style>
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebPage",
+      "@id": "https://nextstep-civic.org/chatbot.html",
+      "url": "https://nextstep-civic.org/chatbot.html",
+      "name": "Compass – Civic Guide – NextStep",
+      "description": "Your personal civic guide. Get recommendations for local engagement opportunities in Boca Raton.",
+      "isPartOf": { "@id": "https://nextstep-civic.org/#website" },
+      "breadcrumb": {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://nextstep-civic.org/" },
+          { "@type": "ListItem", "position": 2, "name": "Compass", "item": "https://nextstep-civic.org/chatbot.html" }
+        ]
+      }
+    }
+  </script>
 </head>
 <body>
 
@@ -208,5 +223,6 @@
   <script type="module" src="auth-check.js"></script>
   <script src="navbar.js"></script>
   <script type="module" src="auth-navbar.js"></script>
+  <script src="dropdown-ios.js" defer></script>
 </body>
 </html>

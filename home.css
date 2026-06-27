@@ -285,38 +285,35 @@
   /* Hides overflow as image scales */
 }
 
-/* CRITICAL: Overlay to hide YouTube controls/title on load */
+/* Permanent overlay that hides YouTube's play button and branding.
+   Matches the hero background so it's invisible but always covers the iframe UI. */
 .hero-media::before {
-  /* Pseudo-element that covers the video
-     Hides YouTube's interface elements that briefly appear */
-     
   content: '';
-  /* Required for pseudo-element to display
-     Empty content creates invisible box */
-     
   position: absolute;
-  /* Positions relative to .hero-media parent
-     Covers entire area */
-     
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  /* Stretches to fill entire parent
-     Creates full coverage */
-     
-  background: rgba(0, 0, 0, 0.2);
-  /* Slight dark overlay - 20% opacity black
-     Improves text readability over video
-     Hides YouTube controls/title that flash on load */
-     
+  inset: 0;
+  background: linear-gradient(135deg, #f8fafc 0%, #e0e7ff 100%);
   z-index: 2;
-  /* CRITICAL: Must be above video (z-index: 0) but below text (z-index: 10)
-     Sits on top of video, blocks controls */
-     
-  pointer-events: auto;
-  
+  pointer-events: none;
+  /* Fade out once the video has had time to autoplay and fill the frame */
+  animation: revealVideo 3s ease 1.5s forwards;
 }
+
+@keyframes revealVideo {
+  0%   { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+/* After the before-overlay fades, this transparent layer stays permanently
+   to block any YouTube UI (play/pause) from being visible or tappable. */
+.hero-media::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: transparent;
+  z-index: 3;
+  pointer-events: auto;
+}
+
 
 /* Hero Video/Image - Works for both iframe and img */
 .hero-image {
@@ -359,37 +356,22 @@
 
 /* Specific styles for iframe video */
 iframe.hero-image {
-  /* Targets only iframe elements with hero-image class
-     Different positioning needed for video vs image */
-     
   position: absolute;
-  /* CRITICAL: Absolute positioning allows precise centering
-     Positions relative to .hero-media parent */
-     
   top: 50%;
   left: 50%;
-  /* Positions top-left corner at center of parent
-     Must combine with transform to truly center */
-     
+  /* Pull back by half width/height to truly center */
+  transform: translate(-50%, -50%) scale(1.3);
+  /* scale(1.3) ensures the video overfills the container
+     so YouTube's black letterbox bars are hidden */
+
   width: 100%;
   height: 100%;
-  /* Fills container completely */
-     
-  min-width: 100%;
-  min-height: 100%;
-  /* CRITICAL: Ensures video always covers container
-     Prevents black bars on sides
-     Video may be cropped but never shows gaps */
-     
-  object-fit: contain;
-  /* How video fills its box
-     cover: scales to fill box, maintains aspect ratio, crops if needed
-     Ensures no empty space */
-     
-  z-index: 0;
-  /* CRITICAL: Behind overlay (z-index: 2)
-     Overlay hides YouTube controls */
+  min-width: 177.78%;   /* 16:9 — ensures full coverage when container is short */
+  min-height: 56.25%;  /* 16:9 — ensures full coverage when container is wide */
 
+  object-fit: cover;
+
+  z-index: 0;
 }
 
 /* Regular image fallback */
@@ -424,6 +406,8 @@ img.hero-image {
   margin: 0;
   list-style: none;
   user-select: none;
+  -webkit-overflow-scrolling: touch; /* iOS momentum scrolling */
+  touch-action: pan-x;               /* lets iOS recognize horizontal swipe */
 }
 
 .scrollbar-jump{ 
@@ -475,6 +459,16 @@ img.hero-image {
 
 .carousel-btn.prev { left: -20px; }
 .carousel-btn.next { right: -20px; }
+
+@media (max-width: 480px) {
+  .carousel-btn.prev { left: 6px; }
+  .carousel-btn.next { right: 6px; }
+  .carousel-btn {
+    padding: 8px 12px;
+    font-size: 1.4rem;
+    background: rgba(255,255,255,0.92);
+  }
+}
 
 /* Dots */
 .carousel-dots {
@@ -1347,4 +1341,151 @@ html {
   .engage-item {
     font-size: clamp(1.65rem, 8.5vw, 2rem) !important;
   }
+}
+
+/* =====================================================================
+   MOBILE-FIRST OVERRIDES  ≤ 480px  (iPhone SE → iPhone 16 Pro Max)
+   ===================================================================== */
+@media (max-width: 480px) {
+
+  /* ── Hero ── */
+  .hero {
+    padding: 5.5rem 1rem 1rem;
+    min-height: 20vh;
+  }
+
+  .hero h1,
+  #heroTitle {
+    font-size: clamp(2rem, 10vw, 2.8rem);
+    letter-spacing: -0.5px;
+    line-height: 1.1;
+  }
+
+  .tagline {
+    font-size: 15px;
+    padding: 0 12px;
+    margin-top: 10px;
+  }
+
+  /* ── Video / image reveal ── */
+  .image-reveal {
+    height: 45vw;          /* shorter on mobile – no need for full parallax */
+    min-height: 180px;
+  }
+
+  .hero-media {
+    width: 100% !important;    /* override JS-set width */
+    border-radius: 0 !important; /* override JS-set radius */
+  }
+
+  /* ── Points / content sections ── */
+  .point,
+  .point-alt {
+    padding: 56px 16px;
+  }
+
+  .point h2,
+  .point-alt h2 {
+    font-size: clamp(1.6rem, 7vw, 2rem);
+    margin-bottom: 12px;
+  }
+
+  .point p,
+  .point-alt p {
+    font-size: 15px;
+    line-height: 1.55;
+  }
+
+  /* ── Carousel ── */
+  .carousel {
+    margin-top: 32px;
+  }
+
+  .slide {
+    height: 200px;
+    border-radius: 10px;
+  }
+
+  .carousel-dots button {
+    width: 10px;
+    height: 10px;
+  }
+
+  /* ── Gallery ── */
+  .gallery-grid {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 0.5rem !important;
+  }
+
+  .gallery-item {
+    aspect-ratio: 1 !important;
+    grid-row: unset !important;
+    grid-column: unset !important;
+    border-radius: 8px;
+  }
+
+  /* ── Impact stats ── */
+  .impact-details {
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+  }
+
+  .impact-item {
+    padding: 1rem 0.75rem;
+  }
+
+  .impact-item .impact-number {
+    font-size: 1.8rem;
+  }
+
+  /* ── Testimonials ── */
+  .testimonial-grid {
+    grid-template-columns: 1fr !important;
+    gap: 1rem;
+  }
+
+  .testimonial-card {
+    padding: 1.25rem;
+  }
+
+  /* ── Events preview ── */
+  .events-preview-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* ── Footer CTA ── */
+  .footer-cta {
+    padding: 48px 16px;
+  }
+
+  .cta-text {
+    font-size: 18px;
+    margin-bottom: 16px;
+  }
+
+  .cta {
+    padding: 14px 28px;
+    font-size: 16px;
+    border-radius: 50px; /* pill shape — easier to tap */
+  }
+}
+
+/* =====================================================================
+   IOS-SPECIFIC FIXES
+   ===================================================================== */
+
+/* Prevent double-tap zoom on buttons / links */
+a, button {
+  touch-action: manipulation;
+}
+
+/* Prevent text size inflation in landscape on iOS */
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+/* Smooth scrolling – iOS needs this on the element, not just html */
+body {
+  -webkit-overflow-scrolling: touch;
 }
