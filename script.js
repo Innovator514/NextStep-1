@@ -409,10 +409,9 @@ async function infiniteTypewriterLoop(loopId) {
     typewriterSpan.style.color = categoryData.color;
     singleItem.classList.add('typing');
 
-    // Show typing indicator dots while about to type
-    typewriterSpan.setAttribute('data-typing', 'true');
+    // Brief pause before typing starts (no dot indicator — see home.css,
+    // the [data-typing] rule that drew the round dot has been removed).
     await new Promise(r => setTimeout(r, 300));
-    typewriterSpan.removeAttribute('data-typing');
 
     await typeWriter(typewriterSpan, categoryData.text, loopId, 55);
     await new Promise(r => setTimeout(r, 1100));

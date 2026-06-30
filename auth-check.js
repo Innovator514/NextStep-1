@@ -60,7 +60,7 @@ function createLoginOverlay() {
       .login-required-card {
         background: white;
         border-radius: 20px;
-        padding: 50px;
+        padding: 70px 50px 50px;
         max-width: 500px;
         text-align: center;
         box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
@@ -78,15 +78,11 @@ function createLoginOverlay() {
         }
       }
       
-      .login-required-icon {
-        font-size: 80px;
-        margin-bottom: 20px;
-      }
-      
       .login-required-title {
         font-size: 32px;
         font-weight: 800;
         color: rgb(1, 9, 67);
+        margin-top: 0;
         margin-bottom: 15px;
       }
       
@@ -150,7 +146,7 @@ function createLoginOverlay() {
       
       @media (max-width: 768px) {
         .login-required-card {
-          padding: 40px 30px;
+          padding: 56px 30px 40px;
           margin: 20px;
         }
         
@@ -173,7 +169,6 @@ function createLoginOverlay() {
     </style>
     
     <div class="login-required-card">
-      <div class="login-required-icon">🔒</div>
       <h1 class="login-required-title">Login Required</h1>
       <p class="login-required-message">
         You need to be logged in to access this page. 
@@ -226,7 +221,7 @@ function createLogoutConfirmOverlay() {
         .logout-confirm-card {
           background: white;
           border-radius: 20px;
-          padding: 45px 50px;
+          padding: 62px 50px 45px;
           max-width: 420px;
           text-align: center;
           box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
@@ -234,15 +229,11 @@ function createLogoutConfirmOverlay() {
           font-family: 'Open Sans', sans-serif;
         }
 
-        .logout-confirm-icon {
-          font-size: 60px;
-          margin-bottom: 15px;
-        }
-
         .logout-confirm-title {
           font-size: 28px;
           font-weight: 800;
           color: rgb(1, 9, 67);
+          margin-top: 0;
           margin-bottom: 12px;
         }
 
@@ -293,7 +284,7 @@ function createLogoutConfirmOverlay() {
 
         @media (max-width: 768px) {
           .logout-confirm-card {
-            padding: 40px 30px;
+            padding: 50px 30px 40px;
             margin: 20px;
           }
 
@@ -308,7 +299,6 @@ function createLogoutConfirmOverlay() {
       </style>
 
       <div class="logout-confirm-card">
-        <div class="logout-confirm-icon">👋</div>
         <h2 class="logout-confirm-title" id="logout-confirm-title">Log Out?</h2>
         <p class="logout-confirm-message">
           You'll need to sign back in to access your profile, badges, and saved events.

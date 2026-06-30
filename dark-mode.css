@@ -1338,3 +1338,109 @@ textarea:focus-visible {
   background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary)) !important;
   color: white !important;
 }
+
+/* Dots */
+[data-theme="dark"] .carousel-dots {
+  background-color: var(--bg-primary);
+}
+[data-theme="dark"] .carousel-dots button {
+  border: none;
+}
+[data-theme="dark"] .carousel-dots button.active {
+  background-color: var(--bg-primary);
+}
+
+[data-theme="dark"] .carousel-dots button::before {
+  border-color: var(--accent-primary);
+}
+[data-theme="dark"] .carousel-dots button.active::before {
+  background: var(--accent-primary);
+}
+
+/* Login Required Overlay (auth-check.js)
+   This overlay's own styles are injected via a <style> tag at runtime,
+   appended to the DOM after this stylesheet — so without !important here,
+   its hardcoded light-mode colors would win the cascade. */
+[data-theme="dark"] #login-required-overlay {
+  background: rgba(0, 0, 0, 0.85) !important;
+}
+
+[data-theme="dark"] .login-required-card {
+  background: var(--bg-secondary) !important;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5) !important;
+  border: 1px solid var(--border-color) !important;
+}
+
+[data-theme="dark"] .login-required-title {
+  color: var(--text-primary) !important;
+}
+
+[data-theme="dark"] .login-required-message {
+  color: var(--text-secondary) !important;
+}
+
+[data-theme="dark"] .btn-login {
+  background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary)) !important;
+  box-shadow: 0 4px 15px rgba(59, 130, 246, 0.35) !important;
+}
+
+[data-theme="dark"] .btn-login:hover {
+  box-shadow: 0 6px 20px rgba(59, 130, 246, 0.45) !important;
+}
+
+[data-theme="dark"] .btn-signup {
+  background: var(--bg-tertiary) !important;
+  color: var(--accent-secondary) !important;
+  border: 2px solid var(--accent-secondary) !important;
+}
+
+[data-theme="dark"] .btn-signup:hover {
+  background: var(--hover-bg) !important;
+}
+
+[data-theme="dark"] .btn-back {
+  background: var(--hover-bg) !important;
+  color: var(--text-secondary) !important;
+}
+
+[data-theme="dark"] .btn-back:hover {
+  background: var(--border-color) !important;
+}
+
+/* Logout Confirmation Overlay (auth-check.js) — same late-injected-style
+   situation as the login overlay above, so !important is needed here too. */
+[data-theme="dark"] #logout-confirm-overlay {
+  background: rgba(0, 0, 0, 0.85) !important;
+}
+
+[data-theme="dark"] .logout-confirm-card {
+  background: var(--bg-secondary) !important;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5) !important;
+  border: 1px solid var(--border-color) !important;
+}
+
+[data-theme="dark"] .logout-confirm-title {
+  color: var(--text-primary) !important;
+}
+
+[data-theme="dark"] .logout-confirm-message {
+  color: var(--text-secondary) !important;
+}
+
+[data-theme="dark"] .btn-confirm-logout {
+  background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary)) !important;
+  box-shadow: 0 4px 15px rgba(59, 130, 246, 0.35) !important;
+}
+
+[data-theme="dark"] .btn-confirm-logout:hover {
+  box-shadow: 0 6px 20px rgba(59, 130, 246, 0.45) !important;
+}
+
+[data-theme="dark"] .btn-cancel-logout {
+  background: var(--hover-bg) !important;
+  color: var(--text-secondary) !important;
+}
+
+[data-theme="dark"] .btn-cancel-logout:hover {
+  background: var(--border-color) !important;
+}

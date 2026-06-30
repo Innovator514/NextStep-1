@@ -736,7 +736,9 @@ img.hero-image {
 
 .engage-label.show {
   /* Class added by JavaScript to reveal label */
-  
+    list-style-type: none;
+  /* Removes the bullet point */
+
   opacity: 1;
   /* Fully visible */
 }
@@ -744,6 +746,9 @@ img.hero-image {
 .engage-list {
   /* Unordered list container */
   
+   list-style-type: none;
+  /* Removes the bullet point */
+
   list-style: none;
   /* Removes default bullet points
      We want clean text without bullets */
@@ -758,6 +763,9 @@ img.hero-image {
 .engage-item {
   /* Individual list items (Political, Environmental, etc.) */
   
+  list-style-type: none;
+  /* Removes the bullet point */
+
   font-size: 28px;
   /* Large, prominent text
      Makes each category stand out */

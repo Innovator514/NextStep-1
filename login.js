@@ -35,20 +35,20 @@ try {
 
   setPersistence(auth, browserLocalPersistence)
     .then(() => {
-      console.log('✅ Local persistence set successfully');
+      console.log('Local persistence set successfully');
     })
     .catch((error) => {
-      console.warn('⚠️ Local storage restricted, falling back to session persistence...', error);
+      console.warn('Local storage restricted, falling back to session persistence...', error);
       return setPersistence(auth, browserSessionPersistence);
     })
     .catch((fallbackError) => {
-      console.error('❌ Could not set any persistence:', fallbackError);
+      console.error('Could not set any persistence:', fallbackError);
     });
 
   window.firebaseAuth = auth;
-  console.log('✅ Firebase initialized successfully');
+  console.log('Firebase initialized successfully');
 } catch (error) {
-  console.error('❌ Firebase initialization error:', error);
+  console.error('Firebase initialization error:', error);
 }
 
 // Show message function
@@ -108,12 +108,12 @@ let isRedirecting = false;
 
 // Initialize after DOM loads
 window.addEventListener('DOMContentLoaded', function () {
-  console.log('📄 DOM loaded, initializing login page...');
+  console.log('DOM loaded, initializing login page...');
 
   const loginForm = document.getElementById('login-form');
   const googleLoginBtn = document.getElementById('google-login');
 
-  console.log('🔍 Elements found:', {
+  console.log('Elements found:', {
     loginForm: !!loginForm,
     googleLoginBtn: !!googleLoginBtn
   });
@@ -122,7 +122,7 @@ window.addEventListener('DOMContentLoaded', function () {
   if (loginForm) {
     loginForm.addEventListener('submit', async function (e) {
       e.preventDefault();
-      console.log('📝 Login form submitted');
+      console.log('Login form submitted');
 
       if (!auth) {
         showMessage('Authentication service not ready. Please refresh the page.', 'error');
@@ -130,7 +130,7 @@ window.addEventListener('DOMContentLoaded', function () {
       }
 
       if (isRedirecting) {
-        console.log('⚠️ Already redirecting, ignoring submit');
+        console.log('Already redirecting, ignoring submit');
         return;
       }
 
@@ -138,7 +138,7 @@ window.addEventListener('DOMContentLoaded', function () {
       const passwordInput = document.getElementById('login-password');
 
       if (!emailInput || !passwordInput) {
-        console.error('❌ Email or password input not found');
+        console.error('Email or password input not found');
         return;
       }
 
@@ -146,7 +146,7 @@ window.addEventListener('DOMContentLoaded', function () {
       const password = passwordInput.value;
       const submitBtn = loginForm.querySelector('.submit-button');
 
-      console.log('🔐 Attempting login for:', email);
+      console.log('Attempting login for:', email);
 
       if (!email || !password) {
         showMessage('Please enter both email and password', 'error');
@@ -160,25 +160,25 @@ window.addEventListener('DOMContentLoaded', function () {
       }
 
       try {
-        console.log('🔐 Calling signInWithEmailAndPassword...');
+        console.log('Calling signInWithEmailAndPassword...');
         const userCredential = await signInWithEmailAndPassword(auth, email, password);
         const user = userCredential.user;
-        console.log('✅ Login successful!');
-        console.log('👤 User:', user.email);
-        console.log('🆔 User ID:', user.uid);
+        console.log('Login successful!');
+        console.log('User:', user.email);
+        console.log('User ID:', user.uid);
 
         showMessage(`Welcome back, ${user.displayName || 'User'}!`, 'success');
 
         // Set flag and redirect
         isRedirecting = true;
-        console.log('🔄 Redirecting to index.html in 1 second...');
+        console.log('Redirecting to index.html in 1 second...');
         setTimeout(() => {
-          console.log('➡️ Redirecting NOW');
+          console.log('Redirecting NOW');
           window.location.href = 'index.html';
         }, 1000);
 
       } catch (error) {
-        console.error('❌ Login error:', error.code, error.message);
+        console.error('Login error:', error.code, error.message);
         showMessage(getErrorMessage(error.code), 'error');
 
         // Re-enable button
@@ -194,7 +194,7 @@ window.addEventListener('DOMContentLoaded', function () {
   if (googleLoginBtn) {
     googleLoginBtn.addEventListener('click', async function (e) {
       e.preventDefault();
-      console.log('🔵 Google login clicked');
+      console.log('Google login clicked');
 
       if (!auth) {
         showMessage('Authentication service not ready. Please refresh the page.', 'error');
@@ -202,30 +202,30 @@ window.addEventListener('DOMContentLoaded', function () {
       }
 
       if (isRedirecting) {
-        console.log('⚠️ Already redirecting, ignoring click');
+        console.log('Already redirecting, ignoring click');
         return;
       }
 
       try {
-        console.log('🔓 Opening Google popup...');
+        console.log('Opening Google popup...');
         const result = await signInWithPopup(auth, googleProvider);
         const user = result.user;
-        console.log('✅ Google login successful!');
-        console.log('👤 User:', user.email);
-        console.log('🆔 User ID:', user.uid);
+        console.log('Google login successful!');
+        console.log('User:', user.email);
+        console.log('User ID:', user.uid);
 
         showMessage(`Welcome, ${user.displayName || 'User'}!`, 'success');
 
         // Set flag and redirect
         isRedirecting = true;
-        console.log('🔄 Redirecting to index.html in 1 second...');
+        console.log('Redirecting to index.html in 1 second...');
         setTimeout(() => {
-          console.log('➡️ Redirecting NOW');
+          console.log('Redirecting NOW');
           window.location.href = 'index.html';
         }, 1000);
 
       } catch (error) {
-        console.error('❌ Google login error:', error.code, error.message);
+        console.error('Google login error:', error.code, error.message);
         if (error.code !== 'auth/popup-closed-by-user' && error.code !== 'auth/cancelled-popup-request') {
           showMessage(getErrorMessage(error.code), 'error');
         }
@@ -236,8 +236,8 @@ window.addEventListener('DOMContentLoaded', function () {
   // Check if user is already logged in
   onAuthStateChanged(auth, (user) => {
     if (user && !isRedirecting) {
-      console.log('👤 User already logged in:', user.email);
-      console.log('ℹ️ On login page - showing message but not redirecting automatically');
+      console.log('User already logged in:', user.email);
+      console.log('ℹOn login page - showing message but not redirecting automatically');
 
       const loginCard = document.querySelector('.login-card');
       if (loginCard) {
@@ -247,7 +247,7 @@ window.addEventListener('DOMContentLoaded', function () {
           banner.id = 'already-logged-in-banner';
           banner.style.cssText = 'background: linear-gradient(135deg, #d1fae5, #a7f3d0); padding: 15px; border-radius: 10px; margin-bottom: 20px; text-align: center; color: #065f46; font-weight: 600;';
           banner.innerHTML = `
-            ✅ You're already logged in as ${user.email}
+            You're already logged in as ${user.email}
             <br>
             <a href="index.html" style="color: #2563eb; text-decoration: underline; margin-top: 10px; display: inline-block;">Go to Home Page →</a>
           `;
@@ -255,9 +255,9 @@ window.addEventListener('DOMContentLoaded', function () {
         }
       }
     } else if (!user) {
-      console.log('👤 No user logged in');
+      console.log('No user logged in');
     }
   });
 
-  console.log('✅ Login page initialization complete');
+  console.log('Login page initialization complete');
 });
