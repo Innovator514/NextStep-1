@@ -128,7 +128,7 @@
     padding: 0.5rem 1rem;
   }
 
-  .contact-main {
+  .contact-subpage-main {
     padding-top: 115px !important;
   }
 
@@ -344,8 +344,8 @@
 }
 
 .team-contact-btn {
-  width: 42px;
-  height: 42px;
+  width: 44px;
+  height: 44px;
   border-radius: 12px;
   background: #f1f5f9;
   display: flex;
@@ -355,6 +355,8 @@
   text-decoration: none;
   transition: all 0.25s ease;
   font-size: 0.95rem;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
 }
 
 .team-contact-btn:hover {
@@ -367,6 +369,12 @@
   [data-theme="dark"] .about-block p, [data-theme="dark"] .team-member-bio, [data-theme="dark"] .value-card p { color: var(--text-secondary) !important; }
   [data-theme="dark"] .value-card, [data-theme="dark"] .team-card { background: var(--bg-primary); border-color: var(--border-color); }
   [data-theme="dark"] .team-social-link { background: var(--hover-bg); color: var(--text-secondary); }
+
+  /* iOS Safari zooms the whole page in when a focused input's font-size
+     is under 16px. Reinforced here in case the shared stylesheet sets it smaller. */
+  .newsletter-input {
+    font-size: 16px;
+  }
 </style>
   <nav>
     <div class="navbar">
@@ -390,8 +398,8 @@
         </nav>
 
         <div class="nav-right">
-          <li class="navbar-item"><a href="login.html" class="login" id="nav-login">Login</a></li>
-          <li class="navbar-item"><a href="signup.html" class="signup" id="nav-signup">Sign Up</a></li>
+          <div class="navbar-item"><a href="login.html" class="login" id="nav-login">Login</a></div>
+          <div class="navbar-item"><a href="signup.html" class="signup" id="nav-signup">Sign Up</a></div>
         </div>
       </div>
     </div>
@@ -489,7 +497,7 @@
       <div class="about-block" style="text-align:center;">
         <h2 style="justify-content:center;"><i class="fas fa-hand-holding-heart"></i> Join the Team</h2>
         <p>We're always looking for passionate people — designers, developers, writers, community organizers. If you care about Boca Raton and want to help build something meaningful, we'd love to hear from you.</p>
-        <a href="contact.html" class="wave-all-btn" style="display:inline-flex;align-items:center;gap:0.5rem;padding:0.9rem 2rem;background:linear-gradient(135deg,#2563eb,#3b82f6);color:white;border-radius:50px;font-family:'Open Sans',sans-serif;font-size:0.95rem;font-weight:700;text-decoration:none;box-shadow:0 4px 20px rgba(37,99,235,0.3);transition:all 0.3s ease;">
+        <a href="contact.html" class="wave-all-btn" style="display:inline-flex;align-items:center;gap:0.5rem;padding:0.9rem 2rem;background:linear-gradient(135deg,#2563eb,#3b82f6);color:white;border-radius:50px;font-family:'Open Sans',sans-serif;font-size:0.95rem;font-weight:700;text-decoration:none;box-shadow:0 4px 20px rgba(37,99,235,0.3);transition:all 0.3s ease;-webkit-tap-highlight-color:transparent;touch-action:manipulation;">
           <i class="fas fa-paper-plane"></i> Get In Touch
         </a>
       </div>

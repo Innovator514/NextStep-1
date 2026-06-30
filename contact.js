@@ -403,14 +403,14 @@ if (document.querySelector('.form-step')) {
     },
     {
         name: "Sophie Bollela",
-        role: "Vice President of Outreach",
+        role: "Vice President of Social Media & Engagement",
         bio: "Sophie Bollella is the Vice President of the department of social media and engagement. She has received diverse academic awards. Including the principles award, which means being well-rounded in sports, academics, and social aspects of the community. This was given due to playing sports her whole life and being a captain, being in high level classes, and being apart of clubs. This then allows her to be able to see and hear the needs of different types of people. Additionally in helping out the local community by doing volunteer work for beach cleanups, fun runs, and animal welfare.",
         image: "images/team/sophie.jpeg",
         email: "mailto:sophiebollella10@gmail.com",
     },
     {
         name: "Zakia",
-        role: "Vice President of Outreach",
+        role: "Vice President of Web Development & Research",
         bio: "She is an award-winning poet and social activist who has been featured in news outlets across the country, including ABC, Fox, CBS, NBC, and The CW. Arianna’s exhibitions in museums and writings have been highlighted in The New York Times Kids Edition, Miami Voyage Magazine, and the Boca Raton Observer. She is passionate about civil service, social activism, and her artistic endeavors.",
         image: "images/team/zakia.jpeg",
         email: "mailto:zakia@nextstep-civic.org",
@@ -418,11 +418,11 @@ if (document.querySelector('.form-step')) {
         linkedin: "#"
     },
     {
-        name: "Lily Montero",
+        name: "Itzel Paulino",
         role: "Marketing & Social Media Director",
-        bio: "She is an award-winning poet and social activist who has been featured in news outlets across the country, including ABC, Fox, CBS, NBC, and The CW. Arianna’s exhibitions in museums and writings have been highlighted in The New York Times Kids Edition, Miami Voyage Magazine, and the Boca Raton Observer. She is passionate about civil service, social activism, and her artistic endeavors.",
-        image: "images/team/lily.JPG",
-        email: "mailto:lilymontero@gmail.com",
+        bio: "Itzel Paulino is the marketing & social media director of Next Step. She has received various awards including the John Goldenberg sportsmanship award for her love, compassion, and determination towards her love for basketball. She has also received many awards for her love and passion for dance including her 5th year of consecutive dance. She is also very determined and hardworking when she wants to achieve a goal. She is also very active in her community with almost 400 community service hours in only her first year of high school.",
+        image: "images/team/itzel.jpg",
+        email: "#",
         instagram: "#",
         linkedin: "#"
     },
@@ -465,6 +465,15 @@ if (document.querySelector('.form-step')) {
     ];
 
 function createTeamCard(member) {
+  // Treat missing fields and unfilled "#" placeholders as "no link provided"
+  const hasLink = (value) => !!value && value.trim() !== '' && value.trim() !== '#';
+
+  const linkButtons = [
+    hasLink(member.email) ? `<a href="${member.email}" class="team-contact-btn" aria-label="Email ${member.name}"><i class="fas fa-envelope"></i></a>` : '',
+    hasLink(member.instagram) ? `<a href="${member.instagram}" class="team-contact-btn" target="_blank" rel="noopener" aria-label="${member.name} on Instagram"><i class="fab fa-instagram"></i></a>` : '',
+    hasLink(member.linkedin) ? `<a href="${member.linkedin}" class="team-contact-btn" target="_blank" rel="noopener" aria-label="${member.name} on LinkedIn"><i class="fab fa-linkedin-in"></i></a>` : ''
+  ].filter(Boolean).join('');
+
   return `
     <div class="team-card">
 
@@ -486,21 +495,7 @@ function createTeamCard(member) {
           ${member.bio}
         </p>
 
-        <div class="team-member-links">
-
-          <a href="${member.email}" class="team-contact-btn">
-            <i class="fas fa-envelope"></i>
-          </a>
-
-          <a href="${member.instagram}" class="team-contact-btn">
-            <i class="fab fa-instagram"></i>
-          </a>
-
-          <a href="${member.linkedin}" class="team-contact-btn">
-            <i class="fab fa-linkedin-in"></i>
-          </a>
-
-        </div>
+        ${linkButtons ? `<div class="team-member-links">${linkButtons}</div>` : ''}
 
       </div>
 

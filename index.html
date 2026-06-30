@@ -454,15 +454,12 @@
         </nav>
 
         <div class="nav-right">
-          <li class="navbar-item"><a href="login.html" class="login" id="nav-login">Login</a></li>
-          <li class="navbar-item"><a href="signup.html" class="signup" id="nav-signup">Sign Up</a></li>
+          <div class="navbar-item"><a href="login.html" class="login" id="nav-login">Login</a></div>
+          <div class="navbar-item"><a href="signup.html" class="signup" id="nav-signup">Sign Up</a></div>
         </div>
       </div>
     </div>
   </nav>
-    </div>
-  </div>
-</nav>
   
 
   <main>
@@ -482,7 +479,54 @@
         </div>
       </header>
       <!-- Hero image -->
-      <section class="image-reveal" id="revealSection"> <div class="hero-media"> <iframe id="heroImage" loading="eager" class="hero-image" src="https://www.youtube-nocookie.com/embed/9yu2IB9Vo5Y?si=75noNKITv_U2Ft0k&amp;controls=0&amp;start=10&amp;end=243&amp;autoplay=1&amp;mute=1&amp;playsinline=1&amp;loop=1&amp;playlist=9yu2IB9Vo5Y&amp;modestbranding=1&amp;showinfo=0&amp;rel=0" title="NextStep Hero Video" frameborder="0" webkit-playsinline="1" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen> </iframe> </div> </section>
+      <section class="image-reveal" id="revealSection"> <div class="hero-media"> <iframe id="heroImage" loading="eager" class="hero-image" width="1280" height="720" src="https://www.youtube-nocookie.com/embed/9yu2IB9Vo5Y?si=75noNKITv_U2Ft0k&amp;controls=0&amp;start=10&amp;end=243&amp;autoplay=1&amp;mute=1&amp;playsinline=1&amp;loop=1&amp;playlist=9yu2IB9Vo5Y&amp;modestbranding=1&amp;showinfo=0&amp;rel=0&amp;enablejsapi=1&amp;origin=https://nextstep-civic.org" title="NextStep Hero Video" frameborder="0" webkit-playsinline="1" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen> </iframe> </div> </section>
+
+      <!-- Hero video autoplay fallback: mobile browsers often block the
+           URL-param autoplay attempt on first load, even when muted. This
+           uses the YouTube IFrame Player API to retry play() programmatically,
+           and as a last resort, on the visitor's first scroll or tap. -->
+      <script>
+        (function() {
+          var player = null;
+          var fallbackArmed = false;
+
+          function tryPlay() {
+            if (player && typeof player.playVideo === 'function') {
+              player.playVideo();
+            }
+          }
+
+          var apiTag = document.createElement('script');
+          apiTag.src = 'https://www.youtube.com/iframe_api';
+          document.head.appendChild(apiTag);
+
+          window.onYouTubeIframeAPIReady = function() {
+            player = new YT.Player('heroImage', {
+              events: {
+                onReady: function(e) {
+                  e.target.mute();
+                  e.target.playVideo();
+                },
+                onStateChange: function(e) {
+                  // PAUSED (2) or UNSTARTED (-1) right after load usually means
+                  // the mobile browser blocked the initial autoplay attempt.
+                  if (e.data === YT.PlayerState.PAUSED || e.data === YT.PlayerState.UNSTARTED) {
+                    tryPlay();
+                  }
+                }
+              }
+            });
+          };
+
+          function fallbackPlayOnce() {
+            if (fallbackArmed) return;
+            fallbackArmed = true;
+            tryPlay();
+          }
+          window.addEventListener('touchstart', fallbackPlayOnce, { passive: true, once: true });
+          window.addEventListener('scroll', fallbackPlayOnce, { passive: true, once: true });
+        })();
+      </script>
 
 
     </section>
@@ -729,7 +773,7 @@
           <p style="opacity: 0.5; font-size: 0.95rem; margin-bottom: 1rem;">Subscribe to our newsletter for the latest
             civic events and opportunities.</p>
          <form class="newsletter-form" method="POST" action="https://app.kit.com/forms/9372116/subscriptions">
-  <input type="email" name="email_address" class="newsletter-input" placeholder="Your email" required>
+  <input type="email" name="email_address" class="newsletter-input" placeholder="Your email" aria-label="Email address" required>
   <button type="submit" class="newsletter-button">Join</button>
 </form>
         </div>

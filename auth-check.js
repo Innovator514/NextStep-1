@@ -197,6 +197,155 @@ function createLoginOverlay() {
   document.body.style.overflow = 'hidden';
 }
 
+// Create logout confirmation overlay (replaces native confirm() popup)
+// Returns a Promise<boolean> that resolves true if the user confirms logout.
+function createLogoutConfirmOverlay() {
+  return new Promise((resolve) => {
+    const overlay = document.createElement('div');
+    overlay.id = 'logout-confirm-overlay';
+    overlay.setAttribute('role', 'dialog');
+    overlay.setAttribute('aria-modal', 'true');
+    overlay.setAttribute('aria-labelledby', 'logout-confirm-title');
+    overlay.innerHTML = `
+      <style>
+        #logout-confirm-overlay {
+          position: fixed;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background: rgba(0, 0, 0, 0.8);
+          backdrop-filter: blur(10px);
+          z-index: 9999;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          animation: fadeIn 0.3s ease;
+        }
+
+        .logout-confirm-card {
+          background: white;
+          border-radius: 20px;
+          padding: 45px 50px;
+          max-width: 420px;
+          text-align: center;
+          box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+          animation: slideUp 0.4s ease;
+          font-family: 'Open Sans', sans-serif;
+        }
+
+        .logout-confirm-icon {
+          font-size: 60px;
+          margin-bottom: 15px;
+        }
+
+        .logout-confirm-title {
+          font-size: 28px;
+          font-weight: 800;
+          color: rgb(1, 9, 67);
+          margin-bottom: 12px;
+        }
+
+        .logout-confirm-message {
+          font-size: 16px;
+          color: #64748b;
+          margin-bottom: 28px;
+          line-height: 1.6;
+        }
+
+        .logout-confirm-buttons {
+          display: flex;
+          gap: 15px;
+          justify-content: center;
+          flex-wrap: wrap;
+        }
+
+        .logout-confirm-btn {
+          padding: 14px 32px;
+          border-radius: 12px;
+          font-size: 16px;
+          font-weight: 700;
+          cursor: pointer;
+          transition: all 0.3s;
+          border: none;
+          font-family: 'Open Sans', sans-serif;
+        }
+
+        .btn-confirm-logout {
+          background: linear-gradient(135deg, #2563eb, #3b82f6);
+          color: white;
+          box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
+        }
+
+        .btn-confirm-logout:hover {
+          transform: translateY(-3px);
+          box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4);
+        }
+
+        .btn-cancel-logout {
+          background: #f1f5f9;
+          color: #64748b;
+        }
+
+        .btn-cancel-logout:hover {
+          background: #e2e8f0;
+        }
+
+        @media (max-width: 768px) {
+          .logout-confirm-card {
+            padding: 40px 30px;
+            margin: 20px;
+          }
+
+          .logout-confirm-buttons {
+            flex-direction: column;
+          }
+
+          .logout-confirm-btn {
+            width: 100%;
+          }
+        }
+      </style>
+
+      <div class="logout-confirm-card">
+        <div class="logout-confirm-icon">👋</div>
+        <h2 class="logout-confirm-title" id="logout-confirm-title">Log Out?</h2>
+        <p class="logout-confirm-message">
+          You'll need to sign back in to access your profile, badges, and saved events.
+        </p>
+        <div class="logout-confirm-buttons">
+          <button class="logout-confirm-btn btn-confirm-logout" id="confirm-logout-btn">Log Out</button>
+          <button class="logout-confirm-btn btn-cancel-logout" id="cancel-logout-btn">Cancel</button>
+        </div>
+      </div>
+    `;
+
+    document.body.appendChild(overlay);
+    document.body.style.overflow = 'hidden';
+
+    function finish(result) {
+      overlay.remove();
+      document.body.style.overflow = '';
+      document.removeEventListener('keydown', onKeydown);
+      resolve(result);
+    }
+
+    function onKeydown(e) {
+      if (e.key === 'Escape') finish(false);
+    }
+
+    document.getElementById('confirm-logout-btn').addEventListener('click', () => finish(true));
+    document.getElementById('cancel-logout-btn').addEventListener('click', () => finish(false));
+    overlay.addEventListener('click', (e) => {
+      if (e.target === overlay) finish(false);
+    });
+    document.addEventListener('keydown', onKeydown);
+
+    // Focus the primary action for keyboard users
+    document.getElementById('confirm-logout-btn').focus();
+  });
+}
+
 // Check authentication and update navigation
 function checkAuth() {
   onAuthStateChanged(auth, (user) => {
@@ -360,23 +509,24 @@ window.logout = async function(event) {
   if (event) {
     event.preventDefault();
   }
-  
-  if (confirm('Are you sure you want to logout?')) {
+
+  const confirmed = await createLogoutConfirmOverlay();
+  if (!confirmed) return;
+
+  try {
+    await signOut(auth);
+
+    // Clear all saved data
     try {
-      await signOut(auth);
-      
-      // Clear all saved data
-      try {
-        localStorage.clear();
-      } catch (e) {
-        console.error('Error clearing data:', e);
-      }
-      
-      window.location.href = 'index.html';
-    } catch (error) {
-      console.error('Error signing out:', error);
-      alert('Error signing out. Please try again.');
+      localStorage.clear();
+    } catch (e) {
+      console.error('Error clearing data:', e);
     }
+
+    window.location.href = 'index.html';
+  } catch (error) {
+    console.error('Error signing out:', error);
+    alert('Error signing out. Please try again.');
   }
 };
 
