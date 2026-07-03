@@ -629,25 +629,33 @@
         <!-- Stats Grid — populated dynamically from Firestore -->
         <div class="impact-details" id="impactDetails">
           <div class="impact-item">
-            <div class="impact-number" data-count="1247">0</div>
+            <div class="impact-number" data-count="40">0</div>
             <div class="impact-label">Community Members</div>
           </div>
           <div class="impact-item">
-            <div class="impact-number" data-count="156">0</div>
+            <div class="impact-number" data-count="0">0</div>
             <div class="impact-label">Events Hosted</div>
           </div>
           <div class="impact-item">
-            <div class="impact-number" data-count="2843">0</div>
+            <div class="impact-number" data-count="1">0</div>
             <div class="impact-label">Volunteer Hours</div>
           </div>
           <div class="impact-item">
-            <div class="impact-number" data-count="89">0</div>
+            <div class="impact-number" data-count="3">0</div>
             <div class="impact-label">Badges Earned</div>
           </div>
         </div>
       </div>
     </section>
-
+<!-- Call to action (original)-->
+    <section class="footer-cta" data-aos="fade-up">
+      <p class="cta-text">
+        Ready to get involved?
+      </p>
+      <a href="map.html" class="cta">
+        Let's Go
+      </a>
+    </section>
     <!-- Testimonials Section -->
     <section class="testimonials-section" data-aos="fade-up">
       <div class="point-content">
@@ -655,31 +663,31 @@
         <p style="text-align:center; color:var(--text-secondary); max-width:600px; margin:0 auto 0.5rem;">Real stories from people making a difference in Boca Raton.</p>
         <div class="testimonial-grid">
           <div class="testimonial-card">
-            <div class="quote">“NextStep made it so easy to find volunteer opportunities that actually fit my schedule. I've met incredible people and made a real difference in my neighborhood.”</div>
+            <div class="quote">“I never knew how much was happening in our community until I joined NextStep. Now, with this amazing group of young, inspiring individuals, I’m able to help others while learning so much more about my community.”</div>
             <div class="author">
-              <div class="avatar">JD</div>
+              <div class="avatar">IP</div>
               <div>
-                <div class="name">Jessica Davis</div>
+                <div class="name">Itzel Pualino</div>
                 <div class="role">Volunteer</div>
               </div>
             </div>
           </div>
           <div class="testimonial-card">
-            <div class="quote">“I never knew how much was happening in my own city until I started using NextStep. The map is incredible — I've attended events I would have missed otherwise.”</div>
+            <div class="quote">“NextStep has made me realize how important it is to participate in my community by seeing real results. I am so grateful for the opportunities it has created to make a positive impact.</div>
             <div class="author">
-              <div class="avatar">MR</div>
+              <div class="avatar">JU</div>
               <div>
-                <div class="name">Marcus Reyes</div>
+                <div class="name">Jolie Urrutia</div>
                 <div class="role">Community Advocate</div>
               </div>
             </div>
           </div>
           <div class="testimonial-card">
-            <div class="quote">“The badge system kept me motivated to stay engaged. Tracking my progress and seeing my name on The Podium gave me a real sense of pride in my community.”</div>
+            <div class="quote">"Volunteering is something I have always wanted to do to give back to my community, but it can be hard to find opportunities. NextStep helped me find places nearby where I could get involved, especially through the map feature, which shows how far away each opportunity is."</div>
             <div class="author">
-              <div class="avatar">SL</div>
+              <div class="avatar">SB</div>
               <div>
-                <div class="name">Sophia Liu</div>
+                <div class="name">Sophie Bollella</div>
                 <div class="role">Student Leader</div>
               </div>
             </div>
@@ -708,23 +716,18 @@
     <!-- Community Gallery Section -->
     <section class="gallery-section" data-aos="fade-up">
       <div class="point-content">
-        <h2 style="text-align:center; font-size:2.8rem; font-weight:800; margin-bottom:0.5rem;">Community Gallery</h2>
-        <p style="text-align:center; color:var(--text-secondary); max-width:600px; margin:0 auto 0.5rem;">Moments that define our community.</p>
+        <h2 style="text-align:center; font-size:2.8rem; font-weight:800; margin-bottom:0.5rem;">NextStep in Action</h2>
+<p style="text-align:center; color:var(--text-secondary); max-width:600px; margin:0 auto 0.5rem;">Photos and moments from our events, team, and community work.</p>
         <div class="gallery-grid" id="galleryGrid">
           <!-- Populated dynamically from Firestore; falls back to defaults if empty -->
-        </div>
+       <div style="text-align:center; margin-top:2rem;">
+  <a href="past-events.html" class="cta" style="background: linear-gradient(135deg, #2563eb, #3b82f6); border-radius:50px; padding:0.8rem 2.5rem;">View Past Events →</a>
+</div>
+ </div>
       </div>
     </section>
 
-    <!-- Call to action (original)-->
-    <section class="footer-cta" data-aos="fade-up">
-      <p class="cta-text">
-        Ready to get involved?
-      </p>
-      <a href="map.html" class="cta">
-        Let's Go
-      </a>
-    </section>
+    
 
   </main>
 
@@ -1068,18 +1071,45 @@
           const db = getFirestore(app);
 
           const snap = await getDocs(collection(db, 'stats'));
-          const items = [];
-          snap.forEach(d => items.push({ id: d.id, ...d.data() }));
+const items = [];
+snap.forEach(d => items.push({ id: d.id, ...d.data() }));
 
-          if (!items.length) return; // keep hardcoded fallback
+const eventsSnap = await getDocs(collection(db, 'events'));
+let activeEventCount = 0;
 
-          container.innerHTML = items.map(item => `
-            <div class="impact-item">
-              <div class="impact-number" data-count="${item.number || 0}" data-suffix="${item.suffix || ''}">0</div>
-              <div class="impact-label">${item.label || ''}</div>
-            </div>
-          `).join('');
+eventsSnap.forEach(d => {
+  const event = d.data();
+  if (event.archived !== true) {
+    activeEventCount++;
+  }
+});
 
+if (!items.length) return; // keep hardcoded fallback
+
+const updatedItems = items.map(item => {
+  const label = (item.label || '').toLowerCase();
+
+  if (
+    label.includes('opportunities listed') ||
+    label.includes('events listed') ||
+    label.includes('active events')
+  ) {
+    return {
+      ...item,
+      number: activeEventCount,
+      suffix: ''
+    };
+  }
+
+  return item;
+});
+
+container.innerHTML = updatedItems.map(item => `
+  <div class="impact-item">
+    <div class="impact-number" data-count="${item.number || 0}" data-suffix="${item.suffix || ''}">0</div>
+    <div class="impact-label">${item.label || ''}</div>
+  </div>
+`).join('');
           // Re-run counter animation on the freshly injected elements
           runCounters(container.querySelectorAll('.impact-number[data-count]'));
 

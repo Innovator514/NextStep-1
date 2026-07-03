@@ -1353,14 +1353,16 @@
           <!-- Error/Success messages -->
           <div id="stats-error" class="mgmt-error"></div>
           <div id="stats-success" class="mgmt-success"></div>
-
+<p style="font-size:0.8rem; color:#64748b; margin-bottom:0.75rem;">
+  Note: “Opportunities Listed” is automatically counted from active, non-archived events on the website. The number entered here is only a fallback.
+</p>
           <!-- Quick presets -->
-          <div class="preset-btns">
-            <button class="preset-btn" onclick="addStatPreset('Community Members', 1247)">+ Members</button>
-            <button class="preset-btn" onclick="addStatPreset('Events Hosted', 156)">+ Events</button>
-            <button class="preset-btn" onclick="addStatPreset('Volunteer Hours', 2843)">+ Hours</button>
-            <button class="preset-btn" onclick="addStatPreset('Badges Earned', 89)">+ Badges</button>
-          </div>
+<div class="preset-btns">
+  <button class="preset-btn" onclick="addStatPreset('Community Members', 40, '+')">+ Members</button>
+  <button class="preset-btn" onclick="addStatPreset('Opportunities Listed', 0)">+ Opportunities</button>
+  <button class="preset-btn" onclick="addStatPreset('Events Hosted', 1)">+ Events Hosted</button>
+  <button class="preset-btn" onclick="addStatPreset('Schools Reached', 3)">+ Schools</button>
+</div>
 
           <div id="stats-list" class="mgmt-item-list">
             <div class="list-loading"><i class="fas fa-spinner fa-spin"></i> Loading stats...</div>
@@ -1611,13 +1613,22 @@
               <input type="hidden" id="wave-cover-image-input" value="">
             </div>
             <div>
-              <label class="form-label" for="wave-excerpt-input">Card Excerpt</label>
-              <textarea id="wave-excerpt-input" required class="form-input" placeholder="Short summary shown on the Wave card."></textarea>
-            </div>
-            <div>
-              <label class="form-label" for="wave-body-input">Post Body</label>
-              <textarea id="wave-body-input" required class="form-input" placeholder="Write paragraphs here. HTML is supported for links, bold text, and lists."></textarea>
-            </div>
+  <label class="form-label" for="wave-excerpt-input">Card Excerpt</label>
+  <textarea id="wave-excerpt-input" required class="form-input" placeholder="Short summary shown on the Wave card."></textarea>
+</div>
+
+<div>
+  <label class="form-label" for="wave-heading-input">Main Heading</label>
+  <input type="text" id="wave-heading-input" class="form-input" placeholder="Example: Why Local Action Matters">
+  <p style="font-size:0.78rem; color:#64748b; margin-top:0.35rem;">
+    Optional. This will appear as a heading at the top of the post.
+  </p>
+</div>
+
+<div>
+  <label class="form-label" for="wave-body-input">Post Body</label>
+  <textarea id="wave-body-input" required class="form-input" placeholder="Write the main paragraphs here. Press Enter twice to create a new paragraph."></textarea>
+</div>
             <button type="submit" class="btn btn-primary" style="width:100%; background:linear-gradient(135deg, #2563eb, #06b6d4);">
               <i class="fas fa-paper-plane"></i> Publish Wave Post
             </button>
@@ -2217,6 +2228,7 @@ window.editWavePost = async function(id) {
     waveCoverClear();
     if (data.imageUrl) waveCoverSetImage(data.imageUrl);
     document.getElementById('wave-excerpt-input').value = data.excerpt || '';
+    document.getElementById('wave-heading-input').value = data.heading || '';
     
     // Convert paragraphs back into raw plain text for the textarea
     let rawBody = data.body || '';
@@ -2269,11 +2281,16 @@ window.publishWavePost = async function(event) {
   const imageUrl = document.getElementById('wave-cover-image-input').value.trim();
   const gradient = WAVE_CATEGORY_GRADIENTS[category] || WAVE_CATEGORY_GRADIENTS.civic;
   const excerpt = document.getElementById('wave-excerpt-input').value.trim();
-  const rawBody = document.getElementById('wave-body-input').value.trim();
-  
-  const body = rawBody.includes('<')
-    ? rawBody
-    : rawBody.split(/\n{2,}/).map(part => `<p>${escapeHTML(part).replace(/\n/g, '<br>')}</p>`).join('');
+const heading = document.getElementById('wave-heading-input').value.trim();
+const rawBody = document.getElementById('wave-body-input').value.trim();
+
+let body = rawBody.includes('<')
+  ? rawBody
+  : rawBody.split(/\n{2,}/).map(part => `<p>${escapeHTML(part).replace(/\n/g, '<br>')}</p>`).join('');
+
+if (heading) {
+  body = `<h2>${escapeHTML(heading)}</h2>` + body;
+}
 
   if (!title || !date || !excerpt || !rawBody) {
     alert('Please fill in the title, date, excerpt, and body.');
@@ -2295,6 +2312,7 @@ window.publishWavePost = async function(event) {
       imageUrl,
       gradient,
       excerpt,
+      heading,
       body,
       isPublished: true,
       updatedAt: serverTimestamp()
@@ -4660,17 +4678,22 @@ window.addStat = async function() {
   }
 };
 
-window.addStatPreset = async function(label, number) {
+window.addStatPreset = async function(label, number, suffix = '') {
   hideMgmtError('stats-error');
   try {
-    await addDoc(collection(db, 'stats'), { label, number, order: statsItems.length, createdAt: serverTimestamp() });
+    await addDoc(collection(db, 'stats'), {
+      label,
+      number,
+      suffix,
+      order: statsItems.length,
+      createdAt: serverTimestamp()
+    });
     await loadStats();
     showMgmtSuccess('stats-success', `"${label}" added!`);
   } catch (e) {
     showMgmtError('stats-error', `Failed: ${e.message}`);
   }
 };
-
 window.deleteStat = async function(id) {
   if (!confirm('Delete this stat?')) return;
   try {
