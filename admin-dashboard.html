@@ -159,6 +159,47 @@
     .wave-post-actions { display:flex; align-items:center; gap:0.5rem; flex-shrink:0; }
     @media (max-width: 650px) { .wave-form-row { grid-template-columns: 1fr; } }
 
+    /* Event toggle switches (Virtual / Volunteer / Recurring) */
+    .ev-toggle-row { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+    .ev-toggle {
+      display: flex; align-items: center; gap: 0.6rem; flex: 1 1 160px; min-width: 0; max-width: 100%;
+      box-sizing: border-box;
+      padding: 0.6rem 0.875rem; border: 2px solid #e2e8f0; border-radius: 10px;
+      cursor: pointer; user-select: none; transition: border-color 0.2s, background 0.2s;
+    }
+    .ev-toggle:hover { border-color: #c7d2fe; }
+    .ev-toggle.is-on { border-color: #2563eb; background: #eff6ff; }
+    .ev-toggle input[type="checkbox"] { display: none; }
+    .ev-toggle-track {
+      position: relative; width: 38px; height: 22px; border-radius: 999px; background: #cbd5e1;
+      flex-shrink: 0; transition: background 0.2s;
+    }
+    .ev-toggle-track::after {
+      content: ""; position: absolute; top: 2px; left: 2px; width: 18px; height: 18px;
+      border-radius: 50%; background: #fff; box-shadow: 0 1px 2px rgba(0,0,0,0.25); transition: transform 0.2s;
+    }
+    .ev-toggle.is-on .ev-toggle-track { background: #2563eb; }
+    .ev-toggle.is-on .ev-toggle-track::after { transform: translateX(16px); }
+    .ev-toggle-label {
+      font-weight: 700; font-size: 0.85rem; color: rgb(1,9,67);
+      display: flex; align-items: center; gap: 0.4rem; min-width: 0;
+      overflow-wrap: anywhere;
+    }
+    [data-theme="dark"] .ev-toggle { border-color: #1e3a5f; }
+    [data-theme="dark"] .ev-toggle.is-on { background: #0a1628; border-color: #3b82f6; }
+    [data-theme="dark"] .ev-toggle-label { color: #f1f5f9; }
+    @media (max-width: 600px) {
+      .ev-toggle-row { flex-direction: column; }
+      .ev-toggle { flex: 1 1 auto; width: 100%; }
+    }
+
+    .ev-recurring-panel {
+      display: none; margin-top: 0.6rem; padding: 0.9rem; background: #f8fafc; border: 1px solid #e2e8f0;
+      border-radius: 12px; gap: 0.75rem;
+    }
+    .ev-recurring-panel.is-visible { display: grid; }
+    [data-theme="dark"] .ev-recurring-panel { background: #0a1628; border-color: #1e3a5f; }
+
     .expiry-group { width: 100%; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1rem; margin-bottom: 1rem; }
     .expiry-label { font-size: 0.8rem; font-weight: 700; color: rgb(1,9,67); display: flex; align-items: center; gap: 0.4rem; margin-bottom: 0.5rem; }
 
@@ -1027,9 +1068,53 @@
                   <option value="environmental">Environmental</option>
                   <option value="education">Education</option>
                   <option value="religious">Religious</option>
-                  <option value="volunteer">Volunteer</option>
                 </select>
               </div>
+            </div>
+
+            <div class="ev-toggle-row">
+              <label class="ev-toggle" id="ev-virtual-toggle" for="ev-is-virtual">
+                <input type="checkbox" id="ev-is-virtual">
+                <span class="ev-toggle-track"></span>
+                <span class="ev-toggle-label"><i class="fas fa-video"></i> Virtual Event</span>
+              </label>
+              <label class="ev-toggle" id="ev-volunteer-toggle" for="ev-is-volunteer">
+                <input type="checkbox" id="ev-is-volunteer">
+                <span class="ev-toggle-track"></span>
+                <span class="ev-toggle-label"><i class="fas fa-hand-holding-heart"></i> Volunteer Opportunity</span>
+              </label>
+              <label class="ev-toggle" id="ev-recurring-toggle" for="ev-is-recurring">
+                <input type="checkbox" id="ev-is-recurring">
+                <span class="ev-toggle-track"></span>
+                <span class="ev-toggle-label"><i class="fas fa-repeat"></i> Recurring Event</span>
+              </label>
+            </div>
+
+            <div class="ev-recurring-panel" id="ev-recurring-panel">
+              <div class="wave-form-row">
+                <div>
+                  <label class="form-label" for="ev-recurring-frequency">Repeats</label>
+                  <select id="ev-recurring-frequency" class="form-input" onchange="onRecurringFrequencyChange()">
+                    <option value="weekly">Weekly</option>
+                    <option value="biweekly">Every 2 weeks</option>
+                    <option value="monthly">Monthly</option>
+                    <option value="custom">Custom dates</option>
+                  </select>
+                </div>
+                <div id="ev-recurring-count-wrap">
+                  <label class="form-label" for="ev-recurring-count">Number of occurrences</label>
+                  <input type="number" id="ev-recurring-count" class="form-input" min="2" max="52" value="4">
+                </div>
+              </div>
+              <div id="ev-recurring-custom-wrap" style="display:none;">
+                <label class="form-label" for="ev-recurring-custom-dates">Additional dates (one per line, or comma-separated)</label>
+                <textarea id="ev-recurring-custom-dates" class="form-input" style="min-height:80px;" placeholder="Jul 5, 2026
+Jul 19, 2026
+Aug 2, 2026"></textarea>
+              </div>
+              <p style="font-size:0.75rem; color:#64748b; margin:0;" id="ev-recurring-hint">
+                <i class="fas fa-circle-info"></i> Starting from the date below, this will publish separate event listings on that schedule. Each occurrence can be edited or deleted individually afterward.
+              </p>
             </div>
 
             <div class="wave-form-row">
@@ -2549,6 +2634,69 @@ window.filterMgmtEvents = function(term) {
   }).join('');
 };
 
+// Wire up the Virtual / Volunteer / Recurring toggle switches
+function setupEventToggle(toggleId, checkboxId, onChange) {
+  const wrap = document.getElementById(toggleId);
+  const box  = document.getElementById(checkboxId);
+  if (!wrap || !box) return;
+  const sync = () => {
+    wrap.classList.toggle('is-on', box.checked);
+    if (onChange) onChange(box.checked);
+  };
+  wrap.addEventListener('click', (e) => {
+    // Let the click land on the wrapping label, but avoid double-toggling
+    // when the native checkbox itself receives the click.
+    if (e.target !== box) {
+      e.preventDefault();
+      box.checked = !box.checked;
+    }
+    sync();
+  });
+  sync();
+}
+
+setupEventToggle('ev-virtual-toggle', 'ev-is-virtual');
+setupEventToggle('ev-volunteer-toggle', 'ev-is-volunteer');
+setupEventToggle('ev-recurring-toggle', 'ev-is-recurring', (isOn) => {
+  const panel = document.getElementById('ev-recurring-panel');
+  if (panel) panel.classList.toggle('is-visible', isOn);
+});
+
+// Swap between "number of occurrences" and "custom dates" depending on frequency
+function onRecurringFrequencyChange() {
+  const isCustom = document.getElementById('ev-recurring-frequency').value === 'custom';
+  document.getElementById('ev-recurring-count-wrap').style.display  = isCustom ? 'none' : '';
+  document.getElementById('ev-recurring-custom-wrap').style.display = isCustom ? '' : 'none';
+}
+
+// Compute the list of ISO-ish date strings for a recurring event series.
+// Accepts the same date formats parseEventDate() in events.js understands
+// (e.g. "Jun 28, 2026" or "2026-06-28") and steps forward by the chosen frequency.
+// The base/start date is always included as the first entry.
+function computeRecurringDates(startDateStr, frequency, count) {
+  if (frequency === 'custom') {
+    const raw = document.getElementById('ev-recurring-custom-dates').value || '';
+    const extra = raw.split(/[\n,]/).map(s => s.trim()).filter(Boolean);
+    return [startDateStr, ...extra];
+  }
+
+  const base = new Date(startDateStr);
+  if (isNaN(base.getTime())) return [startDateStr]; // fall back to a single event if unparseable
+
+  const stepDays = frequency === 'weekly' ? 7 : frequency === 'biweekly' ? 14 : null;
+  const dates = [];
+  for (let i = 0; i < count; i++) {
+    const d = new Date(base.getTime());
+    if (stepDays) {
+      d.setDate(d.getDate() + stepDays * i);
+    } else {
+      d.setMonth(d.getMonth() + i); // monthly
+    }
+    dates.push(d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }));
+  }
+  return dates;
+}
+
 window.startEditEvent = function(id) {
   const ev = allMgmtEvents.find(e => e.id === id);
   if (!ev) return;
@@ -2574,6 +2722,20 @@ window.startEditEvent = function(id) {
   document.getElementById('ev-contact').value              = ev.contact || '';
   document.getElementById('ev-tags').value                 = Array.isArray(ev.tags) ? ev.tags.join(', ') : (ev.tags || '');
 
+  document.getElementById('ev-is-virtual').checked   = !!ev.isVirtual;
+  document.getElementById('ev-is-volunteer').checked = !!ev.isVolunteer;
+  document.getElementById('ev-virtual-toggle').classList.toggle('is-on', !!ev.isVirtual);
+  document.getElementById('ev-volunteer-toggle').classList.toggle('is-on', !!ev.isVolunteer);
+
+  // Recurring stays available during edit — checking it now adds new
+  // occurrences going forward from this event's date; it doesn't touch
+  // any occurrences that already exist.
+  document.getElementById('ev-is-recurring').checked = false;
+  document.getElementById('ev-recurring-toggle').classList.remove('is-on');
+  document.getElementById('ev-recurring-panel').classList.remove('is-visible');
+  document.getElementById('ev-recurring-hint').innerHTML =
+    '<i class="fas fa-circle-info"></i> This adds new occurrences starting from this event\'s date, on the schedule below. It won\'t change any occurrences that already exist.';
+
   document.getElementById('event-form-mode-label').textContent = 'Edit Event';
   document.getElementById('event-submit-label').textContent    = 'Save Changes';
   document.getElementById('event-cancel-edit-btn').style.display = 'inline-flex';
@@ -2590,6 +2752,18 @@ window.resetEventForm = function() {
   document.getElementById('event-form-mode-label').textContent   = 'Create New Event';
   document.getElementById('event-submit-label').textContent      = 'Publish Event';
   document.getElementById('event-cancel-edit-btn').style.display = 'none';
+
+  ['ev-virtual-toggle', 'ev-volunteer-toggle', 'ev-recurring-toggle'].forEach(id => {
+    document.getElementById(id).classList.remove('is-on');
+    document.getElementById(id).style.display = '';
+  });
+  document.getElementById('ev-recurring-panel').classList.remove('is-visible');
+  document.getElementById('ev-recurring-frequency').value = 'weekly';
+  document.getElementById('ev-recurring-custom-dates').value = '';
+  onRecurringFrequencyChange();
+  document.getElementById('ev-recurring-hint').innerHTML =
+    '<i class="fas fa-circle-info"></i> Starting from the date below, this will publish separate event listings on that schedule. Each occurrence can be edited or deleted individually afterward.';
+
   renderMgmtEvents(allMgmtEvents);
 };
 
@@ -2599,7 +2773,11 @@ window.submitEventForm = async function(e) {
   const _v = id => document.getElementById(id).value.trim();
   const _n = id => document.getElementById(id).value ? Number(document.getElementById(id).value) : null;
 
-  const payload = {
+  const isVirtual   = document.getElementById('ev-is-virtual').checked;
+  const isVolunteer = document.getElementById('ev-is-volunteer').checked;
+  const isRecurring = document.getElementById('ev-is-recurring').checked;
+
+  const basePayload = {
     title:            _v('ev-title'),
     category:         document.getElementById('ev-category').value,
     date:             _v('ev-date'),
@@ -2618,22 +2796,73 @@ window.submitEventForm = async function(e) {
     accessibility:    _v('ev-accessibility'),
     contact:          _v('ev-contact'),
     tags:             _v('ev-tags') ? _v('ev-tags').split(',').map(t => t.trim()).filter(Boolean) : [],
+    isVirtual:        isVirtual,
+    isVolunteer:      isVolunteer,
   };
 
-  // Strip out null/empty strings so Firestore stays clean
-  Object.keys(payload).forEach(k => {
-    if (payload[k] === null || payload[k] === '' || (Array.isArray(payload[k]) && payload[k].length === 0)) {
-      delete payload[k];
+  // Strip out null/empty strings so Firestore stays clean (booleans are kept even when false)
+  Object.keys(basePayload).forEach(k => {
+    const v = basePayload[k];
+    if (v === null || v === '' || (Array.isArray(v) && v.length === 0)) {
+      delete basePayload[k];
     }
   });
 
   try {
-    if (editingEventId) {
-      await updateDoc(doc(db, 'events', editingEventId), payload);
+    if (isRecurring) {
+      const frequency = document.getElementById('ev-recurring-frequency').value;
+      const count     = Math.max(2, Math.min(52, Number(document.getElementById('ev-recurring-count').value) || 4));
+      const dates     = computeRecurringDates(basePayload.date, frequency, count); // dates[0] === basePayload.date
+
+      if (editingEventId) {
+        // Update this event in place as the anchor of the series, then
+        // create only the *new* occurrences after it. Existing occurrences
+        // from a prior series (if any) are left untouched.
+        const existing = allMgmtEvents.find(e => e.id === editingEventId);
+        const recurringGroupId = existing?.recurringGroupId || ('rec_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2, 8));
+
+        await updateDoc(doc(db, 'events', editingEventId), {
+          ...basePayload,
+          recurring: true,
+          recurringGroupId,
+          recurringFrequency: frequency,
+          recurringIndex: existing?.recurringIndex ?? 0,
+        });
+
+        const newDates = dates.slice(1); // skip the anchor date — that's the event we just updated
+        for (let i = 0; i < newDates.length; i++) {
+          await addDoc(collection(db, 'events'), {
+            ...basePayload,
+            date: newDates[i],
+            createdAt: serverTimestamp(),
+            recurring: true,
+            recurringGroupId,
+            recurringFrequency: frequency,
+            recurringIndex: (existing?.recurringIndex ?? 0) + i + 1,
+          });
+        }
+        showToast(newDates.length ? `Event updated and ${newDates.length} new occurrence(s) added.` : 'Event updated successfully.');
+      } else {
+        const recurringGroupId = 'rec_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2, 8);
+        for (let i = 0; i < dates.length; i++) {
+          await addDoc(collection(db, 'events'), {
+            ...basePayload,
+            date: dates[i],
+            createdAt: serverTimestamp(),
+            recurring: true,
+            recurringGroupId,
+            recurringFrequency: frequency,
+            recurringIndex: i,
+          });
+        }
+        showToast(`Published ${dates.length} recurring events.`);
+      }
+    } else if (editingEventId) {
+      await updateDoc(doc(db, 'events', editingEventId), basePayload);
       showToast('Event updated successfully.');
     } else {
-      payload.createdAt = serverTimestamp();
-      await addDoc(collection(db, 'events'), payload);
+      basePayload.createdAt = serverTimestamp();
+      await addDoc(collection(db, 'events'), basePayload);
       showToast('Event published successfully.');
     }
     resetEventForm();

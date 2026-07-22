@@ -319,8 +319,14 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  track.addEventListener("mouseenter", stopAutoplay);
-  track.addEventListener("mouseleave", startAutoplay);
+  // Autoplay should only pause while the user is actively pressing/dragging
+  // the carousel — NOT just resting the cursor over it (that made autoplay
+  // look "broken" any time someone watched it, since hovering paused it).
+  // Pointer Events cover mouse, trackpad, and touch with one code path, and
+  // fire reliably on release even on touchscreens (unlike mouseenter/leave).
+  track.addEventListener("pointerdown", stopAutoplay);
+  window.addEventListener("pointerup", resetAutoplay);
+  window.addEventListener("pointercancel", resetAutoplay);
 
   scrollToIndex(true);
   updateDots();

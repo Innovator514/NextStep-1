@@ -410,7 +410,7 @@ img.hero-image {
   touch-action: pan-x;               /* lets iOS recognize horizontal swipe */
 }
 
-.scrollbar-jump{ 
+.jump{ 
    scroll-behavior: auto;
 }
 /* Hide scrollbar */
@@ -460,9 +460,20 @@ img.hero-image {
 .carousel-btn.prev { left: -20px; }
 .carousel-btn.next { right: -20px; }
 
+/* Below 1024px the section's side padding shrinks enough that a -20px
+   offset pushes the buttons flush against (or past) the viewport edge.
+   Pull them onto the carousel itself so they never touch the screen edge. */
+@media (max-width: 1024px) {
+  .carousel-btn.prev { left: 10px; }
+  .carousel-btn.next { right: 10px; }
+  .carousel-btn {
+    background: rgba(255,255,255,0.92);
+  }
+}
+
 @media (max-width: 480px) {
-  .carousel-btn.prev { left: 6px; }
-  .carousel-btn.next { right: 6px; }
+  .carousel-btn.prev { left: 8px; }
+  .carousel-btn.next { right: 8px; }
   .carousel-btn {
     min-width: 44px;
     min-height: 44px;

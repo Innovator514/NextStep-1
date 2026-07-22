@@ -170,7 +170,7 @@
 
     /* ── Upcoming events preview ── */
     .events-preview {
-      padding: 4rem 0;
+      padding: 4rem 1.5rem;
       background: var(--bg-primary);
     }
     .events-preview-grid {
@@ -188,7 +188,9 @@
       transition: transform 0.3s ease, box-shadow 0.3s ease;
       text-decoration: none;
       color: inherit;
-      display: block;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
     }
     .event-preview-card:hover {
       transform: translateY(-6px);
@@ -213,6 +215,9 @@
     }
     .event-preview-card .event-preview-body {
       padding: 1.25rem 1.5rem;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
     }
     .event-preview-card .event-preview-meta {
       font-size: 0.85rem;
@@ -225,6 +230,7 @@
     .event-preview-card .event-preview-meta i {
       color: #2563eb;
       width: 16px;
+      flex-shrink: 0;
     }
     .event-preview-card .event-preview-desc {
       font-size: 0.9rem;
@@ -232,15 +238,27 @@
       line-height: 1.5;
       display: -webkit-box;
       -webkit-box-orient: vertical;
+      -webkit-line-clamp: 3;
+      line-clamp: 3;
       overflow: hidden;
+      margin-top: 0.25rem;
     }
     .event-preview-card .event-preview-footer {
       padding: 0.75rem 1.5rem 1.25rem;
       border-top: 1px solid var(--border-color);
       display: flex;
-      justify-content: space-between;
+      justify-content: flex-end;
+      align-items: center;
       font-size: 0.85rem;
       color: var(--text-secondary);
+      margin-top: auto;
+    }
+    @media (max-width: 480px) {
+      .events-preview { padding: 3rem 1rem; }
+      .events-preview-grid { gap: 1.25rem; }
+      .event-preview-card .event-preview-header { padding: 1rem 1.25rem; }
+      .event-preview-card .event-preview-body { padding: 1rem 1.25rem; }
+      .event-preview-card .event-preview-footer { padding: 0.6rem 1.25rem 1rem; }
     }
 
     /* ── Stats in Your Impact ── */
@@ -280,10 +298,13 @@
 
     /* ── Testimonials ── */
     .testimonials-section {
-      padding: 5rem 0;
+      padding: 5rem 1.5rem;
       background: var(--bg-secondary);
       border-top: 1px solid var(--border-color);
       border-bottom: 1px solid var(--border-color);
+    }
+    @media (max-width: 480px) {
+      .testimonials-section { padding: 3rem 1rem; }
     }
     .testimonial-grid {
       display: grid;
@@ -306,6 +327,11 @@
       color: var(--text-primary);
       font-style: italic;
       margin-bottom: 1rem;
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 5;
+      line-clamp: 5;
+      overflow: hidden;
     }
     .testimonial-card .author {
       display: flex;
@@ -335,13 +361,37 @@
       .testimonial-grid { grid-template-columns: 1fr 1fr; }
     }
     @media (max-width: 480px) {
-      .testimonial-grid { grid-template-columns: 1fr; }
+      .testimonial-grid {
+        display: flex !important;
+        grid-template-columns: none !important;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        gap: 0.75rem;
+        margin: 2rem -1rem 0;
+        padding: 0 1rem 0.5rem;
+      }
+      .testimonial-grid::-webkit-scrollbar { display: none; }
+      .testimonial-card {
+        flex: 0 0 85%;
+        scroll-snap-align: center;
+        padding: 1.1rem;
+      }
+      .testimonial-card .quote {
+        font-size: 0.92rem;
+        -webkit-line-clamp: 6;
+        line-clamp: 6;
+      }
     }
 
     /* ── Community Gallery ── */
     .gallery-section {
-      padding: 5rem 0;
+      padding: 5rem 1.5rem;
       background: var(--bg-primary);
+    }
+    @media (max-width: 480px) {
+      .gallery-section { padding: 3rem 1rem; }
     }
     .gallery-grid {
       display: grid;
@@ -562,12 +612,9 @@
           <!-- Right side: Paragraph -->
           <div class="paragraph-side">
             <p class="nextstep-paragraph"> 
-              Discover civic events, workshops, and volunteer opportunities happening in your community. 
-              Whether you're passionate about local politics, environmental causes, innovative solutions, 
-              youth programs, or educational initiatives, NextStep connects you with meaningful ways to 
-              get involved. Filter by your interests, distance from home, and upcoming dates to find 
-              opportunities that truly fit your schedule and values. Every small action creates ripples 
-              of change in your community.
+              Discover civic events, workshops, and volunteer opportunities near you.
+              Filter by interest, distance, and date to find the right fit — every
+              small action creates ripples of change.
             </p>
           </div>
         </div>
@@ -663,7 +710,7 @@
         <p style="text-align:center; color:var(--text-secondary); max-width:600px; margin:0 auto 0.5rem;">Real stories from people making a difference in Boca Raton.</p>
         <div class="testimonial-grid">
           <div class="testimonial-card">
-            <div class="quote">“I never knew how much was happening in our community until I joined NextStep. Now, with this amazing group of young, inspiring individuals, I’m able to help others while learning so much more about my community.”</div>
+            <div class="quote">"I never knew how much was happening in our community until I joined NextStep. It's incredible to help others while learning from such an inspiring group."</div>
             <div class="author">
               <div class="avatar">IP</div>
               <div>
@@ -673,7 +720,7 @@
             </div>
           </div>
           <div class="testimonial-card">
-            <div class="quote">“NextStep has made me realize how important it is to participate in my community by seeing real results. I am so grateful for the opportunities it has created to make a positive impact.</div>
+            <div class="quote">"NextStep helped me see the real impact of getting involved. I'm grateful for the opportunities it's created to make a difference."</div>
             <div class="author">
               <div class="avatar">JU</div>
               <div>
@@ -683,7 +730,7 @@
             </div>
           </div>
           <div class="testimonial-card">
-            <div class="quote">"Volunteering is something I have always wanted to do to give back to my community, but it can be hard to find opportunities. NextStep helped me find places nearby where I could get involved, especially through the map feature, which shows how far away each opportunity is."</div>
+            <div class="quote">"I've always wanted to volunteer, but finding opportunities was hard. NextStep's map feature made it easy to find things nearby and get involved."</div>
             <div class="author">
               <div class="avatar">SB</div>
               <div>
@@ -903,7 +950,6 @@
                   <div class="event-preview-desc">${desc}</div>
                 </div>
                 <div class="event-preview-footer">
-                  <span><i class="fas fa-user"></i> ${ev.registered || 0} registered</span>
                   <span><i class="fas fa-arrow-right"></i> Details</span>
                 </div>
               </a>

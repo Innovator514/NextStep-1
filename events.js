@@ -60,11 +60,15 @@ function renderEvents(filter = 'all') {
 
     // Quick filters
     if (activeQuickFilters.has('volunteer')) {
-        filtered = filtered.filter(e => e.volunteerHours && Number(e.volunteerHours) > 0);
+        filtered = filtered.filter(e => {
+            if (typeof e.isVolunteer === 'boolean') return e.isVolunteer;
+            return e.volunteerHours && Number(e.volunteerHours) > 0; // legacy fallback
+        });
     }
     if (activeQuickFilters.has('virtual')) {
         filtered = filtered.filter(e => {
-            const loc = (e.location || '').toLowerCase();
+            if (typeof e.isVirtual === 'boolean') return e.isVirtual;
+            const loc = (e.location || '').toLowerCase(); // legacy fallback
             return loc.includes('virtual') || loc.includes('online') || loc.includes('zoom') || loc.includes('webinar');
         });
     }
@@ -95,6 +99,10 @@ function renderEvents(filter = 'all') {
         <div class="event-card" data-category="${event.category}" style="cursor: pointer;" onclick="openEventPopup('${event.id}')">
             <div class="event-header ${event.category}">
                 <div class="event-category">${event.category}</div>
+                ${event.isVirtual || event.isVolunteer ? `<div class="event-badges">
+                    ${event.isVirtual ? `<span class="event-badge event-badge-virtual"><i class="fas fa-video"></i> Virtual</span>` : ''}
+                    ${event.isVolunteer ? `<span class="event-badge event-badge-volunteer"><i class="fas fa-hand-holding-heart"></i> Volunteer</span>` : ''}
+                </div>` : ''}
                 <div class="event-title">${event.title}</div>
                 <div class="event-date">${event.date}</div>
             </div>
@@ -112,21 +120,6 @@ function renderEvents(filter = 'all') {
                 <button 
                     class="view-details-btn"
                     onclick="event.stopPropagation(); openEventPopup('${event.id}')"
-                    style="
-                        margin-top: 1rem;
-                        padding: 0.75rem 1.5rem;
-                        background: linear-gradient(135deg, #2563eb, #3b82f6);
-                        color: white;
-                        border: none;
-                        border-radius: 10px;
-                        font-weight: 600;
-                        cursor: pointer;
-                        width: 100%;
-                        transition: all 0.3s ease;
-                        font-size: 0.95rem;
-                    "
-                    onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 20px rgba(37, 99, 235, 0.4)'"
-                    onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'"
                 >
                     View More Details
                 </button>
@@ -198,8 +191,26 @@ async function loadFirestoreEvents() {
         console.error('Error loading Firestore events:', err);
     }
 
-    // Always render after attempting to load
-    renderEvents(currentFilter);
+    // Always render after attempting to load — refresh whichever view is active
+    if (currentView === 'calendar') {
+        renderCalendarView();
+    } else {
+        renderEvents(currentFilter);
+    }
+
+    // If we arrived via a link like events.html#event-abc123 (e.g. from the
+    // homepage "What's Happening" preview cards), open that event's popup
+    // now that eventsData is fully loaded.
+    openEventFromHash();
+}
+
+function openEventFromHash() {
+    const match = window.location.hash.match(/^#event-(.+)$/);
+    if (!match) return;
+    const eventId = decodeURIComponent(match[1]);
+    if (window.eventsData && window.eventsData.some(e => e.id === eventId)) {
+        window.openEventPopup(eventId);
+    }
 }
 
 // Initial load — fetch Firestore events then render
@@ -269,12 +280,15 @@ function renderCalendarView() {
         if (currentFilter !== 'all' && ev.category !== currentFilter) return false;
         if (!ev.date) return false;
         const d = parseEventDate(ev.date);
+        if (!d) return false; // skip events with an unparseable date instead of crashing
         return d.getFullYear() === year && d.getMonth() === month;
     });
 
     const byDay = {};
     visibleEvents.forEach(ev => {
-        const day = parseEventDate(ev.date).getDate();
+        const parsed = parseEventDate(ev.date);
+        if (!parsed) return;
+        const day = parsed.getDate();
         (byDay[day] = byDay[day] || []).push(ev);
     });
 
@@ -333,6 +347,7 @@ function calendarDayClick(day, year, month) {
         if (currentFilter !== 'all' && ev.category !== currentFilter) return false;
         if (!ev.date) return false;
         const d = parseEventDate(ev.date);
+        if (!d) return false;
         return d.getDate() === day && d.getMonth() === month && d.getFullYear() === year;
     });
 
@@ -381,6 +396,7 @@ filterButtons.forEach(button => {
     });
 });
 
-document.addEventListener('DOMContentLoaded', () => {
-    if (currentView === 'calendar') setView('calendar');
-});
+// This script is loaded at the bottom of the page, so DOMContentLoaded has
+// almost always already fired by the time we get here — a listener for it
+// would never run. Restore the saved view directly instead.
+if (currentView === 'calendar') setView('calendar');

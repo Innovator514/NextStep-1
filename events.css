@@ -502,6 +502,13 @@
        0: no top padding (filters provide spacing)
        2rem: horizontal padding prevents edge touching
        4rem: large bottom padding before footer */
+
+    align-items: start;
+    /* CRITICAL: prevents CSS Grid's default row-stretch behavior.
+       Without this, every card in a row is forced to match the height
+       of the TALLEST card in that row — so one event with a long
+       description would inflate every neighboring card with empty
+       space. align-items:start lets each card size to its own content. */
 }
 
 /* Event Card Container */
@@ -729,6 +736,40 @@
        Separates category from event title */
 }
 
+/* Event Badges (Virtual / Volunteer) */
+.event-badges {
+    /* Row of small pill badges shown under the category label */
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-bottom: 0.8rem;
+}
+
+.event-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.25rem 0.7rem;
+    border-radius: 20px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(8px);
+    color: inherit;
+}
+
+.event-badge-virtual {
+    background: rgba(37, 99, 235, 0.85);
+    color: #fff;
+}
+
+.event-badge-volunteer {
+    background: rgba(16, 185, 129, 0.85);
+    color: #fff;
+}
+
 /* Event Title */
 .event-title {
     /* Main heading for individual event */
@@ -753,6 +794,13 @@
        1.3 = 130% of font size
        Tighter than body text (1.6)
        Appropriate for large headings */
+
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    /* Caps titles at 2 lines with an ellipsis so an unusually long
+       title doesn't make one card's header taller than the rest. */
 }
 
 /* Event Date Display */
@@ -882,12 +930,39 @@
     /* Space above description
        0.5rem = 8px
        Separates from metadata above */
-    
-    flex-grow: 1;
-    /* CRITICAL: Fills remaining vertical space
-       Pushes description to fill card bottom
-       Makes all cards equal height in grid
-       Extra space goes to description area */
+
+    margin-bottom: 1rem;
+    /* Space below description, before the button */
+
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    /* CRITICAL: caps every description at 4 lines regardless of how
+       long the underlying text is. This is what keeps cards visually
+       even — a longer write-up no longer makes a card taller or more
+       prominent than one with a shorter description. "View More
+       Details" is how people read the rest. */
+}
+
+/* View Details Button */
+.view-details-btn {
+    margin-top: 0.25rem;
+    padding: 0.75rem 1.5rem;
+    background: linear-gradient(135deg, #2563eb, #3b82f6);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-weight: 600;
+    cursor: pointer;
+    width: 100%;
+    transition: all 0.3s ease;
+    font-size: 0.95rem;
+}
+
+.view-details-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4);
 }
 
 /* Category Color - Political Events */
