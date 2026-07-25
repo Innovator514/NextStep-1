@@ -378,7 +378,7 @@ if (document.querySelector('.form-step')) {
     {
         name: "Emily Yu",
         role: "President & Founder",
-        bio: "Emily is a student leader passionate about STEM, innovation, and community engagement. At school, she participates in organizations such as Mu Alpha Theta, FTC Robotics, and DECA, where she enjoys teamwork, problem-solving, and leadership. As part of NextStep, she hopes to empower students by making opportunities and resources more accessible. Outside of academics, Emily enjoys playing the clarinet, ",
+        bio: "Emily is a sophomore at Saint Andrew’s School. She is passionate about the community and creating meaningful change. Through co-founding NextStep, she hopes to empower young people to make a positive impact in their own communities. In her free time, she enjoys coding, playing the clarinet, and discovering new ways to combine technology with social good. ",
         image: "images/team/emily.png",
         email: "mailto:emilysmile315@gmail.com",
         instagram: "#",
@@ -455,8 +455,8 @@ if (document.querySelector('.form-step')) {
     },
     {
         name: "Kiran Behroozi",
-        role: "Research & Policy Coordinator",
-        bio: "She is an award-winning poet and social activist who has been featured in news outlets across the country, including ABC, Fox, CBS, NBC, and The CW. Arianna’s exhibitions in museums and writings have been highlighted in The New York Times Kids Edition, Miami Voyage Magazine, and the Boca Raton Observer. She is passionate about civil service, social activism, and her artistic endeavors.",
+        role: "Research Coordinator",
+        bio: "Kiran is the Research Coordinator for NextStep and a student passionate about STEM and civic engagement. Through scientific research and a strong interest in community impact, she is committed to using innovation and advocacy to create meaningful change. Passionate about youth voices, she hopes to ensure all youth can be active in their communities and gain leadership and service experience. Utilizing her research and leadership experience she aims to find opportunities for students to engage in local civic initiatives.",
         image: "images/team/kiran.jpeg",
         email: "mailto:kiran.behroozi@gmail.com",
         instagram: "#",
